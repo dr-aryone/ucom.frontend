@@ -4,13 +4,23 @@ import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-ho
 import styles from './DiscussionBoard.css';
 import urls from '../../utils/urls';
 import TextInput from '../TextInput';
-import CloseIcon from '../Icons/Close ';
-import EnterIcon from '../Icons/Enter ';
+import CloseIcon from '../Icons/Close';
+import EnterIcon from '../Icons/Enter';
 
 const DiscussionBoard = () => {
   const [discussion, setDiscussions] = useState([]);
   const [isAdd, setIsAdd] = useState(false);
   const [discussionLink, setDiscussionLink] = useState('');
+
+  const SortableItem = SortableElement(({ value }) => <li>{value}</li>);
+
+  const SortableList = SortableContainer(({ items }) => (
+    <ul>
+      {items.map((value, index) => (
+        <SortableItem key={`item-${index}`} index={index} value={value} />
+      ))}
+    </ul>
+  ));
 
   return (
     <div className={styles.container}>
@@ -23,11 +33,11 @@ const DiscussionBoard = () => {
       {isAdd &&
         <div className={styles.textinput}>
           <TextInput placeholder="Link to article" value={discussionLink} onChange={setDiscussionLink} />
-          <div className="icon" role="presentation" onClick={() => setDiscussions([...discussion, discussionLink])}><EnterIcon /></div>
-          <div className="icon" role="presentation" onClick={() => setIsAdd(false)}><CloseIcon /></div>
+          <div className={styles.icon} role="presentation" onClick={() => setDiscussions([...discussion, discussionLink])}><EnterIcon /></div>
+          <div className={styles.icon} role="presentation" onClick={() => setIsAdd(false)}><CloseIcon /></div>
         </div>
       }
-      {discussion.map((e, index) => <div key={index}>{e}</div>)}
+      {discussion.map((e, index) => <div className={styles.item} key={index}>{e}</div>)}
     </div>
   );
 };

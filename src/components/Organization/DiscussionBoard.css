@@ -20,9 +20,17 @@
 .textinput {
   display: flex;
   align-items: center;
+  margin-bottom: 24px;
 }
 
 .icon {
   fill: #C4C4C4;
   margin-left: 21px;
+  cursor: pointer;
+}
+
+.item {
+  height: 37px;
+  border: 1px solid gray;
+  margin-bottom: 20px;
 }
