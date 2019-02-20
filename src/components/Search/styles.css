@@ -1,6 +1,17 @@
-.input {
+.search {
   height: 50px;
   width: 100%;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  background: #fff;
+  transition: box-shadow 0.2s ease-in-out;
+  box-shadow: 0px 1px 4px rgba(60, 68, 75, 0);
+}
+
+.input {
+  width: 657px;
 }
 
 .popup {

@@ -7,14 +7,14 @@ const SearchPopup = () => {
 
   return (
     <Fragment>
-      <input onClick={showPopup(!popup)} className={styles.input} placeholder="Search for people, oragnizations, communities, tags, or @accounts in U°OS blockchain…" />
-
-      {/* <div className="layout__search">
-        <SearchInput setSearch={onChangeSearch} search={userName} />
-      </div> */}
+      <div className={styles.search}>
+        <input onClick={() => showPopup(!popup)} className={styles.input} placeholder="Search for people, oragnizations, communities, tags, or @accounts in U°OS blockchain…" />
+      </div>
+      <div className="layout__search">s
+      </div>
 
       {popup && (
-        <Popup onClick={showPopup(!popup)}>
+        <Popup onClick={() => showPopup(!popup)}>
           <div className={styles.popup}>
             <div className={styles.column}>
               <div className={styles.columnTitle}>Members</div>
