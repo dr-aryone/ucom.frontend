@@ -1,0 +1,30 @@
+.input {
+  height: 50px;
+  width: 100%;
+}
+
+.popup {
+  width: 100%;
+  min-height: 584px;
+  box-sizing: border-box;
+  padding: 50px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.column {
+  display: flex;
+  min-width: 230px;
+  max-width: 230px;
+  flex-direction: column;
+}
+
+.columnTitle {
+  text-transform: uppercase;
+  color: #6B6B6B;
+  font-size: 10px;
+  line-height: 13px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 16px;
+}
