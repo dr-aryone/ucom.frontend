@@ -1,0 +1,28 @@
+.container {
+  margin-top: 35px;
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+.title {
+  font-weight: bold;
+  line-height: 24px;
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.accent {
+  color: #d8352f;
+  cursor: pointer;
+  text-decoration: none;
+} 
+
+.textinput {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  fill: #C4C4C4;
+  margin-left: 21px;
+}

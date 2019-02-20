@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Links from '../components/Links';
 import Footer from '../components/Footer';
 import OrganizationHead from '../components/Organization/OrganizationHead';
+import DiscussionBoard from '../components/Organization/DiscussionBoard';
 import VerticalCards from '../components/VerticalCards';
 import OrganizationHeader from '../components/Organization/OrganizationHeader';
 import { getFileUrl } from '../utils/upload';
@@ -82,6 +83,8 @@ const OrganizationPage = (props) => {
                           <div className="user-section__content">{organization.about}</div>
                         </div>
                       )}
+
+                      <DiscussionBoard />
 
                       <div className="user-section">
                         <Feed organizationId={organizationId} feedTypeId={ORGANIZATION_FEED_ID} />
