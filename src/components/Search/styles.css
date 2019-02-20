@@ -8,10 +8,15 @@
   background: #fff;
   transition: box-shadow 0.2s ease-in-out;
   box-shadow: 0px 1px 4px rgba(60, 68, 75, 0);
+  text-align: center;
 }
 
 .input {
   width: 657px;
+  height: 50px;
+  border: none;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .popup {
