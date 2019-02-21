@@ -5,6 +5,7 @@ import debounce from '../../utils/debounce';
 import urls from '../../utils/urls';
 import loader from '../../utils/loader';
 import api from '../../api';
+import UserCardLine from '../UserCardLine/UserCardLine';
 
 const { getPagingLink } = urls;
 
@@ -79,7 +80,7 @@ const SearchPopup = (props) => {
               <div className={styles.columnTitle}>Members</div>
               {users && users.length > 0 &&
                 users.map(item => (
-                  <div>{item.id}</div>
+                  <UserCardLine />
                 ))
               }
             </div>
