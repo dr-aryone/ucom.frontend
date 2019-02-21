@@ -1,14 +1,31 @@
 .container {
-  margin-top: 35px;
   margin-bottom: 40px;
   max-width: 600px;
+}
+
+.ellipsis {
+  visibility: hidden;
+  cursor: pointer;
+  padding: 15px;
 }
 
 .title {
   font-weight: bold;
   line-height: 24px;
   font-size: 18px;
-  margin-bottom: 24px;
+  padding-bottom: 24px;
+  padding-top: 35px;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 8px;
+}
+
+.title:hover .ellipsis {
+  visibility: visible; 
+}
+
+.visibleEllipsis {
+  visibility: visible; 
 }
 
 .accent {
@@ -31,6 +48,40 @@
 
 .item {
   height: 37px;
-  border: 1px solid gray;
-  margin-bottom: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  cursor: pointer;
+  border: gray 1px solid;
+}
+
+.tooltip {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tooltipText {
+  font-size: 14px;
+  margin-right: auto;
+  cursor: pointer;
+}
+
+.tooltipText:hover{ 
+  text-decoration: none;
+}
+
+.tooltipText:nth-child(1){
+  padding-bottom: 22px;
+}
+
+:global(.tippy-popper .tippy-tooltip.discussion-theme){
+  color: #000;
+  background-color: #fff;
+  padding: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E8ECEC;
+}
+
+:global(.tippy-tooltip.discussion-theme .arrow-regular) {
+  border-bottom-color: #fff !important;
 }
