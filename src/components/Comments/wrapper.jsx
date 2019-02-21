@@ -2,6 +2,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import Comments from './index';
 import { getCommentById, getCommentsByContainer } from '../../store/comments';
+import { getUserById } from '../../store/users';
 import urls from '../../utils/urls';
 import { getUserName } from '../../utils/user';
 import { getCommentsTree } from '../../utils/comments';
@@ -22,6 +23,7 @@ export default connect(
           text: comment.description,
           date: moment(comment.createdAt).fromNow(),
           userId: comment.userId,
+          userAccountName: getUserById(state.users, comment.user).accountName,
           nextDepthTotalAmount: comment.metadata.nextDepthTotalAmount,
           parentId: comment.parentId || 0,
           path: comment.path,

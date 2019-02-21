@@ -42,15 +42,19 @@ const Comment = (props) => {
           />
 
           <div className={styles.actions}>
-            {props.depth < 2 &&
-              <div
-                role="presentation"
-                className={styles.reply}
-                onClick={() => setFormVisible(!formVisible)}
-              >
-                Reply
-              </div>
-            }
+            <div
+              role="presentation"
+              className={styles.reply}
+              onClick={() => {
+                if (props.depth < 2) {
+                  setFormVisible(true);
+                } else if (props.onClickReply) {
+                  props.onClickReply();
+                }
+              }}
+            >
+              Reply
+            </div>
             <div className={styles.date}>{props.date}</div>
             <div className={styles.rating}>
               <CommentRating commentId={props.id} />
@@ -69,6 +73,7 @@ const Comment = (props) => {
           text={comment.text}
           date={comment.date}
           userId={comment.userId}
+          userAccountName={comment.userAccountName}
           replys={comment.replys}
           nextDepthTotalAmount={comment.nextDepthTotalAmount}
           metadata={props.metadata}
@@ -78,6 +83,9 @@ const Comment = (props) => {
           ownerName={props.ownerName}
           onSubmit={props.onSubmit}
           onClickShowReplies={props.onClickShowReplies}
+          onClickReply={() => {
+            setFormVisible(true);
+          }}
         />
       ))}
 
@@ -105,6 +113,7 @@ const Comment = (props) => {
           text={comment.text}
           date={comment.date}
           userId={comment.userId}
+          userAccountName={comment.userAccountName}
           replys={comment.replys}
           nextDepthTotalAmount={comment.nextDepthTotalAmount}
           metadata={props.metadata}
@@ -114,11 +123,15 @@ const Comment = (props) => {
           ownerName={props.ownerName}
           onSubmit={props.onSubmit}
           onClickShowReplies={props.onClickShowReplies}
+          onClickReply={() => {
+            setFormVisible(true);
+          }}
         />
       ))}
 
       {formVisible &&
         <Form
+          message={`@${props.userAccountName} `}
           containerId={props.containerId}
           postId={props.postId}
           commentId={props.id}
@@ -148,12 +161,14 @@ Comment.propTypes = {
   text: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   userId: PropTypes.number.isRequired,
+  userAccountName: PropTypes.string.isRequired,
   ownerId: PropTypes.number,
   ownerImageUrl: PropTypes.string,
   ownerPageUrl: PropTypes.string,
   ownerName: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   onClickShowReplies: PropTypes.func.isRequired,
+  onClickReply: PropTypes.func,
   replys: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     depth: PropTypes.number.isRequired,
@@ -178,6 +193,7 @@ Comment.defaultProps = {
   ownerPageUrl: null,
   ownerName: null,
   nextDepthTotalAmount: 0,
+  onClickReply: null,
 };
 
 export default Comment;
