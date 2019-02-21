@@ -2,7 +2,7 @@
   height: 50px;
   width: 100%;
   position: fixed;
-  z-index: 100;
+  z-index: 1001;
   top: 0;
   left: 0;
   background: #fff;
@@ -17,6 +17,7 @@
   border: none;
   margin: 0 auto;
   text-align: center;
+  outline: none;
 }
 
 .popup {
@@ -26,6 +27,8 @@
   padding: 50px 0;
   display: flex;
   justify-content: center;
+  background: #fff;
+  margin-top: 50px;
 }
 
 .column {
