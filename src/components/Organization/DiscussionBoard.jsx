@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import { bindActionCreators } from 'redux';
 import cx from 'classnames';
 import { Tooltip } from 'react-tippy';
 import styles from './DiscussionBoard.css';
@@ -9,8 +11,9 @@ import TextInput from '../TextInput';
 import CloseIcon from '../Icons/Close';
 import EnterIcon from '../Icons/Enter';
 import EllipsisIcon from '../Icons/Ellipsis';
+import { postsFetch } from '../../actions/posts';
 
-function DiscussionBoard() {
+const DiscussionBoard = () => {
   const [discussion, setDiscussions] = useState([]);
   const [isAdd, setIsAdd] = useState(false);
   const [ellipsisVisibility, setEllipsisVisibility] = useState(false);
@@ -19,7 +22,7 @@ function DiscussionBoard() {
   const SortableItem = SortableElement(({ value }) => <div className={styles.item}>{value}</div>);
 
   const SortableList = SortableContainer(({ items }) => (
-    <div>
+    <div className={styles.list}>
       {items.map((value, index) => (
         <SortableItem key={`item-${index}`} index={index} value={value} />
       ))}
@@ -37,6 +40,11 @@ function DiscussionBoard() {
       setIsAdd(false); setDiscussionLink('');
     }
   };
+
+  // useEffect(() => {
+  //   [15, 14175, 39].forEach(e => props.postsFetch(e));
+  // }, []);
+
 
   useEffect(() => {
     if (isAdd) {
@@ -86,10 +94,17 @@ function DiscussionBoard() {
           <div className={styles.icon} role="presentation" onClick={() => { setIsAdd(false); setDiscussionLink(''); }}><CloseIcon /></div>
         </div>
       }
-      <SortableList items={discussion} onSortEnd={onSortEnd} />
+      <SortableList helperClass={styles.itemDragged} items={discussion} onSortEnd={onSortEnd} />
     </div>
   );
-}
+};
 
-export default DiscussionBoard;
+export default connect(
+  state => ({
+    posts: state.posts,
+  }),
+  dispatch => bindActionCreators({
+    postsFetch,
+  }, dispatch),
+)(DiscussionBoard);
 
