@@ -9,6 +9,7 @@ import UserCardLine from '../UserCardLine/UserCardLine';
 import { getUserById } from '../../store/users';
 import { getUserName } from '../../utils/user';
 import { getFileUrl } from '../../utils/upload';
+import Arrow from '../Icons/ArrowLeft';
 
 const { getPagingLink } = urls;
 
@@ -20,12 +21,11 @@ const SearchPopup = () => {
   const [userName, setUserName] = useState();
   const page = 1;
   const sortBy = '-current_rate';
-  const perPage = usersData.data.length || 7;
+  const perPage = usersData.data.length || 10;
   // const userName = urlParams.get('userName') || '';
   const usersParams = {
     page, sortBy, perPage, userName,
   };
-
 
   const getData = async (params) => {
     loader.start();
@@ -33,7 +33,6 @@ const SearchPopup = () => {
     try {
       const data = await api.getUsers(params);
       setUsersData(data);
-      console.log('lol');
     } catch (e) {
       console.error(e);
     }
@@ -43,7 +42,7 @@ const SearchPopup = () => {
 
   const onChangeSearch = (userName) => {
     getData({
-      ...usersParams, userName, page: 1, perPage: 7,
+      ...usersParams, userName, page: 1, perPage: 10,
     });
   };
   const debouncedSetSearch = debounce(onChangeSearch, 500);
@@ -60,12 +59,9 @@ const SearchPopup = () => {
     }
   }, [userName]);
 
-  const users = usersData.data;
-
-  // console.log(usersData);
-  // console.log('users: ', users);
-  console.log('userName: ', userName);
-
+  const usersCount = usersData.data;
+  const users = [...usersCount];
+  users.splice(7);
 
   return (
     <Fragment>
@@ -90,18 +86,23 @@ const SearchPopup = () => {
               {users && users.length > 0 &&
                 users.map(item => (
                   <Fragment>
-                    {console.log('item.accountName: ', getUserName(item))}
                     <UserCardLine
                       url={urls.getUserUrl(item.id)}
                       userPickSrc={getFileUrl(item.avatarFilename)}
-                      userName={getUserName(item)}
+                      name={getUserName(item)}
                       accountName={item.accountName}
                       rate={item.currentRate}
                       sign="@"
-                      userId={item.id}
+                      // userId={item.id}
                     />
                   </Fragment>
                 ))
+              }
+              {usersCount.length > 7 &&
+                <a href="/users" className={styles.viewAll}>
+                  <div className={styles.viewAllText}>View all</div>
+                  <div className={styles.arrow}><Arrow /></div>
+                </a>
               }
             </div>
           </div>

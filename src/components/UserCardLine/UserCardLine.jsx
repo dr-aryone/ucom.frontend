@@ -12,20 +12,23 @@ import { formatRate } from '../../utils/rate';
 const UserCardLine = (props) => {
   const LinkTag = props.url ? Link : 'div';
 
-  console.log('props: ', props);
-
   return (
-    <div className={styles.userCard}>
+    <LinkTag to={props.url} className={styles.userCard}>
       <div className={styles.avatar}>
         <UserPick isOwner={props.isOwner} url={props.url} src={props.userPickSrc} alt={props.userPickAlt} />
       </div>
-      <div className={styles.name}>
-        <LinkTag to={props.url}>{props.name}</LinkTag>
+      <div className={styles.nameBlock}>
+        <div className={styles.name}>{props.name}</div>
+        {props.accountName && (
+          <div className={styles.accountName}>
+            {props.sign}{props.accountName}
+          </div>
+        )}
       </div>
       <div className={styles.rate}>
         {formatRate(props.rate)}°
       </div>
-    </div>
+    </LinkTag>
   );
 };
 
@@ -36,6 +39,7 @@ UserCardLine.propTypes = {
   rate: PropTypes.number.isRequired,
   url: PropTypes.string,
   isOwner: PropTypes.bool,
+  sign: PropTypes.string,
 };
 
 UserCardLine.defaultProps = {
@@ -43,20 +47,23 @@ UserCardLine.defaultProps = {
   userPickAlt: null,
   url: PropTypes.null,
   isOwner: false,
+  sign: '@',
 };
 
-export default connect(
-  (state, props) => () => {
-    const user = getUserById(state.users, props.userId);
+// export default connect(
+//   (state, props) => () => {
+//     const user = getUserById(state.users, props.userId);
 
-    return ({
-      ...props,
-      userPickSrc: user ? urls.getFileUrl(user.avatarFilename) : null,
-      userPickAlt: getUserName(user),
-      url: user ? urls.getUserUrl(user.id) : null,
-      name: getUserName(user),
-      rate: user ? user.currentRate : null,
-    });
-  },
-  null,
-)(UserCardLine);
+//     return ({
+//       ...props,
+//       userPickSrc: user ? urls.getFileUrl(user.avatarFilename) : null,
+//       userPickAlt: getUserName(user),
+//       url: user ? urls.getUserUrl(user.id) : null,
+//       name: getUserName(user),
+//       rate: user ? user.currentRate : null,
+//     });
+//   },
+//   null,
+// )(UserCardLine);
+
+export default UserCardLine;

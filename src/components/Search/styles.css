@@ -12,19 +12,24 @@
 }
 
 .input {
-  width: 657px;
+  max-width: 657px;
+  width: 100%;
   height: 50px;
   border: none;
   margin: 0 auto;
   text-align: center;
   outline: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .popup {
   width: 100%;
   min-height: 584px;
+  height: 100%;
   box-sizing: border-box;
-  padding: 50px 0;
+  padding: 100px 0;
   display: flex;
   justify-content: center;
   background: #fff;
@@ -33,8 +38,8 @@
 
 .column {
   display: flex;
-  min-width: 230px;
-  max-width: 230px;
+  width: 304px;
+  max-width: 304px;
   flex-direction: column;
 }
 
@@ -45,5 +50,59 @@
   line-height: 13px;
   font-weight: 500;
   text-align: left;
-  margin-bottom: 16px;
+  margin-bottom: 4px;
+  padding-left: 12px;
+  letter-spacing: 0.06em;
+}
+
+.viewAll {
+  font-weight: bold;
+  line-height: normal;
+  font-size: 14px;
+  color: #5A5A5A;
+  padding: 12px 15px;
+  width: 304px;
+  max-width: 304px;
+  height: 42px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.viewAll:hover {
+  padding: 12px 15px;
+  width: 304px;
+  max-width: 304px;
+  height: 42px;
+  display: flex;
+  box-sizing: border-box;
+  border-radius: 3px;
+  background: #F8F8F9;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.viewAll:hover .viewAllText {
+  color: #D83832;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.arrow {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.viewAll:hover .arrow {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0.2s, opacity 0.2s ease;
+}
+
+.viewAll:hover .arrow svg {
+  fill: #D83832;
+  transform: rotate(180deg);
+  transition: fill 0.2 ease;
 }
