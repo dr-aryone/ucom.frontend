@@ -29,8 +29,8 @@ const DiscussionBoard = () => {
     </div>
   ));
 
-  const onSortEnd = ({ oldIndex, newIndex, items }) => {
-    setDiscussions(arrayMove(items, oldIndex, newIndex));
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    setDiscussions(arrayMove(discussion.slice(), oldIndex, newIndex));
   };
 
   const onKeyDown = (e) => {
