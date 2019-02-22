@@ -18,6 +18,7 @@ const DiscussionBoard = () => {
   const [isAdd, setIsAdd] = useState(false);
   const [ellipsisVisibility, setEllipsisVisibility] = useState(false);
   const [discussionLink, setDiscussionLink] = useState('');
+  const [error, setError] = useState('');
 
   const SortableItem = SortableElement(({ value }) => <div className={styles.item}>{value}</div>);
 
@@ -41,6 +42,15 @@ const DiscussionBoard = () => {
     }
   };
 
+  const onAddLink = () => {
+    if (discussionLink) {
+      setError('Incorrect link. Format: https://u.community/posts/1');
+    } else {
+      setDiscussions([...discussion, discussionLink]);
+      setDiscussionLink('');
+      setIsAdd(false);
+    }
+  };
   // useEffect(() => {
   //   [15, 14175, 39].forEach(e => props.postsFetch(e));
   // }, []);
@@ -89,8 +99,8 @@ const DiscussionBoard = () => {
       }
       {isAdd &&
         <div className={styles.textinput}>
-          <TextInput placeholder="Link to article" value={discussionLink} onChange={setDiscussionLink} />
-          <div className={styles.icon} role="presentation" onClick={() => { setDiscussions([...discussion, discussionLink]); setDiscussionLink(''); setIsAdd(false); }}><EnterIcon /></div>
+          <TextInput error={error} placeholder="Link to article" value={discussionLink} onChange={setDiscussionLink} />
+          <div className={styles.icon} role="presentation" onClick={onAddLink}><EnterIcon /></div>
           <div className={styles.icon} role="presentation" onClick={() => { setIsAdd(false); setDiscussionLink(''); }}><CloseIcon /></div>
         </div>
       }
