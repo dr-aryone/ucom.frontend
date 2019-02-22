@@ -43,7 +43,7 @@ const DiscussionBoard = () => {
   };
 
   const onAddLink = () => {
-    if (discussionLink) {
+    if (!discussionLink) {
       setError('Incorrect link. Format: https://u.community/posts/1');
     } else {
       setDiscussions([...discussion, discussionLink]);
