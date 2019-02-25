@@ -11,7 +11,7 @@ const UserCardLine = (props) => {
   return (
     <LinkTag to={props.url} className={styles.userCard}>
       <div className={styles.avatar}>
-        <UserPick isOwner={props.isOwner} url={props.url} src={props.userPickSrc} alt={props.userPickAlt} />
+        <UserPick isOwner={props.isOwner} src={props.userPickSrc} alt={props.userPickAlt} />
       </div>
       <div className={styles.nameBlock}>
         <div className={styles.name}>{props.name}</div>
