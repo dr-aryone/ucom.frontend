@@ -23,7 +23,7 @@ const SearchPopup = () => {
   const usersParams = {
     page, sortBy, perPage, userName,
   };
-  const closeSearch = () => (console.log('lol'));
+  // const closeSearch = () => (console.log('a'));
 
   const getData = async (params) => {
     loader.start();
@@ -71,7 +71,7 @@ const SearchPopup = () => {
           placeholder="Search for people, oragnizations, communities, tags, or @accounts in U°OS blockchain…"
           type="text"
           spellCheck="false"
-          onBlur={() => closeSearch()}
+          // onBlur={() => closeSearch()}
         />
         <div
           role="presentation"
@@ -88,17 +88,16 @@ const SearchPopup = () => {
               <div className={styles.columnTitle}>Members</div>
               {users && users.length > 0 &&
                 users.map(item => (
-                  <Fragment>
-                    <UserCardLine
-                      url={urls.getUserUrl(item.id)}
-                      userPickSrc={getFileUrl(item.avatarFilename)}
-                      name={getUserName(item)}
-                      accountName={item.accountName}
-                      rate={item.currentRate}
-                      sign="@"
-                      // userId={item.id}
-                    />
-                  </Fragment>
+                  <UserCardLine
+                    key={item.id}
+                    url={urls.getUserUrl(item.id)}
+                    userPickSrc={getFileUrl(item.avatarFilename)}
+                    name={getUserName(item)}
+                    accountName={item.accountName}
+                    rate={item.currentRate}
+                    sign="@"
+                    // userId={item.id}
+                  />
                 ))
               }
               {usersCount.length > 7 &&
