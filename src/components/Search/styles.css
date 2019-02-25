@@ -1,3 +1,13 @@
+.modal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
 .search {
   height: 50px;
   width: 100%;
@@ -57,15 +67,27 @@
   opacity: 0; transition: opacity 0.3s ease;
 }
 
+@media (max-width: 760px) {
+  .input {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 415px) {
+  .input {
+    max-width: 200px;
+  }
+}
+
 .popup {
   width: 100%;
-  min-height: 584px;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 150px 0;
+  background: #fff;
+  overflow-y: scroll;
+  margin: 0 auto;
+  padding: 80px 0;
   display: flex;
   justify-content: center;
-  background: #fff;
+  height: auto;
 }
 
 .column {
@@ -135,7 +157,7 @@
 .footer {
   height: 68px;
   width: 100%;
-  position: fixed;
+  /* position: fixed; */
   z-index: 1001;
   bottom: 0;
   left: 0;
@@ -174,4 +196,20 @@
 
 .arrowGrey svg {
   fill: #B1B1B1;
+}
+
+@media (max-width: 350px) {
+  .arrowGrey {
+    margin-right: 15px;
+  }
+}
+
+.notFound {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  line-height: 34px;
+  font-size: 28px;
+  color: #B1B1B1;
 }

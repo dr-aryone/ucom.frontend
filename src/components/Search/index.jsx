@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Popup from '../Popup';
 import styles from './styles.css';
 import debounce from '../../utils/debounce';
@@ -55,8 +56,10 @@ const SearchPopup = () => {
   const users = [...usersCount];
   users.splice(7);
 
+  const duckLink = `https://duckduckgo.com/?q=${userName}&sites=u.community&ia=web`;
+
   return (
-    <Fragment>
+    <div className={styles.modal}>
       <div className={styles.search}>
         <div className={styles.iconSearch}>
           <IconSearch />
@@ -82,39 +85,45 @@ const SearchPopup = () => {
       </div>
 
       {userName !== '' && (
-        <Popup>
-          <div className={styles.popup}>
-            <div className={styles.column}>
-              <div className={styles.columnTitle}>Members</div>
+        <Fragment>
+          <Popup mod="search">
+            <div className={styles.popup}>
               {users && users.length > 0 &&
-                users.map(item => (
-                  <UserCardLine
-                    key={item.id}
-                    url={urls.getUserUrl(item.id)}
-                    userPickSrc={getFileUrl(item.avatarFilename)}
-                    name={getUserName(item)}
-                    accountName={item.accountName}
-                    rate={item.currentRate}
-                    sign="@"
-                    // userId={item.id}
-                  />
-                ))
+                <div className={styles.column}>
+                  <div className={styles.columnTitle}>Members</div>
+                  {users && users.length > 0 &&
+                    users.map(item => (
+                      <UserCardLine
+                        key={item.id}
+                        url={urls.getUserUrl(item.id)}
+                        userPickSrc={getFileUrl(item.avatarFilename)}
+                        name={getUserName(item)}
+                        accountName={item.accountName}
+                        rate={item.currentRate}
+                        sign="@"
+                        // userId={item.id}
+                      />
+                    ))
+                  }
+                  {usersCount.length > 7 &&
+                    <Link to={`/users/?page=1&sortBy=-current_rate&perPage=20&userName=${userName}`} className={styles.viewAll}>
+                      <div className={styles.viewAllText}>View all</div>
+                      <div className={styles.arrowRed}><Arrow /></div>
+                    </Link>
+                  }
+                </div>
               }
-              {usersCount.length > 7 &&
-                <a href="/users" className={styles.viewAll}>
-                  <div className={styles.viewAllText}>View all</div>
-                  <div className={styles.arrowRed}><Arrow /></div>
-                </a>
+              {users && users.length === 0 &&
+                <div className={styles.notFound}>No Members Found</div>
               }
             </div>
-            <a href="#" className={styles.footer}>
-              <div className={styles.searchLink}>Locate “{userName}” in posts and publications<span className={styles.iconDuck}><IconDuck /></span><span className={styles.arrowGrey}><Arrow /></span></div>
-            </a>
-          </div>
-        </Popup>
+          </Popup>
+          <a href={duckLink} className={styles.footer} rel="noopener noreferrer" target="_blank">
+            <div className={styles.searchLink}>Locate “{userName}” in posts and publications<span className={styles.iconDuck}><IconDuck /></span><span className={styles.arrowGrey}><Arrow /></span></div>
+          </a>
+        </Fragment>
       )}
-
-    </Fragment>
+    </div>
   );
 };
 
