@@ -21,18 +21,18 @@ const DiscussionBoard = () => {
   const [discussionLink, setDiscussionLink] = useState('');
   const [error, setError] = useState('');
 
-  const SortableItem = SortableElement(({ value }) => {
+  const SortableItem = SortableElement(({ value, myIndex }) => {
     const [ellipsisItemVisibility, setEllipsisItemVisibility] = useState(false);
     const ellipsisClassItemName = cx(styles.ellipsis, {
       [styles.visibleEllipsis]: ellipsisItemVisibility,
     });
-
+    console.log(value, myIndex);
     return (
       <div>
         <div className={styles.item}>
           <div className={styles.itemContainer}>
             <div className={styles.itemMain}>
-              <div className={styles.caption}>{value}</div>
+              <Link target="_blank" to={`/posts/${value}`} className={styles.caption}>{value}</Link>
               <div className={styles.author}>{value}</div>
             </div>
             <div className={styles.itemSide}>
@@ -41,8 +41,7 @@ const DiscussionBoard = () => {
               <Tooltip
                 html={(
                   <div className={styles.tooltip}>
-                    <Link target="_blank" className={styles.tooltipText} to={urls.getNewPostUrl()}>Create and add Article</Link>
-                    <span className={styles.tooltipText} role="presentation" onClick={() => setIsAdd(true)}>Add Article</span>
+                    <span className={styles.tooltipText} role="presentation" onClick={() => setDiscussions(discussion.splice(myIndex, 1))}>Remove</span>
                   </div>
               )}
                 position="bottom"
@@ -65,7 +64,7 @@ const DiscussionBoard = () => {
   const SortableList = SortableContainer(({ items }) => (
     <div className={styles.list}>
       {items.map((value, index) => (
-        <SortableItem key={`item-${index}`} index={index} value={value} />
+        <SortableItem key={`item-${index}`} myIndex={index} index={index} value={value} />
       ))}
     </div>
   ));
@@ -123,7 +122,6 @@ const DiscussionBoard = () => {
           <Tooltip
             html={(
               <div className={styles.tooltip}>
-                <Link target="_blank" className={styles.tooltipText} to={urls.getNewPostUrl()}>Create and add Article</Link>
                 <span className={styles.tooltipText} role="presentation" onClick={() => setIsAdd(true)}>Add Article</span>
               </div>
             )}
@@ -135,7 +133,6 @@ const DiscussionBoard = () => {
             interactive
             onShow={() => setEllipsisVisibility(true)}
             onHide={() => setEllipsisVisibility(false)}
-            pressDelay={100}
           >
             <div className={ellipsisClassName}><EllipsisIcon /></div>
           </Tooltip> : null
@@ -153,7 +150,7 @@ const DiscussionBoard = () => {
           <div className={styles.icon} role="presentation" onClick={() => { setIsAdd(false); setDiscussionLink(''); }}><CloseIcon /></div>
         </div>
       }
-      <SortableList helperClass={styles.itemDragged} items={discussion} onSortEnd={onSortEnd} />
+      <SortableList pressDelay={150} helperClass={styles.itemDragged} items={discussion} onSortEnd={onSortEnd} />
     </div>
   );
 };
