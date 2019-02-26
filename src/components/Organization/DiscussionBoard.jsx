@@ -11,16 +11,56 @@ import TextInput from '../TextInput';
 import CloseIcon from '../Icons/Close';
 import EnterIcon from '../Icons/Enter';
 import EllipsisIcon from '../Icons/Ellipsis';
+import CommentIcon from '../Icons/Comment';
 import { postsFetch } from '../../actions/posts';
 
 const DiscussionBoard = () => {
-  const [discussion, setDiscussions] = useState([]);
+  const [discussion, setDiscussions] = useState([313, 322, 32644]);
   const [isAdd, setIsAdd] = useState(false);
   const [ellipsisVisibility, setEllipsisVisibility] = useState(false);
   const [discussionLink, setDiscussionLink] = useState('');
   const [error, setError] = useState('');
 
-  const SortableItem = SortableElement(({ value }) => <div className={styles.item}>{value}</div>);
+  const SortableItem = SortableElement(({ value }) => {
+    const [ellipsisItemVisibility, setEllipsisItemVisibility] = useState(false);
+    const ellipsisClassItemName = cx(styles.ellipsis, {
+      [styles.visibleEllipsis]: ellipsisItemVisibility,
+    });
+
+    return (
+      <div>
+        <div className={styles.item}>
+          <div className={styles.itemContainer}>
+            <div className={styles.itemMain}>
+              <div className={styles.caption}>{value}</div>
+              <div className={styles.author}>{value}</div>
+            </div>
+            <div className={styles.itemSide}>
+              <div className={styles.comment}>{value}</div>
+              <div className={styles.commentIcon}><CommentIcon dimension="10" /></div>
+              <Tooltip
+                html={(
+                  <div className={styles.tooltip}>
+                    <Link target="_blank" className={styles.tooltipText} to={urls.getNewPostUrl()}>Create and add Article</Link>
+                    <span className={styles.tooltipText} role="presentation" onClick={() => setIsAdd(true)}>Add Article</span>
+                  </div>
+              )}
+                position="bottom"
+                trigger="click"
+                useContext
+                theme="discussion"
+                arrow
+                interactive
+                onShow={() => setEllipsisItemVisibility(true)}
+                onHide={() => setEllipsisItemVisibility(false)}
+              >
+                <div className={ellipsisClassItemName}><EllipsisIcon /></div>
+              </Tooltip>
+            </div>
+          </div>
+        </div>
+      </div>);
+  });
 
   const SortableList = SortableContainer(({ items }) => (
     <div className={styles.list}>
@@ -34,27 +74,35 @@ const DiscussionBoard = () => {
     setDiscussions(arrayMove(discussion.slice(), oldIndex, newIndex));
   };
 
+
+  const onAddLink = () => {
+    const { origin } = document.location;
+    let url;
+    let pathnames;
+
+    try {
+      url = new URL(discussionLink);
+      pathnames = url.pathname.split('/');
+    } catch (e) {
+      return setError(`Incorrect link. Format: ${origin}/posts/1`);
+    }
+
+    if (origin === url.origin && pathnames.length === 3 && pathnames[1] === 'posts' && Number.isInteger(+pathnames[2])) {
+      setDiscussions([...discussion, pathnames[2]]);
+      setDiscussionLink('');
+      return setIsAdd(false);
+    }
+
+    return setError(`Incorrect link. Format: ${origin}/posts/1`);
+  };
+
   const onKeyDown = (e) => {
     if (e.key === 'Enter') {
-      setDiscussions([...discussion, discussionLink]); setDiscussionLink(''); setIsAdd(false);
+      onAddLink();
     } else if (e.key === 'Escape') {
       setIsAdd(false); setDiscussionLink('');
     }
   };
-
-  const onAddLink = () => {
-    if (!discussionLink) {
-      setError('Incorrect link. Format: https://u.community/posts/1');
-    } else {
-      setDiscussions([...discussion, discussionLink]);
-      setDiscussionLink('');
-      setIsAdd(false);
-    }
-  };
-  // useEffect(() => {
-  //   [15, 14175, 39].forEach(e => props.postsFetch(e));
-  // }, []);
-
 
   useEffect(() => {
     if (isAdd) {
@@ -87,6 +135,7 @@ const DiscussionBoard = () => {
             interactive
             onShow={() => setEllipsisVisibility(true)}
             onHide={() => setEllipsisVisibility(false)}
+            pressDelay={100}
           >
             <div className={ellipsisClassName}><EllipsisIcon /></div>
           </Tooltip> : null
