@@ -62,6 +62,12 @@
   fill: #C4C4C4;
   margin-left: 21px;
   cursor: pointer;
+  margin-bottom: auto;
+  margin-top: 13px;
+}
+
+.close {
+  margin-top: 16px;
 }
 
 .itemMain {
@@ -139,8 +145,8 @@
   text-decoration: none;
 }
 
-.tooltipText:nth-child(1){
-  margin-bottom: 22px;
+.tooltipText:nth-child(2){
+  margin-top: 22px;
 }
 
 :global(.tippy-popper .tippy-tooltip.discussion-theme){

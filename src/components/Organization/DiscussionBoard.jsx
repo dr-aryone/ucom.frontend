@@ -26,7 +26,7 @@ const DiscussionBoard = () => {
     const ellipsisClassItemName = cx(styles.ellipsis, {
       [styles.visibleEllipsis]: ellipsisItemVisibility,
     });
-    console.log(value, myIndex);
+
     return (
       <div>
         <div className={styles.item}>
@@ -41,7 +41,13 @@ const DiscussionBoard = () => {
               <Tooltip
                 html={(
                   <div className={styles.tooltip}>
-                    <span className={styles.tooltipText} role="presentation" onClick={() => setDiscussions(discussion.splice(myIndex, 1))}>Remove</span>
+                    <span
+                      className={styles.tooltipText}
+                      role="presentation"
+                      onClick={() => setDiscussions(discussion.filter((e, index) => index !== myIndex))
+                    }
+                    >Remove
+                    </span>
                   </div>
               )}
                 position="bottom"
@@ -95,11 +101,17 @@ const DiscussionBoard = () => {
     return setError(`Incorrect link. Format: ${origin}/posts/1`);
   };
 
+  const resetError = () => {
+    setIsAdd(false);
+    setDiscussionLink('');
+    setError('');
+  };
+
   const onKeyDown = (e) => {
     if (e.key === 'Enter') {
       onAddLink();
     } else if (e.key === 'Escape') {
-      setIsAdd(false); setDiscussionLink('');
+      resetError();
     }
   };
 
@@ -122,6 +134,7 @@ const DiscussionBoard = () => {
           <Tooltip
             html={(
               <div className={styles.tooltip}>
+                <Link target="_blank" className={styles.tooltipText} to={urls.getNewPostUrl()}>Create and add Article</Link>
                 <span className={styles.tooltipText} role="presentation" onClick={() => setIsAdd(true)}>Add Article</span>
               </div>
             )}
@@ -147,7 +160,7 @@ const DiscussionBoard = () => {
         <div className={styles.textinput}>
           <TextInput error={error} placeholder="Link to article" value={discussionLink} onChange={setDiscussionLink} />
           <div className={styles.icon} role="presentation" onClick={onAddLink}><EnterIcon /></div>
-          <div className={styles.icon} role="presentation" onClick={() => { setIsAdd(false); setDiscussionLink(''); }}><CloseIcon /></div>
+          <div className={[styles.icon, styles.close]} role="presentation" onClick={resetError}><CloseIcon /></div>
         </div>
       }
       <SortableList pressDelay={150} helperClass={styles.itemDragged} items={discussion} onSortEnd={onSortEnd} />
