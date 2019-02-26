@@ -113,7 +113,7 @@
     "socket.io-client": "^2.1.1",
     "textarea-caret": "^3.1.0",
     "tributejs": "git+https://github.com/UOSnetwork/tribute.git",
-    "ucom-libs-graphql-schemas": "git+ssh://git@github.com/UOSnetwork/ucom.libs.graphql-schemas.git",
+    "ucom-libs-graphql-schemas": "^1.2.0",
     "ucom-libs-social-transactions": "^1.0.1",
     "ucom-libs-wallet": "^1.1.1",
     "uuid": "^3.3.2",
