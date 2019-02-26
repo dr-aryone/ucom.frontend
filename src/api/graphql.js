@@ -221,7 +221,7 @@ export default {
     side,
     postTypeId,
   }) {
-    const query = tab === 'Posts' && side === 'Users' ?
+    const query = tab === 'Posts' ?
       await GraphQLSchema[`getMany${side}For${filter}${tab}Query`](
         postTypeId,
         page,
