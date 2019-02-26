@@ -109,6 +109,14 @@ export const getPostCover = (post) => {
   }
 };
 
+export const getPostImage = (post, name) => {
+  try {
+    return post.entityImages[name][0];
+  } catch (e) {
+    return null;
+  }
+};
+
 export const parseMediumContent = (html) => {
   const div = document.createElement('div');
   div.innerHTML = html;

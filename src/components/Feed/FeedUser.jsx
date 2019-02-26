@@ -82,7 +82,7 @@ FeedUser.defaultProps = {
   userId: null,
   organizationId: null,
   tagIdentity: null,
-  feedInputInitialText: null,
+  feedInputInitialText: '',
   filter: null,
 };
 

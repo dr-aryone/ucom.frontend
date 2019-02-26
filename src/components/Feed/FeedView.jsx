@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import FeedInput from './FeedInput';
+import Form from './Form/wrapper';
 import Post from './Post/Post';
 import LoadMore from './LoadMore';
 
 const Feed = props => (
   <div className="feed">
     {props.onSubmitPostForm &&
-      <FeedInput
+      <Form
+        message={props.feedInputInitialText}
         onSubmit={props.onSubmitPostForm}
-        initialText={props.feedInputInitialText}
       />
     }
 

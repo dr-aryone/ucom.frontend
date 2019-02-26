@@ -1,0 +1,73 @@
+:local(.embedMenu) {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+}
+
+:local(.buttonIcon) {
+  box-sizing: border-box;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  fill: #c4c4c4;
+  transition: all 0.2s ease;
+}
+
+:local(.buttonIcon svg) {
+  align-self: center;
+  justify-self: center;
+}
+
+:local(.buttonIcon:hover) {
+  fill: #767676;
+}
+
+:local(.trigger) {
+  composes: buttonIcon;
+  border: 2px solid #E8ECEC;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+:local(.trigger svg) {
+  width: 10px;
+  height: 10px;
+}
+
+:local(.triggerActive) {
+  transform: rotate(45deg);
+}
+
+:local(.icon) {
+  composes: buttonIcon;
+}
+
+:local(.iconImage) {
+  composes: buttonIcon;
+}
+
+:local(.iconImage circle) {
+  stroke: #c4c4c4;
+  transition: stroke 0.2s ease;
+}
+
+:local(.iconImage:hover circle) {
+  stroke: #767676;
+}
+
+:local(.iconImage input) {
+  display: none;
+}
+
+:local(.item) {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 16px 0 0;
+}

@@ -13,6 +13,7 @@ const UserPick = (props) => {
       className={classNames([
         styles.userPick,
         { [styles.owner]: props.isOwner },
+        { [styles.userPickBig]: props.size === 'big' },
       ])}
       title={props.alt}
       to={props.url}
@@ -31,6 +32,7 @@ UserPick.propTypes = {
   alt: PropTypes.string,
   src: PropTypes.string,
   isOwner: PropTypes.bool,
+  size: PropTypes.oneOf(['big']),
 };
 
 UserPick.defaultProps = {
@@ -38,6 +40,7 @@ UserPick.defaultProps = {
   alt: null,
   src: null,
   isOwner: false,
+  size: null,
 };
 
 export default UserPick;

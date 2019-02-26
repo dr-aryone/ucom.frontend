@@ -1,3 +1,5 @@
+import { numberWithSpaces } from './number';
+
 export const formatRate = rate => (
-  rate ? rate.toLocaleString('ru-RU') : 0
+  rate ? numberWithSpaces(rate) : 0
 );

@@ -1,0 +1,108 @@
+:local(.pollForm) {
+  position: relative;
+  z-index: 0;
+  padding: 20px;
+  box-shadow: 0px 1px 4px rgba(60, 68, 75, 0.13);
+}
+
+:local(.close) {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: #C4C4C4;
+  cursor: pointer;
+}
+
+:local(.question) {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 30px 0 0;
+  margin: 0 0 24px 0;
+  border: none;
+  line-height: 34px;
+  font-size: 28px;
+  font-weight: bold;
+  outline: none;
+  resize: none;
+}
+
+:local(.question::placeholder) {
+  opacity: 1;
+  color: rgba(0,0,0,0.3);
+}
+
+:local(.option) {
+  position: relative;
+  z-index: 0;
+}
+
+:local(.optionData) {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 11px 45px 11px 20px;
+  margin: 0 0 16px;
+  border: 1px solid #B1B1B1;
+  font-size: 16px;
+  line-height: 1.5;
+  border-radius: 4px;
+  outline: none;
+  resize: none;
+}
+
+:local(.optionData::placeholder) {
+  opacity: 1;
+  color: #C1C1C1;
+}
+
+:local(.optionDelete) {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  fill: #c4c4c4;
+}
+
+:local(.button) {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 11px;
+  margin: 0 0 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: none;
+  background: #F8F8F9;
+  outline: none;
+  cursor: pointer;
+}
+
+:local(.settings) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+}
+
+@media (max-width: 767px) {
+  :local(.settings) {
+    grid-template-columns: 1fr;
+  }
+}
+
+:local(.checkbox) {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+:local(.checkboxLabel) {
+  margin: 0 0 0 10px;
+}

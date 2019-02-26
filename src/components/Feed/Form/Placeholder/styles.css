@@ -1,0 +1,15 @@
+:local(.placeholder) {
+  margin: 0 -8px 40px;
+  padding: 17px 0;
+  border-bottom: 1px solid #e1e1e1;
+  font-size: 24px;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+:local(.placeholderItem) {
+  display: inline-block;
+  margin: 0 8px;
+  vertical-align: middle;
+}

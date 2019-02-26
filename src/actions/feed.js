@@ -16,6 +16,7 @@ import api from '../api';
 import graphql from '../api/graphql';
 import { addPosts } from './posts';
 import { commentsAddContainerData } from './comments';
+import loader from '../utils/loader';
 
 export const feedReset = () => ({ type: 'FEED_RESET' });
 export const feedSetLoading = payload => ({ type: 'FEED_SET_LOADING', payload });
@@ -86,7 +87,10 @@ export const feedGetUserPosts = ({
   }, 2000);
 };
 
-export const feedCreatePost = (feedTypeId, params) => (dispatch) => {
+export const feedCreatePost = (
+  feedTypeId,
+  params,
+) => async (dispatch) => {
   const createCommentPostFunctions = {
     [USER_NEWS_FEED_ID]: api.createUserCommentPost.bind(api),
     [USER_WALL_FEED_ID]: api.createUserCommentPost.bind(api),
@@ -94,17 +98,19 @@ export const feedCreatePost = (feedTypeId, params) => (dispatch) => {
     [TAG_FEED_ID]: api.createUserCommentPost.bind(api),
   };
 
+  loader.start();
   dispatch(feedSetLoading(true));
 
-  return createCommentPostFunctions[feedTypeId](params)
-    .then((data) => {
-      dispatch(addPosts([data]));
-      dispatch(feedPrependPostIds([data.id]));
-      dispatch(feedSetLoading(false));
-    })
-    .catch(() => {
-      dispatch(feedSetLoading(false));
-    });
+  try {
+    const data = await createCommentPostFunctions[feedTypeId](params);
+    dispatch(addPosts([data]));
+    dispatch(feedPrependPostIds([data.id]));
+  } catch (e) {
+    console.error(e);
+  }
+
+  loader.done();
+  dispatch(feedSetLoading(false));
 };
 
 export const feedGetPosts = (

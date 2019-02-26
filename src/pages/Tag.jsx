@@ -69,7 +69,7 @@ const Tag = (props) => {
                   feedTypeId={TAG_FEED_ID}
                   userId={props.user.data.id}
                   tagIdentity={tag.title}
-                  feedInputInitialText={tag.title}
+                  feedInputInitialText={`#${tag.title} `}
                   filter={(postId) => {
                     const post = getPostById(props.posts, postId);
                     return post && post.description && existHashTag(post.description, tag.title);
