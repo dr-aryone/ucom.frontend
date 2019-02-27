@@ -102,7 +102,6 @@ const Field = (props) => {
               poll={poll}
               onClickCLose={() => setPoll(null)}
               onChange={(poll) => {
-                console.log(poll);
                 setPoll(poll);
               }} // Сюда записывается отредактированный опрос
             />
@@ -115,7 +114,9 @@ const Field = (props) => {
               setMainImageFilename(file);
             }}
             onClickPoll={() => {
-              setPoll({}); // TODO: Передавать пустую структуру опроса с помощью либы Володи
+              setPoll({
+                options: [''],
+              }); // TODO: Передавать пустую структуру опроса с помощью либы Володи
             }}
           />
           <button

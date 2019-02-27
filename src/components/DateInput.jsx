@@ -77,7 +77,12 @@ class DateInput extends PureComponent {
 
   render() {
     const days = range(1, this.state.daysInMonth + 1).map(i => ({ value: i, label: i }));
-    const years = range(2018, 1905).map(i => ({ value: i, label: i }));
+    let years;
+    if (this.props.dateForPoll) {
+      years = range(2019, 2026).map(i => ({ value: i, label: i }));
+    } else {
+      years = range(2018, 1905).map(i => ({ value: i, label: i }));
+    }
     const { error, touched } = this.props;
     return (
       <div className="date-input">
