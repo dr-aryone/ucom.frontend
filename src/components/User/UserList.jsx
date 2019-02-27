@@ -18,7 +18,7 @@ const UserList = (props) => {
     return null;
   }
 
-  const visibleUsers = getUsersByIds(props.users, props.usersIds.sort())
+  const visibleUsers = getUsersByIds(props.users, props.usersIds)
     .slice(0, props.limit);
 
   return (

@@ -14,7 +14,6 @@ const OrganizationListPopup = (props) => {
   }
 
   const organizations = props.organizationsIds
-    .sort()
     .map(id => getOrganizationById(props.organizations, id))
     .filter(e => e);
   return (

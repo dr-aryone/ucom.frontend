@@ -36,7 +36,7 @@ export default (state = getInitialState(), action) => {
       return { ...state, manyUsers: merge(state.manyUsers, action.payload) };
 
     case 'POSTS_FEED_SET_SIDE_ORGANIZATIONS':
-      return { ...state, manyOrganizations: merge(state.manyOrganizations, action.payload) };
+      return { ...state, manyOrganizations: action.payload };
 
     case 'POSTS_FEED_SET_SIDE_TAGS':
       return { ...state, manyTags: merge(state.manyTags, action.payload) };
