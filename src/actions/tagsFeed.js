@@ -36,7 +36,8 @@ export const tagsFeedGet = ({
     const data = await graphql.getOverview(params);
     dispatch(tagsFeedAppendIds(data.manyTags.data));
     dispatch(tagsFeedSetMetadata(data.manyTags.metadata));
-    dispatch(tagsFeedSetSideUsers(data.manyUsers.data));
+    // dispatch(tagsFeedSetSideUsers(data.manyUsers.data));
+    // dispatch(addUsers(data.manyUsers.data));
   } catch (e) {
     console.error(e);
   }

@@ -17,21 +17,15 @@ class OrganizationList extends PureComponent {
   }
 
   render() {
-    const {
-      organizationsIds, myOrganizations, limit, organizations, tagTitle, loadMore,
-    } = this.props;
-    if ((!organizationsIds || !organizationsIds.length) && (!myOrganizations || !myOrganizations.length)) {
+    if (!this.props.organizationsIds || !this.props.organizationsIds.length) {
       return null;
     }
 
-    const visibleOrganizations = myOrganizations ? myOrganizations.slice(0, limit) :
-      organizationsIds
-        .sort()
-        .slice(0, limit)
-        .map(id => getOrganizationById(organizations, id))
-        .filter(item => item && item.id);
-
-    const allOrganizations = myOrganizations || organizationsIds;
+    const visibleOrganizations = this.props.organizationsIds
+      .sort()
+      .slice(0, this.props.limit)
+      .map(id => getOrganizationById(this.props.organizations, id))
+      .filter(item => item && item.id);
 
     return (
       <Fragment>
@@ -50,35 +44,28 @@ class OrganizationList extends PureComponent {
             ))}
           </div>
 
-          {allOrganizations.length > limit &&
+          {this.props.organizationsIds.length > this.props.limit &&
             <div className="organization-list__more">
               <button
                 className="button-clean button-clean_link"
-                onClick={() => { this.setState({ popupVisible: true }); loadMore(); }}
+                onClick={() => { this.setState({ popupVisible: true }); if (this.props.loadMore) this.props.loadMore(); }}
               >
                 View All
               </button>
             </div>
           }
-
         </div>
-        {this.state.popupVisible && myOrganizations &&
-          <OrganizationListPopup
-            myOrganizations={myOrganizations}
-            onClickClose={() => this.setState({ popupVisible: false })}
-          />
-        }
 
-        {this.state.popupVisible && organizationsIds && (
-          tagTitle ? (
+        {this.state.popupVisible && (
+          this.props.tagTitle ? (
             <OrganizationListPopupMore
-              organizationsIds={organizationsIds}
-              tagTitle={tagTitle}
+              organizationsIds={this.props.organizationsIds}
+              tagTitle={this.props.tagTitle}
               onClickClose={() => this.setState({ popupVisible: false })}
             />
           ) : (
             <OrganizationListPopup
-              organizationsIds={organizationsIds}
+              organizationsIds={this.props.organizationsIds}
               onClickClose={() => this.setState({ popupVisible: false })}
             />
           )

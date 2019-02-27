@@ -11,11 +11,11 @@ import { getFileUrl } from '../../utils/upload';
 import urls from '../../utils/urls';
 
 const UserListPopup = (props) => {
-  if (!props.usersIds && !props.myUsers) {
+  if (!props.usersIds) {
     return null;
   }
 
-  const users = props.myUsers ? props.myUsers : getUsersByIds(props.users, props.usersIds);
+  const users = getUsersByIds(props.users, props.usersIds);
 
   return (
     <div className="entry-list">

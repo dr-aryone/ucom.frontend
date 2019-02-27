@@ -61,7 +61,7 @@ const Communities = (props) => {
                 Most Active Members
                 </h2>
               </div>
-              <UserList loadMore={() => props.dispatch(feedGetSide({ categoryId: overviewCategory.id, tab: 'Organizations', side: 'Users' }))} myUsers={props.communityFeed.manyUsers} limit={LIST_LIMIT} />
+              <UserList loadMore={() => props.dispatch(feedGetSide({ categoryId: overviewCategory.id, tab: 'Organizations', side: 'Users' }))} usersIds={props.feed.manyUsers.map(e => e.id)} limit={LIST_LIMIT} />
             </div>
             }
           </div>

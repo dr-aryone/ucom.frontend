@@ -5,12 +5,15 @@ import Footer from '../components/Footer';
 import urls from '../utils/urls';
 import * as overviewUtils from '../utils/overview';
 import Publications from '../components/Overview/PublicationsTab';
+import Posts from '../components/Overview/PostsTab';
 import Communities from '../components/Overview/CommunitiesTab';
 import Tags from '../components/Overview/TagsTab';
 import NotFoundPage from './NotFoundPage';
 import * as feedActions from '../actions/feed';
+import { communityFeedGet } from '../actions/communityFeed';
+import { tagsFeedGet } from '../actions/tagsFeed';
 import { FEED_PER_PAGE } from '../utils/feed';
-import { POST_TYPE_DIRECT_ID, POST_TYPE_MEDIA_ID } from '../utils/posts';
+import { POST_TYPE_MEDIA_ID, POST_TYPE_DIRECT_ID } from '../utils/posts';
 
 
 const Overview = (props) => {
@@ -23,8 +26,8 @@ const Overview = (props) => {
   }
 
   const overviewComponents = {
-    publications: props => <Publications {...props} postTypeId={POST_TYPE_MEDIA_ID} />,
-    posts: props => <Publications {...props} postTypeId={POST_TYPE_DIRECT_ID} />,
+    publications: Publications,
+    posts: Posts,
     communities: Communities,
     tags: Tags,
   };
@@ -97,11 +100,28 @@ const Overview = (props) => {
   );
 };
 
-export const getPageData = (store, { name, page = 1 }) => {
-  const overviewCategory = overviewUtils.OVERVIEW_CATEGORIES.find(i => i.name === name);
+export const getPageData = (store, {
+  page = 1, route, filter,
+}) => {
+  const { feedGetPosts } = feedActions;
+  const overviewCategory = overviewUtils.OVERVIEW_CATEGORIES.find(i => i.name === filter);
   if (!overviewCategory) return null;
   const overviewCategoryId = overviewCategory.id;
-  return store.dispatch(feedActions.feedGetPosts(overviewCategoryId, { page, perPage: FEED_PER_PAGE, POST_TYPE_MEDIA_ID }));
+  let feedGet;
+  let data;
+  if ((route === 'publications') || (route === 'posts')) {
+    feedGet = feedGetPosts;
+    const postTypeId = route === 'publications' ? POST_TYPE_MEDIA_ID : POST_TYPE_DIRECT_ID;
+    data = {
+      postTypeId, page, perPage: FEED_PER_PAGE, categoryId: overviewCategoryId,
+    };
+  } else if ((route === 'communities') || (route === 'tags')) {
+    feedGet = route === 'publications' ? communityFeedGet : tagsFeedGet;
+    data = {
+      page, perPage: FEED_PER_PAGE, categoryId: overviewCategoryId,
+    };
+  }
+  return store.dispatch(feedGet(data));
 };
 
 export default Overview;

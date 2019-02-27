@@ -1,79 +1,68 @@
 import { connect } from 'react-redux';
 import React, { useState } from 'react';
 import { getFileUrl } from '../../utils/upload';
-import urls from '../../utils/urls';
 import UserListPopup from './UserListPopup';
 import UserListPopupMore from './UserListPopupMore';
+import urls from '../../utils/urls';
 import { getUsersByIds } from '../../store/users';
-import DefaultUserCard, { MyUserCard } from '../UserCard/UserCard';
+import UserCard from '../UserCard';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
 import { getUserName } from '../../utils/user';
+import Rate from '../Rate';
 
-const UserList = ({
-  usersIds, myUsers, limit, users, tagTitle, loadMore,
-}) => {
+const UserList = (props) => {
   const [popupVisible, setPopupVisible] = useState(false);
-  if ((!usersIds || !usersIds.length) && (!myUsers || !myUsers.length)) {
+
+  if (!props.usersIds || !props.usersIds.length) {
     return null;
   }
 
-  const visibleUsers = myUsers ? myUsers.slice(0, limit) : getUsersByIds(users, usersIds.sort())
-    .slice(0, limit);
+  const visibleUsers = getUsersByIds(props.users, props.usersIds.sort())
+    .slice(0, props.limit);
 
-  const allUsers = myUsers || usersIds;
   return (
     <div className="organization-list">
       <div className="organization-list__list">
         {visibleUsers.map(item => (
           <div className="organization-list__item" key={item.id}>
-            {myUsers ?
-              <MyUserCard
-                name={getUserName(item)}
-                userPickAlt={getUserName(item)}
-                url={urls.getUserUrl(item.id)}
-                userPickSrc={getFileUrl(item.avatarFilename)}
-                rate={item.currentRate}
-              /> : <DefaultUserCard userId={item.id} />
-            }
+            <UserCard
+              userName={getUserName(item)}
+              accountName={item.accountName}
+              profileLink={urls.getUserUrl(item.id)}
+              avatarUrl={getFileUrl(item.avatarFilename)}
+              sign="@"
+            />
+
+            <div className="organization-list__rate">
+              <Rate value={item.currentRate} />
+            </div>
           </div>
         ))}
       </div>
 
-
-      {allUsers.length > limit &&
+      {props.usersIds.length > props.limit &&
         <div className="organization-list__more">
           <button
             className="button-clean button-clean_link"
-            onClick={async () => { await loadMore(); setPopupVisible(true); }}
+            onClick={async () => { setPopupVisible(true); if (props.loadMore) await props.loadMore(); }}
           >
             View All
           </button>
         </div>
       }
 
-      {popupVisible && myUsers &&
+      {popupVisible &&
         <Popup onClickClose={() => setPopupVisible(false)}>
           <ModalContent onClickClose={() => setPopupVisible(false)}>
-            <UserListPopup
-              myUsers={myUsers}
-              title="Users"
-            />
-          </ModalContent>
-        </Popup>
-      }
-
-      {popupVisible && usersIds &&
-        <Popup onClickClose={() => setPopupVisible(false)}>
-          <ModalContent onClickClose={() => setPopupVisible(false)}>
-            {tagTitle ? (
+            {props.tagTitle ? (
               <UserListPopupMore
-                usersIds={usersIds}
-                tagTitle={tagTitle}
+                usersIds={props.usersIds}
+                tagTitle={props.tagTitle}
               />
             ) : (
               <UserListPopup
-                usersIds={usersIds}
+                usersIds={props.usersIds}
               />
             )}
           </ModalContent>

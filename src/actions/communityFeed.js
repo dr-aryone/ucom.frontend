@@ -35,7 +35,8 @@ export const communityFeedGet = ({
     const data = await graphql.getOverview(params);
     dispatch(communityFeedAppendIds(data.manyOrganizations.data));
     dispatch(communityFeedSetMetadata(data.manyOrganizations.metadata));
-    dispatch(communityFeedSetSideUsers(data.manyUsers.data));
+    // dispatch(communityFeedSetSideUsers(data.manyUsers.data));
+    // dispatch(addUsers(data.manyUsers.data));
   } catch (e) {
     console.error(e);
   }

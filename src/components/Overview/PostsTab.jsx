@@ -10,7 +10,7 @@ import * as overviewUtils from '../../utils/overview';
 import * as feedActions from '../../actions/feed';
 import { FEED_PER_PAGE } from '../../utils/feed';
 import loader from '../../utils/loader';
-import { POST_TYPE_MEDIA_ID } from '../../utils/posts';
+import { POST_TYPE_DIRECT_ID } from '../../utils/posts';
 
 const LIST_LIMIT = 5;
 
@@ -20,7 +20,7 @@ const Publications = (props) => {
   const overviewCategory = overviewUtils.OVERVIEW_CATEGORIES.find(i => i.name === overviewCategoryName);
 
 
-  const postTypeId = POST_TYPE_MEDIA_ID;
+  const postTypeId = POST_TYPE_DIRECT_ID;
 
   const onClickLoadMore = () => {
     loader.start();

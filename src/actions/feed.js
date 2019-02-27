@@ -1,4 +1,6 @@
 import * as overviewUtils from '../utils/overview';
+import { addUsers } from './users';
+import { addOrganizations } from './organizations';
 
 import {
   USER_NEWS_FEED_ID,
@@ -136,8 +138,13 @@ export const feedGetPosts = ({
       posts: data.manyPosts.data,
       metadata: data.manyPosts.metadata,
     }));
+
     dispatch(feedSetSideUsers(data.manyUsers.data));
+    dispatch(addUsers(data.manyUsers.data));
+
     dispatch(feedSetSideOrganizations(data.manyOrganizations.data));
+    dispatch(addOrganizations(data.manyOrganizations.data));
+
     dispatch(feedSetSideTags(data.manyTags.data));
   } catch (e) {
     console.error(e);
@@ -162,6 +169,11 @@ export const feedGetSide = ({
     const data = await graphql.getOverviewSide(params);
     const payload = data[`many${side}`].data;
     dispatch({ type: `${tab.toUpperCase()}_FEED_SET_SIDE_${side.toUpperCase()}`, payload });
+    if (side === 'Organizations') {
+      dispatch(addOrganizations(payload));
+    } else if (side === 'Users') {
+      dispatch(addUsers(payload));
+    }
   } catch (e) {
     console.error(e);
   }

@@ -59,7 +59,7 @@ const TagsTab = (props) => {
                 Top uses by
                 </h2>
               </div>
-              <UserList loadMore={() => props.dispatch(feedGetSide({ categoryId: overviewCategory.id, tab: 'Tags', side: 'Users' }))} myUsers={props.tagsFeed.manyUsers} limit={LIST_LIMIT} />
+              <UserList loadMore={() => props.dispatch(feedGetSide({ categoryId: overviewCategory.id, tab: 'Tags', side: 'Users' }))} usersIds={props.feed.manyUsers.map(e => e.id)} limit={LIST_LIMIT} />
             </div>
             }
           </div>
