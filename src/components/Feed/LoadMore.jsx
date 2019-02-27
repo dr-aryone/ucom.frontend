@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { throttle } from 'lodash';
 import React, { PureComponent } from 'react';
@@ -74,6 +73,10 @@ LoadMore.defaultProps = {
   onClick: null,
 };
 
-export default connect(state => ({
-  feeds: state.feeds,
-}))(LoadMore);
+LoadMore.defaultProps = {
+  url: null,
+  disabled: false,
+  onClick: null,
+};
+
+export default LoadMore;

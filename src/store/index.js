@@ -18,6 +18,8 @@ import registration from './registration';
 import mainPostGroup from './mainPostGroup';
 import feed from './feed';
 import tags from './tags';
+import communityFeed from './communityFeed';
+import tagsFeed from './tagsFeed';
 import { reducer as user } from './user';
 
 export const createStore = () => {
@@ -40,6 +42,8 @@ export const createStore = () => {
     mainPostGroup,
     feed,
     tags,
+    communityFeed,
+    tagsFeed,
   });
   const middlewares = [thunk];
   let preloadedState;
