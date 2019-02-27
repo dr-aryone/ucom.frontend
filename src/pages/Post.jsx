@@ -46,7 +46,7 @@ const PostPage = (props) => {
 
   return (
     <LayoutBase>
-      <div className="container">
+      <div className="container container_post">
         <div className="post-head">
           <div className="post-head__inner">
             <div className="post-head__user">
@@ -82,26 +82,31 @@ const PostPage = (props) => {
             </div>
 
             <div className="post-body__bside">
-              <div className="post-body__rate">
-                <Rate className="rate_medium" value={props.post.currentRate} />
-              </div>
-              <div className="post-body__rating">
-                <PostRating postId={props.post.id} />
-              </div>
-              <div className="post-body__share">
-                <ShareButton
-                  toggleShare={toggleShare}
-                />
-                {sharePopup ? (
-                  <div className="post-body__share-popup">
-                    <ShareBlock
-                      link={urls.getPostUrl(props.post)}
-                      postId={props.post.id}
-                      onClickClose={toggleShare}
-                      repostAvailable={props.post.myselfData.repostAvailable}
+              <div className="post-body__actions">
+                <div className="post-body__rate">
+                  <Rate className="rate_medium" value={props.post.currentRate} />
+                </div>
+                <div className="post-body__rating">
+                  <PostRating postId={props.post.id} />
+                </div>
+                <div className="post-body__share">
+                  <div className="post-body__share-button">
+                    <ShareButton
+                      toggleShare={toggleShare}
                     />
+
+                    {sharePopup ? (
+                      <div className="post-body__share-popup">
+                        <ShareBlock
+                          link={urls.getPostUrl(props.post)}
+                          postId={props.post.id}
+                          onClickClose={toggleShare}
+                          repostAvailable={props.post.myselfData.repostAvailable}
+                        />
+                      </div>
+                    ) : null }
                   </div>
-                ) : null }
+                </div>
               </div>
             </div>
           </div>

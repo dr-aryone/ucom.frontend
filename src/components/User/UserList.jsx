@@ -18,7 +18,7 @@ const UserList = (props) => {
     return null;
   }
 
-  const visibleUsers = getUsersByIds(props.users, props.usersIds.sort())
+  const visibleUsers = getUsersByIds(props.users, props.usersIds)
     .slice(0, props.limit);
 
   return (
@@ -45,7 +45,7 @@ const UserList = (props) => {
         <div className="organization-list__more">
           <button
             className="button-clean button-clean_link"
-            onClick={() => setPopupVisible(true)}
+            onClick={async () => { setPopupVisible(true); if (props.loadMore) await props.loadMore(); }}
           >
             View All
           </button>

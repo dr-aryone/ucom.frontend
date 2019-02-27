@@ -12,6 +12,7 @@
 @media(max-width: 767px) {
   .postCard {
     min-height: auto;
+    padding: 20px;
   }
 }
 
@@ -97,13 +98,16 @@
 
 .title {
   display: block;
+  margin: 0 0 10px;
+  padding: 50px 0 0;
+  word-break: break-word;
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: bold;
 }
 
 .title a {
   margin: 0 0 24px;
-  font-size: 28px;
-  line-height: 34px;
-  font-weight: bold;
   margin: 0;
   color: inherit;
 }
@@ -143,6 +147,12 @@
   box-shadow: 0px 1px 4px rgba(60, 68, 75, 0.13);
 }
 
+@media (max-width: 767px) {
+  .postCardSmall {
+    padding: 20px;
+  }
+}
+
 .postCardSmallRepost .rate {
   position: absolute;
   top: 20px;
@@ -155,9 +165,7 @@
 }
 
 .postCardSmall .title {
-  min-width: 260px;
   z-index: 1;
-  line-height: 24px;
   margin-bottom: 10px;
 }
 

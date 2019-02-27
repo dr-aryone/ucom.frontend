@@ -322,16 +322,16 @@ const OrganizationsCreatePage = (props) => {
             <div className="grid__item grid__item_side">
               <VerticalMenu
                 sections={[
-                  { name: 'PersonalNeworks', title: 'Personal Neworks' },
+                  { name: 'Contacts', title: 'Contacts' },
                   { name: 'SocialNetworks', title: 'Social Networks' },
                 ]}
               />
             </div>
             <div className="grid__item grid__item_main">
               <div className="fields">
-                <Element name="PersonalNeworks">
+                <Element name="Contacts">
                   <div className="fields__title">
-                    <h1 className="title title_small">Personal networks</h1>
+                    <h1 className="title title_small">Contacts</h1>
                   </div>
 
                   <div className="fields__item">

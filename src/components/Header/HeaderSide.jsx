@@ -28,23 +28,12 @@ const HeaderSide = ({
 
     <div className="menu__item only-desktop">
       <NavLink
-        to="/communities"
+        to={urls.getOverviewCategoryUrl()}
         className="menu__link menu__link_upper"
         activeClassName="menu__link_active"
-        isActive={() => location.pathname === '/communities'}
+        isActive={() => location.pathname.indexOf(urls.getOverviewCategoryUrl()) === 0}
       >
-        Communities
-      </NavLink>
-    </div>
-
-    <div className="menu__item only-desktop">
-      <NavLink
-        to={urls.getPublicationsCategoryUrl('trending')}
-        className="menu__link menu__link_upper"
-        activeClassName="menu__link_active"
-        isActive={() => location.pathname.indexOf(urls.getPublicationsUrl()) === 0}
-      >
-        Publications
+        Overview
       </NavLink>
     </div>
 

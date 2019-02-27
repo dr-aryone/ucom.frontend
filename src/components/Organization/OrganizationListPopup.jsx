@@ -13,10 +13,9 @@ const OrganizationListPopup = (props) => {
     return null;
   }
 
-  const organizations = props.readyOrganizations ? props.readyOrganizations : props.organizationsIds
-    .sort()
-    .map(id => getOrganizationById(props.organizations, id));
-  console.log(organizations);
+  const organizations = props.organizationsIds
+    .map(id => getOrganizationById(props.organizations, id))
+    .filter(e => e);
   return (
     <Popup onClickClose={props.onClickClose}>
       <ModalContent onClickClose={props.onClickClose}>
@@ -24,8 +23,8 @@ const OrganizationListPopup = (props) => {
           <div className="entry-list__title">Organizations</div>
 
           <div className="entry-list__list">
-            {organizations.map(item => (
-              <div className="entry-list__item" key={item.id}>
+            {organizations.map((item, index) => (
+              <div className="entry-list__item" key={index}>
                 <div className="entry-list__card">
                   <OrganizationCard
                     avatarSrc={getFileUrl(item.avatarFilename)}

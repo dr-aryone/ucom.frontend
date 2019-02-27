@@ -64,25 +64,23 @@ const UserPage = (props) => {
         </Popup>
       }
 
-      <div className="content content_sheet">
-        <div className="content__inner">
-          <UserHead userId={userId} />
+      <div className="container container_user">
+        <UserHead userId={userId} />
 
-          <div className="grid grid_user">
-            <div className="grid__item">
-              <UserAbout userId={userId} />
-              <Feed
-                userId={userId}
-                feedTypeId={USER_WALL_FEED_ID}
-              />
-            </div>
+        <div className="grid grid_user">
+          <div className="grid__item">
+            <UserAbout userId={userId} />
+            <Feed
+              userId={userId}
+              feedTypeId={USER_WALL_FEED_ID}
+            />
+          </div>
 
-            <div className="grid__item">
-              <UserOrganizations userId={userId} />
-              <UserSocialNetworks userId={userId} />
-              <UserNetworks userId={userId} />
-              <UserCreatedAt userId={userId} />
-            </div>
+          <div className="grid__item grid__item_info">
+            <UserOrganizations userId={userId} />
+            <UserSocialNetworks userId={userId} />
+            <UserNetworks userId={userId} />
+            <UserCreatedAt userId={userId} />
           </div>
         </div>
       </div>

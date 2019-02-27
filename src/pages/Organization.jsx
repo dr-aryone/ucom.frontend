@@ -140,6 +140,19 @@ const OrganizationPage = (props) => {
                         </div>
                       )}
 
+                      {organization.personalWebsiteUrl && (
+                        <div className="user-section">
+                          <div className="user-section__title">
+                            <h3 className="title title_xsmall title_light">
+                              Contacts
+                            </h3>
+                          </div>
+                          <div className="user-section__content">
+                            <Links userSources={[{ sourceUrl: organization.personalWebsiteUrl }]} />
+                          </div>
+                        </div>
+                      )}
+
                       {socialNetworks && socialNetworks.length > 0 && (
                         <div className="user-section">
                           <div className="user-section__title">

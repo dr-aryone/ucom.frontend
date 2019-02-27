@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import normalizeUrl from 'normalize-url';
 import SocialIcon from './Icons/Socials/Social';
 import { extractHostname } from '../utils/url';
 
@@ -15,7 +16,7 @@ const Links = props => (
               <SocialIcon sourceUrl={hostName} />
             </span>
             <span className="inline__item">
-              <a href={item.sourceUrl} target="blank">{hostName}</a>
+              <a href={normalizeUrl(item.sourceUrl)} rel="noopener noreferrer" target="_blank">{hostName}</a>
             </span>
           </span>
         </li>

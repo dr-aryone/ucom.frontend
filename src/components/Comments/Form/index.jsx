@@ -11,7 +11,7 @@ import TributeWrapper from '../../TributeWrapper';
 // TODO: Upload images
 
 const Form = (props) => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(props.message);
   const textareaEl = useRef(null);
 
   const reset = () => {
@@ -107,6 +107,7 @@ const Form = (props) => {
 };
 
 Form.propTypes = {
+  message: PropTypes.string,
   containerId: PropTypes.oneOf([COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST]).isRequired,
   postId: PropTypes.number.isRequired,
   commentId: PropTypes.number,
@@ -125,6 +126,7 @@ Form.propTypes = {
 };
 
 Form.defaultProps = {
+  message: '',
   commentId: null,
   depth: 0,
   autoFocus: false,

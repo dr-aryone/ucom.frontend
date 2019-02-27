@@ -71,12 +71,14 @@ const UsersPage = (props) => {
 
   return (
     <LayoutBase>
-      <div className="content">
-        <div className="content__inner">
-          <div className="content__title content__title_narrow content__title_searched">
-            <h1 className="title">People</h1>
-            <SearchInput setSearch={onChangeSearch} search={userName} />
-          </div>
+      <div className="layout layout_entries">
+        <div className="layout__title">
+          <h1 className="title">People</h1>
+        </div>
+        <div className="layout__search">
+          <SearchInput setSearch={onChangeSearch} search={userName} />
+        </div>
+        <div className="layout__table">
           {users && users.length > 0 &&
             <div className="table-content table-content_big-bottom">
               <div className="table-content__table">
@@ -87,6 +89,10 @@ const UsersPage = (props) => {
                       {[{
                         title: 'Name',
                         name: 'account_name',
+                        sortable: true,
+                      }, {
+                        title: 'Date',
+                        name: 'id',
                         sortable: true,
                       }, {
                         title: 'Rate',
@@ -126,7 +132,7 @@ const UsersPage = (props) => {
                   <tbody className="list-table__body">
                     {users.map((item, index) => (
                       <tr className="list-table__row" key={item.id}>
-                        <td className="list-table__cell list-table__cell_index">{index + 1}</td>
+                        <td className="list-table__cell list-table__cell_index">{index + 1 + ((page - 1) * perPage) }</td>
                         <td className="list-table__cell list-table__cell_name" data-title="Name">
                           <UserCard
                             profileLink={urls.getUserUrl(item.id)}
@@ -136,6 +142,7 @@ const UsersPage = (props) => {
                             sign="@"
                           />
                         </td>
+                        <td className="list-table__cell list-table__cell_date" data-title="Date" />
                         <td className="list-table__cell" data-title="Rate">
                           <span className="title title_xsmall title_light">{(+item.currentRate).toLocaleString()}°</span>
                         </td>

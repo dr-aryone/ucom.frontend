@@ -4,6 +4,7 @@ export const SOURCES_ID_FACEBOOK = 1;
 export const SOURCES_ID_REDDIT = 2;
 export const SOURCES_ID_MEDIUM = 3;
 export const SOURCES_ID_TWITTER = 4;
+export const SOURCES_ID_GITHUB = 5;
 export const STEPS_ID_GENERAL = 1;
 export const STEPS_ID_COMMUNITY = 2;
 export const STEPS_ID_CONTACTS = 3;
@@ -36,6 +37,9 @@ const getInitialState = () => ({
       sourceUrl: '',
     }, {
       sourceTypeId: SOURCES_ID_TWITTER,
+      sourceUrl: '',
+    }, {
+      sourceTypeId: SOURCES_ID_GITHUB,
       sourceUrl: '',
     }],
     communitySources: [],

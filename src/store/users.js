@@ -77,6 +77,7 @@ const users = (state = getInitialState(), action) => {
           [user.id]: {
             ...user,
             followedBy: uniq(compact([].concat(user.followedBy, action.payload.userId))),
+            myselfData: { ...user.myselfData, follow: true },
           },
         },
       };
@@ -85,7 +86,7 @@ const users = (state = getInitialState(), action) => {
     case 'USERS_REMOVE_FOLLOWED_BY': {
       const user = state.data[action.payload.ownerId];
 
-      if (!user || !user.followedBy) {
+      if (!user) {
         return state;
       }
 
@@ -95,7 +96,8 @@ const users = (state = getInitialState(), action) => {
           ...state.data,
           [user.id]: {
             ...user,
-            followedBy: user.followedBy.filter(id => id !== action.payload.userId),
+            followedBy: user.followedBy ? user.followedBy.filter(id => id !== action.payload.userId) : null,
+            myselfData: { ...user.myselfData, follow: false },
           },
         },
       };

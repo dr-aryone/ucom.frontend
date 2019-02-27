@@ -6,6 +6,7 @@ import FacebookIcon from './Facebook';
 import RedditIcon from './Reddit';
 import MediumIcon from './Medium';
 import TelegramIcon from './Telegram';
+import GithubIcon from './Github';
 
 const socialIcons = [
   [/(facebook|fb)/, <FacebookIcon />],
@@ -13,6 +14,7 @@ const socialIcons = [
   [/reddit/, <RedditIcon />],
   [/medium/, <MediumIcon />],
   [/telegram/, <TelegramIcon />],
+  [/github/, <GithubIcon />],
 ];
 
 const SocialIcon = (props) => {

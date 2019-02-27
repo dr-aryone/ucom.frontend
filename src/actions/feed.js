@@ -1,10 +1,7 @@
-import {
-  POSTS_CATREGORIES_HOT_ID,
-  POSTS_CATREGORIES_TRENDING_ID,
-  POSTS_CATREGORIES_FRESH_ID,
-  POSTS_CATREGORIES_TOP_ID,
-  POST_TYPE_MEDIA_ID,
-} from '../utils/posts';
+import * as overviewUtils from '../utils/overview';
+import { addUsers } from './users';
+import { addOrganizations } from './organizations';
+
 import {
   USER_NEWS_FEED_ID,
   USER_WALL_FEED_ID,
@@ -17,12 +14,16 @@ import graphql from '../api/graphql';
 import { addPosts } from './posts';
 import { commentsAddContainerData } from './comments';
 
-export const feedReset = () => ({ type: 'FEED_RESET' });
-export const feedSetLoading = payload => ({ type: 'FEED_SET_LOADING', payload });
-export const feedSetMetadata = payload => ({ type: 'FEED_SET_METADATA', payload });
-export const feedSetPostIds = payload => ({ type: 'FEED_SET_POST_IDS', payload });
-export const feedPrependPostIds = payload => ({ type: 'FEED_PREPEND_POST_IDS', payload });
-export const feedAppendPostIds = payload => ({ type: 'FEED_APPEND_POST_IDS', payload });
+export const feedReset = () => ({ type: 'POSTS_FEED_RESET' });
+export const feedSetLoading = payload => ({ type: 'POSTS_FEED_SET_LOADING', payload });
+export const feedSetMetadata = payload => ({ type: 'POSTS_FEED_SET_METADATA', payload });
+export const feedSetPostIds = payload => ({ type: 'POSTS_FEED_SET_POST_IDS', payload });
+export const feedPrependPostIds = payload => ({ type: 'POSTS_FEED_PREPEND_POST_IDS', payload });
+export const feedAppendPostIds = payload => ({ type: 'POSTS_FEED_APPEND_POST_IDS', payload });
+export const feedSetSideUsers = payload => ({ type: 'POSTS_FEED_SET_SIDE_USERS', payload });
+export const feedSetSideOrganizations = payload => ({ type: 'POSTS_FEED_SET_SIDE_ORGANIZATIONS', payload });
+export const feedSetSideTags = payload => ({ type: 'POSTS_FEED_SET_SIDE_TAGS', payload });
+
 
 export const parseFeedData = ({
   posts,
@@ -107,48 +108,76 @@ export const feedCreatePost = (feedTypeId, params) => (dispatch) => {
     });
 };
 
-export const feedGetPosts = (
-  postsCategoryId,
-  {
-    page,
-    perPage,
-  },
-) => async (dispatch) => {
-  const postFilteringForCategories = {
-    [POSTS_CATREGORIES_HOT_ID]: {
-      createdAt: '24_hours',
-    },
-  };
+const filter = {
+  [overviewUtils.OVERVIEW_CATEGORIES_HOT_ID]: 'Hot',
+  [overviewUtils.OVERVIEW_CATEGORIES_TRENDING_ID]: 'Trending',
+  [overviewUtils.OVERVIEW_CATEGORIES_FRESH_ID]: 'Fresh',
+  [overviewUtils.OVERVIEW_CATEGORIES_TOP_ID]: 'Top',
+};
 
-  const postOrderingForCategories = {
-    [POSTS_CATREGORIES_HOT_ID]: '-current_rate',
-    [POSTS_CATREGORIES_TRENDING_ID]: '-current_rate_delta_daily',
-    [POSTS_CATREGORIES_FRESH_ID]: '-id',
-    [POSTS_CATREGORIES_TOP_ID]: '-current_rate',
-  };
-
+export const feedGetPosts = ({
+  postTypeId,
+  page,
+  perPage,
+  categoryId,
+}) => async (dispatch) => {
   const params = {
-    postFiltering: {
-      postTypeId: POST_TYPE_MEDIA_ID,
-      ...postFilteringForCategories[postsCategoryId],
-    },
-    postOrdering: postOrderingForCategories[postsCategoryId],
+    tab: 'Posts',
+    filter: filter[categoryId],
+    postTypeId,
     page,
     perPage,
     commentsPerPage: COMMENTS_INITIAL_COUNT_USER_WALL_FEED,
+    commentsPage: page,
   };
-
   dispatch(feedSetLoading(true));
 
   try {
-    const data = await graphql.getPosts(params);
+    const data = await graphql.getOverview(params);
     dispatch(parseFeedData({
-      posts: data.data,
-      metadata: data.metadata,
+      posts: data.manyPosts.data,
+      metadata: data.manyPosts.metadata,
     }));
+
+    dispatch(feedSetSideUsers(data.manyUsers.data));
+    dispatch(addUsers(data.manyUsers.data));
+
+    dispatch(feedSetSideOrganizations(data.manyOrganizations.data));
+    dispatch(addOrganizations(data.manyOrganizations.data));
+
+    dispatch(feedSetSideTags(data.manyTags.data));
   } catch (e) {
     console.error(e);
   }
 
   dispatch(feedSetLoading(false));
 };
+export const feedGetSide = ({
+  categoryId,
+  tab,
+  side,
+  postTypeId,
+}) => async (dispatch) => {
+  const params = {
+    tab,
+    filter: filter[categoryId],
+    side,
+    postTypeId,
+  };
+  dispatch(feedSetLoading(true));
+  try {
+    const data = await graphql.getOverviewSide(params);
+    const payload = data[`many${side}`].data;
+    dispatch({ type: `${tab.toUpperCase()}_FEED_SET_SIDE_${side.toUpperCase()}`, payload });
+    if (side === 'Organizations') {
+      dispatch(addOrganizations(payload));
+    } else if (side === 'Users') {
+      dispatch(addUsers(payload));
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  dispatch(feedSetLoading(false));
+};
+

@@ -26,7 +26,7 @@ const OrganizationCard = props => (
     </div>
     {typeof props.currentRate !== 'undefined' &&
       <div className="organization-card__bside">
-        <Rate className="rate_small" value={props.currentRate} />
+        <Rate value={props.currentRate} />
       </div>
     }
   </div>

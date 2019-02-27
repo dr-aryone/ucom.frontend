@@ -15,7 +15,12 @@ const remoteSearch = (text, cb) => {
 
 export const defaultTributeConfig = {
   values: (text, cb) => remoteSearch(text, users => cb(users)),
-  lookup: 'accountName',
+  lookup: (item, mentionText) => {
+    if (item.firstName && (item.firstName.indexOf(mentionText) !== -1)) {
+      return item.firstName;
+    }
+    return item.accountName;
+  },
   fillAttr: 'accountName',
   menuItemTemplate:
   item => (`

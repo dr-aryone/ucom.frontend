@@ -6,26 +6,21 @@ import loader from '../../utils/loader';
 import { addPosts } from '../../actions/posts';
 import LoadMore from './LoadMore';
 import Post from './Post/Post';
-import {
-  POSTS_CATREGORIES_HOT_ID,
-  POSTS_CATREGORIES_TRENDING_ID,
-  POSTS_CATREGORIES_FRESH_ID,
-  POSTS_CATREGORIES_TOP_ID,
-  POST_TYPE_MEDIA_ID,
-} from '../../utils/posts';
+import { POST_TYPE_MEDIA_ID } from '../../utils/posts';
+import * as overviewUtils from '../../utils/overview';
 
 const paramsForCategories = {
-  [POSTS_CATREGORIES_HOT_ID]: {
+  [overviewUtils.OVERVIEW_CATEGORIES_HOT_ID]: {
     sortBy: '-current_rate',
     createdAt: '24_hours',
   },
-  [POSTS_CATREGORIES_TRENDING_ID]: {
+  [overviewUtils.OVERVIEW_CATEGORIES_TRENDING_ID]: {
     sortBy: '-current_rate_delta_daily',
   },
-  [POSTS_CATREGORIES_FRESH_ID]: {
+  [overviewUtils.OVERVIEW_CATEGORIES_FRESH_ID]: {
     sortBy: '-id',
   },
-  [POSTS_CATREGORIES_TOP_ID]: {
+  [overviewUtils.OVERVIEW_CATEGORIES_TOP_ID]: {
     sortBy: '-current_rate',
   },
 };

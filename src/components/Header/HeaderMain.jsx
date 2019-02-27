@@ -49,10 +49,16 @@ const HeaderMain = ({
         })
       }
 
-      {user.organizations && user.organizations.length > 3 ?
-        <Fragment>
-          <div className="header-user-menu__item" role="presentation" onClick={() => setOrganizationListPopup(true)} >View All</div>
-        </Fragment> : null}
+      {/* <div className="menu__item only-desktop">
+        <NavLink
+          to={urls.getOverviewCategoryUrl()}
+          className="menu__link menu__link_upper"
+          activeClassName="menu__link_active"
+          isActive={() => location.pathname.indexOf(urls.getPublicationsUrl()) === 0}
+        >
+          Overview
+        </NavLink>
+      </div> */}
 
       <Link to="/communities/new" className="header-user-menu__item">Create Community</Link>
     </div>

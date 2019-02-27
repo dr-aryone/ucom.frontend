@@ -73,12 +73,11 @@ class EventsPage extends PureComponent {
   render() {
     return (
       <LayoutBase>
-        <div className="content">
-          <div className="content__inner">
-            <div className="content__title content__title_narrow">
-              <h1 className="title">Communities</h1>
-            </div>
-
+        <div className="layout layout_entries">
+          <div className="layout__title">
+            <h1 className="title">Communities</h1>
+          </div>
+          <div className="layout__table">
             {this.state.organizations && this.state.organizations.length > 0 &&
               <div className="table-content">
                 <div className="table-content__table">

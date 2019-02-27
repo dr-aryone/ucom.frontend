@@ -3,6 +3,7 @@ import {
   SOURCES_ID_REDDIT,
   SOURCES_ID_MEDIUM,
   SOURCES_ID_TWITTER,
+  SOURCES_ID_GITHUB,
   USERS_TEAM_STATUS_ID_PENDING,
   USERS_TEAM_STATUS_ID_CONFIRMED,
   USERS_TEAM_STATUS_ID_DECLINED,
@@ -42,6 +43,9 @@ export const getSourceNameById = (id) => {
       return 'Twitter';
     }
 
+    case SOURCES_ID_GITHUB: {
+      return 'Github';
+    }
     default: {
       return null;
     }
