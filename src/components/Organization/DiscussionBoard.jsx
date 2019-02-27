@@ -7,6 +7,7 @@ import cx from 'classnames';
 import { Tooltip } from 'react-tippy';
 import styles from './DiscussionBoard.css';
 import urls from '../../utils/urls';
+import { copyToClipboard } from '../../utils/text';
 import TextInput from '../TextInput';
 import CloseIcon from '../Icons/Close';
 import EnterIcon from '../Icons/Enter';
@@ -14,7 +15,8 @@ import EllipsisIcon from '../Icons/Ellipsis';
 import CommentIcon from '../Icons/Comment';
 import { postsFetch } from '../../actions/posts';
 
-const DiscussionBoard = () => {
+
+const DiscussionBoard = ({ isCurrentUser, organizationId }) => {
   const [discussion, setDiscussions] = useState([313, 322, 32644]);
   const [isAdd, setIsAdd] = useState(false);
   const [ellipsisVisibility, setEllipsisVisibility] = useState(false);
@@ -41,12 +43,19 @@ const DiscussionBoard = () => {
               <Tooltip
                 html={(
                   <div className={styles.tooltip}>
+                    {isCurrentUser &&
                     <span
                       className={styles.tooltipText}
                       role="presentation"
                       onClick={() => setDiscussions(discussion.filter((e, index) => index !== myIndex))
                     }
                     >Remove
+                    </span>}
+                    <span
+                      className={styles.tooltipText}
+                      role="presentation"
+                      onClick={() => copyToClipboard(`${document.location.origin}/posts/${value}`)}
+                    >Copy Link
                     </span>
                   </div>
               )}
@@ -70,7 +79,7 @@ const DiscussionBoard = () => {
   const SortableList = SortableContainer(({ items }) => (
     <div className={styles.list}>
       {items.map((value, index) => (
-        <SortableItem key={`item-${index}`} myIndex={index} index={index} value={value} />
+        <SortableItem disabled={!isCurrentUser} key={`item-${index}`} myIndex={index} index={index} value={value} />
       ))}
     </div>
   ));
@@ -95,6 +104,7 @@ const DiscussionBoard = () => {
     if (origin === url.origin && pathnames.length === 3 && pathnames[1] === 'posts' && Number.isInteger(+pathnames[2])) {
       setDiscussions([...discussion, pathnames[2]]);
       setDiscussionLink('');
+      setError('');
       return setIsAdd(false);
     }
 
@@ -123,6 +133,10 @@ const DiscussionBoard = () => {
     return null;
   });
 
+  useEffect(() => {
+    setIsAdd(false);
+  }, [organizationId]);
+
   const ellipsisClassName = cx(styles.ellipsis, {
     [styles.visibleEllipsis]: ellipsisVisibility,
   });
@@ -130,7 +144,7 @@ const DiscussionBoard = () => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>Discussion Board
-        {discussion.length ?
+        {discussion.length && isCurrentUser ?
           <Tooltip
             html={(
               <div className={styles.tooltip}>
@@ -160,7 +174,7 @@ const DiscussionBoard = () => {
         <div className={styles.textinput}>
           <TextInput error={error} placeholder="Link to article" value={discussionLink} onChange={setDiscussionLink} />
           <div className={styles.icon} role="presentation" onClick={onAddLink}><EnterIcon /></div>
-          <div className={[styles.icon, styles.close]} role="presentation" onClick={resetError}><CloseIcon /></div>
+          <div className={`${styles.icon} ${styles.close}`} role="presentation" onClick={resetError}><CloseIcon /></div>
         </div>
       }
       <SortableList pressDelay={150} helperClass={styles.itemDragged} items={discussion} onSortEnd={onSortEnd} />

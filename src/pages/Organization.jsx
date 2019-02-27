@@ -84,7 +84,7 @@ const OrganizationPage = (props) => {
                         </div>
                       )}
 
-                      <DiscussionBoard />
+                      <DiscussionBoard discussions={organization.discussions} organizationId={organization.id} isCurrentUser={organization.userId === props.user.id} />
 
                       <div className="user-section">
                         <Feed organizationId={organizationId} feedTypeId={ORGANIZATION_FEED_ID} />
