@@ -3,6 +3,10 @@
   max-width: 600px;
 }
 
+.notCursor .itemContainer {
+  cursor: default;
+}
+
 .ellipsis {
   visibility: hidden;
   cursor: pointer;
@@ -108,6 +112,7 @@
 
 .caption:hover {
   color: #D8352F;
+  text-decoration: none;
 }
 
 .comment {

@@ -294,6 +294,12 @@ class Api {
     return response.data;
   }
 
+  async setDiscussions(organizationId, data) {
+    const url = `/api/v1/${organizationId}/discussions`;
+    const response = await this.actions.post(url, snakes(data));
+    return response.data;
+  }
+
   async getOrganizationPosts(id) {
     const url = `/api/v1/organizations/${id}/posts`;
 

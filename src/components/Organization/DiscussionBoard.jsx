@@ -14,9 +14,9 @@ import EnterIcon from '../Icons/Enter';
 import EllipsisIcon from '../Icons/Ellipsis';
 import CommentIcon from '../Icons/Comment';
 import { postsFetch } from '../../actions/posts';
+import api from '../../api';
 
-
-const DiscussionBoard = ({ isCurrentUser, organizationId }) => {
+const DiscussionBoard = ({ isCurrentUser, organizationId, discussions }) => {
   const [discussion, setDiscussions] = useState([313, 322, 32644]);
   const [isAdd, setIsAdd] = useState(false);
   const [ellipsisVisibility, setEllipsisVisibility] = useState(false);
@@ -77,7 +77,7 @@ const DiscussionBoard = ({ isCurrentUser, organizationId }) => {
   });
 
   const SortableList = SortableContainer(({ items }) => (
-    <div className={styles.list}>
+    <div className={`${styles.list} ${isCurrentUser ? '' : styles.notCursor}`} >
       {items.map((value, index) => (
         <SortableItem disabled={!isCurrentUser} key={`item-${index}`} myIndex={index} index={index} value={value} />
       ))}
@@ -136,6 +136,11 @@ const DiscussionBoard = ({ isCurrentUser, organizationId }) => {
   useEffect(() => {
     setIsAdd(false);
   }, [organizationId]);
+
+  useEffect(() => {
+    api.setDiscussions(organizationId, { discussions: [2] });
+  }, []);
+
 
   const ellipsisClassName = cx(styles.ellipsis, {
     [styles.visibleEllipsis]: ellipsisVisibility,
