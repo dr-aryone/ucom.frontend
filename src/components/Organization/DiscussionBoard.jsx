@@ -113,10 +113,13 @@ const DiscussionBoard = ({
     } catch (e) {
       return setError(`Incorrect link. Format: ${origin}/posts/1`);
     }
+
     if (!(origin === url.origin && pathnames.length === 3 && pathnames[1] === 'posts' && Number.isInteger(+postId))) {
       return setError(`Incorrect link. Format: ${origin}/posts/1`);
     } else if (discussion.some(e => e === +postId)) {
       return setError('All discussions must be unique.');
+    } else if (discussion.length === 10) {
+      return setError('Organization has maximum allowed amount of discussions: 10');
     }
 
     try {
