@@ -27,6 +27,8 @@ const UserPage = (props) => {
   const postId = Number(props.match.params.postId);
   const [loaded, setLoaded] = useState(false);
 
+  console.log(userIdOrName);
+
   useEffect(() => {
     loader.start();
     window.scrollTo(0, 0);
