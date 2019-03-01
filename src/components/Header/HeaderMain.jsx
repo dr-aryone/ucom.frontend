@@ -39,12 +39,12 @@ const HeaderMain = ({ location }) => (
 
       <div className="menu__item only-desktop">
         <NavLink
-          to={urls.getPublicationsCategoryUrl('trending')}
+          to={urls.getOverviewCategoryUrl()}
           className="menu__link menu__link_upper"
           activeClassName="menu__link_active"
           isActive={() => location.pathname.indexOf(urls.getPublicationsUrl()) === 0}
         >
-          Publications
+          Overview
         </NavLink>
       </div>
 

@@ -47,7 +47,15 @@ const OrganizationPage = (props) => {
 
   const socialNetworks = (organization.socialNetworks || [])
     .filter(item => item.sourceUrl && item.sourceUrl.length > 0);
+  const isCurrentUser = organization.usersTeam ? [organization.userId, ...organization.usersTeam.map(e => e.id)].some(e => e === props.user.id) : false;
+  const apiDiscussions = organization.discussions || [];
+  let renderDiscussions;
 
+  if (!isCurrentUser && !apiDiscussions.length) {
+    renderDiscussions = false;
+  } else {
+    renderDiscussions = true;
+  }
   return (
     <LayoutBase>
       {Boolean(post) &&
@@ -84,7 +92,7 @@ const OrganizationPage = (props) => {
                         </div>
                       )}
 
-                      <DiscussionBoard discussions={organization.discussions} organizationId={organization.id} isCurrentUser={organization.userId === props.user.id} />
+                      {renderDiscussions && <DiscussionBoard organization={organization} apiDiscussions={apiDiscussions} organizationId={organization.id} isCurrentUser={isCurrentUser} /> }
 
                       <div className="user-section">
                         <Feed organizationId={organizationId} feedTypeId={ORGANIZATION_FEED_ID} />
@@ -195,15 +203,12 @@ const OrganizationPage = (props) => {
 OrganizationPage.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.number,
       postId: PropTypes.number,
     }).isRequired,
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-  organizations: PropTypes.arrayOf(PropTypes.any).isRequired,
-  posts: PropTypes.arrayOf(PropTypes.any).isRequired,
   getOrganization: PropTypes.func.isRequired,
   fetchPost: PropTypes.func.isRequired,
 };

@@ -1,0 +1,13 @@
+#!/bin/bash
+. ~/.nvm/nvm.sh
+. ~/.bashrc
+echo "Lets deploy on staging"
+cd /var/www/ucom.frontend.staging
+git checkout staging
+git pull
+npm ci --ignore-scripts
+npm run staging
+echo "Lets reload pm2 with update env and saving new configuration"
+/home/dev/.nvm/versions/node/v10.9.0/bin/pm2 reload ecosystem-staging.config.js --update-env
+/home/dev/.nvm/versions/node/v10.9.0/bin/pm2 save
+echo "Deploy on staging is finished"

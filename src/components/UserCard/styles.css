@@ -23,3 +23,9 @@
   font-weight: bold;
   opacity: 0.4;
 }
+
+.user-card-simple_tag {
+  display: flex;
+  flex-direction: column;
+  line-height: normal;
+}

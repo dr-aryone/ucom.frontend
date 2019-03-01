@@ -30,3 +30,35 @@
     }
   }
 }
+.nav-bar__title_overview {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-bar__categories {
+  display: flex;
+
+  .overview__link {
+    font-weight: bold;
+    line-height: 25px;
+    font-size: 16px;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 8px;
+    opacity: 0.2;
+    text-transform: capitalize;
+    
+    &:hover {
+      opacity: 1;
+      border-bottom-color: #000;
+    }
+  }
+
+  .overview__link_active {
+    opacity: 1;
+    border-bottom-color: #000;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}

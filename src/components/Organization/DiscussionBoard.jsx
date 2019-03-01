@@ -13,17 +13,20 @@ import CloseIcon from '../Icons/Close';
 import EnterIcon from '../Icons/Enter';
 import EllipsisIcon from '../Icons/Ellipsis';
 import CommentIcon from '../Icons/Comment';
-import { postsFetch } from '../../actions/posts';
+import { setApiDiscussions } from '../../actions/organization';
+import { getOrganization, addOrganizations } from '../../actions/organizations';
 import api from '../../api';
 
-const DiscussionBoard = ({ isCurrentUser, organizationId, discussions }) => {
-  const [discussion, setDiscussions] = useState([313, 322, 32644]);
+const DiscussionBoard = ({
+  isCurrentUser, organizationId, apiDiscussions, setApiDiscussions, getOrganization, organization, addOrganizations,
+}) => {
+  const [discussion, setDiscussions] = useState([]);
   const [isAdd, setIsAdd] = useState(false);
   const [ellipsisVisibility, setEllipsisVisibility] = useState(false);
   const [discussionLink, setDiscussionLink] = useState('');
   const [error, setError] = useState('');
 
-  const SortableItem = SortableElement(({ value, myIndex }) => {
+  const SortableItem = SortableElement(({ item, myIndex }) => {
     const [ellipsisItemVisibility, setEllipsisItemVisibility] = useState(false);
     const ellipsisClassItemName = cx(styles.ellipsis, {
       [styles.visibleEllipsis]: ellipsisItemVisibility,
@@ -34,11 +37,11 @@ const DiscussionBoard = ({ isCurrentUser, organizationId, discussions }) => {
         <div className={styles.item}>
           <div className={styles.itemContainer}>
             <div className={styles.itemMain}>
-              <Link target="_blank" to={`/posts/${value}`} className={styles.caption}>{value}</Link>
-              <div className={styles.author}>{value}</div>
+              <Link target="_blank" to={`/posts/${item.id}`} className={styles.caption}>{item.title}</Link>
+              <Link target="_blank" to={`/user/${item.userId}`} className={styles.author}>{item.user.firstName || item.user.accountТame}</Link>
             </div>
             <div className={styles.itemSide}>
-              <div className={styles.comment}>{value}</div>
+              <div className={styles.comment}>{item.commentsCount}</div>
               <div className={styles.commentIcon}><CommentIcon dimension="10" /></div>
               <Tooltip
                 html={(
@@ -47,14 +50,14 @@ const DiscussionBoard = ({ isCurrentUser, organizationId, discussions }) => {
                     <span
                       className={styles.tooltipText}
                       role="presentation"
-                      onClick={() => setDiscussions(discussion.filter((e, index) => index !== myIndex))
+                      onClick={() => onRemove(myIndex) // eslint-disable-line
                     }
                     >Remove
                     </span>}
                     <span
                       className={styles.tooltipText}
                       role="presentation"
-                      onClick={() => copyToClipboard(`${document.location.origin}/posts/${value}`)}
+                      onClick={() => copyToClipboard(`${document.location.origin}/posts/${item.id}`)}
                     >Copy Link
                     </span>
                   </div>
@@ -78,37 +81,54 @@ const DiscussionBoard = ({ isCurrentUser, organizationId, discussions }) => {
 
   const SortableList = SortableContainer(({ items }) => (
     <div className={`${styles.list} ${isCurrentUser ? '' : styles.notCursor}`} >
-      {items.map((value, index) => (
-        <SortableItem disabled={!isCurrentUser} key={`item-${index}`} myIndex={index} index={index} value={value} />
+      {items.map((item, index) => (
+        <SortableItem disabled={!isCurrentUser} key={`item-${index}`} myIndex={index} index={index} item={item} />
       ))}
     </div>
   ));
 
-  const onSortEnd = ({ oldIndex, newIndex }) => {
-    setDiscussions(arrayMove(discussion.slice(), oldIndex, newIndex));
+  const setMyApiDiscussions = async (discussion) => {
+    await setApiDiscussions({ organizationId, payload: { discussions: discussion.map(e => ({ id: e })) } });
+    await getOrganization(organizationId);
   };
 
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    addOrganizations([{ ...organization, discussions: arrayMove(apiDiscussions.slice(), oldIndex, newIndex) }]);
+    setMyApiDiscussions(arrayMove(discussion.slice(), oldIndex, newIndex));
+  };
 
-  const onAddLink = () => {
+  const onRemove = (myIndex) => {
+    setMyApiDiscussions(discussion.filter((e, index) => index !== myIndex));
+  };
+
+  const onAddLink = async () => {
     const { origin } = document.location;
     let url;
     let pathnames;
-
+    let postId;
     try {
       url = new URL(discussionLink);
       pathnames = url.pathname.split('/');
+      postId = pathnames[2]; // eslint-disable-line
     } catch (e) {
       return setError(`Incorrect link. Format: ${origin}/posts/1`);
     }
-
-    if (origin === url.origin && pathnames.length === 3 && pathnames[1] === 'posts' && Number.isInteger(+pathnames[2])) {
-      setDiscussions([...discussion, pathnames[2]]);
-      setDiscussionLink('');
-      setError('');
-      return setIsAdd(false);
+    if (!(origin === url.origin && pathnames.length === 3 && pathnames[1] === 'posts' && Number.isInteger(+postId))) {
+      return setError(`Incorrect link. Format: ${origin}/posts/1`);
+    } else if (discussion.some(e => e === +postId)) {
+      return setError('All discussions must be unique.');
     }
 
-    return setError(`Incorrect link. Format: ${origin}/posts/1`);
+    try {
+      await api.validateDiscussionsPostId(organizationId, postId);
+    } catch (e) {
+      return setError(e.response.data.errors);
+    }
+    await setMyApiDiscussions([...discussion, postId]);
+    setDiscussionLink('');
+    setError('');
+
+    return setIsAdd(false);
   };
 
   const resetError = () => {
@@ -138,9 +158,8 @@ const DiscussionBoard = ({ isCurrentUser, organizationId, discussions }) => {
   }, [organizationId]);
 
   useEffect(() => {
-    api.setDiscussions(organizationId, { discussions: [2] });
-  }, []);
-
+    setDiscussions(apiDiscussions.map(e => e.id));
+  }, [apiDiscussions]);
 
   const ellipsisClassName = cx(styles.ellipsis, {
     [styles.visibleEllipsis]: ellipsisVisibility,
@@ -149,7 +168,7 @@ const DiscussionBoard = ({ isCurrentUser, organizationId, discussions }) => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>Discussion Board
-        {discussion.length && isCurrentUser ?
+        {apiDiscussions.length && isCurrentUser ?
           <Tooltip
             html={(
               <div className={styles.tooltip}>
@@ -170,8 +189,8 @@ const DiscussionBoard = ({ isCurrentUser, organizationId, discussions }) => {
           </Tooltip> : null
         }
       </div>
-      {!isAdd && !discussion.length &&
-        <div>
+      {!isAdd && !apiDiscussions.length && isCurrentUser &&
+        <div className={styles.initial}>
           Nothing here yet. <span className={styles.accent} role="presentation" onClick={() => setIsAdd(true)}>Paste link</span> or create <Link target="_blank" className={styles.accent} to={urls.getNewPostUrl()}>new article</Link>.
         </div>
       }
@@ -182,17 +201,17 @@ const DiscussionBoard = ({ isCurrentUser, organizationId, discussions }) => {
           <div className={`${styles.icon} ${styles.close}`} role="presentation" onClick={resetError}><CloseIcon /></div>
         </div>
       }
-      <SortableList pressDelay={150} helperClass={styles.itemDragged} items={discussion} onSortEnd={onSortEnd} />
+      <SortableList pressDelay={150} helperClass={styles.itemDragged} items={apiDiscussions} onSortEnd={onSortEnd} />
     </div>
   );
 };
 
 export default connect(
-  state => ({
-    posts: state.posts,
-  }),
+  null,
   dispatch => bindActionCreators({
-    postsFetch,
+    setApiDiscussions,
+    getOrganization,
+    addOrganizations,
   }, dispatch),
 )(DiscussionBoard);
 
