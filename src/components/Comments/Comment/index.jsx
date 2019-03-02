@@ -13,6 +13,7 @@ const Comment = (props) => {
   const [formVisible, setFormVisible] = useState(false);
   const newReplys = props.replys.filter(i => i.isNew);
   const replys = props.replys.filter(i => newReplys.every(j => j.id !== i.id));
+  const [lastNameReply, setLastNameReply] = useState('');
 
   return (
     <Fragment>
@@ -84,6 +85,7 @@ const Comment = (props) => {
           onSubmit={props.onSubmit}
           onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
+            setLastNameReply(comment.userAccountName);
             setFormVisible(true);
           }}
         />
@@ -131,7 +133,6 @@ const Comment = (props) => {
 
       {formVisible &&
         <Form
-          message={`@${props.userAccountName} `}
           containerId={props.containerId}
           postId={props.postId}
           commentId={props.id}
@@ -142,6 +143,7 @@ const Comment = (props) => {
           userName={props.ownerName}
           onSubmit={props.onSubmit}
           onReset={() => setFormVisible(false)}
+          message={lastNameReply !== '' ? `@${lastNameReply}` : `@${props.userAccountName} `}
         />
       }
     </Fragment>
