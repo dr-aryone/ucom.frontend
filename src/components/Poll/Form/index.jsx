@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './styles.css';
 import IconClose from '../../Icons/Close';
 import IconDelete from '../../Icons/Delete';
@@ -8,6 +8,8 @@ import TextareaAutosize from '../../TextareaAutosize';
 import DateInput from '../../DateInput';
 
 const PollForm = (props) => {
+  const [multiple, setMultiple] = useState(false);
+
   return (
     <div className={styles.pollForm}>
       <div
@@ -81,7 +83,16 @@ const PollForm = (props) => {
       <div className={styles.settings}>
         <div>
           <label className={styles.checkbox}>
-            <Checkbox />
+            <Checkbox
+              isChecked={multiple}
+              onChange={() => {
+                setMultiple(!multiple);
+                props.onChange({
+                  ...props.poll,
+                  multiple: !multiple,
+                });
+              }}
+            />
             <span className={styles.checkboxLabel}>Multiple choices</span>
           </label>
         </div>
@@ -129,6 +140,7 @@ PollForm.propTypes = {
     options: PropTypes.arrayOf(PropTypes.string),
     // endTime: PropTypes.instanceOf(Date),
     endTime: PropTypes.string,
+    multiple: PropTypes.string,
   }),
 };
 
