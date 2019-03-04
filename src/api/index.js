@@ -479,6 +479,12 @@ class Api {
 
     return humps(response.data);
   }
+
+  async getStats() {
+    const response = await this.actions.get('/api/v1/stats/total');
+
+    return humps(response.data);
+  }
 }
 
 export default new Api();
