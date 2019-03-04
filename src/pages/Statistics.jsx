@@ -1,10 +1,12 @@
 import React from 'react';
 // import Footer from '../components/Footer';
 import LayoutBase from '../components/Layout/LayoutBase';
+import styles from './Statistics.css';
 
+const { ParamTypes } = require('ucom.libs.common').Stats.Dictionary;
 
 const statisticRows = [
-  { title: 'Members', field: 'members' },
+  { title: 'Members', field: 'members', fields: [] },
   { title: 'Content', fields: [] },
   { title: 'Communities', field: '' },
   { title: 'Tags', field: 'Tags' },
@@ -21,42 +23,37 @@ const statisticRows = [
   { title: 'Posts', field: '' },
 ];
 
-const Statistics = (props) => {
-  console.log(props);
+const Statistics = () => {
+  console.log(ParamTypes);
   return (
     <LayoutBase>
       <div className="content">
-
-        <div className="content__inner content__inner_medium">
-          <div className="content__title content__title_between">
-            <h1 className="title">Statistics</h1>
-          </div>
-        </div>
         <div className="content">
+          <h1 className="title">U°Community Statistics</h1>
           <div className="content__inner">
-            <div className="table-content__table">
-              <table className="list-table list-table_events list-table_responsive">
-                <thead className="list-table__head">
-                  <tr className="list-table__row">
+            <div className={styles.table}>
+              <table className={styles.list}>
+                <thead className={styles.head}>
+                  <tr>
                     {['', 'Total', '24hr'].map((item, index) => (
                       <td
                         key={index}
                         role="presentation"
                         className=""
                       >
-                        <div className="list-table__title">
+                        <div className={styles.title}>
                           {item}
                         </div>
                       </td>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="list-table__body">
+                <tbody className={styles.body}>
                   {statisticRows.map((item, index) => (
-                    <tr className="list-table__row" key={index}>
-                      <td className="">{item.title}</td>
-                      <td className="">100</td>
-                      <td className="">100</td>
+                    <tr className={item.fields ? styles.captionRow : styles.row} key={index}>
+                      <td><div className={item.fields ? styles.title : styles.caption}>{item.title}</div></td>
+                      <td><div className={styles.usualItem}>100</div></td>
+                      <td><div className={styles.usualItem}>+100</div></td>
                     </tr>
                   ))}
                 </tbody>

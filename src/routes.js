@@ -89,7 +89,7 @@ export default [{
 },
 {
   path: '/stats',
-  component: Faq,
+  component: Statistics,
 },
 {
   path: '*',
