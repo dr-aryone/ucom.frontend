@@ -14,6 +14,7 @@ import RegistrationPage from './components/Registration/Registration';
 import GovernancePage from './components/Governance/Governance';
 import Tag from './pages/Tag';
 import Faq from './pages/Faq';
+import Statistics from './pages/Statistics';
 
 export default [{
   path: '/',
@@ -85,6 +86,10 @@ export default [{
 {
   path: '/faq',
   component: Faq,
+},
+{
+  path: '/stats',
+  component: Statistics,
 },
 {
   path: '*',
