@@ -4,15 +4,18 @@ import React, { Fragment } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import { selectUser } from '../../store/selectors';
 import { removeUser } from '../../actions';
 import { showMenuPopup, hideMenuPopup } from '../../actions/menuPopup';
 import Popup from '../Popup';
 import LogoutIcon from '../Icons/Logout';
+import IconSearch from '../Icons/Search';
 import MenuWallet from '../Wallet/MenuWallet';
 import WalletActivity from '../Wallet/WalletActivity';
 import { removeBrainkey } from '../../utils/brainkey';
 import { removeToken } from '../../utils/token';
+import urls from '../../utils/urls';
 
 const UserMenu = (props) => {
   const logout = () => {
@@ -33,45 +36,25 @@ const UserMenu = (props) => {
                 <div className="content__inner content__inner_grid">
                   <div className="user-menu__side">
                     <div className="menu menu_vertical menu_fixed-width">
-                      {/* <div className="menu__item else-desktop">
-                        <NavLink
-                          to={urls.getNewPostUrl()}
-                          className="menu__link menu__link_upper"
-                          activeClassName="menu__link_active"
-                          isActive={() => props.location.pathname === '/posts/new/1'}
-                        >
-                          Add&nbsp;publication
-                        </NavLink>
+                      <div className="menu__item  menu__item_search else-desktop">
+                        <div className="menu__item-search-icon"><IconSearch /></div>  Search for…
                       </div>
-
                       <div className="menu__item else-desktop">
                         <NavLink
                           to="/users"
                           className="menu__link menu__link_upper"
-                          activeClassName="menu__link_active"
-                          isActive={() => props.location.pathname === '/users'}
+                          // activeClassName="menu__link_active"
+                          // isActive={() => props.location.pathname === '/users'}
                         >
                           People
                         </NavLink>
                       </div>
-
-                      <div className="menu__item else-desktop">
-                        <NavLink
-                          to="/communities"
-                          className="menu__link menu__link_upper"
-                          activeClassName="menu__link_active"
-                          isActive={() => props.location.pathname === '/communities'}
-                        >
-                          Communities
-                        </NavLink>
-                      </div>
-
                       <div className="menu__item else-desktop">
                         <NavLink
                           to={urls.getOverviewCategoryUrl()}
                           className="menu__link menu__link_upper"
-                          activeClassName="menu__link_active"
-                          isActive={() => props.location.pathname.indexOf('/publications') === 0}
+                          // activeClassName="menu__link_active"
+                          // isActive={() => props.location.pathname.indexOf('/publications') === 0}
                         >
                           Overview
                         </NavLink>
@@ -81,12 +64,12 @@ const UserMenu = (props) => {
                         <NavLink
                           to={urls.getGovernanceUrl()}
                           className="menu__link menu__link_upper"
-                          activeClassName="menu__link_active"
-                          isActive={() => props.location.pathname.indexOf(urls.getGovernanceUrl()) === 0}
+                          // activeClassName="menu__link_active"
+                          // isActive={() => props.location.pathname.indexOf(urls.getGovernanceUrl()) === 0}
                         >
                           Governance
                         </NavLink>
-                      </div> */}
+                      </div>
 
                       {props.user.id &&
                         <div className="menu__item">

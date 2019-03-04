@@ -79,7 +79,6 @@
     font-size: 12px;
     font-weight: bold;
     color: #505050;
-    opacity: 0.2;
 
     &:hover {
       color: black;
@@ -90,6 +89,20 @@
     &.menu__link_active {
       color: @red;
       opacity: 1;
+    }
+  }
+
+  .menu__item_search {
+    display: flex;
+    font-size: 12px;
+    letter-spacing: 0.375px;
+    color: #000000;
+    cursor: pointer;
+    font-weight: normal;
+
+    .menu__item-search-icon {
+      fill: #505050;
+      margin-right: 9px;
     }
   }
   

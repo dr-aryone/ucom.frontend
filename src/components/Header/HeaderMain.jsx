@@ -95,7 +95,7 @@ const HeaderMain = ({
 
             <NotificationTrigger />
 
-            <div className={`header-search ${menuPopupVisibility ? '' : 'header-search_border'}`}>
+            <div className={`header-search ${menuPopupVisibility ? '' : 'header-search_border'}  only-desktop`}>
               <IconSearch />
             </div>
 
@@ -104,7 +104,7 @@ const HeaderMain = ({
           </Fragment>
          :
           <Fragment>
-            <div className={`header-search ${menuPopupVisibility ? '' : 'header-search_border'}`}>
+            <div className={`header-search ${menuPopupVisibility ? '' : 'header-search_border'} only-desktop`}>
               <IconSearch />
             </div>
             <button
@@ -113,15 +113,12 @@ const HeaderMain = ({
             >
               SIGN in
             </button>
+            <div className=" else-desktop">
+              <UserMenuTrigger />
+            </div>
           </Fragment>
         }
-        {/* <div className="menu__item else-desktop">
-          <div className="menu-popup">
-            <div className="menu-popup__arrow-wrapper" role="presentation" onClick={triggerMenuPopup}>
-              <div className={`menu-popup__arrow ${menuPopupVisibility ? 'menu-popup__arrow_red' : ''}`} />
-            </div>
-          </div>
-        </div> */}
+
       </nav>
     </div>
   );
