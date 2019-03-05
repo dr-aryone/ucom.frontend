@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import cx from 'classnames';
 import { Tooltip } from 'react-tippy';
 import styles from './DiscussionBoard.css';
-import urls from '../../utils/urls';
+// import urls from '../../utils/urls';
 import { copyToClipboard } from '../../utils/text';
 import TextInput from '../TextInput';
 import CloseIcon from '../Icons/Close';
@@ -175,7 +175,7 @@ const DiscussionBoard = ({
           <Tooltip
             html={(
               <div className={styles.tooltip}>
-                <Link target="_blank" className={styles.tooltipText} to={urls.getNewPostUrl()}>Create and add Article</Link>
+                {/* <Link target="_blank" className={styles.tooltipText} to={urls.getNewPostUrl()}>Create and add Article</Link> */}
                 <span className={styles.tooltipText} role="presentation" onClick={() => setIsAdd(true)}>Add Article</span>
               </div>
             )}
@@ -194,7 +194,8 @@ const DiscussionBoard = ({
       </div>
       {!isAdd && !apiDiscussions.length && isCurrentUser &&
         <div className={styles.initial}>
-          Nothing here yet. <span className={styles.accent} role="presentation" onClick={() => setIsAdd(true)}>Paste link</span> or create <Link target="_blank" className={styles.accent} to={urls.getNewPostUrl()}>new article</Link>.
+          Nothing here yet. <span className={styles.accent} role="presentation" onClick={() => setIsAdd(true)}>Paste link</span>
+          {/* or create <Link target="_blank" className={styles.accent} to={urls.getNewPostUrl()}>new article</Link> */}.
         </div>
       }
       {isAdd &&
