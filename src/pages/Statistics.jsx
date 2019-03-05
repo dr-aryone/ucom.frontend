@@ -14,7 +14,7 @@ const statisticRows = [
   { title: 'Tags', field: 'TAGS_PERSON' },
   { title: 'Publications', field: 'POSTS_MEDIA' },
   { title: 'Posts', field: 'POSTS_DIRECT' },
-  { title: 'Feedback', fields: ['COMMENTS_PARENT', 'COMMENTS_PARENT'] },
+  { title: 'Feedback', fields: ['COMMENTS_PARENT', 'COMMENTS_REPLY'] },
   { title: 'Comments', field: 'COMMENTS_PARENT' },
   { title: 'Replies', field: 'COMMENTS_REPLY' },
   { title: 'Actions', fields: ['ACTIVITIES_VOTE_UPVOTE', 'ACTIVITIES_VOTE_DOWNVOTE'] },
