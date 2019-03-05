@@ -26,15 +26,26 @@ const statisticRows = [
 ];
 
 const statisticColumns = ['DELTA_PT24H', 'NUMBER'];
+
+function useForceUpdate() {
+  const [value, set] = useState(true); // boolean state
+  return () => set(!value); // toggle the state to force render
+}
+
 const Statistics = () => {
   const [stats, setStats] = useState([]);
+
+  const forceUpdate = useForceUpdate();
 
   const fetchStats = async () => {
     const res = await api.getStats();
     setStats(res);
   };
+
   useEffect(() => {
     fetchStats();
+    const intervalID = setInterval(forceUpdate, 1000 * 60 * 30);
+    return () => clearInterval(intervalID);
   }, []);
 
   return (
