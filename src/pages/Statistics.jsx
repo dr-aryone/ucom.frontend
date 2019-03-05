@@ -25,7 +25,7 @@ const statisticRows = [
   { title: 'Posts', field: 'POSTS_REPOST_DIRECT' },
 ];
 
-const statisticColumns = ['DELTA_PT24H', 'NUMBER'];
+const statisticColumns = ['NUMBER', 'DELTA_PT24H'];
 
 function useForceUpdate() {
   const [value, set] = useState(true); // boolean state
