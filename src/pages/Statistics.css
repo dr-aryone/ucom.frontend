@@ -1,0 +1,25 @@
+.list {
+  width: 300px;
+  height: 514px;
+  margin-top: 96px;
+}
+
+.title {
+  color: #000000;
+  opacity: 0.3;
+  font-size: 12px;
+}
+
+.caption {
+  color: #000000;
+  opacity: 0.5;
+  width: 80px;
+}
+
+.usualItem {
+  font-size: 12px;
+}
+
+.captionRow .usualItem, .captionRow .title{
+  margin-top: 25px;
+}

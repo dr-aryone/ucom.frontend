@@ -99,7 +99,6 @@ const organization = (state = getInitialState(), action) => {
 
     case 'SET_ORGANIZATION_DATA': {
       delete action.payload.socialNetworks;
-
       const keys = Object.keys(action.payload);
       const data = Object.assign({}, state.data, action.payload);
       const activeStep = state.steps.find(step => step.id === state.activeStepId);

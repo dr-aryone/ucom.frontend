@@ -294,6 +294,24 @@ class Api {
     return response.data;
   }
 
+  async setDiscussions(organizationId, data) {
+    const url = `/api/v1/organizations/${organizationId}/discussions`;
+    const response = await this.actions.post(url, snakes(data));
+    return humps(response.data);
+  }
+
+  async deleteAllDiscussions(organizationId) {
+    const url = `/api/v1/organizations/${organizationId}/discussions`;
+    const response = await this.actions.del(url);
+    return humps(response.data);
+  }
+
+  async validateDiscussionsPostId(organizationId, postId) {
+    const url = `/api/v1/organizations/${organizationId}/discussions/${postId}/validate`;
+    const response = await this.actions.get(url);
+    return humps(response.data);
+  }
+
   async getOrganizationPosts(id) {
     const url = `/api/v1/organizations/${id}/posts`;
 
@@ -476,6 +494,12 @@ class Api {
 
   async uploadPostImage(file) {
     const response = await this.actions.post('/api/v1/posts/image', { image: file });
+
+    return humps(response.data);
+  }
+
+  async getStats() {
+    const response = await this.actions.get('/api/v1/stats/total');
 
     return humps(response.data);
   }

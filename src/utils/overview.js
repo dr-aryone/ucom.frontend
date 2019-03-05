@@ -22,11 +22,7 @@ export const OVERVIEW_ROUTES_POSTS_ID = 2;
 export const OVERVIEW_ROUTES_COMMUNITIES_ID = 3;
 export const OVERVIEW_ROUTES_TAGS_ID = 4;
 
-export const OVERVIEW_ROUTES = process.env.NODE_ENV === 'production' ?
-  [{
-    id: OVERVIEW_ROUTES_PUBLICATIONS_ID,
-    name: 'publications',
-  }] :
+export const OVERVIEW_ROUTES =
   [{
     id: OVERVIEW_ROUTES_PUBLICATIONS_ID,
     name: 'publications',
