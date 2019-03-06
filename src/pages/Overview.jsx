@@ -43,12 +43,13 @@ const Overview = (props) => {
           <div className="content__inner content__inner_overview">
             <div className="nav-bar">
               <div className="nav-bar__title nav-bar__title_overview">
-                <h1 className="title title_big title_bold">Overview</h1>
-                <div className="nav-bar__categories">
+                <h1 className="title title_big title_bold only-desktop">Overview</h1>
+                <h2 className="title title_bold else-desktop">Overview</h2>
+                <div className="nav-bar__categories only-desktop">
                   {overviewUtils.OVERVIEW_CATEGORIES.map(item => (
                     <div className="menu__item" key={item.id}>
                       <NavLink
-                        className="overview__link"
+                        className="overview__link "
                         activeClassName="overview__link_active"
                         to={urls.getOverviewCategoryUrl({ filter: item.name, route: overviewRouteName })}
                         isActive={() => props.location.pathname.indexOf(`filter/${item.name}`) !== -1}
@@ -63,6 +64,21 @@ const Overview = (props) => {
             </div>
           </div>
           <div className="content__inner content__inner_overview content__inner_overview_shadow">
+            <div className="nav-bar__categories else-desktop">
+              {overviewUtils.OVERVIEW_CATEGORIES.map(item => (
+                <div key={item.id}>
+                  <NavLink
+                    className="overview__link overview__link-mobile"
+                    activeClassName="overview__link_active"
+                    to={urls.getOverviewCategoryUrl({ filter: item.name, route: overviewRouteName })}
+                    isActive={() => props.location.pathname.indexOf(`filter/${item.name}`) !== -1}
+                    key={item.id}
+                  >
+                    {item.name}
+                  </NavLink>
+                </div>
+              ))}
+            </div>
             <div className="nav-bar__menu">
               <div className="toolbar toolbar_responsive">
                 <div className="toolbar__main">

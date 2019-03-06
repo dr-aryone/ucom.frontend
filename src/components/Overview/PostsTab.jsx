@@ -54,6 +54,7 @@ const Publications = (props) => {
           loading={props.feed.loading}
           loadMoreUrl={urls.getOverviewCategoryUrl({ filter: overviewCategory.name, page: page + 1 })}
           onClickLoadMore={onClickLoadMore}
+          isMobile
         />
       </div>
 
