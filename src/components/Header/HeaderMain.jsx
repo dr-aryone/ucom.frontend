@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Tooltip } from 'react-tippy';
 import { Link } from 'react-router-dom';
+import { isMobile } from 'react-device-detect';
 import { getFileUrl } from '../../utils/upload';
 import { authShowPopup } from '../../actions/auth';
 import { triggerMenuPopup, hideMenuPopup } from '../../actions/menuPopup';
@@ -18,11 +19,11 @@ import OrganizationListPopup from '../Organization/OrganizationListPopup';
 import OrganizationIcon from '../Icons/Organization';
 import UserMenuTrigger from '../UserMenu/UserMenuTrigger';
 
-
 const HeaderMain = ({
   authShowPopup, users, user, menuPopupVisibility, triggerMenuPopup,
 }) => {
   const owner = getUserById(users, user.id);
+
   const [visibleOrganizationListPopup, setOrganizationListPopup] = useState(false);
 
   const userContext = (
@@ -49,17 +50,6 @@ const HeaderMain = ({
         })
       }
 
-      {/* <div className="menu__item only-desktop">
-        <NavLink
-          to={urls.getOverviewCategoryUrl()}
-          className="menu__link menu__link_upper"
-          activeClassName="menu__link_active"
-          isActive={() => location.pathname.indexOf(urls.getPublicationsUrl()) === 0}
-        >
-          Overview
-        </NavLink>
-      </div> */}
-
       <Link to="/communities/new" className="header-user-menu__item">Create Community</Link>
     </div>
   );
@@ -81,6 +71,7 @@ const HeaderMain = ({
               stickyDuration={0}
               offset={-30}
               distance={20}
+              disabled={isMobile}
             >
               <Link className="avatar-and-rate" to={`/user/${user.id}`} onClick={() => (menuPopupVisibility ? triggerMenuPopup() : null)}>
                 <div className="header__rate">{(+owner.currentRate).toLocaleString()}°</div>
@@ -115,6 +106,7 @@ const HeaderMain = ({
                   stickyDuration={0}
                   offset={-30}
                   distance={20}
+                  disabled={isMobile}
                 >
                   <Link className="avatar-and-rate" to={`/user/${user.id}`} onClick={() => (menuPopupVisibility ? triggerMenuPopup() : null)}>
                     <div className="header__rate">{(+owner.currentRate).toLocaleString()}°</div>
