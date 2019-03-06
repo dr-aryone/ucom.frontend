@@ -19,6 +19,19 @@
   }
 }
 
+.menu_sigh-in.menu__link {
+  transition: color 0.2s ease;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  color: #505050;
+  
+  &:hover,
+  &_active, {
+    color: @red;
+    text-decoration: none;
+  }
+}
 .menu_normal {
   font-weight: normal;
 }
@@ -204,6 +217,36 @@
     @media (max-width: 1023px) {
       color: @red;
     }
+  }
+}
+
+.menu_simple-tabs_header {
+  margin: 0 -15px;
+  font-size: 16px;
+  text-transform: capitalize;
+
+  .menu__item {
+    margin: 0 15px;
+  }
+
+  .menu__item_narrow {
+    margin: 0 12px;
+  }
+
+  .menu__link {
+    padding: 24px 0;
+    display: block;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: 0.3s ease border-bottom;
+  }
+
+  .menu__item_active .menu__link,
+  .menu__item:hover .menu__link,
+  .menu__link_active,
+  .menu__link:hover {
+    border-bottom-color: @red;
+    color: @red;
   }
 }
 

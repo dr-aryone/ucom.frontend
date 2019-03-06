@@ -65,62 +65,93 @@ const HeaderMain = ({
   );
 
   return (
-    <div className="header__main">
-      {visibleOrganizationListPopup && <OrganizationListPopup readyOrganizations={user.organizations.slice(3)} onClickClose={() => setOrganizationListPopup(false)} />}
-
-      <nav className="fixed-menu menu_header">
-        {owner ?
-          <Fragment>
-            <div className="header-dropdown">
-              <Tooltip
-                useContext
-                position="bottom-end"
-                html={userContext}
-                arrow
-                interactive
-                hideOnClick={false}
-                theme="user"
-                stick
-                stickyDuration={0}
-                offset={-30}
-                distance={20}
-              >
-                <Link className="avatar-and-rate" to={`/user/${user.id}`} onClick={() => (menuPopupVisibility ? triggerMenuPopup() : null)}>
-                  <div className="header__rate">{(+owner.currentRate).toLocaleString()}°</div>
-                  <Avatar size="xsmall" src={getFileUrl(owner.avatarFilename)} />
-                </Link>
-              </Tooltip>
-            </div>
-
-
-            <NotificationTrigger />
-
-            <div className={`header-search ${menuPopupVisibility ? '' : 'header-search_border'}  only-desktop`}>
-              <IconSearch />
-            </div>
-
-            <UserMenuTrigger />
-
-          </Fragment>
-         :
-          <Fragment>
-            <div className={`header-search ${menuPopupVisibility ? '' : 'header-search_border'} only-desktop`}>
-              <IconSearch />
-            </div>
-            <button
-              className="menu__link menu__link_upper menu_sigh-in"
-              onClick={() => authShowPopup()}
+    <Fragment>
+      {owner ?
+        <div className="else-desktop fixed-menu  menu_header">
+          <div className="header-dropdown">
+            <Tooltip
+              useContext
+              position="bottom-end"
+              html={userContext}
+              arrow
+              interactive
+              hideOnClick={false}
+              theme="user"
+              stick
+              stickyDuration={0}
+              offset={-30}
+              distance={20}
             >
-              SIGN in
-            </button>
-            <div className=" else-desktop">
-              <UserMenuTrigger />
-            </div>
-          </Fragment>
-        }
+              <Link className="avatar-and-rate" to={`/user/${user.id}`} onClick={() => (menuPopupVisibility ? triggerMenuPopup() : null)}>
+                <div className="header__rate">{(+owner.currentRate).toLocaleString()}°</div>
+                <Avatar size="xsmall" src={getFileUrl(owner.avatarFilename)} />
+              </Link>
+            </Tooltip>
+          </div>
+          <NotificationTrigger />
+        </div> :
+        <button
+          className="menu__link menu__link_upper menu_sigh-in else-desktop"
+          onClick={() => authShowPopup()}
+        >
+          SIGN in
+        </button>
+      }
+      <div className="header__main">
+        {visibleOrganizationListPopup && <OrganizationListPopup readyOrganizations={user.organizations.slice(3)} onClickClose={() => setOrganizationListPopup(false)} />}
+        <nav className="fixed-menu menu_header">
+          {owner ?
+            <Fragment>
+              <div className="header-dropdown only-desktop">
+                <Tooltip
+                  useContext
+                  position="bottom-end"
+                  html={userContext}
+                  arrow
+                  interactive
+                  hideOnClick={false}
+                  theme="user"
+                  stick
+                  stickyDuration={0}
+                  offset={-30}
+                  distance={20}
+                >
+                  <Link className="avatar-and-rate" to={`/user/${user.id}`} onClick={() => (menuPopupVisibility ? triggerMenuPopup() : null)}>
+                    <div className="header__rate">{(+owner.currentRate).toLocaleString()}°</div>
+                    <Avatar size="xsmall" src={getFileUrl(owner.avatarFilename)} />
+                  </Link>
+                </Tooltip>
+              </div>
 
-      </nav>
-    </div>
+              <span className="only-desktop"><NotificationTrigger /></span>
+
+              <div className={`header-search only-desktop ${menuPopupVisibility ? '' : 'header-search_border'}  only-desktop`}>
+                <IconSearch />
+              </div>
+
+              <UserMenuTrigger />
+
+            </Fragment>
+          :
+            <Fragment>
+              <div className={`header-search ${menuPopupVisibility ? '' : 'header-search_border'} only-desktop`}>
+                <IconSearch />
+              </div>
+              <button
+                className="menu__link menu__link_upper menu_sigh-in only-desktop"
+                onClick={() => authShowPopup()}
+              >
+                SIGN in
+              </button>
+              <div className="else-desktop">
+                <UserMenuTrigger />
+              </div>
+            </Fragment>
+          }
+
+        </nav>
+      </div>
+    </Fragment>
   );
 };
 export default connect(

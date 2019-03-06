@@ -35,7 +35,14 @@
   justify-content: center;
   align-items: center;
   padding-right: 0;
+
+  @media(max-width: 1024px){
+    justify-content: space-between;
+    padding-right: 0;
+    padding-left: 15px;
+  }
 }
+
 
 .header_z-index {
   z-index: 2000;
@@ -77,6 +84,10 @@
 
   @media (min-width: 767px) {
     white-space: nowrap;
+  }
+
+  @media(max-width: 1024px){
+    flex: none;
   }
 }
 
@@ -199,6 +210,10 @@
   &:hover {
     fill: black;
   }
+
+  @media(max-width: 1024px){
+    width: 48px;
+  }
 }
 
 .header-burger_active {
@@ -238,4 +253,8 @@
       -o-transform:scale(1.0625);
    }
   }
+}
+
+.else-desktop.fixed-menu .notification-tooltip-trigger{
+  margin-right: 0;
 }

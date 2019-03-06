@@ -30,7 +30,7 @@ const MenuWallet = (props) => {
         <div className="nav-bar__menu">
           <div className="toolbar toolbar_responsive">
             <div className="toolbar__main menu_border">
-              <div className="menu menu_simple-tabs">
+              <div className="menu menu_simple-tabs_header">
                 <div className="menu__item">
                   <div
                     className={`menu__link ${route === 1 ? 'menu__link_active' : ''}`}
