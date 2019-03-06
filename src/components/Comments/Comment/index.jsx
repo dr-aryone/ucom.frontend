@@ -10,10 +10,9 @@ import { COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST } from '../
 import { sanitizeCommentText, checkMentionTag } from '../../../utils/text';
 
 const Comment = (props) => {
-  const [formVisible, setFormVisible] = useState(false);
+  const [formVisible, setFormVisible] = useState({ visible: false, name: '' });
   const newReplys = props.replys.filter(i => i.isNew);
   const replys = props.replys.filter(i => newReplys.every(j => j.id !== i.id));
-  const [lastNameReply, setLastNameReply] = useState('');
 
   return (
     <Fragment>
@@ -48,7 +47,7 @@ const Comment = (props) => {
               className={styles.reply}
               onClick={() => {
                 if (props.depth < 2) {
-                  setFormVisible(true);
+                  setFormVisible({ visible: true, name: '' });
                 } else if (props.onClickReply) {
                   props.onClickReply();
                 }
@@ -85,12 +84,7 @@ const Comment = (props) => {
           onSubmit={props.onSubmit}
           onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
-            console.log('reply: ', comment.userAccountName);
-            console.log('depth: ', comment.depth);
-            console.log('props depth: ', props.depth);
-            setLastNameReply(comment.userAccountName);
-            setFormVisible(true);
-            console.log('lastNameReply: ', lastNameReply === comment.userAccountName);
+            setFormVisible({ visible: true, name: comment.userAccountName });
           }}
         />
       ))}
@@ -130,12 +124,12 @@ const Comment = (props) => {
           onSubmit={props.onSubmit}
           onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
-            setFormVisible(true);
+            setFormVisible({ visible: true, name: comment.userAccountName });
           }}
         />
       ))}
 
-      {formVisible &&
+      {formVisible && formVisible.visible &&
         <Form
           depth={props.depth + 1}
           containerId={props.containerId}
@@ -146,8 +140,8 @@ const Comment = (props) => {
           userPageUrl={props.ownerPageUrl}
           userName={props.ownerName}
           onSubmit={props.onSubmit}
-          onReset={() => setFormVisible(false)}
-          message={lastNameReply === props.userAccountName ? `@${lastNameReply} ` : `@${props.userAccountName} `}
+          onReset={() => setFormVisible({ visible: false, name: '' })}
+          message={formVisible.visible && formVisible.name !== '' ? `@${formVisible.name} ` : `@${props.userAccountName} `}
         />
       }
     </Fragment>
