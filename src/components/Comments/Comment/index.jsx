@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import styles from './styles.css';
 import UserCard from '../../UserCard/UserCard';
 import Gallery from '../../Gallery';
@@ -14,8 +14,6 @@ const Comment = (props) => {
   const newReplys = props.replys.filter(i => i.isNew);
   const replys = props.replys.filter(i => newReplys.every(j => j.id !== i.id));
   const [lastNameReply, setLastNameReply] = useState('');
-
-  // useEffect(() => props.depth + 1)(formVisible);
 
   return (
     <Fragment>
@@ -52,7 +50,6 @@ const Comment = (props) => {
                 if (props.depth < 2) {
                   setFormVisible(true);
                 } else if (props.onClickReply) {
-                  // setLastNameReply(comment.userAccountName);
                   props.onClickReply();
                 }
               }}
@@ -89,8 +86,11 @@ const Comment = (props) => {
           onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
             console.log('reply: ', comment.userAccountName);
+            console.log('depth: ', comment.depth);
+            console.log('props depth: ', props.depth);
             setLastNameReply(comment.userAccountName);
             setFormVisible(true);
+            console.log('lastNameReply: ', lastNameReply === comment.userAccountName);
           }}
         />
       ))}
@@ -130,8 +130,6 @@ const Comment = (props) => {
           onSubmit={props.onSubmit}
           onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
-            console.log('newReply: ', comment.userAccountName);
-            // setLastNameReply(comment.userAccountName);
             setFormVisible(true);
           }}
         />
@@ -149,7 +147,7 @@ const Comment = (props) => {
           userName={props.ownerName}
           onSubmit={props.onSubmit}
           onReset={() => setFormVisible(false)}
-          message={(props.depth + 1) !== 2 && lastNameReply !== '' ? `@${lastNameReply} ` : `@${props.userAccountName} `}
+          message={lastNameReply === props.userAccountName ? `@${lastNameReply} ` : `@${props.userAccountName} `}
         />
       }
     </Fragment>
