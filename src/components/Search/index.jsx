@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Popup from '../Popup';
 import styles from './styles.css';
@@ -13,8 +14,9 @@ import Arrow from '../Icons/ArrowLeft';
 import IconSearch from '../Icons/Search';
 import IconClose from '../Icons/Close';
 import IconDuck from '../Icons/Socials/Duck';
+import { feedPrependPostIds } from '../../actions/feed';
 
-const SearchPopup = () => {
+const SearchPopup = (props) => {
   // const [popup, showPopup] = useState(false);
   const [usersData, setUsersData] = useState({ data: [], metadata: {} });
   const [userName, setUserName] = useState('');
@@ -79,6 +81,7 @@ const SearchPopup = () => {
         <div
           role="presentation"
           className={styles.iconClose}
+          onClick={() => props.onClickClose()}
         >
           <IconClose />
         </div>
@@ -125,6 +128,10 @@ const SearchPopup = () => {
       )}
     </div>
   );
+};
+
+SearchPopup.propTypes = {
+  onClickClose: PropTypes.func,
 };
 
 export default SearchPopup;

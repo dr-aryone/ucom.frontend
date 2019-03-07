@@ -9,6 +9,8 @@ import SearchPopup from '../Search';
 const HeaderMain = ({ location }) => {
   const [search, showSearch] = useState(false);
 
+  console.log(search);
+
   return (
     <div className="header__main">
       <nav className="menu menu_responsive menu_header">
@@ -68,6 +70,7 @@ const HeaderMain = ({ location }) => {
             role="presentation"
             className="menu__link-button"
             onClick={() => showSearch(!search)}
+            onClickClose={() => showSearch(!search)}
           >
             <strong>Search</strong>
           </div>
