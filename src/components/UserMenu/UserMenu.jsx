@@ -1,10 +1,11 @@
 // import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import { KEY_ESCAPE } from 'keycode-js';
 import { selectUser } from '../../store/selectors';
 import { removeUser } from '../../actions';
 import { showMenuPopup, hideMenuPopup } from '../../actions/menuPopup';
@@ -16,6 +17,7 @@ import WalletActivity from '../Wallet/WalletActivity';
 import { removeBrainkey } from '../../utils/brainkey';
 import { removeToken } from '../../utils/token';
 import urls from '../../utils/urls';
+import SearchPopup from '../Search';
 
 const UserMenu = (props) => {
   const logout = () => {
@@ -25,6 +27,8 @@ const UserMenu = (props) => {
     window.location.reload();
     props.hideMenuPopup();
   };
+
+  const [search, showSearch] = useState(false);
 
   return (
     <Fragment>
@@ -36,8 +40,14 @@ const UserMenu = (props) => {
                 <div className="content__inner content__inner_grid">
                   <div className="user-menu__side">
                     <div className="menu menu_vertical menu_fixed-width">
-                      <div className="menu__item  menu__item_search else-desktop">
-                        <div className="menu__item-search-icon"><IconSearch /></div>  Search for…
+                      <div
+                        className="menu__item  menu__item_search else-desktop"
+                        role="presentation"
+                        onClick={() => showSearch(!search)}
+                      >
+                        <div className="menu__item-search-icon">
+                          <IconSearch />
+                        </div>  Search for…
                       </div>
                       <div className="menu__item else-desktop">
                         <NavLink
@@ -104,6 +114,17 @@ const UserMenu = (props) => {
                           </span>
                         </div>
                       }
+
+                      {search && (
+                        <SearchPopup
+                          onClickClose={() => showSearch(!search)}
+                          onKeyDown={(e) => {
+                            if (e.keyCode === KEY_ESCAPE) {
+                              showSearch(!search);
+                            }
+                          }}
+                        />
+                      )}
                     </div>
                   </div>
                   <div>

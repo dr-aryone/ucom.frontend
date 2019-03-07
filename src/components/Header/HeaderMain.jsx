@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Tooltip } from 'react-tippy';
 import { Link } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
+import { KEY_ESCAPE } from 'keycode-js';
 import { getFileUrl } from '../../utils/upload';
 import { authShowPopup } from '../../actions/auth';
 import { triggerMenuPopup, hideMenuPopup } from '../../actions/menuPopup';
@@ -119,9 +120,24 @@ const HeaderMain = ({
 
               <span className="only-desktop"><NotificationTrigger /></span>
 
-              <div className={`header-search only-desktop ${menuPopupVisibility ? '' : 'header-search_border'}  only-desktop`}>
+              <div
+                role="presentation"
+                className={`header-search only-desktop ${menuPopupVisibility ? '' : 'header-search_border'}  only-desktop`}
+                onClick={() => showSearch(!search)}
+              >
                 <IconSearch />
               </div>
+
+              {search && (
+                <SearchPopup
+                  onClickClose={() => showSearch(!search)}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === KEY_ESCAPE) {
+                      showSearch(!search);
+                    }
+                  }}
+                />
+              )}
 
               <UserMenuTrigger />
 
@@ -132,13 +148,19 @@ const HeaderMain = ({
                 role="presentation"
                 className={`header-search ${menuPopupVisibility ? '' : 'header-search_border'} only-desktop`}
                 onClick={() => showSearch(!search)}
-                // onClickClose={() => showSearch(!search)}
               >
                 <IconSearch />
               </div>
 
               {search && (
-                <SearchPopup />
+                <SearchPopup
+                  onClickClose={() => showSearch(!search)}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === KEY_ESCAPE) {
+                      showSearch(!search);
+                    }
+                  }}
+                />
               )}
 
               <button

@@ -14,10 +14,8 @@ import Arrow from '../Icons/ArrowLeft';
 import IconSearch from '../Icons/Search';
 import IconClose from '../Icons/Close';
 import IconDuck from '../Icons/Socials/Duck';
-import { feedPrependPostIds } from '../../actions/feed';
 
 const SearchPopup = (props) => {
-  // const [popup, showPopup] = useState(false);
   const [usersData, setUsersData] = useState({ data: [], metadata: {} });
   const [userName, setUserName] = useState('');
   const page = 1;
@@ -26,7 +24,6 @@ const SearchPopup = (props) => {
   const usersParams = {
     page, sortBy, perPage, userName,
   };
-  // const closeSearch = () => (console.log('a'));
 
   const getData = async (params) => {
     loader.start();
@@ -67,21 +64,21 @@ const SearchPopup = (props) => {
           <IconSearch />
         </div>
         <input
+          autoFocus
           onChange={(e) => {
             setUserName(e.target.value);
             debouncedSetSearch(e.target.value);
-            // showPopup(!popup);
           }}
           className={styles.input}
-          placeholder="Search for people, oragnizations, communities, tags, or @accounts in U°OS blockchain…"
+          placeholder="Search for people in U°OS blockchain…"
           type="text"
           spellCheck="false"
-          // onBlur={() => closeSearch()}
+          onKeyDown={props.onKeyDown}
         />
         <div
           role="presentation"
           className={styles.iconClose}
-          onClick={() => props.onClickClose()}
+          onClick={() => props.onClickClose && props.onClickClose()}
         >
           <IconClose />
         </div>
@@ -104,7 +101,6 @@ const SearchPopup = (props) => {
                         accountName={item.accountName}
                         rate={item.currentRate}
                         sign="@"
-                        // userId={item.id}
                       />
                     ))
                   }
