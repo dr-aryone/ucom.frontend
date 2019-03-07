@@ -10,7 +10,7 @@ import { COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST } from '../
 import { sanitizeCommentText, checkMentionTag } from '../../../utils/text';
 
 const Comment = (props) => {
-  const [formVisible, setFormVisible] = useState(false);
+  const [formVisible, setFormVisible] = useState({ visible: false, name: '' });
   const newReplys = props.replys.filter(i => i.isNew);
   const replys = props.replys.filter(i => newReplys.every(j => j.id !== i.id));
 
@@ -47,7 +47,7 @@ const Comment = (props) => {
               className={styles.reply}
               onClick={() => {
                 if (props.depth < 2) {
-                  setFormVisible(true);
+                  setFormVisible({ visible: true, name: '' });
                 } else if (props.onClickReply) {
                   props.onClickReply();
                 }
@@ -84,7 +84,7 @@ const Comment = (props) => {
           onSubmit={props.onSubmit}
           onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
-            setFormVisible(true);
+            setFormVisible({ visible: true, name: comment.userAccountName });
           }}
         />
       ))}
@@ -124,24 +124,24 @@ const Comment = (props) => {
           onSubmit={props.onSubmit}
           onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
-            setFormVisible(true);
+            setFormVisible({ visible: true, name: comment.userAccountName });
           }}
         />
       ))}
 
-      {formVisible &&
+      {formVisible && formVisible.visible &&
         <Form
-          message={`@${props.userAccountName} `}
+          depth={props.depth + 1}
           containerId={props.containerId}
           postId={props.postId}
           commentId={props.id}
           autoFocus
-          depth={props.depth + 1}
           userImageUrl={props.ownerImageUrl}
           userPageUrl={props.ownerPageUrl}
           userName={props.ownerName}
           onSubmit={props.onSubmit}
-          onReset={() => setFormVisible(false)}
+          onReset={() => setFormVisible({ visible: false, name: '' })}
+          message={formVisible.visible && formVisible.name !== '' ? `@${formVisible.name} ` : `@${props.userAccountName} `}
         />
       }
     </Fragment>
