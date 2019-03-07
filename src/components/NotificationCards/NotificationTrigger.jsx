@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
 import React, { PureComponent } from 'react';
 import NotificationTooltip from './NotificationTooltip';
 import IconBell from '../Icons/Bell';
@@ -31,10 +30,7 @@ class NotificationTrigger extends PureComponent {
         <div
           role="presentation"
           onClick={this.triggerTooltip}
-          className={classNames(
-            'icon-counter',
-            { 'icon-counter_active': this.props.tooltipVisibilty },
-          )}
+          className="icon-counter"
         >
           <div className="icon-counter__icon">
             <IconBell />

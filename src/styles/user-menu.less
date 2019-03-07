@@ -74,6 +74,48 @@
 .user-menu__side {
   padding-bottom: 40px;
   margin-right: 50px;
+
+  .menu__link {
+    font-size: 12px;
+    font-weight: bold;
+    color: #505050;
+
+    &:hover {
+      color: black;
+      text-decoration: none;
+      opacity: 1;
+    }
+    
+    &.menu__link_active {
+      color: @red;
+      opacity: 1;
+    }
+  }
+
+  .menu__item_search {
+    display: flex;
+    font-size: 12px;
+    letter-spacing: 0.375px;
+    color: #000000;
+    cursor: pointer;
+    font-weight: normal;
+    align-items: flex-end;
+    
+    .menu__item-search-icon {
+      fill: #505050;
+      margin-right: 9px;
+    }
+  }
+  
+  .menu__logout {
+    fill: #505050;
+    opacity: 1;
+    transition: all .2s;
+
+    &:hover {
+      fill: black;
+    }
+  }
 }
 
 .user-menu__title {

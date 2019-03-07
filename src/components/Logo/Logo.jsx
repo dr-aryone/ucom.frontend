@@ -13,7 +13,7 @@ const Logo = props => (
     <div className="logo__svg">
       {props.mod === 'small' ? <MiniIconLogo /> : <IconLogo />}
     </div>
-    <span className="logo__version">Alpha</span>
+    {/* <span className="logo__version">Alpha</span> */}
   </div>
 );
 

@@ -33,7 +33,7 @@ const WalletActivity = (props) => {
 
   return (
     <div className="wallet-activity">
-      <div className="wallet-activity__title title">Activity</div>
+      <div className="wallet-activity__title title">Transfers</div>
       {fixedList.map((group, i) => (
         <div key={i} className="wallet-activity__block">
           <div className="wallet-activity__date title_xxsmall"><strong>{group.date}</strong></div>
