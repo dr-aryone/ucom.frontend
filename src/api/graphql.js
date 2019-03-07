@@ -4,8 +4,7 @@ import * as axios from 'axios';
 import { getBackendConfig } from '../utils/config';
 import { getToken } from '../utils/token';
 import { COMMENTS_PER_PAGE } from '../utils/comments';
-import { FEED_PER_PAGE } from '../utils/feed';
-import snakes from '../utils/snakes';
+import { FEED_PER_PAGE, OVERVIEW_SIDE_PER_PAGE } from '../utils/feed';
 
 const request = async (data) => {
   const options = {
@@ -182,30 +181,62 @@ export default {
     }
   },
 
-  async getPosts({
-    postFiltering,
-    postOrdering,
+
+  async getOverview({
     page = 1,
     perPage = FEED_PER_PAGE,
-    commentsPage = 1,
-    commentsPerPage = COMMENTS_PER_PAGE,
+    commentsPage,
+    commentsPerPage,
+    filter,
+    tab,
+    postTypeId,
   }) {
     const token = getToken();
-    const query = await GraphQLSchema.getPostsQuery(
-      snakes(postFiltering),
-      snakes(postOrdering),
-      page,
-      perPage,
-      commentsPage,
-      commentsPerPage,
-      Boolean(token),
-    );
+    const query = tab === 'Posts' ?
+      await GraphQLSchema[`getMany${filter}PostsQuery`](
+        postTypeId,
+        page,
+        perPage,
+        commentsPage,
+        commentsPerPage,
+        Boolean(token),
+      ) : await GraphQLSchema[`getMany${filter}${tab}Query`](
+        page,
+        perPage,
+      );
 
     try {
       const data = await request({ query });
-      return data.data.posts;
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getOverviewSide({
+    page = 1,
+    perPage = OVERVIEW_SIDE_PER_PAGE,
+    filter,
+    tab,
+    side,
+    postTypeId,
+  }) {
+    const query = tab === 'Posts' ?
+      await GraphQLSchema[`getMany${side}For${filter}${tab}Query`](
+        postTypeId,
+        page,
+        perPage,
+      ) :
+      await GraphQLSchema[`getMany${side}For${filter}${tab}Query`](
+        page,
+        perPage,
+      );
+    try {
+      const data = await request({ query });
+      return data.data;
     } catch (e) {
       throw e;
     }
   },
 };
+

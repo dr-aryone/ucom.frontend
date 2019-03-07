@@ -23,6 +23,7 @@ const Comments = (props) => {
             text={comment.text}
             date={comment.date}
             userId={comment.userId}
+            userAccountName={comment.userAccountName}
             replys={comment.replys}
             nextDepthTotalAmount={comment.nextDepthTotalAmount}
             metadata={props.metadata}
@@ -55,6 +56,7 @@ const Comments = (props) => {
             text={comment.text}
             date={comment.date}
             userId={comment.userId}
+            userAccountName={comment.userAccountName}
             replys={comment.replys}
             nextDepthTotalAmount={comment.nextDepthTotalAmount}
             metadata={props.metadata}
@@ -89,6 +91,7 @@ Comments.propTypes = {
     text: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     userId: PropTypes.number.isRequired,
+    userAccountName: PropTypes.string.isRequired,
     parentId: PropTypes.number.isRequired,
     isNew: PropTypes.bool.isRequired,
   })),

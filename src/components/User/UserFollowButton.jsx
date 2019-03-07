@@ -20,12 +20,11 @@ const UserFollowButton = (props) => {
     return null;
   }
 
-  const userIsFollowing = owner && owner.iFollow && owner.iFollow.length > 0 ?
+  const userIsFollowing = user.myselfData ? user.myselfData.follow : owner && owner.iFollow && owner.iFollow.length > 0 ? // eslint-disable-line
     owner.iFollow.some(id => id === Number(props.userId)) :
     false;
 
   const userIsOwner = owner && Number(owner.id) === Number(user.id);
-
   return (
     <Button
       isStretched

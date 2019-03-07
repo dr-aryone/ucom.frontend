@@ -9,7 +9,7 @@ import urls from '../../utils/urls';
 import styles from './styles.css';
 import { formatRate } from '../../utils/rate';
 
-const UserCard = (props) => {
+export const MyUserCard = (props) => {
   const LinkTag = props.url ? Link : 'div';
 
   return (
@@ -27,7 +27,7 @@ const UserCard = (props) => {
   );
 };
 
-UserCard.propTypes = {
+MyUserCard.propTypes = {
   userPickSrc: PropTypes.string,
   userPickAlt: PropTypes.string,
   name: PropTypes.string.isRequired,
@@ -36,7 +36,7 @@ UserCard.propTypes = {
   isOwner: PropTypes.bool,
 };
 
-UserCard.defaultProps = {
+MyUserCard.defaultProps = {
   userPickSrc: null,
   userPickAlt: null,
   url: PropTypes.null,
@@ -57,4 +57,4 @@ export default connect(
     });
   },
   null,
-)(UserCard);
+)(MyUserCard);

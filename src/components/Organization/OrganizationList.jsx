@@ -22,7 +22,6 @@ class OrganizationList extends PureComponent {
     }
 
     const visibleOrganizations = this.props.organizationsIds
-      .sort()
       .slice(0, this.props.limit)
       .map(id => getOrganizationById(this.props.organizations, id))
       .filter(item => item && item.id);
@@ -48,7 +47,7 @@ class OrganizationList extends PureComponent {
             <div className="organization-list__more">
               <button
                 className="button-clean button-clean_link"
-                onClick={() => this.setState({ popupVisible: true })}
+                onClick={() => { this.setState({ popupVisible: true }); if (this.props.loadMore) this.props.loadMore(); }}
               >
                 View All
               </button>

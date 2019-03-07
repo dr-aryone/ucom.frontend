@@ -5,7 +5,7 @@ import Post from './Post/Post';
 import LoadMore from './LoadMore';
 
 const Feed = props => (
-  <div className="feed">
+  <div className={`feed ${props.isMobile ? 'feed-mobile' : ''}`}>
     {props.onSubmitPostForm &&
       <FeedInput
         onSubmit={props.onSubmitPostForm}

@@ -1,9 +1,14 @@
-import { POST_TYPE_MEDIA_ID, POSTS_CATREGORIES } from './posts';
+import * as overviewUtils from './overview';
+import { POST_TYPE_MEDIA_ID } from './posts';
 import { getBackendConfig } from './config';
 
 const urls = {
   getNewPostUrl() {
     return '/posts/new';
+  },
+
+  getTagUrl(tag) {
+    return `/tags/${tag}`;
   },
 
   getRegistrationUrl() {
@@ -74,11 +79,11 @@ const urls = {
     return `/communities/${id}`;
   },
 
-  getPublicationsCategoryUrl(
-    name = POSTS_CATREGORIES[0].name,
-    page,
-  ) {
-    let url = `/publications/${name}`;
+  getOverviewCategoryUrl(params = {}) {
+    const filter = params.filter || overviewUtils.OVERVIEW_CATEGORIES[0].name;
+    const route = params.route || overviewUtils.OVERVIEW_ROUTES[0].name;
+    const { page } = params;
+    let url = `/overview/${route}/filter/${filter}`;
 
     if (page) {
       url = `${url}/page/${page}`;
@@ -86,9 +91,9 @@ const urls = {
 
     return url;
   },
-
+  // getPublicationsUrl
   getPublicationsUrl() {
-    return '/publications';
+    return '/overview/publications';
   },
 
   getFileUrl(filename) {
