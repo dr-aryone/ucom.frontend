@@ -93,15 +93,21 @@ const SearchPopup = (props) => {
                   <div className={styles.columnTitle}>Members</div>
                   {users && users.length > 0 &&
                     users.map(item => (
-                      <UserCardLine
+                      <div
+                        role="presentation"
                         key={item.id}
-                        url={urls.getUserUrl(item.id)}
-                        userPickSrc={getFileUrl(item.avatarFilename)}
-                        name={getUserName(item)}
-                        accountName={item.accountName}
-                        rate={item.currentRate}
-                        sign="@"
-                      />
+                        onClick={() => props.onClickClose && props.onClickClose()}
+                      >
+                        <UserCardLine
+                          key={item.id}
+                          url={urls.getUserUrl(item.id)}
+                          userPickSrc={getFileUrl(item.avatarFilename)}
+                          name={getUserName(item)}
+                          accountName={item.accountName}
+                          rate={item.currentRate}
+                          sign="@"
+                        />
+                      </div>
                     ))
                   }
                   {usersCount.length > 7 &&

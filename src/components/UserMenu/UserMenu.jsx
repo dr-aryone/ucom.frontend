@@ -114,17 +114,6 @@ const UserMenu = (props) => {
                           </span>
                         </div>
                       }
-
-                      {search && (
-                        <SearchPopup
-                          onClickClose={() => showSearch(!search)}
-                          onKeyDown={(e) => {
-                            if (e.keyCode === KEY_ESCAPE) {
-                              showSearch(!search);
-                            }
-                          }}
-                        />
-                      )}
                     </div>
                   </div>
                   <div>
@@ -138,6 +127,16 @@ const UserMenu = (props) => {
           </div>
         </Popup>
       }
+      {search && (
+        <SearchPopup
+          onClickClose={() => showSearch(!search)}
+          onKeyDown={(e) => {
+            if (e.keyCode === KEY_ESCAPE) {
+              showSearch(!search);
+            }
+          }}
+        />
+      )}
     </Fragment>
   );
 };
