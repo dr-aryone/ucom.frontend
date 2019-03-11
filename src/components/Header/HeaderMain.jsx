@@ -53,6 +53,11 @@ const HeaderMain = ({
         })
       }
 
+      {user.organizations && user.organizations.length > 3 ?
+        <Fragment>
+          <div className="header-user-menu__item" role="presentation" onClick={() => setOrganizationListPopup(true)} >View All</div>
+        </Fragment> : null}
+
       <Link to="/communities/new" className="header-user-menu__item">Create Community</Link>
     </div>
   );
@@ -92,7 +97,7 @@ const HeaderMain = ({
         </button>
       }
       <div className="header__main">
-        {visibleOrganizationListPopup && <OrganizationListPopup readyOrganizations={user.organizations.slice(3)} onClickClose={() => setOrganizationListPopup(false)} />}
+        {visibleOrganizationListPopup && <OrganizationListPopup organizationsIds={user.organizations.slice(3).map(e => e.id)} onClickClose={() => setOrganizationListPopup(false)} />}
         <nav className="fixed-menu menu_header">
           {owner ?
             <Fragment>
