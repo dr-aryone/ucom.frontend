@@ -16,8 +16,39 @@ const clearClassNames = (element) => {
   });
 };
 
+const containsFiles = (e) => {
+  if (e.dataTransfer.types) {
+    for (let i = 0; i < e.dataTransfer.types.length; i++) {
+      if (e.dataTransfer.types[i] === 'Files') {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
+
 
 export default MediumEditor.extensions.fileDragging.extend({
+  handleDrag(e) {
+    e.preventDefault();
+
+    if (!containsFiles(e)) {
+      return;
+    }
+
+    e.dataTransfer.dropEffect = 'copy';
+
+    const target = e.target.classList ? e.target : e.target.parentElement;
+
+    // Ensure the class gets removed from anything that had it before
+    clearClassNames(target);
+
+    if (e.type === 'dragover') {
+      target.classList.add(CLASS_DRAG_OVER);
+    }
+  },
+
   handleDrop(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -87,6 +118,7 @@ export default MediumEditor.extensions.fileDragging.extend({
         imgEl.src = imgUrl;
         imgEl.removeAttribute('id');
         this.base.checkContentChanged(this.base.origElements);
+        this.base.trigger('stateChanged');
       }
     } catch (e) {
       console.error(e);

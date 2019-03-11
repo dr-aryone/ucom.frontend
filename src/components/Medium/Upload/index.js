@@ -202,6 +202,7 @@ export default class MediumUpload extends MediumEditor.Extension {
     this.setCursorToElemnt(newLine);
     this.currentEl = newLine;
     this.base.checkContentChanged(this.base.origElements);
+    this.base.trigger('stateChanged');
 
     setTimeout(() => {
       this.uploadButtons.show(this.currentEl);

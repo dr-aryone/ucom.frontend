@@ -25,6 +25,10 @@ export default class MediumEmbed extends MediumEditor.Extension {
       this.state = this.getState();
     });
 
+    this.base.subscribe('stateChanged', () => {
+      this.state = this.getState();
+    });
+
     this.base.subscribe('editableKeydown', this.onKeyDown);
   }
 
