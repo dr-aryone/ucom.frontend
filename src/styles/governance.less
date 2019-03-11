@@ -1,3 +1,40 @@
+.governance-main-title {
+  display: flex;
+  margin-bottom: 25px;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.governance-all {
+  padding-top: 46px;
+  position: relative;
+  display: flex;
+}
+
+.governance-switch {
+  fill: none;
+  stroke: black;
+  cursor: pointer;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 24px;
+  padding-right: 20px;
+
+  &:hover {
+    stroke: @red;
+  }
+}
+
+.governance-switch_rotated {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
 .governance__text {
   font-weight: 500;
   line-height: 38px;
@@ -5,8 +42,18 @@
   max-width: 700px;
 }
 
+.governance__text_small {
+  font-size: 16px;
+  line-height: 28px;
+}
+
 .governance__text_description {
   margin-bottom: 64px;
+}
+
+.governance__status {
+  display: flex;
+  align-items: flex-end;
 }
 
 .governance__status-text {
@@ -23,11 +70,6 @@
 .governance__edit-stake {
   display: flex;
   align-items: flex-end;
-}
-
-.governance__status {
-  display: flex;
-  flex-direction: column;
 }
 
 .governance__action {

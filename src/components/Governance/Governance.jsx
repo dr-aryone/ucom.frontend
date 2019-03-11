@@ -1,9 +1,8 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { useEffect, useState } from 'react';
-import GovernanceTable from './GovernanceTable';
+import GovernanceBlock from './GovernanceBlock';
 import Button from '../Button';
-import { ArrowIcon } from '../Icons/GovernanceIcons';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
 import OrganizationHead from '../Organization/OrganizationHead';
@@ -33,6 +32,8 @@ const Governance = (props) => {
   const [electionVisibility, setElectionVisibility] = useState(false);
   const [confirmationVisibility, setConfirmationVisibility] = useState(false);
   const [closeVisibility, setCloseVisibility] = useState(false);
+  const [nodeVisibility, setNodeVisibility] = useState({ prod: false, calc: false });
+
   const setVotes = () => {
     setConfirmationVisibility(false);
     setElectionVisibility(false);
@@ -107,33 +108,35 @@ const Governance = (props) => {
       <div className="governance">
         <div className="content content_base">
           <div className="content__inner">
-            <div className="content__title">
-              <h1 className="title">Governance</h1>
+            <div className="governance-main-title">
+              <h1 className="title title_bold">Governance</h1>
+              {props.user.id &&
+              <div className="governance__status">
+                <span className="governance__status-text">Voting Power:</span>
+                <h3 className="title_small">
+                  {stakedTokens}°
+                </h3>
+              </div>
+              }
             </div>
-
+            <div className="nav-bar__categories">
+              {/* {overviewUtils.OVERVIEW_CATEGORIES.map(item => (
+                <div className="menu__item" key={item.id}>
+                  <NavLink
+                      className="overview__link"
+                      activeClassName="overview__link_active"
+                      to={urls.getOverviewCategoryUrl({ filter: item.name, route: overviewRouteName })}
+                      isActive={() => props.location.pathname.indexOf(`filter/${item.name}`) !== -1}
+                    >
+                      {item.name}
+                    </NavLink>
+                </div>
+                ))} */}
+            </div>
             <div className="governance__section">
               <div className="governance__text">
-                Govern the U°OS protocol through voting. You can currently vote for active and standby Block Producers. Vote with your staked UOS.
+              Govern the U°OS protocol through voting. You can vote for Block Producers and Calculator Nodes. Vote with your Importance.
               </div>
-
-              {props.user.id &&
-                <div className="governance__status">
-                  <div className="governance__edit-stake">
-                    <span className="governance__status-text">Staked</span>
-                    <h3 className="title_small">
-                      {stakedTokens}
-                    </h3>
-                    <span className="governance__status-text">UOS</span>
-                  </div>
-                  <div
-                    className="governance__action"
-                    role="presentation"
-                    onClick={() => props.setWalletEditStakeVisible(true)}
-                  >
-                    Edit Stake
-                  </div>
-                </div>
-              }
             </div>
           </div>
         </div>
@@ -178,24 +181,8 @@ const Governance = (props) => {
 
               {props.governance.nodes.data.length > 0 &&
                 <div className="content__section content__section_medium">
-                  <div className="governance-all">
-                    <div className="governance-all__title">
-                      <h2 className="title title_bold">Block Producers </h2>
-                      {props.user.id &&
-                        <div className="governance__exercise" role="presentation" onClick={() => setElectionVisibility(true)}>
-                        Exercise your election rights <div className="governance__arrow-icon"><ArrowIcon /></div>
-                        </div>}
-                    </div>
-                    <div className="governance__text governance__text_description">
-                    The Block Producers are decentralized entities that keep the chain running by producing blocks. The Block Producers are elected through voting.
-                    </div>
-                    <div className="governance-all__table">
-                      <GovernanceTable
-                        data={table}
-                        isPreview
-                      />
-                    </div>
-                  </div>
+                  <GovernanceBlock setVis={() => setNodeVisibility({ calc: false, prod: !nodeVisibility.prod })} vis={nodeVisibility.prod} table={table} title="Block Producers" description="The Block Producers are decentralized entities that keep the chain running by producing blocks. The Block Producers are elected through voting." />
+                  <GovernanceBlock setVis={() => setNodeVisibility({ prod: false, calc: !nodeVisibility.calc })} vis={nodeVisibility.calc} table={table} title="Calculator Nodes " description="A Calculator Node is a node on the U°OS blockchain dedicated to calculating the activity of user accounts: social, transactional, stake." />
                 </div>
               }
             </div>
