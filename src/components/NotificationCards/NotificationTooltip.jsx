@@ -1,3 +1,4 @@
+import { throttle } from 'lodash';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { bindActionCreators } from 'redux';
 import React, { Component, createRef } from 'react';
@@ -24,6 +25,18 @@ class NotificationTooltip extends Component {
     super(props);
     this.tooltip = createRef();
     this.notificationsContent = createRef();
+
+    const notificationTrigger = new CustomEvent('NotificationTrigger');
+
+    this.onScrollY = throttle((container) => {
+      if (container.scrollTop + container.offsetHeight + 100 > this.notificationsContent.current.offsetHeight) {
+        try {
+          window.dispatchEvent(notificationTrigger);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }, 10);
   }
 
   componentDidMount() {
@@ -78,22 +91,13 @@ class NotificationTooltip extends Component {
     const { list, notificationsMetadata } = this.props;
     const newNotifications = filterNotifs(list, false);
     const oldNotifications = filterNotifs(list, true);
-    const notificationTrigger = new CustomEvent('NotificationTrigger');
 
     return (
       <div ref={this.tooltip} className="notification-tooltip">
         <div className="arrow-big" />
         <PerfectScrollbar
           className="notification-tooltip__container"
-          onScrollY={(container) => {
-            if (container.scrollTop + container.offsetHeight + 100 > this.notificationsContent.current.offsetHeight) {
-              try {
-                window.dispatchEvent(notificationTrigger);
-              } catch (e) {
-                console.error(e);
-              }
-            }
-          }}
+          onScrollY={this.onScrollY}
         >
           <div ref={this.notificationsContent}>
             {isRequiredTime(list, false) &&
