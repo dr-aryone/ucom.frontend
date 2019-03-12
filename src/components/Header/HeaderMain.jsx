@@ -128,14 +128,20 @@ const HeaderMain = ({
               <div
                 role="presentation"
                 className={`header-search only-desktop ${menuPopupVisibility ? '' : 'header-search_border'}  only-desktop`}
-                onClick={() => showSearch(!search)}
+                onClick={() => {
+                  showSearch(!search);
+                  return menuPopupVisibility ? triggerMenuPopup() : null;
+                }}
               >
                 <IconSearch />
               </div>
 
               {search && (
                 <SearchPopup
-                  onClickClose={() => showSearch(!search)}
+                  onClickClose={() => {
+                    showSearch(!search);
+                    hideMenuPopup();
+                  }}
                   onKeyDown={(e) => {
                     if (e.keyCode === KEY_ESCAPE) {
                       showSearch(!search);
