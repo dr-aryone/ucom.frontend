@@ -39,7 +39,6 @@ class FeedInput extends PureComponent {
       return null;
     }
 
-
     return (
       <div className="feed-input">
         <div className="feed-input__invite" role="presentation" onClick={this.showForm}>

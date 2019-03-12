@@ -22,6 +22,7 @@
   white-space: pre-wrap;
   margin-bottom: 20px;
   word-wrap: break-word;
+  word-break: break-word;
 }
 
 

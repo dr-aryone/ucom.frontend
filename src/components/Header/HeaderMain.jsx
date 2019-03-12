@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Tooltip } from 'react-tippy';
 import { Link } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
+import { KEY_ESCAPE } from 'keycode-js';
 import { getFileUrl } from '../../utils/upload';
 import { authShowPopup } from '../../actions/auth';
 import { triggerMenuPopup, hideMenuPopup } from '../../actions/menuPopup';
@@ -18,6 +19,7 @@ import AvatarFromFile from '../AvatarFromFile';
 import OrganizationListPopup from '../Organization/OrganizationListPopup';
 import OrganizationIcon from '../Icons/Organization';
 import UserMenuTrigger from '../UserMenu/UserMenuTrigger';
+import SearchPopup from '../Search';
 
 const HeaderMain = ({
   authShowPopup, users, user, menuPopupVisibility, triggerMenuPopup,
@@ -25,6 +27,7 @@ const HeaderMain = ({
   const owner = getUserById(users, user.id);
 
   const [visibleOrganizationListPopup, setOrganizationListPopup] = useState(false);
+  const [search, showSearch] = useState(false);
 
   const userContext = (
     <div className="header-user-menu">
@@ -49,6 +52,11 @@ const HeaderMain = ({
           );
         })
       }
+
+      {user.organizations && user.organizations.length > 3 ?
+        <Fragment>
+          <div className="header-user-menu__item" role="presentation" onClick={() => setOrganizationListPopup(true)} >View All</div>
+        </Fragment> : null}
 
       <Link to="/communities/new" className="header-user-menu__item">Create Community</Link>
     </div>
@@ -89,7 +97,7 @@ const HeaderMain = ({
         </button>
       }
       <div className="header__main">
-        {visibleOrganizationListPopup && <OrganizationListPopup readyOrganizations={user.organizations.slice(3)} onClickClose={() => setOrganizationListPopup(false)} />}
+        {visibleOrganizationListPopup && <OrganizationListPopup organizationsIds={user.organizations.slice(3).map(e => e.id)} onClickClose={() => setOrganizationListPopup(false)} />}
         <nav className="fixed-menu menu_header">
           {owner ?
             <Fragment>
@@ -117,18 +125,49 @@ const HeaderMain = ({
 
               <span className="only-desktop"><NotificationTrigger /></span>
 
-              <div className={`header-search only-desktop ${menuPopupVisibility ? '' : 'header-search_border'}  only-desktop`}>
+              <div
+                role="presentation"
+                className={`header-search only-desktop ${menuPopupVisibility ? '' : 'header-search_border'}  only-desktop`}
+                onClick={() => showSearch(!search)}
+              >
                 <IconSearch />
               </div>
+
+              {search && (
+                <SearchPopup
+                  onClickClose={() => showSearch(!search)}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === KEY_ESCAPE) {
+                      showSearch(!search);
+                    }
+                  }}
+                />
+              )}
 
               <UserMenuTrigger />
 
             </Fragment>
           :
             <Fragment>
-              <div className={`header-search ${menuPopupVisibility ? '' : 'header-search_border'} only-desktop`}>
+              <div
+                role="presentation"
+                className={`header-search ${menuPopupVisibility ? '' : 'header-search_border'} only-desktop`}
+                onClick={() => showSearch(!search)}
+              >
                 <IconSearch />
               </div>
+
+              {search && (
+                <SearchPopup
+                  onClickClose={() => showSearch(!search)}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === KEY_ESCAPE) {
+                      showSearch(!search);
+                    }
+                  }}
+                />
+              )}
+
               <button
                 className="menu__link menu__link_upper menu_sigh-in only-desktop"
                 onClick={() => authShowPopup()}

@@ -9,7 +9,7 @@ import ModalContent from '../ModalContent';
 import Rate from '../Rate';
 
 const OrganizationListPopup = (props) => {
-  if ((!props.organizationsIds || !props.organizationsIds.length) && (!props.readyOrganizations || !props.readyOrganizations.length)) {
+  if (!props.organizationsIds || !props.organizationsIds.length) {
     return null;
   }
 
