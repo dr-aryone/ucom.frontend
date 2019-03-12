@@ -140,7 +140,7 @@ const HeaderMain = ({
                 <SearchPopup
                   onClickClose={() => {
                     showSearch(!search);
-                    triggerMenuPopup();
+                    hideMenuPopup();
                   }}
                   onKeyDown={(e) => {
                     if (e.keyCode === KEY_ESCAPE) {
