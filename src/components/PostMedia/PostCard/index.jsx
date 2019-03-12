@@ -37,7 +37,7 @@ const PostCard = (props) => {
 
       {props.title && (
         <h1 className={styles.title}>
-          <PostLink to={props.url}>{sanitizePostTitle(props.title)}</PostLink>
+          <PostLink to={props.url} dangerouslySetInnerHTML={{ __html: sanitizePostTitle(props.title) }} />
         </h1>
       )}
 
