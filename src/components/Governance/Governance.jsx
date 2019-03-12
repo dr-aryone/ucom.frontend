@@ -1,6 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { useEffect, useState } from 'react';
+import { Tooltip } from 'react-tippy';
 import GovernanceBlock from './GovernanceBlock';
 import Button from '../Button';
 import Popup from '../Popup';
@@ -16,6 +17,15 @@ import { getUosGroupId } from '../../utils/config';
 import SetStakePopup from '../Wallet/SetStakePopup';
 import GovernanceElection from './GovernanceElection';
 import GovernanceConfirmation from './GovernanceConfirmation';
+import { formatRate } from '../../utils/rate';
+
+const governanceTabs = [
+  { name: 'Network', active: true },
+  { name: 'My Projects', active: false },
+  { name: 'Ideas', active: false },
+  { name: 'Projects', active: false },
+  { name: 'Results', active: false },
+];
 
 const Governance = (props) => {
   const organizationId = getUosGroupId();
@@ -106,32 +116,25 @@ const Governance = (props) => {
       )}
 
       <div className="governance">
-        <div className="content content_base">
-          <div className="content__inner">
+        <div className="content">
+          <div className="content__inner governance-inner">
             <div className="governance-main-title">
               <h1 className="title title_bold">Governance</h1>
               {props.user.id &&
               <div className="governance__status">
                 <span className="governance__status-text">Voting Power:</span>
                 <h3 className="title_small">
-                  {stakedTokens}°
+                  {formatRate(stakedTokens)}°
                 </h3>
               </div>
               }
             </div>
-            <div className="nav-bar__categories">
-              {/* {overviewUtils.OVERVIEW_CATEGORIES.map(item => (
-                <div className="menu__item" key={item.id}>
-                  <NavLink
-                      className="overview__link"
-                      activeClassName="overview__link_active"
-                      to={urls.getOverviewCategoryUrl({ filter: item.name, route: overviewRouteName })}
-                      isActive={() => props.location.pathname.indexOf(`filter/${item.name}`) !== -1}
-                    >
-                      {item.name}
-                    </NavLink>
+            <div className="nav-bar__categories nav-bar__categories_governance">
+              {governanceTabs.map(item => (
+                <div key={item.name} className={`overview__link ${item.active ? 'overview__link_active' : 'overview__link_disabled'}`}>
+                  <Tooltip disabled={item.active} position="bottom" arrow title="Coming Soon">{item.name}</Tooltip>
                 </div>
-                ))} */}
+                ))}
             </div>
             <div className="governance__section">
               <div className="governance__text">
@@ -145,8 +148,8 @@ const Governance = (props) => {
         <div className="content__inner">
           <div className="sheets">
             <div className="sheets__list">
-              <div className="sheets__item">
-                <OrganizationHead organizationId={organizationId} isOrganization />
+              <div className="sheets__item sheets__item_governance">
+                <OrganizationHead organizationId={organizationId} isGovernance />
               </div>
             </div>
 
@@ -180,10 +183,10 @@ const Governance = (props) => {
               } */}
 
               {props.governance.nodes.data.length > 0 &&
-                <div className="content__section content__section_medium">
-                  <GovernanceBlock setVis={() => setNodeVisibility({ calc: false, prod: !nodeVisibility.prod })} vis={nodeVisibility.prod} table={table} title="Block Producers" description="The Block Producers are decentralized entities that keep the chain running by producing blocks. The Block Producers are elected through voting." />
-                  <GovernanceBlock setVis={() => setNodeVisibility({ prod: false, calc: !nodeVisibility.calc })} vis={nodeVisibility.calc} table={table} title="Calculator Nodes " description="A Calculator Node is a node on the U°OS blockchain dedicated to calculating the activity of user accounts: social, transactional, stake." />
-                </div>
+              <div>
+                <GovernanceBlock go={() => setElectionVisibility(true)} myVotes={346} voters={12345} rate={15000} setVis={() => setNodeVisibility({ calc: false, prod: !nodeVisibility.prod })} vis={nodeVisibility.prod} table={table} title="Block Producers" description="The Block Producers are decentralized entities that keep the chain running by producing blocks. The Block Producers are elected through voting." />
+                <GovernanceBlock go={() => setElectionVisibility(true)} votes={0} voters={12345} rate={15000} setVis={() => setNodeVisibility({ prod: false, calc: !nodeVisibility.calc })} vis={nodeVisibility.calc} table={table} title="Calculator Nodes " description="A Calculator Node is a node on the U°OS blockchain dedicated to calculating the activity of user accounts: social, transactional, stake." />
+              </div>
               }
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import React from 'react';
 import UserFollowButton from '../User/UserFollowButton';
 import UserCard from '../UserCard';
@@ -11,6 +12,9 @@ import { selectUser } from '../../store/selectors/user';
 import { getOrganizationById } from '../../store/organizations';
 import OrganizationFollowButton from '.././Organization/OrganizationFollowButton';
 import { getOrganizationUrl } from '../../utils/organization';
+import { formatRate } from '../../utils/rate';
+import Avatar from '../Avatar';
+import OrganizationIcon from '../Icons/Organization';
 
 const OrganizationHead = (props) => {
   const organization = getOrganizationById(props.organizations, props.organizationId);
@@ -23,6 +27,28 @@ const OrganizationHead = (props) => {
 
   if (!user) {
     return null;
+  }
+  if (props.isGovernance) {
+    return (
+      <div className="governance-head">
+        <Link to={getOrganizationUrl(organization.id)}>
+          <Avatar
+            isPost
+            rounded
+            BlankIcon={OrganizationIcon}
+            src={getFileUrl(organization.avatarFilename)}
+          />
+        </Link>
+
+        <Link className="governance-head__nickname" to={getOrganizationUrl(organization.id)}>
+          <div >{organization.nickname}</div>
+        </Link>
+
+        <div className="toolbar__side">
+          {formatRate(organization.currentRate)}°
+        </div>
+      </div>
+    );
   }
 
   return (
