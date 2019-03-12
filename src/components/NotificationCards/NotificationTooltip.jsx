@@ -23,6 +23,7 @@ class NotificationTooltip extends Component {
   constructor(props) {
     super(props);
     this.tooltip = createRef();
+    this.notificationsContent = createRef();
   }
 
   componentDidMount() {
@@ -38,6 +39,10 @@ class NotificationTooltip extends Component {
   }
 
   loadMore = () => {
+    if (this.props.loading) {
+      return;
+    }
+
     const { hasMore } = this.props.notificationsMetadata;
 
     if (hasMore) {
@@ -80,15 +85,17 @@ class NotificationTooltip extends Component {
         <div className="arrow-big" />
         <PerfectScrollbar
           className="notification-tooltip__container"
-          onYReachEnd={() => {
-            try {
-              window.dispatchEvent(notificationTrigger);
-            } catch (e) {
-              console.error(e);
+          onScrollY={(container) => {
+            if (container.scrollTop + container.offsetHeight + 100 > this.notificationsContent.current.offsetHeight) {
+              try {
+                window.dispatchEvent(notificationTrigger);
+              } catch (e) {
+                console.error(e);
+              }
             }
-        }}
+          }}
         >
-          <div>
+          <div ref={this.notificationsContent}>
             {isRequiredTime(list, false) &&
               <div className="notification-tooltip__header">
                 <h3 className="notification-tooltip__title">New notifications
