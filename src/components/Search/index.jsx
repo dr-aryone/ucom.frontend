@@ -84,6 +84,10 @@ const SearchPopup = (props) => {
         </div>
       </div>
 
+      {props.userMenu && userName === '' && (
+        <div className={styles.notFound} />
+      )}
+
       {userName !== '' && (
         <Fragment>
           <Popup mod="search">
@@ -112,7 +116,13 @@ const SearchPopup = (props) => {
                   }
                   {usersCount.length > 7 &&
                     <Link to={`/users/?page=1&sortBy=-current_rate&perPage=20&userName=${userName}`} className={styles.viewAll}>
-                      <div className={styles.viewAllText}>View all</div>
+                      <div
+                        role="presentation"
+                        className={styles.viewAllText}
+                        onClick={() => props.onClickClose && props.onClickClose()}
+                      >
+                        View all
+                      </div>
                       <div className={styles.arrowRed}><Arrow /></div>
                     </Link>
                   }

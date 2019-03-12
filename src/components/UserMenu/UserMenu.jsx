@@ -43,7 +43,10 @@ const UserMenu = (props) => {
                       <div
                         className="menu__item  menu__item_search else-desktop"
                         role="presentation"
-                        onClick={() => showSearch(!search)}
+                        onClick={() => {
+                          showSearch(!search);
+                          return props.menuPopupVisibility ? props.hideMenuPopup() : null;
+                        }}
                       >
                         <div className="menu__item-search-icon">
                           <IconSearch />
@@ -129,10 +132,12 @@ const UserMenu = (props) => {
       }
       {search && (
         <SearchPopup
+          userMenu
           onClickClose={() => showSearch(!search)}
           onKeyDown={(e) => {
             if (e.keyCode === KEY_ESCAPE) {
               showSearch(!search);
+              props.showMenuPopup();
             }
           }}
         />
