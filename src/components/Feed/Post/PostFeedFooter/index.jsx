@@ -55,9 +55,12 @@ class PostFeedFooter extends PureComponent {
               <div className="post__share-popup">
                 <ShareBlock
                   link={urls.getPostUrl(post)}
+                  linkPost={post.post && urls.getPostUrl(post.post)}
                   postId={post.id}
                   onClickClose={this.props.toggleShare}
                   repostAvailable={post.myselfData.repostAvailable}
+                  postTypeId={post.postTypeId}
+                  postPostTypeId={post.post && post.post.postTypeId}
                 />
               </div>
             ) : null }

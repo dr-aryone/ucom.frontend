@@ -1,0 +1,54 @@
+.share__icon {
+  position: relative;
+  top: -3px;
+}
+
+.share__icon svg {
+  display: block;
+}
+
+.share {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.repost__block {
+  display: flex;
+  width: 100%;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #E1E1E1;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.repost__icon {
+  margin-right: 10px;
+}
+
+.copylink {
+  color: #d8352f;
+  font-weight: 400;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.copylink__link {
+  text-overflow: ellipsis;
+  max-width: 250px;
+  overflow: hidden;
+}
+
+.socialIcons {
+  display: flex;
+  padding-bottom: 16px;
+  margin: 8px 0 20px;
+  border-bottom: 1px solid #E1E1E1;
+}
+
+.icon {
+  margin-right: 8px;
+  text-decoration: none;
+}
