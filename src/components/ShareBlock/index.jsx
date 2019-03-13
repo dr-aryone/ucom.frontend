@@ -45,14 +45,14 @@ class ShareBlock extends PureComponent {
       <div className={styles.share} ref={(el) => { this.el = el; }}>
         {this.props.repostAvailable &&
           <div
-            className={styles.repost__block}
+            className={styles.repostBlock}
             role="presentation"
             onClick={() => {
               this.props.addRepost(this.props.postId);
               this.props.onClickClose();
             }}
           >
-            <IconRepost className={styles.repost__icon} />
+            <IconRepost className={styles.repostIcon} />
             <span>Repost to my profile</span>
           </div>
         }

@@ -1,11 +1,11 @@
-.share__icon {
+/* .share__icon {
   position: relative;
   top: -3px;
 }
 
 .share__icon svg {
   display: block;
-}
+} */
 
 .share {
   font-weight: bold;
@@ -13,7 +13,7 @@
   line-height: 17px;
 }
 
-.repost__block {
+.repostBlock {
   display: flex;
   width: 100%;
   padding-bottom: 15px;
@@ -22,7 +22,7 @@
   cursor: pointer;
 }
 
-.repost__icon {
+.repostIcon {
   margin-right: 10px;
 }
 
@@ -35,7 +35,7 @@
   cursor: pointer;
 }
 
-.copylink__link {
+.copylinkTitle {
   text-overflow: ellipsis;
   max-width: 250px;
   overflow: hidden;
