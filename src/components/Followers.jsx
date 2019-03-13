@@ -7,7 +7,6 @@ import Avatar from '../components/Avatar';
 import Popup from '../components/Popup';
 import ModalContent from '../components/ModalContent';
 import ProfilesList from '../components/ProfilesList';
-import { getFileUrl } from '../utils/upload';
 import { getUserName, userIsFollowed } from '../utils/user';
 import urls from '../utils/urls';
 import { selectUser } from '../store/selectors';
@@ -87,7 +86,7 @@ class Followers extends PureComponent {
               <div className="avatars-list avatars-list_dual">
                 {avatarUsers.map(item => (
                   <div className="avatars-list__item" key={item.id}>
-                    <Avatar borderWhite size="xsmall" src={getFileUrl(item.avatarFilename)} />
+                    <Avatar borderWhite size="xsmall" src={urls.getFileUrl(item.avatarFilename)} />
                   </div>
                 ))}
               </div>

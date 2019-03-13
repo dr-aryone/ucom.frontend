@@ -5,16 +5,15 @@ import { Link } from 'react-router-dom';
 import Avatar from '../Avatar';
 import AvatarFromFile from '../AvatarFromFile';
 import CommunityIcon from '../Icons/Community';
-import { getFileUrl } from '../../utils/upload';
 import { getOrganizationUrl } from '../../utils/organization';
 import { getOrganization } from '../../actions/organizations';
-
+import urls from '../../utils/urls';
 
 const CommunityCard = (props) => {
   const organization = props.community;
 
   const profileLink = getOrganizationUrl(organization.id);
-  const avatarUrl = getFileUrl(organization.avatarFilename);
+  const avatarUrl = urls.getFileUrl(organization.avatarFilename);
 
   const avatar = avatarUrl && typeof avatarUrl === 'object' ?
     <AvatarFromFile rounded file={avatarUrl} size="medium" /> :
@@ -52,7 +51,7 @@ const CommunityCard = (props) => {
               organization.followedBy.slice(0, 3)
               .map((item, i) => (
                 <div className="community-item__user-avatar" key={i}>
-                  <Avatar src={getFileUrl(item.avatarFilename)} size="xmsmall" />
+                  <Avatar src={urls.getFileUrl(item.avatarFilename)} size="xmsmall" />
                 </div>))}
             </div> : null
           }

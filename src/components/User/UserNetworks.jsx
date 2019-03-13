@@ -3,25 +3,22 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { getUserById } from '../../store/users';
 import { extractHostname } from '../../utils/url';
+import styles from '../Sidebar/styles.css';
 
 const UserNetworks = (props) => {
   const user = getUserById(props.users, props.userId);
 
-  if (!user) {
-    return null;
-  }
-
-  if (!user.personalWebsiteUrl) {
+  if (!user || !user.personalWebsiteUrl) {
     return null;
   }
 
   return (
-    <div className="user-section">
-      <div className="user-section__title">
-        <h3 className="title title_xxsmall title_medium">Networks</h3>
-      </div>
-      <div className="user-section__content">
-        <a href={user.personalWebsiteUrl} target="_blank" rel="noopener noreferrer">{extractHostname(user.personalWebsiteUrl)}</a>
+    <div className={styles.section}>
+      <div className={styles.title}>Contacts</div>
+      <div className={styles.content}>
+        <a className="red" href={user.personalWebsiteUrl} target="_blank" rel="noopener noreferrer">
+          {extractHostname(user.personalWebsiteUrl)}
+        </a>
       </div>
     </div>
   );

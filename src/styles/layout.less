@@ -43,3 +43,26 @@
     }
   }
 }
+
+.layout_profile {
+  max-width: 1180px;
+  grid-row-gap: 36px;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 50px 1fr 90px 300px 50px;
+  }
+
+  .layout__header {
+    @media (min-width: 1024px) {
+      grid-column-start: 1;
+      grid-column-end: 6;
+    }
+  }
+
+  .layout__sidebar {
+    @media (min-width: 1024px) {
+      grid-column-start: 4;
+      grid-column-end: 5;
+    }
+  }
+}

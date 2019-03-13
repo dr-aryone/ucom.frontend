@@ -29,3 +29,5 @@ export const userIsFollowed = (followers, userId) => {
 
   return !!followers.find(i => +i.id === +userId);
 };
+
+export const userIsOwner = (user, owner) => user && owner && +user.id === +owner.id;

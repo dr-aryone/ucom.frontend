@@ -6,10 +6,9 @@ import Checkbox from '../Checkbox';
 import Avatar from '../Avatar';
 import { IconOK } from '../Icons/GovernanceIcons';
 import { getBpStatusById, BP_STATUS_ACTIVE_ID, LIMITER_OF_PRODUCERS } from '../../utils/nodes';
-import { getFileUrl } from '../../utils/upload';
 import { selectUser } from '../../store/selectors/user';
 import { governanceNodesSetVote } from '../../actions/governance';
-
+import urls from '../../utils/urls';
 
 const GovernanceTable = props => (
   <table className="governance-table">
@@ -37,7 +36,7 @@ const GovernanceTable = props => (
             if (props.user.id && props.isPreview && item.myselfData && item.myselfData.bpVote) {
               return (
                 <td className="governance-table__cell governance-table__cell_avatar" data-name="">
-                  <Avatar src={getFileUrl(props.user.avatarFilename)} size="xysmall" icon={<IconOK />} />
+                  <Avatar src={urls.getFileUrl(props.user.avatarFilename)} size="xysmall" icon={<IconOK />} />
                 </td>
               );
             } else if (props.user.id && !props.isPreview) {

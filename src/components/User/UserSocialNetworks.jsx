@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import Links from '../Links';
 import { getUserById } from '../../store/users';
+import styles from '../Sidebar/styles.css';
 
 const UserSocialNetworks = (props) => {
   const user = getUserById(props.users, props.userId);
@@ -12,11 +13,9 @@ const UserSocialNetworks = (props) => {
   }
 
   return (
-    <div className="user-section">
-      <div className="user-section__title">
-        <h3 className="title title_xxsmall title_medium">Social Networks</h3>
-      </div>
-      <div className="user-section__content">
+    <div className={styles.section}>
+      <div className={styles.title}>Social Networks</div>
+      <div className={styles.content}>
         <Links userSources={user.usersSources} />
       </div>
     </div>

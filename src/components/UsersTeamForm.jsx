@@ -7,7 +7,6 @@ import UserCard from './UserCard';
 import IconRemove from './Icons/Remove';
 import { getUserName } from '../utils/user';
 import urls from '../utils/urls';
-import { getFileUrl } from '../utils/upload';
 import { getUsersTeamStatusById } from '../utils/organization';
 import {
   USERS_TEAM_STATUS_ID_CONFIRMED,
@@ -37,7 +36,7 @@ const UsersTeamForm = props => (
                 <UserCard
                   userName={getUserName(item)}
                   accountName={item.accountName}
-                  avatarUrl={getFileUrl(item.avatarFilename)}
+                  avatarUrl={urls.getFileUrl(item.avatarFilename)}
                   profileLink={urls.getUserUrl(item.id)}
                 />
               </div>

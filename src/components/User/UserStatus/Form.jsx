@@ -1,8 +1,10 @@
+import PropTypes from 'prop-types';
 import { KEY_ESCAPE, KEY_RETURN } from 'keycode-js';
 import React, { useState, useEffect } from 'react';
 import Button from '../../Button';
-
-import { PLACEHOLDER, STATUS_MAX_LENGTH } from './UserStatus';
+import styles from './styles.css';
+import TextareaAutosize from '../../TextareaAutosize';
+import { PLACEHOLDER, STATUS_MAX_LENGTH } from './index';
 
 const UserStatusForm = (props) => {
   let element;
@@ -32,27 +34,27 @@ const UserStatusForm = (props) => {
   };
 
   return (
-    <div className="status__form" ref={(el) => { element = el; }}>
-      <textarea
+    <div className={styles.form} ref={(el) => { element = el; }}>
+      <TextareaAutosize
         autoFocus
         rows="2"
-        className="status__textarea"
+        className={styles.textarea}
         placeholder={PLACEHOLDER}
         maxLength={STATUS_MAX_LENGTH}
         value={moodMessage}
         onChange={e => setMoodMessage(e.target.value)}
-        onKeyUp={(e) => {
+        onKeyDown={(e) => {
           if (e.keyCode === KEY_ESCAPE) {
             props.onClickHide();
           }
 
-          if (e.keyCode === KEY_RETURN && (e.ctrlKey || e.metaKey)) {
+          if ((e.ctrlKey || e.metaKey) && e.keyCode === KEY_RETURN) {
             save();
           }
         }}
       />
 
-      <div className="status__actions">
+      <div className={styles.actions}>
         <Button
           text="Save"
           size="small"
@@ -60,12 +62,22 @@ const UserStatusForm = (props) => {
           onClick={() => save()}
         />
 
-        <div className="status__counter">
+        <div className={styles.counter}>
           {moodMessage.length}/{STATUS_MAX_LENGTH}
         </div>
       </div>
     </div>
   );
+};
+
+UserStatusForm.propTypes = {
+  moodMessage: PropTypes.string,
+  onClickHide: PropTypes.func.isRequired,
+  onClickSave: PropTypes.func.isRequired,
+};
+
+UserStatusForm.defaultProps = {
+  moodMessage: null,
 };
 
 export default UserStatusForm;

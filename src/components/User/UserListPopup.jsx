@@ -7,7 +7,6 @@ import UserFollowButton from './UserFollowButton';
 import { selectUser } from '../../store/selectors/user';
 import { getUsersByIds } from '../../store/users';
 import { getUserName } from '../../utils/user';
-import { getFileUrl } from '../../utils/upload';
 import urls from '../../utils/urls';
 
 const UserListPopup = (props) => {
@@ -29,7 +28,7 @@ const UserListPopup = (props) => {
                 className="user-card_text_left"
                 userName={getUserName(item)}
                 accountName={item.accountName}
-                avatarUrl={getFileUrl(item.avatarFilename)}
+                avatarUrl={urls.getFileUrl(item.avatarFilename)}
                 profileLink={urls.getUserUrl(item.id)}
                 sign={props.noSign ? '' : '@'}
               />

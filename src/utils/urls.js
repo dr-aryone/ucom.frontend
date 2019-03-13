@@ -91,7 +91,7 @@ const urls = {
 
     return url;
   },
-  // getPublicationsUrl
+
   getPublicationsUrl() {
     return '/overview/publications';
   },
@@ -99,6 +99,10 @@ const urls = {
   getFileUrl(filename) {
     if (!filename) {
       return null;
+    }
+
+    if (filename.indexOf('http://') > -1) {
+      return filename;
     }
 
     return `${getBackendConfig().httpEndpoint}/upload/${filename}`;

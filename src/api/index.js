@@ -64,7 +64,7 @@ class Api {
   }
 
   async patchMyself(data) {
-    const response = await this.actions.patch('/api/v1/myself', data);
+    const response = await this.actions.patch('/api/v1/myself', snakes(data));
 
     return humps(response.data);
   }

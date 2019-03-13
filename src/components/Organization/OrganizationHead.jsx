@@ -6,7 +6,6 @@ import UserCard from '../UserCard';
 import { getUserById } from '../../store/users';
 import { getUserName } from '../../utils/user';
 import urls from '../../utils/urls';
-import { getFileUrl } from '../../utils/upload';
 import { selectUser } from '../../store/selectors/user';
 import { getOrganizationById } from '../../store/organizations';
 import OrganizationFollowButton from '.././Organization/OrganizationFollowButton';
@@ -34,7 +33,7 @@ const OrganizationHead = (props) => {
               size="big"
               userName={organization.nickname}
               profileLink={getOrganizationUrl(organization.id)}
-              avatarUrl={getFileUrl(organization.avatarFilename)}
+              avatarUrl={urls.getFileUrl(organization.avatarFilename)}
               rate={Number(organization.currentRate)}
             />
           </div>
@@ -50,7 +49,7 @@ const OrganizationHead = (props) => {
               size="big"
               userName={getUserName(user)}
               profileLink={urls.getUserUrl(user.id)}
-              avatarUrl={getFileUrl(user.avatarFilename)}
+              avatarUrl={urls.getFileUrl(user.avatarFilename)}
               rate={Number(user.currentRate)}
             />
           </div>

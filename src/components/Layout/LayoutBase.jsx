@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Fragment, useEffect } from 'react';
 import Header from '../Header/Header';
 
@@ -15,6 +16,10 @@ const LayoutBase = (props) => {
       </div>
     </Fragment>
   );
+};
+
+LayoutBase.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default LayoutBase;

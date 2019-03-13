@@ -1,11 +1,12 @@
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import UserHead from '../components/User/UserHead';
+import UserHead from '../components/User/UserHead/index';
 import UserOrganizations from '../components/User/UserOrganizations';
-import UserAbout from '../components/User/UserAbout';
+// import UserAbout from '../components/User/UserAbout';
 import UserSocialNetworks from '../components/User/UserSocialNetworks';
 import UserNetworks from '../components/User/UserNetworks';
-import UserCreatedAt from '../components/User/UserCreatedAt';
+// import UserCreatedAt from '../components/User/UserCreatedAt';
 import LayoutBase from '../components/Layout/LayoutBase';
 import { selectUser } from '../store/selectors/user';
 import { fetchUser } from '../actions/users';
@@ -16,7 +17,7 @@ import Popup from '../components/Popup';
 import ModalContent from '../components/ModalContent';
 import Post from '../components/Feed/Post/Post';
 import urls from '../utils/urls';
-import Feed from '../components/Feed/FeedUser';
+// import Feed from '../components/Feed/FeedUser';
 import { USER_WALL_FEED_ID, FEED_PER_PAGE } from '../utils/feed';
 import { feedGetUserPosts } from '../actions/feed';
 import loader from '../utils/loader';
@@ -64,7 +65,18 @@ const UserPage = (props) => {
         </Popup>
       }
 
-      <div className="container container_user">
+      <div className="layout layout_profile">
+        <div className="layout__header">
+          <UserHead userId={userId} />
+        </div>
+        <div className="layout__sidebar">
+          <UserOrganizations userId={userId} />
+          <UserNetworks userId={userId} />
+          <UserSocialNetworks userId={userId} />
+        </div>
+      </div>
+
+      {/* <div className="container container_user">
         <UserHead userId={userId} />
 
         <div className="grid grid_user">
@@ -83,9 +95,24 @@ const UserPage = (props) => {
             <UserCreatedAt userId={userId} />
           </div>
         </div>
-      </div>
+      </div> */}
     </LayoutBase>
   );
+};
+
+UserPage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      userId: PropTypes.string,
+      postId: PropTypes.string,
+    }),
+  }).isRequired,
+  users: PropTypes.objectOf(PropTypes.any).isRequired,
+  posts: PropTypes.objectOf(PropTypes.any).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export const getUserPageData = (store, params) => {

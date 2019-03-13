@@ -9,8 +9,8 @@ import Followers from '../Followers/Followers';
 import OrganizationFollowButton from './OrganizationFollowButton';
 import { selectUser } from '../../store/selectors';
 import { getOrganizationById } from '../../store/organizations';
-import { getFileUrl } from '../../utils/upload';
 import { getOrganizationEditUrl } from '../../utils/organization';
+import urls from '../../utils/urls';
 
 const OrganizationHeader = (props) => {
   const organization = getOrganizationById(props.organizations, props.organizationId);
@@ -27,7 +27,7 @@ const OrganizationHeader = (props) => {
     <div className="organization-header">
       <div className="organization-header__top">
         <div className="organization-header__aside">
-          <Avatar size="medium" src={getFileUrl(organization.avatarFilename)} square rounded />
+          <Avatar size="medium" src={urls.getFileUrl(organization.avatarFilename)} square rounded />
         </div>
 
         <div className="organization-header__aside-b">

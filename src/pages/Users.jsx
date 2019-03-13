@@ -9,7 +9,6 @@ import { getUserName } from '../utils/user';
 import urls from '../utils/urls';
 import IconTableTriangle from '../components/Icons/TableTriangle';
 import SearchInput from '../components/SearchInput';
-import { getFileUrl } from '../utils/upload';
 import loader from '../utils/loader';
 
 const { getPagingLink } = urls;
@@ -136,7 +135,7 @@ const UsersPage = (props) => {
                         <td className="list-table__cell list-table__cell_name" data-title="Name">
                           <UserCard
                             profileLink={urls.getUserUrl(item.id)}
-                            avatarUrl={getFileUrl(item.avatarFilename)}
+                            avatarUrl={urls.getFileUrl(item.avatarFilename)}
                             userName={getUserName(item)}
                             accountName={item.accountName}
                             sign="@"

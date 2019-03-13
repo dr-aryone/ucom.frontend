@@ -8,6 +8,20 @@
   border-radius: 50%;
 }
 
+:local(.userPick.stretch) {
+  width: 100%;
+  height: 100%;
+}
+
+:local(.userPick.organization) {
+  border-radius: 3px;
+}
+
+:local(.userPick.organization img),
+:local(.userPick.organization svg) {
+  border-radius: 3px;
+}
+
 :local(.userPick img),
 :local(.userPick svg) {
   width: 100%;

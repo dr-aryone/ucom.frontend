@@ -9,7 +9,6 @@ import OrganizationHead from '../components/Organization/OrganizationHead';
 import DiscussionBoard from '../components/Organization/DiscussionBoard';
 import VerticalCards from '../components/VerticalCards';
 import OrganizationHeader from '../components/Organization/OrganizationHeader';
-import { getFileUrl } from '../utils/upload';
 import { getSourceUrl } from '../utils/sources';
 import { getOrganization } from '../actions/organizations';
 import { selectUser } from '../store/selectors';
@@ -122,7 +121,7 @@ const OrganizationPage = (props) => {
                               userCards={organization.partnershipSources.map(item => ({
                                 id: item.id,
                                 userName: item.title,
-                                avatarUrl: getFileUrl(item.avatarFilename),
+                                avatarUrl: urls.getFileUrl(item.avatarFilename),
                                 accountName: item.nickname || item.description,
                                 profileLink: getSourceUrl(item),
                               }))}
@@ -142,7 +141,7 @@ const OrganizationPage = (props) => {
                               userCards={organization.communitySources.map(item => ({
                                 id: item.id,
                                 userName: item.title,
-                                avatarUrl: getFileUrl(item.avatarFilename),
+                                avatarUrl: urls.getFileUrl(item.avatarFilename),
                                 accountName: item.nickname || item.description,
                                 profileLink: getSourceUrl(item),
                               }))}

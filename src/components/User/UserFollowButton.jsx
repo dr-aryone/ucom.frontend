@@ -51,6 +51,9 @@ UserFollowButton.propTypes = {
   authShowPopup: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
   users: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired,
 };
 
 export default connect(

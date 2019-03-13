@@ -5,7 +5,6 @@ import { Tooltip } from 'react-tippy';
 import { Link } from 'react-router-dom';
 import { isMobile } from 'react-device-detect';
 import { KEY_ESCAPE } from 'keycode-js';
-import { getFileUrl } from '../../utils/upload';
 import { authShowPopup } from '../../actions/auth';
 import { triggerMenuPopup, hideMenuPopup } from '../../actions/menuPopup';
 import { selectUser } from '../../store/selectors';
@@ -36,7 +35,7 @@ const HeaderMain = ({
       <Link className="header-user-menu__item" to={urls.getNewPostUrl()}>New publication</Link>
       <div className="header-user-menu__caption">My communities</div>
       {user.organizations && user.organizations.slice(0, 3).map((item) => {
-        const avatar = getFileUrl(item.avatarFilename);
+        const avatar = urls.getFileUrl(item.avatarFilename);
 
         return (
           <Link className="header-user-menu__community" to={getOrganizationUrl(item.id)} key={item.id}>
@@ -83,7 +82,7 @@ const HeaderMain = ({
             >
               <Link className="avatar-and-rate" to={`/user/${user.id}`} onClick={() => (menuPopupVisibility ? triggerMenuPopup() : null)}>
                 <div className="header__rate">{(+owner.currentRate).toLocaleString()}°</div>
-                <Avatar size="xsmall" src={getFileUrl(owner.avatarFilename)} />
+                <Avatar size="xsmall" src={urls.getFileUrl(owner.avatarFilename)} />
               </Link>
             </Tooltip>
           </div>
@@ -118,7 +117,7 @@ const HeaderMain = ({
                 >
                   <Link className="avatar-and-rate" to={`/user/${user.id}`} onClick={() => (menuPopupVisibility ? triggerMenuPopup() : null)}>
                     <div className="header__rate">{(+owner.currentRate).toLocaleString()}°</div>
-                    <Avatar size="xsmall" src={getFileUrl(owner.avatarFilename)} />
+                    <Avatar size="xsmall" src={urls.getFileUrl(owner.avatarFilename)} />
                   </Link>
                 </Tooltip>
               </div>

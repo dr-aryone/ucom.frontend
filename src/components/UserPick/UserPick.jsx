@@ -3,24 +3,28 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import UserIcon from '../Icons/User';
+import OrganizationIcon from '../Icons/Organization';
 import styles from './styles.css';
 
 const UserPick = (props) => {
   const LinkTag = props.url ? Link : 'div';
+  const BlankIcon = props.organization ? OrganizationIcon : UserIcon;
 
   return (
     <LinkTag
-      className={classNames([
-        styles.userPick,
-        { [styles.owner]: props.isOwner },
-      ])}
+      className={classNames({
+        [styles.userPick]: true,
+        [styles.owner]: props.isOwner,
+        [styles.stretch]: props.stretch,
+        [styles.organization]: props.organization,
+      })}
       title={props.alt}
       to={props.url}
     >
       {props.src ? (
         <img src={props.src} alt={props.alt} />
       ) : (
-        <UserIcon />
+        <BlankIcon />
       )}
     </LinkTag>
   );
@@ -31,6 +35,8 @@ UserPick.propTypes = {
   alt: PropTypes.string,
   src: PropTypes.string,
   isOwner: PropTypes.bool,
+  stretch: PropTypes.bool,
+  organization: PropTypes.bool,
 };
 
 UserPick.defaultProps = {
@@ -38,6 +44,8 @@ UserPick.defaultProps = {
   alt: null,
   src: null,
   isOwner: false,
+  stretch: false,
+  organization: false,
 };
 
 export default UserPick;

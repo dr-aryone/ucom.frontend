@@ -12,7 +12,7 @@
 
   &__checked-icon {
     margin-top: 2px;
-    margin-right: 8px;
+    margin-left: 8px;
   }
 
   &:hover {
@@ -76,6 +76,7 @@
     &_transparent {
       background: transparent;
       border: 1px solid @gray;
+      transition: border 0.2s ease;
 
       &:hover {
         border: 1px solid @gray-dark;
@@ -118,17 +119,17 @@
       border-color: transparent;
       background: @white;
     }
-    
+
     &_light {
       border-color: transparent;
       background: @white;
-      color: #C4C4C4; 
+      color: #C4C4C4;
     }
 
     &_light-black {
       border-color: transparent;
       background: @white;
-      color: #000; 
+      color: #000;
     }
   }
 

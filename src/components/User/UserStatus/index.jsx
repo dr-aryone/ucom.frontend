@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -6,7 +7,8 @@ import { selectUser } from '../../../store/selectors/user';
 import { getUserById } from '../../../store/users';
 import { updateUser } from '../../../actions/users';
 import IconEdit from '../../Icons/Edit';
-import UserStatusForm from './UserStatusForm';
+import Form from './Form';
+import styles from './styles.css';
 
 export const PLACEHOLDER = 'What’s Ur Passion…';
 export const STATUS_MAX_LENGTH = 130;
@@ -33,39 +35,48 @@ const UserStatus = (props) => {
   }
 
   return (
-    <div className="status">
+    <div className={styles.status}>
       {props.user.id !== +user.id ? (
-        <div className="status__message">
+        <div className={styles.message}>
           {user.moodMessage || 'What’s Ur @Passion…'}
         </div>
         ) : (
           <div
             role="presentation"
-            className={classNames(
-              'status__message',
-              'status__message_editable',
-              { 'status__message_empty': !user.moodMessage },
-            )}
+            className={classNames({
+              [styles.message]: true,
+              [styles.messageEditable]: true,
+              [styles.messageEmpty]: !user.moodMessage,
+            })}
             onClick={() => showForm()}
           >
             {user.moodMessage || PLACEHOLDER}
 
-            <span className="status__message-edit-icon">
+            <span className={styles.editIcon}>
               <IconEdit />
             </span>
           </div>
         )}
 
-      {formVisibility && <UserStatusForm
-        moodMessage={user.moodMessage}
-        onClickHide={() => hideForm()}
-        onClickSave={moodMessage => props.updateUser({ moodMessage })}
-      />
+      {formVisibility &&
+        <Form
+          moodMessage={user.moodMessage}
+          onClickHide={() => hideForm()}
+          onClickSave={moodMessage => props.updateUser({ moodMessage })}
+        />
       }
     </div>
   );
 };
 
+UserStatus.propTypes = {
+  updateUser: PropTypes.func.isRequired,
+  users: PropTypes.objectOf(PropTypes.any).isRequired,
+  userId: PropTypes.number.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired,
+};
 
 export default connect(
   state => ({

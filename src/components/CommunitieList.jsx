@@ -1,7 +1,7 @@
 import React from 'react';
 import UserCard from './UserCard';
 import IconRemove from './Icons/Remove';
-import { getFileUrl } from '../utils/upload';
+import urls from '../utils/urls';
 
 const CommunitieList = props => (
   <div className="communitie-list">
@@ -13,7 +13,7 @@ const CommunitieList = props => (
               sign=""
               userName={item.title}
               accountName={item.nickname || item.description}
-              avatarUrl={typeof item.avatarFilename === 'string' ? getFileUrl(item.avatarFilename) : item.avatarFilename}
+              avatarUrl={typeof item.avatarFilename === 'string' ? urls.getFileUrl(item.avatarFilename) : item.avatarFilename}
             />
           </div>
           <div className="toolbar__side">

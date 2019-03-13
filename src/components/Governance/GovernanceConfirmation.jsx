@@ -3,8 +3,8 @@ import GovernanceTable from './GovernanceTable';
 import Button from '../Button';
 import Avatar from '../Avatar';
 import { IconOK, IconNo } from '../Icons/GovernanceIcons';
-import { getFileUrl } from '../../utils/upload';
 import Panel from '../Panel/Panel';
+import urls from '../../utils/urls';
 
 const GovernanceConfirmation = (props) => {
   const [idList, setListId] = useState([]);
@@ -28,7 +28,7 @@ const GovernanceConfirmation = (props) => {
           </div>
           <div className="governance-vote-title">
             <div className="governance-confirmation-avatar">
-              <Avatar src={getFileUrl(props.user.avatarFilename)} size="xsmall" icon={<IconOK />} />
+              <Avatar src={urls.getFileUrl(props.user.avatarFilename)} size="xsmall" icon={<IconOK />} />
             </div>
             <div className="title title_xxsmall title_bold">Block Producers to Vote </div>
           </div>
@@ -40,7 +40,7 @@ const GovernanceConfirmation = (props) => {
 
           <div className="governance-vote-title">
             <div className="governance-confirmation-avatar">
-              <Avatar src={getFileUrl(props.user.avatarFilename)} size="xsmall" icon={<IconNo />} />
+              <Avatar src={urls.getFileUrl(props.user.avatarFilename)} size="xsmall" icon={<IconNo />} />
             </div>
             <div className="title title_xxsmall title_bold">Block Producers to Unvote </div>
           </div>

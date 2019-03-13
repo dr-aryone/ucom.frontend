@@ -5,9 +5,9 @@ import React, { PureComponent } from 'react';
 import { Tooltip } from 'react-tippy';
 import UserCard from './UserCard';
 import { selectUser } from '../store/selectors';
-import { getFileUrl } from '../utils/upload';
 import { getUserName } from '../utils/user';
 import { fetchMyself } from '../actions/users';
+import urls from '../utils/urls';
 
 class OrganizationsDropdown extends PureComponent {
   state = {
@@ -45,7 +45,7 @@ class OrganizationsDropdown extends PureComponent {
             className="organizations-dropdown__item"
           >
             <UserCard
-              avatarUrl={getFileUrl(this.props.user.avatarFilename)}
+              avatarUrl={urls.getFileUrl(this.props.user.avatarFilename)}
               userName={getUserName(this.props.user)}
               accountName={this.props.user.accountName}
             />
@@ -60,7 +60,7 @@ class OrganizationsDropdown extends PureComponent {
               <UserCard
                 squareAvatar
                 roundedAvatar
-                avatarUrl={getFileUrl(item.avatarFilename)}
+                avatarUrl={urls.getFileUrl(item.avatarFilename)}
                 userName={item.title}
                 accountName={item.nickname}
               />

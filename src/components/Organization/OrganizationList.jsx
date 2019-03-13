@@ -1,78 +1,93 @@
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import React, { PureComponent, Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import { getOrganizationById } from '../../store/organizations';
-import { getFileUrl } from '../../utils/upload';
 import OrganizationCard from './OrganizationCard';
-import { getOrganizationUrl } from '../../utils/organization';
 import OrganizationListPopup from './OrganizationListPopup';
 import OrganizationListPopupMore from './OrganizationListPopupMore';
+import urls from '../../utils/urls';
+import styles from '../List/styles.css';
 
-class OrganizationList extends PureComponent {
-  constructor(props) {
-    super(props);
+const OrganizationList = (props) => {
+  const [popupVisibility, setPopupVisibility] = useState(false);
 
-    this.state = {
-      popupVisible: false,
-    };
+  if (!props.organizationsIds.length) {
+    return null;
   }
 
-  render() {
-    if (!this.props.organizationsIds || !this.props.organizationsIds.length) {
-      return null;
-    }
+  const visibleOrganizations = props.organizationsIds
+    .slice(0, props.limit)
+    .map(id => getOrganizationById(props.organizations, id))
+    .filter(item => item && item.id);
 
-    const visibleOrganizations = this.props.organizationsIds
-      .slice(0, this.props.limit)
-      .map(id => getOrganizationById(this.props.organizations, id))
-      .filter(item => item && item.id);
+  return (
+    <Fragment>
+      {visibleOrganizations.map(item => (
+        <Link
+          key={item.id}
+          className={styles.item}
+          to={urls.getOrganizationUrl(item.id)}
+        >
+          <OrganizationCard
+            disabledLink
+            title={item.title}
+            nickname={item.nickname}
+            currentRate={item.currentRate}
+            avatarSrc={urls.getFileUrl(item.avatarFilename)}
+            url={urls.getOrganizationUrl(item.id)}
+          />
+        </Link>
+      ))}
 
-    return (
-      <Fragment>
-        <div className="organization-list">
-          <div className="organization-list__list">
-            {visibleOrganizations.map(item => (
-              <div className="organization-list__item" key={item.id}>
-                <OrganizationCard
-                  avatarSrc={getFileUrl(item.avatarFilename)}
-                  title={item.title}
-                  nickname={item.nickname}
-                  currentRate={item.currentRate}
-                  url={getOrganizationUrl(item.id)}
-                />
-              </div>
-            ))}
-          </div>
-
-          {this.props.organizationsIds.length > this.props.limit &&
-            <div className="organization-list__more">
-              <button
-                className="button-clean button-clean_link"
-                onClick={() => { this.setState({ popupVisible: true }); if (this.props.loadMore) this.props.loadMore(); }}
-              >
-                View All
-              </button>
-            </div>
-          }
+      {props.organizationsIds.length > props.limit &&
+        <div className={styles.more}>
+          <span
+            role="presentation"
+            className={styles.moreLink}
+            onClick={() => {
+              setPopupVisibility(true);
+              if (props.loadMore) {
+                props.loadMore();
+              }
+            }}
+          >
+            View All
+          </span>
         </div>
+      }
 
-        {this.state.popupVisible && (
-          this.props.tagTitle ? (
-            <OrganizationListPopupMore
-              organizationsIds={this.props.organizationsIds}
-              tagTitle={this.props.tagTitle}
-              onClickClose={() => this.setState({ popupVisible: false })}
-            />
-          ) : (
-            <OrganizationListPopup
-              organizationsIds={this.props.organizationsIds}
-              onClickClose={() => this.setState({ popupVisible: false })}
-            />
-          )
-        )}
-      </Fragment>
-    );
-  }
-}
+      {popupVisibility && (
+        props.tagTitle ? (
+          <OrganizationListPopupMore
+            organizationsIds={props.organizationsIds}
+            tagTitle={props.tagTitle}
+            onClickClose={() => setPopupVisibility(false)}
+          />
+        ) : (
+          <OrganizationListPopup
+            organizationsIds={props.organizationsIds}
+            onClickClose={() => setPopupVisibility(false)}
+          />
+        )
+      )}
+    </Fragment>
+  );
+};
+
+OrganizationList.propTypes = {
+  organizationsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  limit: PropTypes.number,
+  organizations: PropTypes.objectOf(PropTypes.any).isRequired,
+  loadMore: PropTypes.func,
+  tagTitle: PropTypes.string,
+};
+
+OrganizationList.defaultProps = {
+  limit: null,
+  loadMore: null,
+  tagTitle: null,
+};
 
 export default connect(state => ({
   organizations: state.organizations,

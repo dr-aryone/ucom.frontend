@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import React, { useState } from 'react';
-import { getFileUrl } from '../../utils/upload';
 import UserListPopup from './UserListPopup';
 import UserListPopupMore from './UserListPopupMore';
 import urls from '../../utils/urls';
@@ -30,7 +29,7 @@ const UserList = (props) => {
               userName={getUserName(item)}
               accountName={item.accountName}
               profileLink={urls.getUserUrl(item.id)}
-              avatarUrl={getFileUrl(item.avatarFilename)}
+              avatarUrl={urls.getFileUrl(item.avatarFilename)}
               sign="@"
             />
 

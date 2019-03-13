@@ -1,111 +1,101 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
-import React, { PureComponent, Fragment } from 'react';
-import Avatar from '../Avatar';
+import React, { useState, useEffect, Fragment } from 'react';
+import UserPick from '../UserPick/UserPick';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
 import UserListPopup from '../User/UserListPopup';
-import { getFileUrl } from '../../utils/upload';
 import { getUsersByIds } from '../../store/users';
 import { selectUser } from '../../store/selectors/user';
+import urls from '../../utils/urls';
+import styles from './styles.css';
 
-class Followers extends PureComponent {
-  constructor(props) {
-    super(props);
+const Followers = (props) => {
+  const [popupVisible, setPopupVisible] = useState(false);
+  const hasUsers = () => props.usersIds.length > 0;
 
-    this.state = {
-      popupVisible: false,
-    };
-  }
-
-  componentWillReceiveProps(prevProps) {
-    if (this.props.location !== prevProps.location) {
-      this.hidePopup();
+  const showPopup = () => {
+    if (hasUsers()) {
+      setPopupVisible(true);
     }
+  };
+
+  useEffect(() => {
+    setPopupVisible(false);
+  }, [props.location]);
+
+  if (!props.usersIds) {
+    return null;
   }
 
-  hidePopup() {
-    this.setState({ popupVisible: false });
-  }
+  const users = getUsersByIds(props.users, props.usersIds);
+  const avatarUsers = users.slice(0, 2);
 
-  showPopup() {
-    if (this.props.usersIds.length > 0) {
-      this.setState({ popupVisible: true });
-    }
-  }
+  return (
+    <Fragment>
+      {popupVisible && (
+        <Popup onClickClose={() => setPopupVisible(false)}>
+          <ModalContent onClickClose={() => setPopupVisible(false)}>
+            <UserListPopup title={props.title} usersIds={props.usersIds} />
+          </ModalContent>
+        </Popup>
+      )}
 
-  render() {
-    if (!this.props.usersIds) {
-      return null;
-    }
-
-    const users = getUsersByIds(this.props.users, this.props.usersIds);
-    const avatarUsers = users.slice(0, 2);
-
-    return (
-      <Fragment>
-        {this.state.popupVisible && (
-          <Popup onClickClose={() => this.hidePopup()}>
-            <ModalContent onClickClose={() => this.hidePopup()}>
-              <UserListPopup title={this.props.title} usersIds={this.props.usersIds} />
-            </ModalContent>
-          </Popup>
-        )}
-
-        <div className="follwers">
-          <div className="follwers__main">
-            <div className="follwers__count">
-              <button
-                onClick={() => this.showPopup()}
-                className={classNames(
-                  'button-clean',
-                  { 'button-clean_link': users.length },
-                )}
-              >
-                {users.length}
-              </button>
-            </div>
-
-            <div className="follwers__title">
-              <button
-                onClick={() => this.showPopup()}
-                className={classNames(
-                  'button-clean',
-                  { 'button-clean_link': users.length },
-                )}
-              >
-                {this.props.title}
-              </button>
-            </div>
+      <div
+        role="presentation"
+        className={classNames({
+          [styles.followers]: true,
+          [styles.followersActive]: hasUsers(),
+        })}
+        onClick={() => showPopup()}
+      >
+        <div className={styles.info}>
+          <div className={styles.count}>
+            {users.length}
           </div>
 
-          {avatarUsers.length > 1 && (
-            <div className="follwers__side">
-              <div className="avatars-list avatars-list_dual">
-                {avatarUsers.map(item => (
-                  <div className="avatars-list__item" key={item.id}>
-                    <Avatar borderWhite size="xsmall" src={getFileUrl(item.avatarFilename)} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <div className={styles.title}>
+            {props.title}
+          </div>
         </div>
-      </Fragment>
-    );
-  }
-}
+
+        <div className={styles.avatars}>
+          {avatarUsers.length === 2 &&
+            <Fragment>
+              <div className={styles.avatarSmall}>
+                <UserPick stretch src={urls.getFileUrl(avatarUsers[1].avatarFilename)} />
+              </div>
+              <div className={styles.avatar}>
+                <UserPick stretch src={urls.getFileUrl(avatarUsers[0].avatarFilename)} />
+              </div>
+            </Fragment>
+          }
+          {avatarUsers.length === 1 &&
+            <div className={styles.avatar}>
+              <UserPick stretch src={urls.getFileUrl(avatarUsers[0].avatarFilename)} />
+            </div>
+          }
+          {avatarUsers.length === 0 &&
+            <div className={styles.avatarEmpty} />
+          }
+        </div>
+      </div>
+    </Fragment>
+  );
+};
 
 Followers.propTypes = {
   title: PropTypes.string,
   usersIds: PropTypes.arrayOf(PropTypes.number),
-  users: PropTypes.objectOf(PropTypes.object),
+  users: PropTypes.objectOf(PropTypes.any).isRequired,
+  location: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 Followers.defaultProps = {
   title: 'Followers',
+  usersIds: [],
 };
 
 export default withRouter(connect(state => ({

@@ -21,6 +21,7 @@ const Avatar = (props) => {
         { [`avatar_${props.size}`]: Boolean(props.size) },
         { 'avatar_border_white': props.borderWhite },
         { 'avatar_blank': !props.src },
+        { 'avatar_auto-szie': props.autoSize },
       )}
     >
       {props.src && <img className="avatar__img" src={props.src} alt={props.alt} /> }
@@ -66,6 +67,7 @@ Avatar.propTypes = {
   alt: PropTypes.string,
   borderWhite: PropTypes.bool,
   isPost: PropTypes.bool,
+  autoSize: PropTypes.bool,
 };
 
 Avatar.defaultProps = {
