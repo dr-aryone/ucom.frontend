@@ -25,6 +25,7 @@ const Checkbox = ({ isChecked = false, onChange, isDisabled }) => (
 Checkbox.propTypes = {
   isChecked: PropTypes.bool,
   onChange: PropTypes.func,
+  isDisabled: PropTypes.bool,
 };
 
 export default Checkbox;

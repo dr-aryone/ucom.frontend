@@ -3,7 +3,7 @@ import LoadMore from './../Feed/LoadMore';
 import TagCard from './TagCard';
 
 const TagsList = props => (
-  <div className="feed">
+  <div className="feed feed-mobile">
     {props.tagIds.length > 0 &&
       <div className="feed__list">
         {props.tagIds.map((tag, i) => (

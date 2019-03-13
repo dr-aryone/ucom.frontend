@@ -21,8 +21,14 @@
   align-items: center;
   white-space: pre-wrap;
   margin-bottom: 20px;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
+
+.content span {
+  max-width: 100%;
+}
 .showMore {
   color: #D8352F;
 }

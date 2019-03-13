@@ -186,7 +186,7 @@ const Governance = (props) => {
               <div>
                 <GovernanceBlock
                   onClickVoteButton={() => setElectionVisibility(true)}
-                  myVotes={346}
+                  myVotes={selectedNodes.length}
                   voters={12345}
                   rate={15000}
                   onClickTick={() => setNodeVisibility({ calc: false, prod: !nodeVisibility.prod })}
@@ -197,7 +197,7 @@ const Governance = (props) => {
                 />
                 <GovernanceBlock
                   onClickVoteButton={() => setElectionVisibility(true)}
-                  myVotes={0}
+                  myVotes={selectedNodes.length}
                   voters={12345}
                   rate={15000}
                   onClickTick={() => setNodeVisibility({ prod: false, calc: !nodeVisibility.calc })}

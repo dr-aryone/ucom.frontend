@@ -1,9 +1,13 @@
 .tippy-popper[x-placement^=bottom] {
-  .tippy-tooltip.dropdown-theme {
+  .dropdown-theme, .user-theme {
     .tippy-arrow {
       border-bottom-color: #fff;
     }
   }
+}
+
+.tippy-popper {
+  transition-duration: 0ms !important;
 }
 
 .tippy-tooltip.dropdown-theme {
@@ -19,5 +23,22 @@
 
   .arrow-regular {
     border-bottom-color: #E8ECEC !important;
+  }
+}
+
+.tippy-tooltip.user-theme {
+  padding: 0;
+  text-align: initial;
+  background: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E8ECEC;
+
+  @media (max-width: 787px) {
+    width: 100%;
+  }
+
+  .arrow-regular {
+    border-bottom-color: #fff !important;
+    left: 135px !important;
   }
 }

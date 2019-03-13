@@ -82,7 +82,7 @@ const DiscussionBoard = ({
   const SortableList = SortableContainer(({ items }) => (
     <div className={`${styles.list} ${isCurrentUser ? '' : styles.notCursor}`} >
       {items.map((item, index) => (
-        <SortableItem disabled={!isCurrentUser} key={`item-${index}`} myIndex={index} index={index} item={item} />
+        <SortableItem disabled={!isCurrentUser || (apiDiscussions.length === 1)} key={`item-${index}`} myIndex={index} index={index} item={item} />
       ))}
     </div>
   ));

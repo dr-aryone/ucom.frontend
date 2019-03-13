@@ -3,7 +3,7 @@ import LoadMore from './../Feed/LoadMore';
 import CommunityCard from './CommunityCard';
 
 const CommunitiesList = props => (
-  <div className="feed">
+  <div className="feed feed-mobile">
     {props.communityIds.length > 0 &&
       <div className="feed__list">
         {props.communityIds.map((community, i) => (

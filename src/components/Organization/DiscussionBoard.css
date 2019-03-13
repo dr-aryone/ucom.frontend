@@ -1,6 +1,6 @@
 .container {
   margin-bottom: 40px;
-  max-width: 600px;
+  max-width: 620px;
 }
 
 .notCursor .itemContainer {
@@ -14,7 +14,6 @@
 }
 
 .initial {
-  padding-left: 15px;
   padding-right: 8px;
 }
 
@@ -24,11 +23,11 @@
   font-size: 18px;
   padding-bottom: 24px;
   padding-top: 35px;
-  padding-left: 15px;
   padding-right: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 600px;
 }
 
 .title:hover .ellipsis {
@@ -63,7 +62,6 @@
   display: flex;
   align-items: center;
   margin-bottom: 24px;
-  padding-left: 15px;
   padding-right: 8px;
 }
 
@@ -145,6 +143,9 @@
 
 .list {
   background: #F1F2F2;
+  max-width: 620px;
+  position: relative;
+  right: 15px;
 }
 
 .itemDragged .item {

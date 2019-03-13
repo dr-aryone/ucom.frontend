@@ -23,7 +23,7 @@ const PostFeedHeader = (props) => {
         </div>
       </div>
 
-      { (props.userId && POST_TYPE_MEDIA_ID !== props.postTypeId) ? (
+      {props.userId && POST_TYPE_MEDIA_ID !== props.postTypeId ? (
         <div className={styles.user}>
           <UserCard
             userId={props.userId}
@@ -40,6 +40,11 @@ PostFeedHeader.propTypes = {
   postId: PropTypes.number.isRequired,
   userId: PropTypes.number,
   postTypeId: PropTypes.number,
+};
+
+PostFeedHeader.defaultProps = {
+  userId: null,
+  postTypeId: null,
 };
 
 export default connect(state => ({

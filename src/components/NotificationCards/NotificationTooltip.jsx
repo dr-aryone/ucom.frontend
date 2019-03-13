@@ -1,3 +1,4 @@
+import { throttle } from 'lodash';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { bindActionCreators } from 'redux';
 import React, { Component, createRef } from 'react';
@@ -23,6 +24,19 @@ class NotificationTooltip extends Component {
   constructor(props) {
     super(props);
     this.tooltip = createRef();
+    this.notificationsContent = createRef();
+
+    const notificationTrigger = new CustomEvent('NotificationTrigger');
+
+    this.onScrollY = throttle((container) => {
+      if (container.scrollTop + container.offsetHeight + 100 > this.notificationsContent.current.offsetHeight) {
+        try {
+          window.dispatchEvent(notificationTrigger);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }, 10);
   }
 
   componentDidMount() {
@@ -38,6 +52,10 @@ class NotificationTooltip extends Component {
   }
 
   loadMore = () => {
+    if (this.props.loading) {
+      return;
+    }
+
     const { hasMore } = this.props.notificationsMetadata;
 
     if (hasMore) {
@@ -73,22 +91,15 @@ class NotificationTooltip extends Component {
     const { list, notificationsMetadata } = this.props;
     const newNotifications = filterNotifs(list, false);
     const oldNotifications = filterNotifs(list, true);
-    const notificationTrigger = new CustomEvent('NotificationTrigger');
 
     return (
       <div ref={this.tooltip} className="notification-tooltip">
         <div className="arrow-big" />
         <PerfectScrollbar
           className="notification-tooltip__container"
-          onYReachEnd={() => {
-            try {
-              window.dispatchEvent(notificationTrigger);
-            } catch (e) {
-              console.error(e);
-            }
-        }}
+          onScrollY={this.onScrollY}
         >
-          <div>
+          <div ref={this.notificationsContent}>
             {isRequiredTime(list, false) &&
               <div className="notification-tooltip__header">
                 <h3 className="notification-tooltip__title">New notifications

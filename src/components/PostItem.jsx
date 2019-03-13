@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Rate from './Rate';
 import EditIcon from './Icons/Edit';
 import Tags from './Tags';
+import { sanitizePostTitle } from '../utils/text';
 
 const PostItem = (props) => {
   const LinkTag = props.url ? Link : 'span';
@@ -35,11 +36,7 @@ const PostItem = (props) => {
             </Link>
           )}
 
-          {props.title ? (
-            <LinkTag to={props.url}>{props.title}</LinkTag>
-          ) : (
-            <span className="blank">Lorem ipsum dolor sit amet consectetur adipisicing.</span>
-          )}
+          <LinkTag to={props.url} dangerouslySetInnerHTML={{ __html: sanitizePostTitle(props.title) }} />
         </div>
       </div>
 
@@ -61,6 +58,15 @@ PostItem.propTypes = {
   editUrl: PropTypes.string,
   rate: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   url: PropTypes.string,
+};
+
+PostItem.defaultProps = {
+  coverImg: null,
+  title: '',
+  tags: [],
+  editUrl: '',
+  rate: null,
+  url: '',
 };
 
 export default PostItem;

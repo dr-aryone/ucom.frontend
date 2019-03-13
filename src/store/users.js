@@ -109,7 +109,7 @@ const users = (state = getInitialState(), action) => {
 };
 
 export const getUserById = (users, userIdOrName) => {
-  if (Number.isNaN(+userIdOrName) && (String(userIdOrName).length >= 12)) {
+  if (Number.isNaN(+userIdOrName)) {
     return Object.values(users.data).find(e => e.accountName === userIdOrName);
   }
   return users.data[userIdOrName];
