@@ -6,6 +6,10 @@
   position: relative;
 }
 
+.infoBlock {
+  display: flex;
+}
+
 .commentСount {
   font-size: 16px;
   font-weight: 600;

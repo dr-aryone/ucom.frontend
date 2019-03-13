@@ -56,7 +56,8 @@ class ShareBlock extends PureComponent {
             <span>Repost to my profile</span>
           </div>
         }
-        {(this.props.postTypeId === POST_TYPE_MEDIA_ID || this.props.postPostTypeId === POST_TYPE_MEDIA_ID) && (
+        {(this.props.postTypeId === POST_TYPE_MEDIA_ID ||
+          this.props.postPostTypeId === POST_TYPE_MEDIA_ID) &&
           <div className={styles.social}>
             Share to
             <div className={styles.socialIcons}>
@@ -65,7 +66,7 @@ class ShareBlock extends PureComponent {
               <a href={`https://telegram.me/share/url?url=${window.location.origin + (this.props.linkPost || this.props.link)}`} target="_blank" rel="noopener noreferrer" className={styles.icon}><IconTelegram /></a>
             </div>
           </div>
-        )}
+        }
         <div className={styles.copylink__block}>
           <span>Copy link</span>
           <div className={styles.copylink}>
@@ -80,10 +81,13 @@ class ShareBlock extends PureComponent {
 
 ShareBlock.propTypes = {
   link: PropTypes.string,
+  linkPost: PropTypes.string,
   addRepost: PropTypes.func,
   onClickClose: PropTypes.func,
   repostAvailable: PropTypes.bool,
   postId: PropTypes.number,
+  postTypeId: PropTypes.number,
+  postPostTypeId: PropTypes.number,
 };
 
 export default connect(
