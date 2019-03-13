@@ -67,7 +67,7 @@ const Governance = (props) => {
         <Popup onClickClose={() => setElectionVisibility(false)}>
           <ModalContent closeText="Close" mod="governance-election" onClickClose={() => setElectionVisibility(false)}>
             <GovernanceElection {...{
-              stakedTokens, table, selectedNodes, setConfirmationVisibility, user,
+              stakedTokens, table, selectedNodes, setConfirmationVisibility, user, nodeVisibility,
             }}
             />
           </ModalContent>
@@ -118,15 +118,15 @@ const Governance = (props) => {
       <div className="governance">
         <div className="content">
           <div className="content__inner governance-inner">
-            <div className="governance-main-title">
+            <div className="governance__main-title">
               <h1 className="title title_bold">Governance</h1>
               {props.user.id &&
-              <div className="governance__status">
-                <span className="governance__status-text">Voting Power:</span>
-                <h3 className="title_small">
-                  {formatRate(stakedTokens)}°
-                </h3>
-              </div>
+                <div className="governance__status">
+                  <span className="governance__status-text">Voting Power:</span>
+                  <h3 className="title_small">
+                    {formatRate(stakedTokens)}°
+                  </h3>
+                </div>
               }
             </div>
             <div className="nav-bar__categories nav-bar__categories_governance">
@@ -134,11 +134,11 @@ const Governance = (props) => {
                 <div key={item.name} className={`overview__link ${item.active ? 'overview__link_active' : 'overview__link_disabled'}`}>
                   <Tooltip disabled={item.active} position="bottom" arrow title="Coming Soon">{item.name}</Tooltip>
                 </div>
-                ))}
+              ))}
             </div>
             <div className="governance__section">
               <div className="governance__text">
-              Govern the U°OS protocol through voting. You can vote for Block Producers and Calculator Nodes. Vote with your Importance.
+                Govern the U°OS protocol through voting. You can vote for Block Producers and Calculator Nodes. Vote with your Importance.
               </div>
             </div>
           </div>
@@ -184,8 +184,28 @@ const Governance = (props) => {
 
               {props.governance.nodes.data.length > 0 &&
               <div>
-                <GovernanceBlock go={() => setElectionVisibility(true)} myVotes={346} voters={12345} rate={15000} setVis={() => setNodeVisibility({ calc: false, prod: !nodeVisibility.prod })} vis={nodeVisibility.prod} table={table} title="Block Producers" description="The Block Producers are decentralized entities that keep the chain running by producing blocks. The Block Producers are elected through voting." />
-                <GovernanceBlock go={() => setElectionVisibility(true)} votes={0} voters={12345} rate={15000} setVis={() => setNodeVisibility({ prod: false, calc: !nodeVisibility.calc })} vis={nodeVisibility.calc} table={table} title="Calculator Nodes " description="A Calculator Node is a node on the U°OS blockchain dedicated to calculating the activity of user accounts: social, transactional, stake." />
+                <GovernanceBlock
+                  onClickVoteButton={() => setElectionVisibility(true)}
+                  myVotes={346}
+                  voters={12345}
+                  rate={15000}
+                  onClickTick={() => setNodeVisibility({ calc: false, prod: !nodeVisibility.prod })}
+                  visibility={nodeVisibility.prod}
+                  table={table}
+                  title="Block Producers"
+                  description="The Block Producers are decentralized entities that keep the chain running by producing blocks. The Block Producers are elected through voting."
+                />
+                <GovernanceBlock
+                  onClickVoteButton={() => setElectionVisibility(true)}
+                  myVotes={0}
+                  voters={12345}
+                  rate={15000}
+                  onClickTick={() => setNodeVisibility({ prod: false, calc: !nodeVisibility.calc })}
+                  visibility={nodeVisibility.calc}
+                  table={table}
+                  title="Calculator Nodes "
+                  description="A Calculator Node is a node on the U°OS blockchain dedicated to calculating the activity of user accounts: social, transactional, stake."
+                />
               </div>
               }
             </div>

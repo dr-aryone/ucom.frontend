@@ -11,7 +11,7 @@ const Rate = (props) => {
   return (
     <div className={classNames('rate', props.className)}>
       <div className="rate__value">
-        {formatRate((+props.value).toLocaleString())}
+        {formatRate(+props.value)}
         <span className="rate__degree">{props.dimension}</span>
       </div>
       <div className="rate__label">{props.label}</div>
