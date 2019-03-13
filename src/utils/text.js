@@ -102,8 +102,10 @@ export const sanitizeCommentText = memoize(html => sanitizeHtml(html, {
   },
   textFilter: text => escapeQuotes(removeMultipleNewLines(makeLink(text))),
 }));
-/* eslint-disable */
 
+export const sanitizePostTitle = memoize(text => sanitizeHtml(text));
+
+/* eslint-disable */
 export const calculateClosestTo0 = arr => arr.reduce(
   (acc, x) =>
     (acc === 0 ? x :
@@ -112,4 +114,5 @@ export const calculateClosestTo0 = arr => arr.reduce(
   , 0,
 );
 /* eslint-enable */
+
 export const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value);

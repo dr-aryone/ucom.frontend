@@ -23,11 +23,7 @@ class PostFeedFooter extends PureComponent {
           <div className={styles.infoBlock}>
             <span
               role="presentation"
-              className={classNames(
-                `${styles.commentСount}`,
-                { [styles.commentCountActive]: this.props.commentsIsVisible },
-              )}
-              onClick={this.props.toggleComments}
+              className={styles.commentСount}
             >
               <span className="inline inline_small">
                 <span className="inline__item">
@@ -80,9 +76,6 @@ class PostFeedFooter extends PureComponent {
 
 PostFeedFooter.propTypes = {
   post: PropTypes.objectOf(PropTypes.any).isRequired,
-  commentsCount: PropTypes.number.isRequired,
-  commentsIsVisible: PropTypes.bool.isRequired,
-  toggleComments: PropTypes.func.isRequired,
   sharePopup: PropTypes.bool.isRequired,
   toggleShare: PropTypes.func.isRequired,
 };
