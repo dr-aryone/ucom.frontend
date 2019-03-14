@@ -1,12 +1,3 @@
-/* .share__icon {
-  position: relative;
-  top: -3px;
-}
-
-.share__icon svg {
-  display: block;
-} */
-
 .share {
   font-weight: bold;
   font-size: 14px;
@@ -39,6 +30,7 @@
   text-overflow: ellipsis;
   max-width: 250px;
   overflow: hidden;
+  white-space: pre;
 }
 
 .socialIcons {

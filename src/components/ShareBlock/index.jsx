@@ -70,7 +70,7 @@ class ShareBlock extends PureComponent {
         <div className={styles.copylink__block}>
           <span>Copy link</span>
           <div className={styles.copylink}>
-            <a target="_blank" rel="noopener noreferrer" href={this.props.link} className={styles.copylink__link}>{window.location.origin + this.props.link}</a>
+            <a target="_blank" rel="noopener noreferrer" href={this.props.link} className={styles.copylinkTitle}>{window.location.origin + this.props.link}</a>
             <IconCopyLink onClick={this.copyToClipboard()} />
           </div>
         </div>
