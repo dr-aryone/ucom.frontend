@@ -3,41 +3,15 @@
   margin-bottom: 25px;
   justify-content: space-between;
   align-items: baseline;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+
+    .governance__status-text {
+      margin-left: 3px;
+    }
+  }
 }
-
-// .governance-all {
-//   padding-top: 46px;
-//   position: relative;
-//   display: flex;
-
-//   &:last-child {
-//     box-shadow: 0px 0px 20px rgba(184, 184, 184, 0.25);  
-//   }
-// }
-
-// .governance-switch {
-//   fill: none;
-//   stroke: black;
-//   cursor: pointer;
-//   height: 34px;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   padding-left: 52px;
-//   padding-right: 20px;
-
-//   &:hover {
-//     stroke: @red;
-//   }
-// }
-
-// .governance-switch_rotated {
-//   -webkit-transform: rotate(180deg);
-//   -moz-transform: rotate(180deg);
-//   -o-transform: rotate(180deg);
-//   -ms-transform: rotate(180deg);
-//   transform: rotate(180deg);
-// }
 
 .governance__text {
   font-weight: 500;
@@ -101,13 +75,6 @@
   cursor: pointer;
 }
 
-// .governance-all__title {
-//   margin-bottom: 7px;
-//   line-height: 34px;
-//   display: flex;
-//   justify-content: space-between;
-// }
-
 .governance-head {
   display: flex;
   align-items: center;
@@ -127,47 +94,9 @@
 .governance-inner{
   padding-left: 85px;
   padding-right: 90px;
+
+  @media (max-width: 767px) {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
-
-// .governance-all__container {
-//   width: 100%;
-//   padding-right: 88px;
-// }
-
-// .governance-all-info {
-//   font-weight: normal;
-//   line-height: normal;
-//   font-size: 14px;
-//   color: #666666;
-//   margin-bottom: 21px;
-// }
-
-// .governance-all-info__item {
-//   margin-right: 22px;
-// }
-
-// .governance-all__votes {
-//   margin-bottom: 45px;
-//   display: flex;
-
-//   .governance-all-info__item {
-//     margin-right: 40px;
-//     margin-left: auto;
-//   }
-// }
-
-// .governance-all__accent {
-//   color: @red;
-// }
-
-
-// .governance__button {
-//   margin-bottom: 40px;
-//   max-width: 158px;
-//   line-height: 20px;
-//   font-size: 16px;
-
-//   .button {
-//     padding: unset;
-//   }
-// }

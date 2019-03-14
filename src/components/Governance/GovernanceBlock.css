@@ -83,3 +83,14 @@
 .button :global(.button) {
   padding: unset;
 }
+
+@media (max-width: 767px) {
+  .switch {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .container {
+    padding-right: 10px;
+  }
+}
