@@ -60,6 +60,9 @@ const Governance = (props) => {
     props.governanceNodesGet();
     props.getOrganization(organizationId);
   };
+  const test = require('ucom.libs.common');
+
+  console.log(test);
 
   return (
     <LayoutBase>
