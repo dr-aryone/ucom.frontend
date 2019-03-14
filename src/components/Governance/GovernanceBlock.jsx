@@ -26,7 +26,7 @@ const GovernanceBlock = ({
       </div>
       <div className={`${styles.info} ${styles.votes}`}>
         {/* <span className={styles.item}>{formatRate(voters)} voters</span> */}
-        {myVotes ? <span>You casted <span className={styles.accent} >{formatRate(myVotes) } votes</span></span> :
+        {myVotes ? <span className={styles.item}>You casted <span className={styles.accent} >{formatRate(myVotes) } votes</span></span> :
         <span> You didn’t vote </span>}
       </div>
 

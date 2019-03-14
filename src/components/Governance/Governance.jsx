@@ -15,6 +15,7 @@ import { selectUser } from '../../store/selectors/user';
 import LayoutBase from '../Layout/LayoutBase';
 import { getUosGroupId } from '../../utils/config';
 import SetStakePopup from '../Wallet/SetStakePopup';
+import Footer from '../Footer';
 import GovernanceElection from './GovernanceElection';
 import GovernanceConfirmation from './GovernanceConfirmation';
 import { formatRate } from '../../utils/rate';
@@ -211,6 +212,7 @@ const Governance = (props) => {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </LayoutBase>
   );

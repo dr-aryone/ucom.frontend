@@ -4,7 +4,8 @@
   line-height: 20px;
   white-space: nowrap;
   border-spacing: 0;
-
+  padding-bottom: 70px;
+  
   @media (max-width: 1023px) {
     display: block;
   }
@@ -119,6 +120,8 @@
   }
 
   .governance-table__row {
+    transition: background-color 0.2s ease;
+
     &:nth-child(even) {
       @media (max-width: 1023px) {
         background: #F8F8F9;
