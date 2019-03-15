@@ -2,12 +2,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'react-tippy';
+import { findKey } from 'lodash';
 import GovernanceBlock from './GovernanceBlock';
 import Button from '../Button';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
 import OrganizationHead from '../Organization/OrganizationHead';
-import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForBlockProducers } from '../../actions/governance';
+import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForNodes } from '../../actions/governance';
 import { getOrganization } from '../../actions/organizations';
 import { getAccountState, setWalletEditStakeVisible } from '../../actions/wallet';
 import { getSelectedNodes } from '../../store/governance';
@@ -20,6 +21,9 @@ import GovernanceElection from './GovernanceElection';
 import GovernanceConfirmation from './GovernanceConfirmation';
 import { formatRate } from '../../utils/rate';
 
+const { BLOCK_PRODUCERS, CALCULATOR_NODES } = require('ucom.libs.common').Governance.Dictionary.BlockchainNodesTypes;
+
+
 const governanceTabs = [
   { name: 'Network', active: true },
   { name: 'My Projects', active: false },
@@ -29,6 +33,13 @@ const governanceTabs = [
 ];
 
 const Governance = (props) => {
+  const [electionVisibility, setElectionVisibility] = useState(false);
+  const [confirmationVisibility, setConfirmationVisibility] = useState(false);
+  const [closeVisibility, setCloseVisibility] = useState(false);
+  const [nodeVisibility, setNodeVisibility] = useState({ [BLOCK_PRODUCERS]: false, [CALCULATOR_NODES]: false });
+
+  const currentNodeVisibility = findKey(nodeVisibility, i => i);
+
   const organizationId = getUosGroupId();
 
   useEffect(() => {
@@ -37,19 +48,19 @@ const Governance = (props) => {
     props.governanceNodesGet();
   }, [organizationId]);
 
-  const stakedTokens = (props.wallet.state.data.tokens && props.wallet.state.data.tokens.staked) || 0;
-  const table = props.governance.nodes.data;
-  const { selectedNodes, user } = props;
-  const [electionVisibility, setElectionVisibility] = useState(false);
-  const [confirmationVisibility, setConfirmationVisibility] = useState(false);
-  const [closeVisibility, setCloseVisibility] = useState(false);
-  const [nodeVisibility, setNodeVisibility] = useState({ prod: false, calc: false });
+  const tableBP = props.governance.nodes.data[BLOCK_PRODUCERS] && props.governance.nodes.data[BLOCK_PRODUCERS].data;
+  const tableCN = props.governance.nodes.data[CALCULATOR_NODES] && props.governance.nodes.data[CALCULATOR_NODES].data;
+  const table = props.governance.nodes.data[currentNodeVisibility] && props.governance.nodes.data[currentNodeVisibility].data;
+  const { user } = props;
+  const { currentImportance } = user;
+
+  const selectedNodes = props.selectedNodes[currentNodeVisibility];
 
   const setVotes = () => {
     setConfirmationVisibility(false);
     setElectionVisibility(false);
     setCloseVisibility(false);
-    props.voteForBlockProducers();
+    props.voteForNodes(currentNodeVisibility);
   };
 
   const close = () => {
@@ -60,9 +71,6 @@ const Governance = (props) => {
     props.governanceNodesGet();
     props.getOrganization(organizationId);
   };
-  const test = require('ucom.libs.common');
-
-  console.log(test);
 
   return (
     <LayoutBase>
@@ -71,7 +79,7 @@ const Governance = (props) => {
         <Popup onClickClose={() => setElectionVisibility(false)}>
           <ModalContent closeText="Close" mod="governance-election" onClickClose={() => setElectionVisibility(false)}>
             <GovernanceElection {...{
-              stakedTokens, table, selectedNodes, setConfirmationVisibility, user, nodeVisibility,
+              currentImportance, table, selectedNodes, setConfirmationVisibility, user, currentNodeVisibility,
             }}
             />
           </ModalContent>
@@ -128,7 +136,7 @@ const Governance = (props) => {
                 <div className="governance__status">
                   <span className="governance__status-text">Voting Power:</span>
                   <h3 className="title_small">
-                    {formatRate(stakedTokens)}°
+                    {formatRate(currentImportance)}°
                   </h3>
                 </div>
               }
@@ -186,32 +194,36 @@ const Governance = (props) => {
                 </div>
               } */}
 
-              {props.governance.nodes.data.length > 0 &&
+
               <div>
-                <GovernanceBlock
-                  onClickVoteButton={() => setElectionVisibility(true)}
-                  myVotes={selectedNodes.length}
-                  voters={12345}
-                  rate={15000}
-                  onClickTick={() => setNodeVisibility({ calc: false, prod: !nodeVisibility.prod })}
-                  visibility={nodeVisibility.prod}
-                  table={table}
-                  title="Block Producers"
-                  description="The Block Producers are decentralized entities that keep the chain running by producing blocks. The Block Producers are elected through voting."
-                />
-                <GovernanceBlock
-                  onClickVoteButton={() => setElectionVisibility(true)}
-                  myVotes={selectedNodes.length}
-                  voters={12345}
-                  rate={15000}
-                  onClickTick={() => setNodeVisibility({ prod: false, calc: !nodeVisibility.calc })}
-                  visibility={nodeVisibility.calc}
-                  table={table}
-                  title="Calculator Nodes "
-                  description="A Calculator Node is a node on the U°OS blockchain dedicated to calculating the activity of user accounts: social, transactional, stake."
-                />
+                {tableBP && tableBP.length > 0 &&
+                  <GovernanceBlock
+                    onClickVoteButton={() => setElectionVisibility(true)}
+                    myVotes={props.selectedNodes[BLOCK_PRODUCERS].length}
+                    voters={12345}
+                    rate={15000}
+                    onClickTick={() => setNodeVisibility({ [CALCULATOR_NODES]: false, [BLOCK_PRODUCERS]: !nodeVisibility[BLOCK_PRODUCERS] })}
+                    visibility={nodeVisibility[BLOCK_PRODUCERS]}
+                    table={tableBP}
+                    title="Block Producers"
+                    description="The Block Producers are decentralized entities that keep the chain running by producing blocks. The Block Producers are elected through voting."
+                  />
+                }
+                {tableCN && tableCN.length > 0 &&
+                  <GovernanceBlock
+                    onClickVoteButton={() => setElectionVisibility(true)}
+                    myVotes={props.selectedNodes[CALCULATOR_NODES].length}
+                    voters={12345}
+                    rate={15000}
+                    onClickTick={() => setNodeVisibility({ [BLOCK_PRODUCERS]: false, [CALCULATOR_NODES]: !nodeVisibility[CALCULATOR_NODES] })}
+                    visibility={nodeVisibility[CALCULATOR_NODES]}
+                    table={tableCN}
+                    title="Calculator Nodes "
+                    description="A Calculator Node is a node on the U°OS blockchain dedicated to calculating the activity of user accounts: social, transactional, stake."
+                  />
+                }
               </div>
-              }
+
             </div>
           </div>
         </div>
@@ -234,7 +246,7 @@ export default connect(
     governanceShowVotePopup,
     getOrganization,
     getAccountState,
-    voteForBlockProducers,
+    voteForNodes,
     setWalletEditStakeVisible,
   }, dispatch),
 )(Governance);

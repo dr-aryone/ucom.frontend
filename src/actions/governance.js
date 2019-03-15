@@ -1,4 +1,5 @@
 import api from '../api';
+import graphql from '../api/graphql';
 import loader from '../utils/loader';
 import { selectUser } from '../store/selectors/user';
 import { getSelectedNodes } from '../store/governance';
@@ -21,8 +22,8 @@ export const governanceNodesGet = () => async (dispatch) => {
   dispatch(governanceNodesSetLoading(true));
 
   try {
-    const data = await api.getNodes();
-    dispatch(governanceNodesSetData(data.data));
+    const data = await graphql.getBlockchainNodes({});
+    dispatch(governanceNodesSetData(data));
   } catch (e) {
     console.error(e);
   }
@@ -31,7 +32,7 @@ export const governanceNodesGet = () => async (dispatch) => {
   dispatch(governanceNodesSetLoading(false));
 };
 
-export const voteForBlockProducers = () => async (dispatch, getState) => {
+export const voteForNodes = nodeType => async (dispatch, getState) => {
   const state = getState();
   const user = selectUser(state);
 
@@ -39,14 +40,14 @@ export const voteForBlockProducers = () => async (dispatch, getState) => {
     return;
   }
 
-  const selectedNodes = getSelectedNodes(state);
+  const selectedNodes = getSelectedNodes(state)[nodeType];
   const selectedNodesAccountNames = selectedNodes.map(i => i.title);
 
   loader.start();
   dispatch(governanceNodesSetLoading(true));
 
   try {
-    await api.voteForBlockProducers(user.accountName, selectedNodesAccountNames);
+    await api.voteForNodes(user.accountName, selectedNodesAccountNames, nodeType);
     dispatch(governanceHideVotePopup());
   } catch (e) {
     const errors = parseWalletErros(e);

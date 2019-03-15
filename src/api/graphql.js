@@ -5,6 +5,7 @@ import { getBackendConfig } from '../utils/config';
 import { getToken } from '../utils/token';
 import { COMMENTS_PER_PAGE } from '../utils/comments';
 import { FEED_PER_PAGE, OVERVIEW_SIDE_PER_PAGE } from '../utils/feed';
+import { NODES_PER_PAGE } from '../utils/governance';
 
 const request = async (data) => {
   const options = {
@@ -234,6 +235,25 @@ export default {
     try {
       const data = await request({ query });
       return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getBlockchainNodes({
+    ordering = '-bp_status',
+    page = 1,
+    perPage = NODES_PER_PAGE,
+  }) {
+    const query = GraphQLSchema.getManyBlockchainNodes(
+      ordering,
+      page,
+      perPage,
+    );
+
+    try {
+      const data = await request({ query });
+      return data.data.manyBlockchainNodes;
     } catch (e) {
       throw e;
     }

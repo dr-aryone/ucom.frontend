@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { findKey } from 'lodash';
 import GovernanceTable from './GovernanceTable';
 import Button from '../Button';
+import { formatRate } from '../../utils/rate';
+
+const { BLOCK_PRODUCERS, CALCULATOR_NODES } = require('ucom.libs.common').Governance.Dictionary.BlockchainNodesTypes;
 
 const nodeTemplates = {
-  prod: {
+  [BLOCK_PRODUCERS]: {
     title: ' Block Producer',
     side: 'BP',
     time: {
@@ -16,7 +18,7 @@ const nodeTemplates = {
       text: 'You can change your vote on each round.',
     },
   },
-  calc: {
+  [CALCULATOR_NODES]: {
     title: ' Calculator Node',
     side: 'Calculator',
     time: {
@@ -31,10 +33,14 @@ const nodeTemplates = {
 };
 
 const GovernanceElection = (props) => {
+  if (!props.currentNodeVisibility) {
+    return null;
+  }
+
   const [route, setRoute] = useState(1);
   const {
     title, side, time, period,
-  } = nodeTemplates[findKey(props.nodeVisibility, i => i)];
+  } = nodeTemplates[props.currentNodeVisibility];
   return (
     <div className="governance governance-election">
       <div className="content content_base">
@@ -44,7 +50,7 @@ const GovernanceElection = (props) => {
           </div>
           <div className="governance-election__grid">
             <div className="governance-election__grid-item">
-              <div className="title title_small title_bold">{props.stakedTokens}</div>
+              <div className="title title_small title_bold">{formatRate(props.currentImportance)}°</div>
               <div className="governance-election__status-text">You’re voting with your Importance.</div>
             </div>
             <div className="governance-election__grid-item">
@@ -111,8 +117,8 @@ const GovernanceElection = (props) => {
                     <span className="inline__item">Organization</span>
                   </span>
                 </div>
-                <div className="governance-table__cell governance-table__cell_votes">Votes</div>
-                <div className="governance-table__cell governance-table__cell_amount">Vote Amount, UOS</div>
+                <div className="governance-table__cell only-pad governance-table__cell_votes">Votes</div>
+                <div className="governance-table__cell only-pad governance-table__cell_amount">Vote Amount, UOS</div>
                 <div className="governance-table__cell governance-table__cell_state">State</div>
               </div>
             </div>

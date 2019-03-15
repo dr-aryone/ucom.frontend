@@ -5,10 +5,6 @@
   white-space: nowrap;
   border-spacing: 0;
   padding-bottom: 70px;
-  
-  @media (max-width: 1023px) {
-    display: block;
-  }
 }
 
 .governance-table__percentage {
@@ -25,20 +21,10 @@
   line-height: 15px;
   text-transform: uppercase;
   color: rgba(0,0,0,0.6);
-
-  @media (max-width: 1023px) {
-    display: none;
-  }
-
+  
   .governance-table__cell {
     border-bottom: 1px solid #E8ECEC;
     padding: 24px 18px;
-  }
-}
-
-.governance-table__row {
-  @media (max-width: 1023px) {
-    display: block;
   }
 }
 
@@ -57,9 +43,8 @@
   padding-left: 16px;
   padding-right: 10px;
 
-  @media (max-width: 1023px) {
-    display: block;
-    border-bottom: 1px  solid #E8ECEC;
+  @media (max-width: 767px) {
+    padding: 0 !important;
   }
 }
 
@@ -81,10 +66,6 @@
 
 .governance-table__cell_name {
   width: auto;
-
-  @media (max-width: 1023px) {
-    text-align: right;
-  }
 }
 
 .governance-table__votes-block {
@@ -108,6 +89,7 @@
 .governance-table__cell_state {
   width: 86px;
 }
+
 .governance-table__cell_id {
   font-size: 10px;
   text-align: right;
@@ -115,47 +97,12 @@
 }
 
 .governance-table__body {
-  @media (max-width: 1023px) {
-    display: block;
-  }
-
   .governance-table__row {
     transition: background-color 0.2s ease;
 
-    &:nth-child(even) {
-      @media (max-width: 1023px) {
-        background: #F8F8F9;
-      }
+    .governance-table__cell_name {
+      font-weight: 700;
     }
-
-    &:hover {
-      @media (min-width: 1024px) {
-        background: #F8F8F9;
-      }
-    }
-  }
-
-  .governance-table__cell {
-    @media (max-width: 1023px) {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
-
-    &:before {
-      @media (max-width: 1023px) {
-        content: attr(data-name);
-        font-weight: normal;
-        font-size: 12px;
-        text-transform: uppercase;
-        color: rgba(0,0,0,0.6);
-      }
-    }
-  }
-
-  .governance-table__cell_name {
-    font-weight: 700;
   }
 }
 
