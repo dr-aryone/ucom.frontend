@@ -240,11 +240,11 @@ export default {
     }
   },
 
-  async getBlockchainNodes({
+  async getBlockchainNodes(
     ordering = '-bp_status',
     page = 1,
     perPage = NODES_PER_PAGE,
-  }) {
+  ) {
     const query = GraphQLSchema.getManyBlockchainNodes(
       ordering,
       page,

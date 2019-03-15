@@ -1,16 +1,17 @@
 import ecc from 'eosjs-ecc';
 import humps from 'lodash-humps';
 import param from 'jquery-param';
-import { camelCase } from 'lodash';
 import HttpActions from './HttpActions';
 import { getToken } from '../utils/token';
 import { getActivePrivateKey } from '../utils/keys';
 import { getBrainkey } from '../utils/brainkey';
 import { getBackendConfig } from '../utils/config';
-import { getKeyByValue, capitalizeFirstLetter } from '../utils/text';
 import snakes from '../utils/snakes';
 
-const { BlockchainNodesTypes } = require('ucom.libs.common').Governance.Dictionary;
+const {
+  BLOCK_PRODUCERS,
+  CALCULATOR_NODES,
+} = require('ucom.libs.common').Governance.Dictionary.BlockchainNodesTypes;
 
 const { WalletApi } = require('ucom-libs-wallet');
 const AppTransaction = require('ucom-libs-social-transactions');
@@ -485,8 +486,12 @@ class Api {
   async voteForNodes(accountName, producers, nodeType) {
     const brainkey = getBrainkey();
     const privateKey = getActivePrivateKey(brainkey);
-    const response = await WalletApi[`voteFor${capitalizeFirstLetter(camelCase(getKeyByValue(BlockchainNodesTypes, +nodeType)))}`](accountName, privateKey, producers);
+    const voteFunctions = {
+      [BLOCK_PRODUCERS]: WalletApi.voteForBlockProducers,
+      [CALCULATOR_NODES]: WalletApi.voteForCalculatorNodes,
+    };
 
+    const response = await voteFunctions[nodeType](accountName, privateKey, producers);
     return humps(response);
   }
 

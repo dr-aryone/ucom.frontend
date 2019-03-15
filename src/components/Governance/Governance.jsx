@@ -23,7 +23,6 @@ import { formatRate } from '../../utils/rate';
 
 const { BLOCK_PRODUCERS, CALCULATOR_NODES } = require('ucom.libs.common').Governance.Dictionary.BlockchainNodesTypes;
 
-
 const governanceTabs = [
   { name: 'Network', active: true },
   { name: 'My Projects', active: false },
@@ -37,9 +36,7 @@ const Governance = (props) => {
   const [confirmationVisibility, setConfirmationVisibility] = useState(false);
   const [closeVisibility, setCloseVisibility] = useState(false);
   const [nodeVisibility, setNodeVisibility] = useState({ [BLOCK_PRODUCERS]: false, [CALCULATOR_NODES]: false });
-
   const currentNodeVisibility = findKey(nodeVisibility, i => i);
-
   const organizationId = getUosGroupId();
 
   useEffect(() => {
@@ -53,7 +50,6 @@ const Governance = (props) => {
   const table = props.governance.nodes.data[currentNodeVisibility] && props.governance.nodes.data[currentNodeVisibility].data;
   const { user } = props;
   const { currentImportance } = user;
-
   const selectedNodes = props.selectedNodes[currentNodeVisibility];
 
   const setVotes = () => {
