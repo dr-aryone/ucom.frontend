@@ -24,7 +24,7 @@ const GovernanceTable = props => (
               <span className="inline__item">Organization</span>
             </span>
           </td>
-          <td className="governance-table__cell governance-table__cell_votes only-pad">Votes</td>
+          <td className="governance-table__cell governance-table__cell_votes">Votes</td>
           <td className="governance-table__cell governance-table__cell_amount only-pad">Vote Amount, UOS</td>
           <td className="governance-table__cell governance-table__cell_state">State</td>
         </tr>
@@ -68,7 +68,7 @@ const GovernanceTable = props => (
           })()}
 
           <td className="governance-table__cell governance-table__cell_name" data-name="Organization">{item.title}</td>
-          <td className="governance-table__cell governance-table__cell_votes only-pad" data-name="Votes">
+          <td className="governance-table__cell governance-table__cell_votes" data-name="Votes">
             <div className="governance-table__votes-block">{item.votesCount} <div className="governance-table__percentage">{item.votesPercentage}%</div></div>
           </td>
           <td className="governance-table__cell governance-table__cell_amount only-pad" data-name="Vote Amount, UOS">{(+item.votesAmount).toLocaleString()}</td>
