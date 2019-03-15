@@ -73,7 +73,7 @@ const UsersPage = (props) => {
     <LayoutBase>
       <div className="layout layout_entries">
         <div className="layout__title">
-          <h1 className="title">People</h1>
+          <h1 className="title title_bold">People</h1>
         </div>
         <div className="layout__search">
           <SearchInput setSearch={onChangeSearch} search={userName} />

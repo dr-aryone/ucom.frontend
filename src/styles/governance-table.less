@@ -26,6 +26,10 @@
     border-bottom: 1px solid #E8ECEC;
     padding: 24px 18px;
   }
+
+  @media (max-width: 767px) {
+    margin-left: -40px;
+  }
 }
 
 .governance-table__row_flex {
@@ -34,6 +38,10 @@
   .governance-table__cell {
     display: flex;
     align-items: center;
+
+    @media (max-width: 767px) {
+      justify-content: center;
+    }
   }  
 }
 
@@ -58,6 +66,10 @@
 
 .governance-table__cell_name_flex {
   flex: 1;
+
+  @media (max-width: 767px) {
+    justify-content: end;
+  }
 }
 
 .governance-table__cell_id {
@@ -114,4 +126,14 @@
 
 .governance-table-checkbox__label {
   margin: 0 0 0 10px;
+
+  @media (max-width: 767px) {
+    margin: 0 0 0 5px;
+  }
+}
+
+.governance-table-checkbox__input {
+  @media (max-width: 767px) {
+    margin-left: 5px;
+  }
 }

@@ -8,10 +8,7 @@ import { getBrainkey } from '../utils/brainkey';
 import { getBackendConfig } from '../utils/config';
 import snakes from '../utils/snakes';
 
-const {
-  BLOCK_PRODUCERS,
-  CALCULATOR_NODES,
-} = require('ucom.libs.common').Governance.Dictionary.BlockchainNodesTypes;
+const { BLOCK_PRODUCERS, CALCULATOR_NODES } = require('ucom.libs.common').Governance.Dictionary.BlockchainNodesTypes;
 
 const { WalletApi } = require('ucom-libs-wallet');
 const AppTransaction = require('ucom-libs-social-transactions');
