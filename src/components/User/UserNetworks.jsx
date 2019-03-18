@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { getUserById } from '../../store/users';
 import { extractHostname } from '../../utils/url';
-import styles from '../Sidebar/styles.css';
+import styles from '../Section/styles.css';
 
 const UserNetworks = (props) => {
   const user = getUserById(props.users, props.userId);

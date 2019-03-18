@@ -2,6 +2,10 @@
   padding: 20px;
 }
 
+:local(.comment:first-child) {
+  border-top: 1px solid #E7ECEC;
+}
+
 :local(.comment[depth="1"]) {
   padding-left: 64px;
 }

@@ -1,8 +1,14 @@
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 const MinimizedText = props => (
-  <div className="text">
+  <div
+    className={classNames({
+      'text': true,
+      'text_gray': props.gray,
+    })}
+  >
     <div
       className={classNames(
         'text__content',
@@ -12,21 +18,42 @@ const MinimizedText = props => (
       <p>{props.text}</p>
     </div>
 
-    {props.enabled &&
-      <div className="text__show-more">
-        <button
-          className="button-clean button-clean_link"
-          onClick={() => {
-            if (props.onClickShowMore) {
-              props.onClickShowMore();
-            }
-          }}
-        >
-          {props.minimized ? 'Show More' : 'Hide More'}
-        </button>
-      </div>
-    }
+    {props.enabled ? (
+      <Fragment>
+        {props.disabledHide && !props.minimized ? null : (
+          <div className="text__show-more">
+            <button
+              className="link red"
+              onClick={() => {
+                if (props.onClickShowMore) {
+                  props.onClickShowMore();
+                }
+              }}
+            >
+              {props.minimized ? 'Show More' : 'Hide More'}
+            </button>
+          </div>
+        )}
+      </Fragment>
+    ) : null}
   </div>
 );
+
+MinimizedText.propTypes = {
+  enabled: PropTypes.bool,
+  minimized: PropTypes.bool,
+  text: PropTypes.string.isRequired,
+  onClickShowMore: PropTypes.func,
+  disabledHide: PropTypes.bool,
+  gray: PropTypes.bool,
+};
+
+MinimizedText.defaultProps = {
+  enabled: true,
+  minimized: true,
+  onClickShowMore: null,
+  disabledHide: false,
+  gray: false,
+};
 
 export default MinimizedText;

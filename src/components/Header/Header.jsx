@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { throttle } from 'lodash';
@@ -25,7 +27,16 @@ const Header = (props) => {
   });
 
   return (
-    <div className={`header ${isScrolledHeader ? 'header_shadow' : ''} ${props.menuPopupVisibility ? 'header_grayed' : ''} ${props.tooltipVisibilty ? 'header_z-index' : ''}`} id="top">
+    <div
+      id="top"
+      className={classNames({
+        'header': true,
+        'header_shadow': isScrolledHeader,
+        'header_grayed': props.menuPopupVisibility,
+        'header_z-index': props.tooltipVisibilty,
+        'header_gray': props.gray,
+      })}
+    >
       <div className="header__inner ">
         <HeaderSide />
         <HeaderMain />
@@ -39,6 +50,18 @@ const Header = (props) => {
       )}
     </div>
   );
+};
+
+Header.propTypes = {
+  menuPopupVisibility: PropTypes.bool,
+  tooltipVisibilty: PropTypes.bool,
+  gray: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  menuPopupVisibility: false,
+  tooltipVisibilty: false,
+  gray: false,
 };
 
 export default withRouter(connect(state => ({

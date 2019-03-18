@@ -106,3 +106,23 @@
   background: rgba(0,0,0,0.5);
   cursor: pointer;
 }
+
+:local(.form.flat) {
+  border-top: 1px solid #E7ECEC;
+}
+
+:local(.form.flat .field) {
+  border: none;
+}
+
+:local(.form.flat .userPick) {
+  padding: 0;
+}
+
+:local(.form.flat .input) {
+  padding: 4px 22px 4px 10px;
+}
+
+:local(.form.flat .actions) {
+  height: 36px;
+}

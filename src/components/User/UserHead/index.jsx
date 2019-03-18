@@ -1,10 +1,8 @@
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styles from './styles.css';
 import { getUserById } from '../../../store/users';
-import IconEdit from '../../Icons/Edit';
 import Avatar from './Avatar';
 import urls from '../../../utils/urls';
 import { updateUser, addUsers } from '../../../actions/users';
@@ -15,6 +13,7 @@ import UserStatus from '../UserStatus';
 import { formatRate } from '../../../utils/rate';
 import UserFollowButton from '../UserFollowButton';
 import Followers from '../../Followers/Followers';
+import ButtonEdit from '../../ButtonEdit';
 
 const UserHead = (props) => {
   const user = getUserById(props.users, props.userId);
@@ -26,13 +25,9 @@ const UserHead = (props) => {
   return (
     <div className={styles.userHead}>
       {userIsOwner(user, props.owner) &&
-        <Link
-          tabIndex="-1"
-          className={styles.iconEdit}
-          to={urls.getUserEditProfileUrl()}
-        >
-          <IconEdit />
-        </Link>
+        <div className={styles.edit}>
+          <ButtonEdit strech url={urls.getUserEditProfileUrl()} />
+        </div>
       }
 
       <div className={styles.main}>

@@ -47,6 +47,7 @@ Feed.propTypes = {
   onSubmitPostForm: PropTypes.func,
   onClickLoadMore: PropTypes.func.isRequired,
   filter: PropTypes.func,
+  isMobile: PropTypes.bool,
 };
 
 Feed.defaultProps = {
@@ -54,6 +55,7 @@ Feed.defaultProps = {
   onSubmitPostForm: null,
   feedInputInitialText: null,
   filter: null,
+  isMobile: false,
 };
 
 export default Feed;

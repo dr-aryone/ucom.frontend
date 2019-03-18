@@ -5,7 +5,7 @@ import Avatar from '../Avatar';
 import Button from '../Button';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
-import { getFileUrl, getBase64FromFile } from '../../utils/upload';
+import { getBase64FromFile } from '../../utils/upload';
 import { setPostData, validatePostField } from '../../actions';
 import { escapeQuotes } from '../../utils/text';
 import IconClip from '../Icons/Clip';
@@ -13,6 +13,7 @@ import IconClose from '../Icons/Close';
 import DropZone from '../DropZone';
 import TributeWrapper from '../TributeWrapper';
 import { updatePost } from '../../actions/posts';
+import urls from '../../utils/urls';
 
 class FeedForm extends PureComponent {
   constructor(props) {
@@ -24,7 +25,7 @@ class FeedForm extends PureComponent {
       message: escapeQuotes(this.props.message) || initialText || '',
       base64Cover: '',
       fileImg: '',
-      fileUrl: getFileUrl(this.props.mainImageFilename) || '',
+      fileUrl: urls.getFileUrl(this.props.mainImageFilename) || '',
     };
   }
 
@@ -58,7 +59,7 @@ class FeedForm extends PureComponent {
       >
         <div className="feed-form__field">
           <div className="feed-form__avatar">
-            <Avatar src={getFileUrl(user.avatarFilename)} />
+            <Avatar src={urls.getFileUrl(user.avatarFilename)} />
           </div>
 
           <div className="feed-form__message">

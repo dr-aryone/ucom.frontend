@@ -3,6 +3,10 @@
   font-size: 16px;
 }
 
+:local(.section:last-child) {
+  margin-bottom: 0;
+}
+
 :local(.title) {
   margin: 0 0 20px;
   font-size: 16px;

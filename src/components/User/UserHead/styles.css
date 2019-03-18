@@ -3,6 +3,7 @@
   padding: 50px 50px 28px;
   border-radius: 12px;
   box-shadow: 0px 0px 20px rgba(184, 184, 184, 0.25);
+  background: #fff;
 }
 
 :local(.main) {
@@ -20,38 +21,19 @@
   align-items: center;
 }
 
-:local(.iconEdit) {
+:local(.edit) {
   position: absolute;
   z-index: 1;
   top: 10px;
   left: 10px;
-  opacity: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  border: 1px solid #E8ECEC;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-  outline: none;
-  transition: background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-:local(.userHead:hover .iconEdit) {
+:local(.userHead:hover .edit) {
   opacity: 1;
-}
-
-:local(.iconEdit:hover) {
-  border-color: #D8E8E8;
-  background: #D8E8E8;
-}
-
-:local(.iconEdit svg) {
-  width: 10px;
-  height: 10px;
 }
 
 :local(.rate) {
@@ -129,7 +111,7 @@
     grid-column-gap: 20px;
   }
 
-  :local(.iconEdit) {
+  :local(.edit) {
     top: 7px;
     left: 7px;
     width: 24px;

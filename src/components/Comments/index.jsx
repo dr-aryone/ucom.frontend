@@ -68,16 +68,17 @@ const Comments = (props) => {
             onClickShowReplies={props.onClickShowReplies}
           />
         ))}
-
-        <Form
-          containerId={props.containerId}
-          postId={props.postId}
-          userImageUrl={props.ownerImageUrl}
-          userPageUrl={props.ownerPageUrl}
-          userName={props.ownerName}
-          onSubmit={props.onSubmit}
-        />
       </div>
+
+      <Form
+        flat
+        containerId={props.containerId}
+        postId={props.postId}
+        userImageUrl={props.ownerImageUrl}
+        userPageUrl={props.ownerPageUrl}
+        userName={props.ownerName}
+        onSubmit={props.onSubmit}
+      />
     </div>
   );
 };

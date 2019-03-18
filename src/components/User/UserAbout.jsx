@@ -1,46 +1,40 @@
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import React, { PureComponent } from 'react';
+import React, { useState } from 'react';
 import { getUserById } from '../../store/users';
 import MinimizedText from '../MinimizedText';
+import styles from '../Section/styles.css';
 
-const ABOUT_TEXT_SHOW_LIMIT = 280;
+const UserAbout = (props) => {
+  const [minimized, setMinimized] = useState(true);
+  const user = getUserById(props.users, props.userId);
 
-class UserAbout extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      minimized: true,
-    };
+  if (!user || !user.about) {
+    return null;
   }
 
-  render() {
-    const user = getUserById(this.props.users, this.props.userId);
+  return (
+    <div className={styles.section}>
+      <div className={styles.title}>About</div>
 
-    if (!user || !user.about) {
-      return null;
-    }
-
-    return (
-      <div className="user-section">
-        <div className="user-section__title">
-          <h2 className="title title_xxsmall title_medium">About</h2>
-        </div>
-
-        <div className="user-section__text">
-          <MinimizedText
-            text={user.about}
-            enabled={user.about.length > ABOUT_TEXT_SHOW_LIMIT}
-            minimized={this.state.minimized}
-            onClickShowMore={() => {
-              this.setState({ minimized: !this.state.minimized });
-            }}
-          />
-        </div>
+      <div className={styles.content}>
+        <MinimizedText
+          gray
+          disabledHide
+          text={user.about}
+          enabled={user.about.length > 280}
+          minimized={minimized}
+          onClickShowMore={() => setMinimized(!minimized)}
+        />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+UserAbout.propTypes = {
+  users: PropTypes.objectOf(PropTypes.any).isRequired,
+  userId: PropTypes.number.isRequired,
+};
 
 export default connect(state => ({
   users: state.users,

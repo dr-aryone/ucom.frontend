@@ -45,7 +45,7 @@ class Followers extends PureComponent {
                   id: item.id,
                   userName: getUserName(item),
                   accountName: item.accountName,
-                  avatarUrl: getFileUrl(item.avatarFilename),
+                  avatarUrl: urls.getFileUrl(item.avatarFilename),
                   profileLink: urls.getUserUrl(item.id),
                   rate: +item.currentRate,
                   follow: userIsFollowed(user.iFollow, item.id),

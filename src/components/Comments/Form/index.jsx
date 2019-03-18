@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import autosize from 'autosize';
 import { KEY_RETURN, KEY_ESCAPE } from 'keycode-js';
 import PropTypes from 'prop-types';
@@ -47,7 +48,13 @@ const Form = (props) => {
   }, [message]);
 
   return (
-    <div className={styles.form} depth={props.depth}>
+    <div
+      className={classNames({
+        [styles.form]: true,
+        [styles.flat]: props.flat,
+      })}
+      depth={props.depth}
+    >
       <div className={styles.userPick}>
         <UserPick src={props.userImageUrl} url={props.userPageUrl} alt={props.userName} />
       </div>
@@ -107,6 +114,7 @@ const Form = (props) => {
 };
 
 Form.propTypes = {
+  flat: PropTypes.bool,
   message: PropTypes.string,
   containerId: PropTypes.oneOf([COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST]).isRequired,
   postId: PropTypes.number.isRequired,
@@ -126,6 +134,7 @@ Form.propTypes = {
 };
 
 Form.defaultProps = {
+  flat: false,
   message: '',
   commentId: null,
   depth: 0,

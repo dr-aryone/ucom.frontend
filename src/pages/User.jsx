@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import UserHead from '../components/User/UserHead/index';
 import UserOrganizations from '../components/User/UserOrganizations';
-// import UserAbout from '../components/User/UserAbout';
+import UserAbout from '../components/User/UserAbout';
 import UserSocialNetworks from '../components/User/UserSocialNetworks';
 import UserNetworks from '../components/User/UserNetworks';
-// import UserCreatedAt from '../components/User/UserCreatedAt';
+import UserCreatedAt from '../components/User/UserCreatedAt';
 import LayoutBase from '../components/Layout/LayoutBase';
 import { selectUser } from '../store/selectors/user';
 import { fetchUser } from '../actions/users';
@@ -17,11 +17,13 @@ import Popup from '../components/Popup';
 import ModalContent from '../components/ModalContent';
 import Post from '../components/Feed/Post/Post';
 import urls from '../utils/urls';
-// import Feed from '../components/Feed/FeedUser';
+import Feed from '../components/Feed/FeedUser';
 import { USER_WALL_FEED_ID, FEED_PER_PAGE } from '../utils/feed';
 import { feedGetUserPosts } from '../actions/feed';
 import loader from '../utils/loader';
 import NotFoundPage from './NotFoundPage';
+import UserEditInformation from '../components/User/UserEditInformation';
+import Footer from '../components/Footer';
 
 const UserPage = (props) => {
   const userIdOrName = props.match.params.userId;
@@ -56,7 +58,7 @@ const UserPage = (props) => {
   const userId = user.id;
 
   return (
-    <LayoutBase>
+    <LayoutBase gray>
       {post &&
         <Popup onClickClose={() => props.history.push(urls.getUserUrl(userId))}>
           <ModalContent mod="post">
@@ -73,29 +75,17 @@ const UserPage = (props) => {
           <UserOrganizations userId={userId} />
           <UserNetworks userId={userId} />
           <UserSocialNetworks userId={userId} />
+          <UserCreatedAt userId={userId} />
+          <UserEditInformation userId={userId} />
+        </div>
+        <div className="layout__main">
+          <UserAbout userId={userId} />
+          <Feed userId={userId} feedTypeId={USER_WALL_FEED_ID} />
+        </div>
+        <div className="layout__footer">
+          <Footer />
         </div>
       </div>
-
-      {/* <div className="container container_user">
-        <UserHead userId={userId} />
-
-        <div className="grid grid_user">
-          <div className="grid__item">
-            <UserAbout userId={userId} />
-            <Feed
-              userId={userId}
-              feedTypeId={USER_WALL_FEED_ID}
-            />
-          </div>
-
-          <div className="grid__item grid__item_info">
-            <UserOrganizations userId={userId} />
-            <UserSocialNetworks userId={userId} />
-            <UserNetworks userId={userId} />
-            <UserCreatedAt userId={userId} />
-          </div>
-        </div>
-      </div> */}
     </LayoutBase>
   );
 };

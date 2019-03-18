@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -19,6 +20,7 @@ import OrganizationListPopup from '../Organization/OrganizationListPopup';
 import OrganizationIcon from '../Icons/Organization';
 import UserMenuTrigger from '../UserMenu/UserMenuTrigger';
 import SearchPopup from '../Search';
+import { formatRate } from '../../utils/rate';
 
 const HeaderMain = ({
   authShowPopup, users, user, menuPopupVisibility, triggerMenuPopup,
@@ -81,7 +83,7 @@ const HeaderMain = ({
               disabled={isMobile}
             >
               <Link className="avatar-and-rate" to={`/user/${user.id}`} onClick={() => (menuPopupVisibility ? triggerMenuPopup() : null)}>
-                <div className="header__rate">{(+owner.currentRate).toLocaleString()}°</div>
+                <div className="header__rate">{formatRate(owner.currentRate)}°</div>
                 <Avatar size="xsmall" src={urls.getFileUrl(owner.avatarFilename)} />
               </Link>
             </Tooltip>
@@ -116,7 +118,7 @@ const HeaderMain = ({
                   disabled={isMobile}
                 >
                   <Link className="avatar-and-rate" to={`/user/${user.id}`} onClick={() => (menuPopupVisibility ? triggerMenuPopup() : null)}>
-                    <div className="header__rate">{(+owner.currentRate).toLocaleString()}°</div>
+                    <div className="header__rate">{formatRate(owner.currentRate)}°</div>
                     <Avatar size="xsmall" src={urls.getFileUrl(owner.avatarFilename)} />
                   </Link>
                 </Tooltip>
@@ -190,6 +192,19 @@ const HeaderMain = ({
     </Fragment>
   );
 };
+
+HeaderMain.propTypes = {
+  authShowPopup: PropTypes.func.isRequired,
+  users: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  menuPopupVisibility: PropTypes.bool,
+  triggerMenuPopup: PropTypes.func.isRequired,
+};
+
+HeaderMain.defaultProps = {
+  menuPopupVisibility: false,
+};
+
 export default connect(
   state => ({
     user: selectUser(state),
