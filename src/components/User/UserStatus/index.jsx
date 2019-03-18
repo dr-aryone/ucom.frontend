@@ -9,6 +9,7 @@ import { updateUser } from '../../../actions/users';
 import IconEdit from '../../Icons/Edit';
 import Form from './Form';
 import styles from './styles.css';
+import { userIsOwner } from '../../../utils/user';
 
 export const PLACEHOLDER = 'What’s Ur Passion…';
 export const STATUS_MAX_LENGTH = 130;
@@ -30,37 +31,38 @@ const UserStatus = (props) => {
     return null;
   }
 
-  if (!user.moodMessage && +props.user.id !== +user.id) {
+  const moodMessage = user.moodMessage && user.moodMessage.trim();
+
+  if (!moodMessage && !userIsOwner(user, props.owner)) {
     return null;
   }
 
   return (
     <div className={styles.status}>
-      {props.user.id !== +user.id ? (
+      {!userIsOwner(user, props.owner) ? (
         <div className={styles.message}>
-          {user.moodMessage || 'What’s Ur @Passion…'}
+          {moodMessage || 'What’s Ur @Passion…'}
         </div>
-        ) : (
-          <div
-            role="presentation"
-            className={classNames({
-              [styles.message]: true,
-              [styles.messageEditable]: true,
-              [styles.messageEmpty]: !user.moodMessage,
-            })}
-            onClick={() => showForm()}
-          >
-            {user.moodMessage || PLACEHOLDER}
-
-            <span className={styles.editIcon}>
-              <IconEdit />
-            </span>
-          </div>
-        )}
+      ) : (
+        <div
+          role="presentation"
+          className={classNames({
+            [styles.message]: true,
+            [styles.messageEditable]: true,
+            [styles.messageEmpty]: !moodMessage,
+          })}
+          onClick={() => showForm()}
+        >
+          {moodMessage || PLACEHOLDER}
+          <span className={styles.editIcon}>
+            <IconEdit />
+          </span>
+        </div>
+      )}
 
       {formVisibility &&
         <Form
-          moodMessage={user.moodMessage}
+          moodMessage={moodMessage}
           onClickHide={() => hideForm()}
           onClickSave={moodMessage => props.updateUser({ moodMessage })}
         />
@@ -73,7 +75,7 @@ UserStatus.propTypes = {
   updateUser: PropTypes.func.isRequired,
   users: PropTypes.objectOf(PropTypes.any).isRequired,
   userId: PropTypes.number.isRequired,
-  user: PropTypes.shape({
+  owner: PropTypes.shape({
     id: PropTypes.number,
   }).isRequired,
 };
@@ -81,7 +83,7 @@ UserStatus.propTypes = {
 export default connect(
   state => ({
     users: state.users,
-    user: selectUser(state),
+    owner: selectUser(state),
   }),
   dispatch => bindActionCreators({
     updateUser,

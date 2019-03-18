@@ -12,7 +12,7 @@ const OrganizationCard = (props) => {
     <div className={styles.organizationCard}>
       <div className={styles.userPick}>
         <LinkTag title={props.title} to={props.url}>
-          <UserPick organization src={props.avatarSrc} />
+          <UserPick shadow organization src={props.avatarSrc} />
         </LinkTag>
       </div>
       <div className={styles.title}>

@@ -42,7 +42,7 @@ class FeedInput extends PureComponent {
     return (
       <div className="feed-input">
         <div className="feed-input__invite" role="presentation" onClick={this.showForm}>
-          <span className="inline">
+          <span className="inline inline_medium">
             <span className="inline__item">Hey</span>
             <span className="inline__item">
               <UserPick src={urls.getFileUrl(user.avatarFilename)} />

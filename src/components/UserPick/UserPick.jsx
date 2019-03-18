@@ -17,6 +17,7 @@ const UserPick = (props) => {
         [styles.owner]: props.isOwner,
         [styles.stretch]: props.stretch,
         [styles.organization]: props.organization,
+        [styles.shadow]: props.shadow,
       })}
       title={props.alt}
       to={props.url}
@@ -37,6 +38,7 @@ UserPick.propTypes = {
   isOwner: PropTypes.bool,
   stretch: PropTypes.bool,
   organization: PropTypes.bool,
+  shadow: PropTypes.bool,
 };
 
 UserPick.defaultProps = {
@@ -46,6 +48,7 @@ UserPick.defaultProps = {
   isOwner: false,
   stretch: false,
   organization: false,
+  shadow: false,
 };
 
 export default UserPick;

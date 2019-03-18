@@ -5,10 +5,7 @@
   height: 100px;
   border-radius: 50%;
   box-shadow: 0px 1px 4px rgba(60, 68, 75, 0.13);
-}
-
-:local(.avatar:hover .imageWrapper img) {
-  transform: scale(1.1);
+  overflow: hidden;
 }
 
 :local(.blank) {

@@ -65,16 +65,16 @@ const Followers = (props) => {
           {avatarUsers.length === 2 &&
             <Fragment>
               <div className={styles.avatarSmall}>
-                <UserPick stretch src={urls.getFileUrl(avatarUsers[1].avatarFilename)} />
+                <UserPick shadow stretch src={urls.getFileUrl(avatarUsers[1].avatarFilename)} />
               </div>
               <div className={styles.avatar}>
-                <UserPick stretch src={urls.getFileUrl(avatarUsers[0].avatarFilename)} />
+                <UserPick shadow stretch src={urls.getFileUrl(avatarUsers[0].avatarFilename)} />
               </div>
             </Fragment>
           }
           {avatarUsers.length === 1 &&
             <div className={styles.avatar}>
-              <UserPick stretch src={urls.getFileUrl(avatarUsers[0].avatarFilename)} />
+              <UserPick shadow stretch src={urls.getFileUrl(avatarUsers[0].avatarFilename)} />
             </div>
           }
           {avatarUsers.length === 0 &&
