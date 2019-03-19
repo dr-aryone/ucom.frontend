@@ -73,6 +73,28 @@
   min-height: 48px;
 }
 
+:local(.menu) {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+}
+
+:local(.menuTrigger) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  fill: #C4C4C4;
+  transition: fill 0.2s ease;
+}
+
+:global(.active) > :local(.menuTrigger),
+:local(.menuTrigger:hover) {
+  fill: #000;
+}
+
 @media (max-width: 767px) {
   :local(.userHead) {
     padding: 20px;

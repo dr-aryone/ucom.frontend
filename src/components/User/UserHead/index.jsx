@@ -1,6 +1,7 @@
+import { Tooltip } from 'react-tippy';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './styles.css';
 import { getUserById } from '../../../store/users';
 import Avatar from './Avatar';
@@ -12,9 +13,13 @@ import { formatRate } from '../../../utils/rate';
 import UserFollowButton from '../UserFollowButton';
 import Followers from '../../Followers/Followers';
 import ButtonEdit from '../../ButtonEdit';
+import IconDots from '../../Icons/Dots';
+import tooltipMenuStyles from '../../TooltipMenu/styles.css';
+import { copyToClipboard } from '../../../utils/text';
 
 const UserHead = (props) => {
   const user = getUserById(props.users, props.userId);
+  const [tooltipVisibility, setTooltipVisibility] = useState(false);
 
   if (!user) {
     return null;
@@ -27,6 +32,41 @@ const UserHead = (props) => {
           <ButtonEdit strech url={urls.getUserEditProfileUrl()} />
         </div>
       }
+
+      <div className={styles.menu}>
+        <Tooltip
+          arrow
+          useContext
+          interactive
+          theme="dropdown"
+          position="bottom-center"
+          trigger="click"
+          open={tooltipVisibility}
+          onRequestClose={() => setTooltipVisibility(false)}
+          html={(
+            <div className={tooltipMenuStyles.tooltipMenu}>
+              <div
+                role="presentation"
+                className={tooltipMenuStyles.item}
+                onClick={() => {
+                  setTooltipVisibility(false);
+                  copyToClipboard(window.location.href);
+                }}
+              >
+                Copy Link
+              </div>
+            </div>
+          )}
+        >
+          <div
+            role="presentation"
+            className={styles.menuTrigger}
+            onClick={() => setTooltipVisibility(!tooltipVisibility)}
+          >
+            <IconDots />
+          </div>
+        </Tooltip>
+      </div>
 
       <div className={styles.main}>
         <div className={styles.avatar}>
