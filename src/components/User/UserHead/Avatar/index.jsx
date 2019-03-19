@@ -24,7 +24,7 @@ const Avatar = (props) => {
       {props.changeEnabled &&
         <Dropzone
           multiple={false}
-          accept="image/jpeg, image/png"
+          accept="image/jpeg, image/png, image/gif"
           className={classNames({
             [styles.upload]: true,
             [styles.uploadActive]: dropActive,

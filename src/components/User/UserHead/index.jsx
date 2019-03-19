@@ -6,8 +6,6 @@ import { getUserById } from '../../../store/users';
 import Avatar from './Avatar';
 import urls from '../../../utils/urls';
 import { updateUser, addUsers } from '../../../actions/users';
-import { compressAvatar } from '../../../utils/upload';
-import { addErrorNotification } from '../../../actions/notifications';
 import { getUserName, userIsOwner } from '../../../utils/user';
 import UserStatus from '../UserStatus';
 import { formatRate } from '../../../utils/rate';
@@ -41,13 +39,9 @@ const UserHead = (props) => {
                 avatarFilename: file.preview,
               }]));
 
-              try {
-                props.dispatch(updateUser({
-                  avatarFilename: await compressAvatar(file),
-                }));
-              } catch (e) {
-                props.dispatch(addErrorNotification(e.message));
-              }
+              props.dispatch(updateUser({
+                avatarFilename: file,
+              }));
             }}
           />
         </div>
