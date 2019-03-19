@@ -5,16 +5,17 @@
   left: 0;
   width: 100%;
   background: #fff;
-  transition: box-shadow .2s ease-in-out;
+  transition: box-shadow 0.2s ease-in-out, background 0.2s ease-in-out;
   box-shadow: 0px 1px 4px rgba(60, 68, 75, 0);
 }
 
 .header_shadow {
   box-shadow: 0px 1px 4px rgba(60, 68, 75, 0.13);
+  transition: box-shadow 0.2s ease-in-out 0.1s, background 0.2s ease-in-out 0.1s;
 }
 
 .header_gray {
-  background: #F9F9F9;
+  background: transparent;
 
   &.header_shadow {
     background: #fff;

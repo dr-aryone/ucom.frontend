@@ -15,6 +15,11 @@
   font-size: 16px;
   font-weight: bold;
   color: #585858;
+  transition: color 0.2s ease;
+}
+
+:local(.followers:hover .count) {
+  color: #000;
 }
 
 :local(.title) {
@@ -22,6 +27,11 @@
   text-transform: uppercase;
   font-size: 10px;
   color: #666;
+  transition: color 0.2s ease;
+}
+
+:local(.followers:hover .title) {
+  color: #000;
 }
 
 :local(.avatars) {
