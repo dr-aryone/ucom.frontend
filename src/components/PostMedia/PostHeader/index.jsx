@@ -2,26 +2,40 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.css';
 import Avatar from '../../Avatar';
-
+import { getFileUrl } from '../../../utils/upload';
+import { getOrganizationUrl } from '../../../utils/organization';
+import OrganizationFollowButton from '../../Organization/OrganizationFollowButton';
+import { formatRate } from '../../../utils/rate';
 
 const PostHeader = (props) => {
-  const LinkTag = props.userUrl ? Link : 'div';
+  // const LinkTag = props.userUrl ? Link : 'div';
+
+  if (!props.org) {
+    return null;
+  }
+
+  console.log(props.org);
 
   return (
     <div className={styles.header}>
-      <div className="post-head__inner">
-        <div className="post-head__user">
-          <LinkTag to={props.userUrl}>
-            <Avatar
-              square
-              src={props.userImageUrl}
-              size="xmsmall"
-            />
-          </LinkTag>
-          <LinkTag to={props.userUrl}><div className={styles.name}>{props.userName}</div></LinkTag>
-        </div>
-        <div className="post-head__follow">
-          {/* <UserFollowButton userId={props.postAuthor.id} /> */}
+      <div className={styles.row}>
+        <Link to={getOrganizationUrl(props.org.id)} className={styles.userPic}>
+          <Avatar
+            className={styles.pic}
+            square
+            src={getFileUrl(props.org.avatarFilename)}
+            size="xmsmall"
+          />
+          <div className={styles.info}>
+            <div className={styles.name}>{props.org.title}</div>
+            <div className={styles.rate}>{formatRate(props.org.currentRate)}°</div>
+          </div>
+        </Link>
+        <div className={styles.follow}>
+          <OrganizationFollowButton
+            organizationId={props.org.id}
+            // className={styles.follow}
+          />
         </div>
       </div>
     </div>

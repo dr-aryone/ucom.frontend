@@ -7,6 +7,7 @@ import styles from './styles.css';
 import Avatar from '../../Avatar';
 // import Eye from '../../Icons/Eye';
 import { sanitizePostTitle } from '../../../utils/text';
+import Countdown from '../../Countdown';
 
 const PostCard = (props) => {
   const PostLink = props.url ? Link : 'span';
@@ -17,8 +18,6 @@ const PostCard = (props) => {
       className={classNames(
         `${styles.postCard}`,
         { [styles.postCardWithCover]: props.coverUrl && props.coverUrl.length > 0 },
-        { [styles.postCardSmall]: props.onFeed || null },
-        { [styles.postCardSmallRepost]: props.repost || null },
       )}
     >
       {(props.coverUrl && props.coverUrl.length > 0) ? (
@@ -37,7 +36,7 @@ const PostCard = (props) => {
 
       {props.title && (
         <h1 className={styles.title}>
-          <PostLink to={props.url} dangerouslySetInnerHTML={{ __html: sanitizePostTitle(props.title) }} />
+          <div dangerouslySetInnerHTML={{ __html: sanitizePostTitle(props.title) }} />
         </h1>
       )}
 
@@ -56,6 +55,12 @@ const PostCard = (props) => {
                 <LinkTag to={props.userUrl}><div className={styles.name}>{props.userName}</div></LinkTag>
               </div>
             )}
+            <div className={styles.infoblockBottom}>
+              <div className={styles.timer}>
+                <Countdown date="2019-05-15T11:43:34Z" />
+              </div>
+              <div className={styles.btn}>Get your Score</div>
+            </div>
           </div>
 
           {/* <div className={styles.infoblockSide}>
