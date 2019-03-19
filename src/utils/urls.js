@@ -79,6 +79,14 @@ const urls = {
     return `/communities/${id}`;
   },
 
+  getOrganizationEditUrl(id) {
+    if (!id) {
+      return null;
+    }
+
+    return `/communities/${id}/edit`;
+  },
+
   getOverviewCategoryUrl(params = {}) {
     const filter = params.filter || overviewUtils.OVERVIEW_CATEGORIES[0].name;
     const route = params.route || overviewUtils.OVERVIEW_ROUTES[0].name;
@@ -110,6 +118,22 @@ const urls = {
 
   getPagingLink(params) {
     return `/users?page=${params.page}&sortBy=${params.sortBy}&perPage=${params.perPage}&userName=${params.userName}`;
+  },
+
+  getSourceUrl(source) {
+    if (!source) {
+      return null;
+    }
+
+    if (source.sourceUrl) {
+      return source.sourceUrl;
+    }
+
+    if (source.entityName.trim() === 'users') {
+      return urls.getUserUrl(source.entityId);
+    }
+
+    return urls.getOrganizationUrl(source.entityId);
   },
 };
 

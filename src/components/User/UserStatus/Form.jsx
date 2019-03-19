@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import { KEY_ESCAPE, KEY_RETURN } from 'keycode-js';
 import React, { useState, useEffect } from 'react';
 import Button from '../../Button';
 import styles from './styles.css';
 import TextareaAutosize from '../../TextareaAutosize';
 import { PLACEHOLDER, STATUS_MAX_LENGTH } from './index';
+import { isSubmitKey, isEscKey } from '../../../utils/keyboard';
 
 const UserStatusForm = (props) => {
   let element;
@@ -44,11 +44,11 @@ const UserStatusForm = (props) => {
         value={moodMessage}
         onChange={e => setMoodMessage(e.target.value)}
         onKeyDown={(e) => {
-          if (e.keyCode === KEY_ESCAPE) {
+          if (isEscKey(e)) {
             props.onClickHide();
           }
 
-          if ((e.ctrlKey || e.metaKey) && e.keyCode === KEY_RETURN) {
+          if (isSubmitKey(e)) {
             save();
           }
         }}

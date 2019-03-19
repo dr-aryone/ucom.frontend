@@ -6,6 +6,15 @@
   background: #fff;
 }
 
+:local(.menu [data-tooltipped] .menuTrigger) {
+  opacity: 0;
+}
+
+:local(.userHead:hover .menu [data-tooltipped] .menuTrigger),
+:local(.menu) :global([data-tooltipped].active) :local(.menuTrigger) {
+  opacity: 1;
+}
+
 :local(.main) {
   display: grid;
   grid-template-columns: 100px 3fr 1fr;
@@ -87,7 +96,7 @@
   height: 24px;
   cursor: pointer;
   fill: #C4C4C4;
-  transition: fill 0.2s ease;
+  transition: fill 0.2s ease, opacity 0.2s ease;
 }
 
 :global(.active) > :local(.menuTrigger),
@@ -139,6 +148,10 @@
     width: 24px;
     height: 24px;
     opacity: 1;
+  }
+
+  :local(.menu) {
+    display: none;
   }
 }
 

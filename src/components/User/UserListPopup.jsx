@@ -9,6 +9,7 @@ import { getUsersByIds } from '../../store/users';
 import { getUserName } from '../../utils/user';
 import urls from '../../utils/urls';
 
+// TODO: Remove
 const UserListPopup = (props) => {
   if (!props.usersIds) {
     return null;

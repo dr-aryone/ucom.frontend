@@ -4,13 +4,12 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import React, { useState, useEffect, Fragment } from 'react';
 import UserPick from '../UserPick/UserPick';
-import Popup from '../Popup';
-import ModalContent from '../ModalContent';
-import UserListPopup from '../User/UserListPopup';
 import { getUsersByIds } from '../../store/users';
 import { selectUser } from '../../store/selectors/user';
 import urls from '../../utils/urls';
 import styles from './styles.css';
+import EntryListPopup from '../EntryListPopup';
+import { getUserName } from '../../utils/user';
 
 const Followers = (props) => {
   const [popupVisible, setPopupVisible] = useState(false);
@@ -35,13 +34,21 @@ const Followers = (props) => {
 
   return (
     <Fragment>
-      {popupVisible && (
-        <Popup onClickClose={() => setPopupVisible(false)}>
-          <ModalContent onClickClose={() => setPopupVisible(false)}>
-            <UserListPopup title={props.title} usersIds={props.usersIds} />
-          </ModalContent>
-        </Popup>
-      )}
+      {popupVisible &&
+        <EntryListPopup
+          title={props.title}
+          data={users.map(item => ({
+            id: item.id,
+            avatarSrc: urls.getFileUrl(item.avatarFilename),
+            url: urls.getUserUrl(item.id),
+            title: getUserName(item),
+            nickname: item.accountName,
+            currentRate: item.currentRate,
+            follow: PropTypes.bool,
+          }))}
+          onClickClose={() => setPopupVisible(false)}
+        />
+      }
 
       <div
         role="presentation"

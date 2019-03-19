@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { useState, Fragment } from 'react';
 import { getOrganizationById } from '../../store/organizations';
-import OrganizationCard from './OrganizationCard';
+import EntryCard from '../EntryCard';
 import OrganizationListPopup from './OrganizationListPopup';
 import OrganizationListPopupMore from './OrganizationListPopupMore';
 import urls from '../../utils/urls';
 import styles from '../List/styles.css';
 
+// TODO: Remove
 const OrganizationList = (props) => {
   const [popupVisibility, setPopupVisibility] = useState(false);
 
@@ -29,8 +30,9 @@ const OrganizationList = (props) => {
           className={styles.item}
           to={urls.getOrganizationUrl(item.id)}
         >
-          <OrganizationCard
+          <EntryCard
             disabledLink
+            organization
             title={item.title}
             nickname={item.nickname}
             currentRate={item.currentRate}

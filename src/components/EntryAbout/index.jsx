@@ -1,15 +1,12 @@
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import React, { useState } from 'react';
-import { getUserById } from '../../store/users';
 import MinimizedText from '../MinimizedText';
 import styles from '../Section/styles.css';
 
 const UserAbout = (props) => {
   const [minimized, setMinimized] = useState(true);
-  const user = getUserById(props.users, props.userId);
 
-  if (!user || !user.about) {
+  if (!props.text) {
     return null;
   }
 
@@ -21,8 +18,8 @@ const UserAbout = (props) => {
         <MinimizedText
           gray
           disabledHide
-          text={user.about}
-          enabled={user.about.length > 280}
+          text={props.text}
+          enabled={props.text.length > 280}
           minimized={minimized}
           onClickShowMore={() => setMinimized(!minimized)}
         />
@@ -32,10 +29,11 @@ const UserAbout = (props) => {
 };
 
 UserAbout.propTypes = {
-  users: PropTypes.objectOf(PropTypes.any).isRequired,
-  userId: PropTypes.number.isRequired,
+  text: PropTypes.string,
 };
 
-export default connect(state => ({
-  users: state.users,
-}))(UserAbout);
+UserAbout.defaultProps = {
+  text: null,
+};
+
+export default UserAbout;

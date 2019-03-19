@@ -115,8 +115,15 @@ export const getUserById = (users, userIdOrName) => {
   return users.data[userIdOrName];
 };
 
-export const getUsersByIds = (users, ids = []) => ids
-  .map(id => getUserById(users, id))
-  .filter(user => Boolean(user));
+export const getUsersByIds = (users, ids = [], limit) => {
+  let result = ids.map(id => getUserById(users, id))
+    .filter(user => Boolean(user));
+
+  if (limit) {
+    result = result.slice(0, limit);
+  }
+
+  return result;
+};
 
 export default users;

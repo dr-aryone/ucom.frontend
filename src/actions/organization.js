@@ -50,19 +50,20 @@ export const fetchOrganization = payload => (dispatch) => {
     .then(() => loader.done());
 };
 
-export const setApiDiscussions = ({ organizationId, payload }) => async (dispatch) => {
+export const setDiscussions = ({
+  organizationId,
+  discussions,
+}) => async () => {
   loader.start();
   try {
-    if (payload.discussions.length) {
-      await api.setDiscussions(organizationId, snakes(payload));
+    if (discussions.length) {
+      await api.setDiscussions(organizationId, snakes({ discussions }));
     } else {
       await api.deleteAllDiscussions(organizationId);
     }
   } catch (e) {
-    const errors = parseErrors(e);
-    dispatch(setOrganizationErrors(errors));
-    dispatch(addValidationErrorNotification());
-    loader.done();
+    console.error(e);
+    // TODO: Show error notification
   }
   loader.done();
 };

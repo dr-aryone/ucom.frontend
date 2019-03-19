@@ -13,3 +13,17 @@
   line-height: 24px;
   font-weight: bold;
 }
+
+:local(.titleWithIcon) {
+  composes: title;
+  display: flex;
+  justify-content: space-between;
+}
+
+:local(.section p) {
+  margin: 0 0 12px;
+}
+
+:local(.section p:last-child) {
+  margin-bottom: 0;
+}

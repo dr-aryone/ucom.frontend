@@ -4,22 +4,24 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import styles from './styles.css';
 import IconUpload from './IconUpload';
-import IconUser from './IconUser';
+import UserPick from '../../UserPick/UserPick';
 
 const Avatar = (props) => {
   const [dropActive, setDropActive] = useState(false);
 
   return (
-    <div className={styles.avatar}>
-      {props.src ? (
-        <div className={styles.imageWrapper}>
-          <img src={props.src} alt={props.alt} />
-        </div>
-      ) : (
-        <div className={styles.blank}>
-          <IconUser />
-        </div>
-      )}
+    <div
+      className={classNames({
+        [styles.avatar]: true,
+        [styles.organization]: props.organization,
+      })}
+    >
+      <UserPick
+        stretch
+        organization={props.organization}
+        src={props.src}
+        alt={props.alt}
+      />
 
       {props.changeEnabled &&
         <Dropzone
@@ -32,7 +34,7 @@ const Avatar = (props) => {
           onDragEnter={() => setDropActive(true)}
           onDragLeave={() => setDropActive(false)}
           onDrop={() => setDropActive(false)}
-          onDropAccepted={files => props.onChange(files[0])}
+          onDropAccepted={files => props.onChange && props.onChange(files[0])}
         >
           <span className={styles.uploadIcon}>
             <IconUpload />
@@ -48,13 +50,16 @@ Avatar.propTypes = {
   src: PropTypes.string,
   alt: PropTypes.string,
   changeEnabled: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+  organization: PropTypes.bool,
 };
 
 Avatar.defaultProps = {
   src: null,
   alt: null,
   changeEnabled: false,
+  organization: false,
+  onChange: null,
 };
 
 export default Avatar;

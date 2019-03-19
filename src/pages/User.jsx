@@ -3,10 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import UserHead from '../components/User/UserHead/index';
 import UserOrganizations from '../components/User/UserOrganizations';
-import UserAbout from '../components/User/UserAbout';
-import UserSocialNetworks from '../components/User/UserSocialNetworks';
-import UserNetworks from '../components/User/UserNetworks';
-import UserCreatedAt from '../components/User/UserCreatedAt';
 import LayoutBase from '../components/Layout/LayoutBase';
 import { selectUser } from '../store/selectors/user';
 import { fetchUser } from '../actions/users';
@@ -24,6 +20,10 @@ import loader from '../utils/loader';
 import NotFoundPage from './NotFoundPage';
 import UserEditInformation from '../components/User/UserEditInformation';
 import Footer from '../components/Footer';
+import EntrySocialNetworks from '../components/EntrySocialNetworks';
+import EntryCreatedAt from '../components/EntryCreatedAt';
+import EntryContacts from '../components/EntryContacts';
+import EntryAbout from '../components/EntryAbout';
 
 const UserPage = (props) => {
   const userIdOrName = props.match.params.userId;
@@ -73,13 +73,13 @@ const UserPage = (props) => {
         </div>
         <div className="layout__sidebar">
           <UserOrganizations userId={userId} />
-          <UserNetworks userId={userId} />
-          <UserSocialNetworks userId={userId} />
-          <UserCreatedAt userId={userId} />
+          <EntryContacts site={user.personalWebsiteUrl} />
+          <EntrySocialNetworks urls={(user.usersSources || []).map(i => i.sourceUrl)} />
+          <EntryCreatedAt date={user.createdAt} />
           <UserEditInformation userId={userId} />
         </div>
         <div className="layout__main">
-          <UserAbout userId={userId} />
+          <EntryAbout text={user.about} />
           <Feed userId={userId} feedTypeId={USER_WALL_FEED_ID} />
         </div>
         <div className="layout__footer">

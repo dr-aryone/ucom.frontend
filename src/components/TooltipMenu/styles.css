@@ -1,9 +1,17 @@
 :local(.item) {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
   padding: 11px 20px 11px 16px;
+  margin: 0;
+  border: none;
   font-size: 14px;
+  text-align: left;
   color: #000;
   cursor: pointer;
+  background: none;
   transition: background 0.2s ease, color 0.2s ease;
+  outline: none;
 }
 
 :local(.item:first-child) {
@@ -17,6 +25,7 @@
 }
 
 :local(.item:hover) {
+  text-decoration: none;
   background: #F8F8F9;
   color: #D8352F;
 }

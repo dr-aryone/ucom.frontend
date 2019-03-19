@@ -1,0 +1,34 @@
+:local(.container) {
+  padding: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+:local(.item) {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  grid-column-gap: 40px;
+  grid-row-gap: 20px;
+  margin: 0 0 40px;
+}
+
+:local(.item:last-child) {
+  margin-bottom: 0;
+}
+
+:local(.title) {
+  margin: 0 0 40px;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+:local(.action) {
+  width: 160px;
+}
+
+@media (max-width: 768px) {
+  :local(.item) {
+    grid-template-columns: 1fr;
+  }
+}

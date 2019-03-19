@@ -5,6 +5,7 @@ import UserPick from '../../UserPick/UserPick';
 import { formatRate } from '../../../utils/rate';
 import styles from './styles.css';
 
+// TODO: Remove and replace to Entry Card
 const OrganizationCard = (props) => {
   const LinkTag = props.disabledLink ? 'span' : Link;
 

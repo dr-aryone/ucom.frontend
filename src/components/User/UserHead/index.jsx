@@ -1,10 +1,9 @@
-import { Tooltip } from 'react-tippy';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import styles from './styles.css';
+import React from 'react';
+import styles from '../../EntryHeader/styles.css';
 import { getUserById } from '../../../store/users';
-import Avatar from './Avatar';
+import Avatar from '../../EntryHeader/Avatar';
 import urls from '../../../utils/urls';
 import { updateUser, addUsers } from '../../../actions/users';
 import { getUserName, userIsOwner } from '../../../utils/user';
@@ -13,13 +12,10 @@ import { formatRate } from '../../../utils/rate';
 import UserFollowButton from '../UserFollowButton';
 import Followers from '../../Followers/Followers';
 import ButtonEdit from '../../ButtonEdit';
-import IconDots from '../../Icons/Dots';
-import tooltipMenuStyles from '../../TooltipMenu/styles.css';
-import { copyToClipboard } from '../../../utils/text';
+import Menu from '../../EntryHeader/Menu';
 
 const UserHead = (props) => {
   const user = getUserById(props.users, props.userId);
-  const [tooltipVisibility, setTooltipVisibility] = useState(false);
 
   if (!user) {
     return null;
@@ -33,40 +29,7 @@ const UserHead = (props) => {
         </div>
       }
 
-      <div className={styles.menu}>
-        <Tooltip
-          arrow
-          useContext
-          interactive
-          theme="dropdown"
-          position="bottom-center"
-          trigger="click"
-          open={tooltipVisibility}
-          onRequestClose={() => setTooltipVisibility(false)}
-          html={(
-            <div className={tooltipMenuStyles.tooltipMenu}>
-              <div
-                role="presentation"
-                className={tooltipMenuStyles.item}
-                onClick={() => {
-                  setTooltipVisibility(false);
-                  copyToClipboard(window.location.href);
-                }}
-              >
-                Copy Link
-              </div>
-            </div>
-          )}
-        >
-          <div
-            role="presentation"
-            className={styles.menuTrigger}
-            onClick={() => setTooltipVisibility(!tooltipVisibility)}
-          >
-            <IconDots />
-          </div>
-        </Tooltip>
-      </div>
+      <Menu />
 
       <div className={styles.main}>
         <div className={styles.avatar}>
@@ -105,17 +68,12 @@ const UserHead = (props) => {
         }
 
         <div className={styles.usersLists}>
-          {user.followedBy &&
-            <div>
-              <Followers title="Followers" usersIds={user.followedBy} />
-            </div>
-          }
-
-          {user.followedBy &&
-            <div>
-              <Followers title="Following" usersIds={user.iFollow} />
-            </div>
-          }
+          <div>
+            <Followers title="Followers" usersIds={user.followedBy} />
+          </div>
+          <div>
+            <Followers title="Following" usersIds={user.iFollow} />
+          </div>
         </div>
       </div>
     </div>
