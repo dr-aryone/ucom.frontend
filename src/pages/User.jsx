@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import UserHead from '../components/User/UserHead/index';
-import UserOrganizations from '../components/User/UserOrganizations';
 import LayoutBase from '../components/Layout/LayoutBase';
 import { selectUser } from '../store/selectors/user';
 import { fetchUser } from '../actions/users';
@@ -24,6 +23,7 @@ import EntrySocialNetworks from '../components/EntrySocialNetworks';
 import EntryCreatedAt from '../components/EntryCreatedAt';
 import EntryContacts from '../components/EntryContacts';
 import EntryAbout from '../components/EntryAbout';
+import EntryListSection from '../components/EntryListSection';
 
 const UserPage = (props) => {
   const userIdOrName = props.match.params.userId;
@@ -72,7 +72,22 @@ const UserPage = (props) => {
           <UserHead userId={userId} />
         </div>
         <div className="layout__sidebar">
-          <UserOrganizations userId={userId} />
+          {user.organizations &&
+            <EntryListSection
+              title="Communities"
+              count={user.organizations.length}
+              data={user.organizations.map(item => ({
+                id: item.id,
+                organization: true,
+                title: item.title,
+                avatarSrc: urls.getFileUrl(item.avatarFilename),
+                url: urls.getOrganizationUrl(item.id),
+                nickname: item.nickname,
+                currentRate: item.currentRate,
+              }))}
+            />
+          }
+
           <EntryContacts site={user.personalWebsiteUrl} />
           <EntrySocialNetworks urls={(user.usersSources || []).map(i => i.sourceUrl)} />
           <EntryCreatedAt date={user.createdAt} />

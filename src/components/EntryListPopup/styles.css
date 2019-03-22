@@ -25,6 +25,7 @@
 
 :local(.action) {
   width: 160px;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {

@@ -1,6 +1,6 @@
 :local(.entryCard) {
   display: grid;
-  grid-template-columns: 36px 1fr min-content;
+  grid-template-columns: 36px 1fr max-content;
   grid-column-gap: 10px;
   grid-row-gap: 2px;
   width: 100%;

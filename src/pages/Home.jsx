@@ -6,12 +6,13 @@ import Promo from '../components/Promo';
 import LayoutBase from '../components/Layout/LayoutBase';
 import { selectUser } from '../store/selectors';
 import { fetchUser } from '../actions/users';
-import UserPeoples from '../components/User/UserPeoples';
-import UserOrganizations from '../components/User/UserOrganizations';
-import { getUserById } from '../store/users';
+import EntryListSection from '../components/EntryListSection';
+import { getUserById, getUsersByIds } from '../store/users';
 import Feed from '../components/Feed/FeedUser';
 import { USER_NEWS_FEED_ID } from '../utils/feed';
 import { getMainPostGroupData } from '../actions/mainPostGroup';
+import urls from '../utils/urls';
+import { getUserName } from '../utils/user';
 
 const HomePage = (props) => {
   useEffect(() => {
@@ -42,8 +43,37 @@ const HomePage = (props) => {
 
               <div className="grid__item grid__item_side">
                 <div className="sidebar sidebar_main">
-                  <UserPeoples userId={user.id} />
-                  <UserOrganizations userId={user.id} />
+                  {user.iFollow &&
+                    <EntryListSection
+                      title="People"
+                      count={user.iFollow.length}
+                      data={getUsersByIds(props.users, user.iFollow).map(item => ({
+                        id: item.id,
+                        title: getUserName(item),
+                        avatarSrc: urls.getFileUrl(item.avatarFilename),
+                        url: urls.getUserUrl(item.id),
+                        nickname: item.accountName,
+                        currentRate: item.currentRate,
+                        follow: true,
+                      }))}
+                    />
+                  }
+
+                  {user.organizations &&
+                    <EntryListSection
+                      title="Communities"
+                      count={user.organizations.length}
+                      data={user.organizations.map(item => ({
+                        id: item.id,
+                        organization: true,
+                        title: item.title,
+                        avatarSrc: urls.getFileUrl(item.avatarFilename),
+                        url: urls.getOrganizationUrl(item.id),
+                        nickname: item.nickname,
+                        currentRate: item.currentRate,
+                      }))}
+                    />
+                  }
                 </div>
               </div>
             </div>

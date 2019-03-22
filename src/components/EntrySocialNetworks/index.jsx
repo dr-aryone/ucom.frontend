@@ -4,7 +4,7 @@ import Links from '../Links';
 import styles from '../Section/styles.css';
 
 const EntrySocialNetworks = (props) => {
-  if (!props.urls) {
+  if (!props.urls.length) {
     return null;
   }
 
