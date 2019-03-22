@@ -11,6 +11,7 @@ import styles from './styles.css';
 import EntryListPopup from '../EntryListPopup';
 import { getUserName } from '../../utils/user';
 
+// TODO: Rename folder Followers to abstract name
 const Followers = (props) => {
   const [popupVisible, setPopupVisible] = useState(false);
   const hasUsers = () => props.usersIds.length > 0;
@@ -24,10 +25,6 @@ const Followers = (props) => {
   useEffect(() => {
     setPopupVisible(false);
   }, [props.location]);
-
-  if (!props.usersIds) {
-    return null;
-  }
 
   const users = getUsersByIds(props.users, props.usersIds);
   const avatarUsers = users.slice(0, 2);

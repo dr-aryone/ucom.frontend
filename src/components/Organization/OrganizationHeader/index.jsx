@@ -21,7 +21,7 @@ const OrganizationHeader = (props) => {
   }
 
   return (
-    <div className={styles.userHead}>
+    <div className={styles.entryHead}>
       {userIsAdmin(props.user, organization) &&
         <div className={styles.edit}>
           <ButtonEdit strech url={urls.getOrganizationEditUrl(organization.id)} />

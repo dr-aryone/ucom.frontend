@@ -89,7 +89,7 @@ const EntryList = (props) => {
   );
 };
 
-const EntryItemShape = {
+export const entryItemProps = {
   id: PropTypes.number.isRequired,
   organization: PropTypes.bool,
   avatarSrc: PropTypes.string,
@@ -103,7 +103,7 @@ const EntryItemShape = {
   follow: PropTypes.bool,
 };
 
-EntryItem.propTypes = EntryItemShape;
+EntryItem.propTypes = entryItemProps;
 EntryItem.defaultProps = {
   organization: false,
   avatarSrc: null,
@@ -117,7 +117,7 @@ EntryItem.defaultProps = {
 };
 
 EntryList.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape(EntryItemShape)),
+  data: PropTypes.arrayOf(PropTypes.shape(entryItemProps)),
   limit: PropTypes.number,
   title: PropTypes.string.isRequired,
 
