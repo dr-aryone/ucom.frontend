@@ -21,7 +21,8 @@ import PostSubmitForm from '../components/Post/PostSubmitForm';
 import { addServerErrorNotification } from '../actions/notifications';
 
 const EditPost = (props) => {
-  const postId = props.match.params.id;
+  // const postId = props.match.params.id;
+  const { organizationId, postId } = props.match.params;
   const [loading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [submitPopupVisible, setSubmitPopupVisible] = useState(false);
@@ -81,10 +82,12 @@ const EditPost = (props) => {
       props.setPostData(JSON.parse(value));
     }
 
+    props.setPostData({ organization_id: organizationId });
+
     return () => {
       props.resetPost();
     };
-  }, [postId]);
+  }, [postId, organizationId]);
 
   if (props.post.data.id && props.post.saved) {
     localStorage.removeItem(POSTS_DRAFT_LOCALSTORAGE_KEY);

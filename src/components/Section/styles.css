@@ -14,10 +14,13 @@
   font-weight: bold;
 }
 
-:local(.titleWithIcon) {
-  composes: title;
+:local(.title.withIcon) {
   display: flex;
   justify-content: space-between;
+}
+
+:local(.title.forText) {
+  margin-bottom: 8px;
 }
 
 :local(.section p) {

@@ -17,7 +17,6 @@ import { USER_WALL_FEED_ID, FEED_PER_PAGE } from '../utils/feed';
 import { feedGetUserPosts } from '../actions/feed';
 import loader from '../utils/loader';
 import NotFoundPage from './NotFoundPage';
-import UserEditInformation from '../components/User/UserEditInformation';
 import Footer from '../components/Footer';
 import EntrySocialNetworks from '../components/EntrySocialNetworks';
 import EntryCreatedAt from '../components/EntryCreatedAt';
@@ -89,9 +88,10 @@ const UserPage = (props) => {
           }
 
           <EntryContacts site={user.personalWebsiteUrl} />
-          <EntrySocialNetworks urls={(user.usersSources || []).map(i => i.sourceUrl)} />
+          <EntrySocialNetworks
+            urls={(user.usersSources || []).map(i => i.sourceUrl).filter(i => !!i)}
+          />
           <EntryCreatedAt date={user.createdAt} />
-          <UserEditInformation userId={userId} />
         </div>
         <div className="layout__main">
           <EntryAbout text={user.about} />

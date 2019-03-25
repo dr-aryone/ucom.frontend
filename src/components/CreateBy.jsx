@@ -13,7 +13,7 @@ const CreateBy = (props) => {
   }
 
   const organization = (props.user.organizations || [])
-    .find(i => i.id === props.post.data.organization_id);
+    .find(i => +i.id === +props.post.data.organization_id);
 
   return (
     <div className="inline inline_small">

@@ -7,6 +7,10 @@ const urls = {
     return '/posts/new';
   },
 
+  getNewOrganizationPostUrl(organizationId) {
+    return `/communities/${organizationId}/posts/new`;
+  },
+
   getTagUrl(tag) {
     return `/tags/${tag}`;
   },

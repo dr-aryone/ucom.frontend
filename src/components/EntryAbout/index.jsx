@@ -12,7 +12,7 @@ const UserAbout = (props) => {
 
   return (
     <div className={styles.section}>
-      <div className={styles.title}>About</div>
+      <div className={`${styles.title} ${styles.forText}`}>About</div>
 
       <div className={styles.content}>
         <MinimizedText

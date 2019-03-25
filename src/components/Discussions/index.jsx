@@ -23,7 +23,7 @@ const Discussions = (props) => {
   return (
 
     <div className={`${sectionStyles.section} ${styles.discussions}`}>
-      <div className={sectionStyles.titleWithIcon}>
+      <div className={`${sectionStyles.title} ${sectionStyles.withIcon} ${sectionStyles.forText}`}>
         Discussion Board
 
         {props.editable &&
@@ -37,7 +37,7 @@ const Discussions = (props) => {
                 disabled={props.items.length >= DISCUSSIONS_LIMIT}
                 items={[{
                   title: 'New Discussion',
-                  url: urls.getNewPostUrl(),
+                  url: props.newDiscussionUrl,
                 }, {
                   title: 'Add Discussion',
                   onClick: () => setFormVisible(true),
@@ -109,6 +109,7 @@ Discussions.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onSortEnd: PropTypes.func.isRequired,
   validatePostUrlFn: PropTypes.func.isRequired,
+  newDiscussionUrl: PropTypes.string.isRequired,
 };
 
 Discussions.defaultProps = {
