@@ -1,6 +1,5 @@
 :local(.wrapper) {
   position: relative;
-  z-index: 0;
   margin: 49px 0 0;
 }
 
@@ -12,6 +11,7 @@
   display: grid;
   align-items: center;
   grid-template-columns: 1fr max-content;
+  grid-column-gap: 20px;
   margin: 0 10px;
   padding: 12px 40px;
   border-radius: 12px 12px 0 0;
@@ -44,7 +44,7 @@
 
 :local(.userCard) {
   display: grid;
-  grid-template-columns: max-content max-content;
+  grid-template-columns: max-content 1fr;
   grid-column-gap: 9px;
   align-items: center;
 }
@@ -59,6 +59,7 @@
   position: relative;
   top: 8px;
   transition: top 0.2s ease;
+  overflow: hidden;
 }
 
 :local(.name) {
@@ -68,6 +69,9 @@
   font-size: 12px;
   font-weight: bold;
   transition: font-size 0.2s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 :local(.rate) {
@@ -101,4 +105,10 @@
 
 :local(.followLink button:hover path) {
   stroke: #D8352F;
+}
+
+@media (max-width: 767px) {
+  :local(.subHeader) {
+    padding: 10px;
+  }
 }

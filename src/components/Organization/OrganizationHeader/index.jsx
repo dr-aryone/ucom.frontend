@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -15,8 +14,7 @@ import Avatar from '../../EntryHeader/Avatar';
 import { formatRate } from '../../../utils/rate';
 import Menu from '../../EntryHeader/Menu';
 import { getUserName } from '../../../utils/user';
-import UserFollowButton from '../../User/UserFollowButton';
-import UserPick from '../../UserPick/UserPick';
+import EntrySubHeader from '../../EntrySubHeader';
 
 const OrganizationHeader = (props) => {
   const organization = getOrganizationById(props.organizations, props.organizationId);
@@ -28,35 +26,14 @@ const OrganizationHeader = (props) => {
   return (
     <div className={subHeaderStyles.wrapper}>
       {organization.user &&
-        <div className={subHeaderStyles.subHeader}>
-          <div className={subHeaderStyles.userCard}>
-            <div className={subHeaderStyles.userPick}>
-              <UserPick
-                shadow
-                stretch
-                url={urls.getUserUrl(organization.user.id)}
-                alt={getUserName(organization.user)}
-                src={urls.getFileUrl(organization.user.avatarFilename)}
-              />
-            </div>
-            <div className={subHeaderStyles.info}>
-              <div className={subHeaderStyles.name}>
-                <Link className="red" to={urls.getUserUrl(organization.user.id)}>
-                  {getUserName(organization.user)}
-                </Link>
-              </div>
-              <div className={subHeaderStyles.rate}>
-                {formatRate(organization.user.currentRate)}°
-              </div>
-            </div>
-          </div>
-
-          {!userIsAdmin(props.user, organization) &&
-            <div className={subHeaderStyles.followLink}>
-              <UserFollowButton asLink userId={organization.user.id} />
-            </div>
-          }
-        </div>
+        <EntrySubHeader
+          userUrl={urls.getUserUrl(organization.user.id)}
+          userName={getUserName(organization.user)}
+          userAvatarUrl={urls.getFileUrl(organization.user.avatarFilename)}
+          userId={+organization.user.id}
+          userRate={+organization.user.currentRate}
+          showFollow={!userIsAdmin(props.user, organization)}
+        />
       }
 
       <div className={`${styles.entryHead} ${styles.organization}`}>
