@@ -1,0 +1,145 @@
+.airdrop {
+  margin-bottom: 40px;
+}
+
+.rateVote {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.rate {
+  font-size: 24px;
+}
+
+.status {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: normal;
+  color: #000000;
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.status span {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: normal;
+}
+
+.statusIcon {
+  margin-left: 15px;
+  margin-right: 8px;
+}
+
+.tokens {
+  display: flex;
+}
+
+.tokensColumn {
+  margin-right: 65px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.tokensColumn:last-child {
+  margin-right: 0px;
+}
+
+.tokenNumber {
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 34px;
+  color: #1B1E1E;
+}
+
+.tokenCurr {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: #767676;
+}
+
+.condition {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+}
+
+.optionStatus {
+  margin-right: 12px;
+}
+
+.conditionTitle {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: normal;
+  color: #000000;
+  margin-bottom: 25px;
+}
+
+.option {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.option:last-child {
+  margin-bottom: 0;
+}
+
+.optionBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.optionTitle {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 19px;
+  color: #000000;
+  margin-bottom: 5px;
+}
+
+.optionTitle:hover {
+  color: #D8352F;
+  cursor: pointer;
+}
+
+.optionText {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  color: #000000;
+}
+
+.created {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 24px;
+  color: #000000;
+  margin-bottom: 40px;
+}
+
+.created span {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 28px;
+  color: #000000;
+}
+
+.share {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: 100px;
+  position: relative;
+}
+
+.share > span {
+  margin-left: 10px;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: normal;
+  color: #000000;
+}

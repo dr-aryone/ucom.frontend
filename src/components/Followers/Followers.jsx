@@ -7,6 +7,7 @@ import Avatar from '../Avatar';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
 import UserListPopup from '../User/UserListPopup';
+import UserListAirdrop from '../User/UsersListAirdrop';
 import { getFileUrl } from '../../utils/upload';
 import { getUsersByIds } from '../../store/users';
 import { selectUser } from '../../store/selectors/user';
@@ -49,7 +50,11 @@ class Followers extends PureComponent {
         {this.state.popupVisible && (
           <Popup onClickClose={() => this.hidePopup()}>
             <ModalContent onClickClose={() => this.hidePopup()}>
-              <UserListPopup title={this.props.title} usersIds={this.props.usersIds} />
+              {this.props.airDrop ? (
+                <UserListAirdrop title={this.props.title} usersIds={this.props.usersIds} />
+              ) : (
+                <UserListPopup title={this.props.title} usersIds={this.props.usersIds} />
+              )}
             </ModalContent>
           </Popup>
         )}

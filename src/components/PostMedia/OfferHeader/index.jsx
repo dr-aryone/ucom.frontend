@@ -7,14 +7,10 @@ import { getOrganizationUrl } from '../../../utils/organization';
 import OrganizationFollowButton from '../../Organization/OrganizationFollowButton';
 import { formatRate } from '../../../utils/rate';
 
-const PostHeader = (props) => {
-  // const LinkTag = props.userUrl ? Link : 'div';
-
+const OfferHeader = (props) => {
   if (!props.org) {
     return null;
   }
-
-  console.log(props.org);
 
   return (
     <div className={styles.header}>
@@ -42,4 +38,4 @@ const PostHeader = (props) => {
   );
 };
 
-export default PostHeader;
+export default OfferHeader;

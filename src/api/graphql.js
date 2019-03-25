@@ -238,5 +238,24 @@ export default {
       throw e;
     }
   },
+
+  async getOnePostOffer({
+    postId,
+    commentsPage = 1,
+    commentsPerPage = COMMENTS_PER_PAGE,
+  }) {
+    const query = GraphQLSchema.getOnePostOffer(
+      postId,
+      commentsPage,
+      commentsPerPage,
+    );
+
+    try {
+      const data = await request({ query });
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
 };
 

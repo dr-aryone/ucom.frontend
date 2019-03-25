@@ -109,3 +109,23 @@ export const postVote = payload => (dispatch) => {
     })
     .then(() => loader.done());
 };
+
+export const getOnePostOffer = ({
+  postId,
+  commentsPage,
+  commentsPerPage,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getOnePostOffer({
+      postId,
+      commentsPage,
+      commentsPerPage,
+    });
+    console.log(data);
+    dispatch(addPosts([data.onePostOffer]));
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};

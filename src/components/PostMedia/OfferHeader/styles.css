@@ -86,3 +86,15 @@
   display: block;
   transition: opacity 0.4s ease;
 }
+
+@media(max-width: 768px) {
+  .header {
+    margin: 70px 20px -20px;
+  }
+}
+
+@media(max-width: 375px) {
+  .header {
+    margin: 10px 7px -20px;
+  }
+}

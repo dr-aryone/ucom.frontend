@@ -93,10 +93,6 @@ export default [{
   component: Statistics,
 },
 {
-  path: '/offer',
-  component: Offer,
-},
-{
   path: '*',
   component: NotFoundPage,
 }];

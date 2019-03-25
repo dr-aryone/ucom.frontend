@@ -7,7 +7,7 @@ import debounce from '../../utils/debounce';
 import api from '../../api';
 import urls from '../../utils/urls';
 import loader from '../../utils/loader';
-import UserCardLine from '../UserCardLine/UserCardLine';
+import UserCardLine from '../UserCardLine';
 import { getUserName } from '../../utils/user';
 import { getFileUrl } from '../../utils/upload';
 import Arrow from '../Icons/ArrowLeft';
