@@ -8,24 +8,20 @@ import { formatRate } from '../../utils/rate';
 
 const EntrySubHeader = props => (
   <div className={styles.subHeader}>
-    <div className={styles.userCard}>
-      <div className={styles.userPick}>
-        <UserPick
-          shadow
-          stretch
-          url={props.userUrl}
-          alt={props.userName}
-          src={props.userAvatarUrl}
-        />
-      </div>
-      <div className={styles.info}>
-        <div className={styles.name}>
-          <Link className="red" to={props.userUrl}>{props.userName}</Link>
-        </div>
-        <div className={styles.rate}>
-          {formatRate(props.userRate)}°
-        </div>
-      </div>
+    <div className={styles.userPick}>
+      <UserPick
+        shadow
+        stretch
+        url={props.userUrl}
+        alt={props.userName}
+        src={props.userAvatarUrl}
+      />
+    </div>
+    <div className={styles.name}>
+      <Link className="red" to={props.userUrl}>{props.userName}</Link>
+    </div>
+    <div className={styles.rate}>
+      {formatRate(props.userRate)}°
     </div>
 
     {props.showFollow &&
