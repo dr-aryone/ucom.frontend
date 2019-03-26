@@ -41,7 +41,7 @@ const Followers = (props) => {
             title: getUserName(item),
             nickname: item.accountName,
             currentRate: item.currentRate,
-            follow: PropTypes.bool,
+            follow: true,
           }))}
           onClickClose={() => setPopupVisible(false)}
         />
