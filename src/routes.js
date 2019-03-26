@@ -77,7 +77,7 @@ export default [{
   path: '/communities/:id/:postId',
   component: OrganizationPage,
 }, {
-  path: '/communities/:organizationId/posts/new',
+  path: '/communities/:organizationId/discussions/new',
   component: EditPostPage,
 }, {
   path: '/governance',

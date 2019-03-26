@@ -108,7 +108,7 @@ const OrganizationPage = (props) => {
             editable={userIsTeam(props.user, organization)}
             placeholder={`Link to ${organization.title} Article`}
             validatePostUrlFn={link => validateDiscationPostUrl(link, organizationId)}
-            newDiscussionUrl={urls.getNewOrganizationPostUrl(organizationId)}
+            newDiscussionUrl={urls.getNewOrganizationDiscussionUrl(organizationId)}
             onSubmit={async (postId) => {
               loader.start();
               await props.dispatch(setDiscussions({

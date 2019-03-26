@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import sectionStyles from '../Section/styles.css';
 import styles from './styles.css';
-import urls from '../../utils/urls';
 import DropdownMenu from '../DropdownMenu';
 import Form from './Form';
 import List from './List';
@@ -53,7 +52,7 @@ const Discussions = (props) => {
           <div className={styles.empty}>
             Nothing here yet.&nbsp;
             <button onClick={() => setFormVisible(true)} className="link red active">Add existing community article</button> or&nbsp;
-            <Link className="red active" to={urls.getNewPostUrl()}>create new article.</Link>
+            <Link className="red active" to={props.newDiscussionUrl}>create new article.</Link>
           </div>
         }
 

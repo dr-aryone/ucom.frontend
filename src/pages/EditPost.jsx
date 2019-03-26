@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 import humps from 'lodash-humps';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import LayoutClean from '../components/Layout/LayoutClean';
@@ -19,13 +19,17 @@ import Popup from '../components/Popup';
 import ModalContent from '../components/ModalContent';
 import PostSubmitForm from '../components/Post/PostSubmitForm';
 import { addServerErrorNotification } from '../actions/notifications';
+import { setDiscussions } from '../actions/organization';
+import { getOrganization } from '../actions/organizations';
+import { getOrganizationById } from '../store/organizations';
 
 const EditPost = (props) => {
-  // const postId = props.match.params.id;
-  const { organizationId, postId } = props.match.params;
+  const postId = props.match.params.id;
+  const { organizationId } = props.match.params;
   const [loading, setLoading] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [submitPopupVisible, setSubmitPopupVisible] = useState(false);
+  const organization = getOrganizationById(props.organizations, organizationId);
 
   const getPost = async () => {
     loader.start();
@@ -33,9 +37,9 @@ const EditPost = (props) => {
 
     try {
       const data = await api.getPost(props.match.params.id);
-      props.setPostData(data);
+      props.dispatch(setPostData(data));
     } catch (e) {
-      props.addServerErrorNotification(e);
+      props.dispatch(addServerErrorNotification(e));
       console.error(e);
     }
 
@@ -46,12 +50,12 @@ const EditPost = (props) => {
 
   const savePost = async () => {
     if (!props.user.id) {
-      props.authShowPopup();
+      props.dispatch(authShowPopup());
       return;
     }
 
     if (!props.post.isValid) {
-      props.validatePost();
+      props.dispatch(validatePost());
       return;
     }
 
@@ -61,11 +65,20 @@ const EditPost = (props) => {
 
     try {
       const data = await saveFn(props.post.data, props.match.params.id);
-      props.postSetSaved(true);
-      props.setPostData({ id: data.id || data.postId });
+      const postId = data.id || data.postId;
+
+      props.dispatch(postSetSaved(true));
+      props.dispatch(setPostData({ id: postId }));
+
+      if (organizationId) {
+        props.dispatch(setDiscussions({
+          organizationId,
+          discussions: [{ id: postId }].concat(organization.discussions.map(i => ({ id: i.id }))),
+        }));
+      }
     } catch (e) {
       console.error(e);
-      props.addServerErrorNotification(e);
+      props.dispatch(addServerErrorNotification(e));
       setLoading(false);
     }
 
@@ -73,19 +86,23 @@ const EditPost = (props) => {
   };
 
   useEffect(() => {
-    props.resetPost();
+    props.dispatch(resetPost());
 
     if (postId) {
       getPost(postId);
     } else if (localStorage[POSTS_DRAFT_LOCALSTORAGE_KEY]) {
       const value = localStorage.getItem(POSTS_DRAFT_LOCALSTORAGE_KEY);
-      props.setPostData(JSON.parse(value));
+      props.dispatch(setPostData(JSON.parse(value)));
     }
 
-    props.setPostData({ organization_id: organizationId });
+    if (organizationId) {
+      props.dispatch(getOrganization(organizationId));
+    }
+
+    props.dispatch(setPostData({ organization_id: organizationId }));
 
     return () => {
-      props.resetPost();
+      props.dispatch(resetPost());
     };
   }, [postId, organizationId]);
 
@@ -143,8 +160,8 @@ const EditPost = (props) => {
                   dataToSave.entityImages = data.entityImages;
                 }
 
-                props.setDataToStoreToLS(dataToSave);
-                props.validatePost();
+                props.dispatch(setDataToStoreToLS(dataToSave));
+                props.dispatch(validatePost());
               }}
               onUploadStart={() => {
                 setLoading(true);
@@ -182,18 +199,23 @@ const EditPost = (props) => {
   );
 };
 
-export default connect(
-  state => ({
-    user: selectUser(state),
-    post: state.post,
-  }),
-  dispatch => bindActionCreators({
-    resetPost,
-    setPostData,
-    validatePost,
-    authShowPopup,
-    postSetSaved,
-    setDataToStoreToLS,
-    addServerErrorNotification,
-  }, dispatch),
-)(EditPost);
+EditPost.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      organizationId: PropTypes.string,
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+  organizations: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired,
+  post: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+export default connect(state => ({
+  organizations: state.organizations,
+  user: selectUser(state),
+  post: state.post,
+}))(EditPost);

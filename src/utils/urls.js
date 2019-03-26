@@ -7,8 +7,8 @@ const urls = {
     return '/posts/new';
   },
 
-  getNewOrganizationPostUrl(organizationId) {
-    return `/communities/${organizationId}/posts/new`;
+  getNewOrganizationDiscussionUrl(organizationId) {
+    return `/communities/${organizationId}/discussions/new`;
   },
 
   getTagUrl(tag) {

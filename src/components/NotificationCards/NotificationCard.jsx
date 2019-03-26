@@ -138,7 +138,7 @@ const getTitle = (props) => {
           <Link to={urls.getUserUrl(props.data.user.id)}>
             <strong>{getUserName(props.data.user)}</strong>
           </Link>
-          &nbsp;started following&nbsp;
+          &nbsp;joined&nbsp;
           <Link to={getOrganizationUrl(props.targetEntity.organization.id)}>
             <strong>{props.targetEntity.organization.title}</strong>
           </Link>
