@@ -20,7 +20,7 @@ class PostFeedFooter extends PureComponent {
     return (
       <Fragment>
         <div className={styles.footer}>
-          <div>
+          <div className={styles.infoBlock}>
             <span
               role="presentation"
               className={styles.commentСount}
@@ -32,7 +32,7 @@ class PostFeedFooter extends PureComponent {
                 <span className="inline__item">{this.props.commentsCount}</span>
               </span>
             </span>
-            <span
+            <div
               role="presentation"
               className={classNames(
                 `${styles.share}`,
@@ -46,14 +46,17 @@ class PostFeedFooter extends PureComponent {
                 </span>
                 <span className="inline__item">Share</span>
               </span>
-            </span>
+            </div>
             {this.props.sharePopup ? (
               <div className="post__share-popup">
                 <ShareBlock
                   link={urls.getPostUrl(post)}
+                  linkPost={post.post && urls.getPostUrl(post.post)}
                   postId={post.id}
                   onClickClose={this.props.toggleShare}
                   repostAvailable={post.myselfData.repostAvailable}
+                  postTypeId={post.postTypeId}
+                  postPostTypeId={post.post && post.post.postTypeId}
                 />
               </div>
             ) : null }
