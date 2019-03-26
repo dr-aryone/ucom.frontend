@@ -121,8 +121,29 @@ export const getOnePostOffer = ({
       commentsPage,
       commentsPerPage,
     });
-    console.log(data);
     dispatch(addPosts([data.onePostOffer]));
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+export const getOnePostOfferWithUserAirdrop = ({
+  airdropFilter,
+  postId,
+  commentsPage,
+  commentsPerPage,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getOnePostOfferWithUserAirdrop({
+      airdropFilter,
+      postId,
+      commentsPage,
+      commentsPerPage,
+    });
+    dispatch(addPosts([data.onePostOffer]));
+    console.log('data: ', data);
     return data;
   } catch (e) {
     console.error(e);

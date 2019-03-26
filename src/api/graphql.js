@@ -257,5 +257,26 @@ export default {
       throw e;
     }
   },
+
+  async getOnePostOfferWithUserAirdrop({
+    airdropFilter = { airdrop_id: 1 },
+    postId,
+    commentsPage = 1,
+    commentsPerPage = COMMENTS_PER_PAGE,
+  }) {
+    const query = GraphQLSchema.getOnePostOfferWithUserAirdrop(
+      airdropFilter,
+      postId,
+      commentsPage,
+      commentsPerPage,
+    );
+
+    try {
+      const data = await request({ query });
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
 };
 

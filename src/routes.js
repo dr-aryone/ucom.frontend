@@ -15,7 +15,6 @@ import GovernancePage from './components/Governance/Governance';
 import Tag from './pages/Tag';
 import Faq from './pages/Faq';
 import Statistics from './pages/Statistics';
-import Offer from './pages/Offer';
 
 export default [{
   path: '/',

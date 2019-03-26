@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 import LayoutBase from '../components/Layout/LayoutBase';
 import OfferHeader from '../components/PostMedia/OfferHeader';
-import { fetchPost, postsFetch, getOnePostOffer } from '../actions/posts';
+import { fetchPost, postsFetch, getOnePostOffer, getOnePostOfferWithUserAirdrop } from '../actions/posts';
 import { getPostById } from '../store/posts';
 import OfferCard from '../components/PostMedia/OfferCard';
 import { getPostCover } from '../utils/posts';
@@ -69,6 +69,9 @@ const Offer = (props) => {
     props.postsFetch({ postId })
       .then(loader.done);
     props.getOnePostOffer({
+      postId,
+    });
+    props.getOnePostOfferWithUserAirdrop({
       postId,
     });
   }, [postId]);
@@ -163,6 +166,7 @@ export default connect(
     postsFetch,
     commentsResetContainerDataByEntryId,
     getOnePostOffer,
+    getOnePostOfferWithUserAirdrop,
   }, dispatch),
 )(Offer);
 

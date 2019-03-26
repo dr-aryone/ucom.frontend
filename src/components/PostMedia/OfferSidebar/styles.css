@@ -104,6 +104,7 @@
 .optionTitle:hover {
   color: #D8352F;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .optionText {
