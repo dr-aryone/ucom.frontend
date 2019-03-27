@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import React, { Fragment } from 'react';
+import React from 'react';
 import Rate from '../../Rate';
 import styles from './styles.css';
 import Avatar from '../../Avatar';
@@ -55,7 +55,7 @@ const OfferCard = (props) => {
 
       <div className={styles.infoblockBottom}>
         <div className={styles.timer}>
-          <Countdown date="2019-05-15T11:43:34Z" />
+          <Countdown date={props.finishedAt} />
         </div>
         <Followers airDrop usersIds={[40, 2, 177]} title="Participants" />
         <div className={classNames(
@@ -71,6 +71,7 @@ const OfferCard = (props) => {
 
 OfferCard.propTypes = {
   url: PropTypes.string,
+  finishedAt: PropTypes.string,
   coverUrl: PropTypes.string,
   rate: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   title: PropTypes.string,

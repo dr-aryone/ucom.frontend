@@ -261,19 +261,56 @@ export default {
   async getOnePostOfferWithUserAirdrop({
     airdropFilter = { airdrop_id: 1 },
     postId,
-    commentsPage = 1,
-    commentsPerPage = COMMENTS_PER_PAGE,
+    commentsQuery = {
+      page: 1,
+      per_page: COMMENTS_PER_PAGE,
+    },
+    usersTeamQuery = {
+      page: 1,
+      per_page: 20,
+      order_by: '-score',
+      filters: {
+        airdrops: {
+          id: 1,
+        },
+      },
+    },
   }) {
     const query = GraphQLSchema.getOnePostOfferWithUserAirdrop(
       airdropFilter,
       postId,
-      commentsPage,
-      commentsPerPage,
+      commentsQuery,
+      usersTeamQuery,
     );
 
     try {
       const data = await request({ query });
       return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getManyUsers({
+    filter = {
+      airdrops: { id: 1 },
+    },
+    orderBy,
+    page,
+    perPage,
+    isMyself,
+  }) {
+    const query = GraphQLSchema.getManyUsers(
+      filter,
+      orderBy,
+      page,
+      perPage,
+      isMyself,
+    );
+
+    try {
+      const data = await request({ query });
+      return data.data.manyUsers;
     } catch (e) {
       throw e;
     }

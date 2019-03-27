@@ -143,7 +143,6 @@ export const getOnePostOfferWithUserAirdrop = ({
       commentsPerPage,
     });
     dispatch(addPosts([data.onePostOffer]));
-    console.log('data: ', data);
     return data;
   } catch (e) {
     console.error(e);

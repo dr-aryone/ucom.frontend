@@ -83,7 +83,8 @@ const OfferSidebar = (props) => {
           <div className={styles.optionStatus}><One /></div>
           <div className={styles.optionBlock}>
             <a
-              href="https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/users
+              // users/?${location.search}&
+              href="https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/?mock_external_id=true
             "
               className={styles.optionTitle}
             >

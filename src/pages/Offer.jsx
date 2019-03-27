@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import LayoutBase from '../components/Layout/LayoutBase';
 import OfferHeader from '../components/PostMedia/OfferHeader';
@@ -18,11 +19,16 @@ import { commentsResetContainerDataByEntryId } from '../actions/comments';
 import ProgressBar from '../components/ProgressBar';
 import { getPercent } from '../utils/text';
 import OfferSidebar from '../components/PostMedia/OfferSidebar';
-import { getToken } from '../utils/token';
+import { getToken, getCookie } from '../utils/token';
+import { getManyUsers } from '../actions/users';
+import api from '../api';
 
 const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
+const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
 const Offer = (props) => {
+  const [token, setToken] = useState(getToken());
+  const [cookie, setCookie] = useState(getCookie(`${CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB}`));
   const postId = 14317;
   const tokens = [
     {
@@ -39,20 +45,19 @@ const Offer = (props) => {
   const perc1 = Number(getPercent(tokens[0].amount_left, tokens[0].amount_claim));
   const perc2 = Number(getPercent(tokens[1].amount_left, tokens[1].amount_claim));
 
-  const token = getToken();
-  console.log(token);
+  const pairAccounts = async () => {
+    if (cookie && token) {
+      try {
+        const data = await api.syncAccountGithub(token, cookie);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
 
-  let cookie;
   useEffect(() => {
-    cookie = (name) => {
-      const match = document.cookie.match(new RegExp(`(^| ) + ${name} + =([^;]+)`));
-      return match ? match[2] : null;
-    };
-  }, []);
-
-  if (cookie !== null) {
-    console.log(cookie);
-  }
+    pairAccounts();
+  }, [cookie, token]);
 
   useEffect(() => {
     if (postId) {
@@ -68,18 +73,27 @@ const Offer = (props) => {
     });
     props.postsFetch({ postId })
       .then(loader.done);
-    props.getOnePostOffer({
-      postId,
-    });
     props.getOnePostOfferWithUserAirdrop({
       postId,
-    });
+    }).then(data => console.log(data.oneUserAirdrop));
+    props.getManyUsers({
+      airdrops: { id: 1 }, // airdrop_id
+      orderBy: 'score',
+      page: 1,
+      perPage: 10,
+    }).then(data => console.log('users: ', data));
+    loader.done();
   }, [postId]);
 
   const post = getPostById(props.posts, postId);
-
   if (!post) {
     return null;
+  }
+
+  if (post.usersTeam && post.usersTeam.data) {
+    const usersTeam = post.usersTeam.data;
+    const usersIds = usersTeam.map(item => item.id);
+    console.log('usersIds: ', usersIds);
   }
 
   return (
@@ -98,6 +112,7 @@ const Offer = (props) => {
           userImageUrl={urls.getFileUrl(post.user.avatarFilename)}
           userName={getUserName(post.user)}
           accountName={post.user.accountName}
+          finishedAt={post.finishedAt}
         />
         <div className={styles.content}>
           <div className={styles.textBlock}>
@@ -156,6 +171,14 @@ const Offer = (props) => {
   );
 };
 
+Offer.propTypes = {
+  commentsResetContainerDataByEntryId: PropTypes.func,
+  fetchPost: PropTypes.func,
+  postsFetch: PropTypes.func,
+  getOnePostOfferWithUserAirdrop: PropTypes.func,
+  getManyUsers: PropTypes.func,
+};
+
 export default connect(
   state => ({
     posts: state.posts,
@@ -167,6 +190,7 @@ export default connect(
     commentsResetContainerDataByEntryId,
     getOnePostOffer,
     getOnePostOfferWithUserAirdrop,
+    getManyUsers,
   }, dispatch),
 )(Offer);
 

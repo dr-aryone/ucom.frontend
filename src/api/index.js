@@ -10,6 +10,7 @@ import snakes from '../utils/snakes';
 
 const { WalletApi } = require('ucom-libs-wallet');
 const AppTransaction = require('ucom-libs-social-transactions');
+const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
 const { TransactionFactory } = AppTransaction;
 
@@ -500,6 +501,17 @@ class Api {
 
   async getStats() {
     const response = await this.actions.get('/api/v1/stats/total');
+
+    return humps(response.data);
+  }
+
+  async syncAccountGithub(token, cookieGh) {
+    const response = await this.actions.post('/api/v1/users-external/users/pair', {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        [CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB]: cookieGh,
+      },
+    });
 
     return humps(response.data);
   }
