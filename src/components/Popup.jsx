@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import React, { useEffect, useRef } from 'react';
 
-export default (props) => {
+const Popup = (props) => {
   const el = useRef(null);
 
   useEffect(() => {
@@ -30,3 +31,16 @@ export default (props) => {
     </div>
   );
 };
+
+Popup.propTypes = {
+  onClickClose: PropTypes.func,
+  children: PropTypes.node.isRequired,
+  mod: PropTypes.string,
+};
+
+Popup.defaultProps = {
+  onClickClose: null,
+  mod: null,
+};
+
+export default Popup;

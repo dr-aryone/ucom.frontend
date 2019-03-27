@@ -23,6 +23,8 @@ import EntryCreatedAt from '../components/EntryCreatedAt';
 import EntryContacts from '../components/EntryContacts';
 import EntryAbout from '../components/EntryAbout';
 import EntryListSection from '../components/EntryListSection';
+import Trust from '../components/Trust';
+import { getUserName } from '../utils/user';
 
 const UserPage = (props) => {
   const userIdOrName = props.match.params.userId;
@@ -92,6 +94,10 @@ const UserPage = (props) => {
             urls={(user.usersSources || []).map(i => i.sourceUrl).filter(i => !!i)}
           />
           <EntryCreatedAt date={user.createdAt} />
+          <Trust
+            userName={getUserName(user)}
+            userAvtarUrl={urls.getFileUrl(user.avatarFilename)}
+          />
         </div>
         <div className="layout__main">
           <EntryAbout text={user.about} />

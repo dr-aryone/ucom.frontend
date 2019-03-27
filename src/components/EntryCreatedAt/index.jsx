@@ -1,7 +1,8 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import styles from '../Section/styles.css';
+import sectionStyles from '../Section/styles.css';
+import styles from './styles.css';
 
 const EntryCreatedAt = (props) => {
   if (!props.date) {
@@ -9,9 +10,11 @@ const EntryCreatedAt = (props) => {
   }
 
   return (
-    <div className={styles.section}>
-      <div className={styles.content}>
-        <strong>Created</strong> {moment(props.date).format('D MMM YYYY')}
+    <div className={sectionStyles.section}>
+      <div className={sectionStyles.content}>
+        <div className={styles.createdAt}>
+          <strong>Created</strong> {moment(props.date).format('D MMM YYYY')}
+        </div>
       </div>
     </div>
   );

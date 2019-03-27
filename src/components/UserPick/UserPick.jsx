@@ -12,6 +12,10 @@ const UserPick = (props) => {
 
   return (
     <LinkTag
+      style={{
+        width: props.size ? `${props.size}px` : undefined,
+        height: props.size ? `${props.size}px` : undefined,
+      }}
       className={classNames({
         [styles.userPick]: true,
         [styles.owner]: props.isOwner,
@@ -39,6 +43,7 @@ UserPick.propTypes = {
   stretch: PropTypes.bool,
   organization: PropTypes.bool,
   shadow: PropTypes.bool,
+  size: PropTypes.number,
 };
 
 UserPick.defaultProps = {
@@ -49,6 +54,7 @@ UserPick.defaultProps = {
   stretch: false,
   organization: false,
   shadow: false,
+  size: null,
 };
 
 export default UserPick;

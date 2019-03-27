@@ -1,0 +1,77 @@
+:local(.trust) {
+  margin: 52px 0 0;
+}
+
+:local(.acceptCard) {
+  margin: 0 -30px;
+  padding: 22px 30px 0;
+  box-shadow: 0px 0px 20px rgba(184, 184, 184, 0.25);
+  background: #fff;
+}
+
+:local(.acceptCard:after) {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+:local(.acceptCard .title) {
+  margin: 0 0 25px;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:local(.acceptCard .action) {
+  margin: 0 0 10px;
+}
+
+:local(.rules) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:local(.rules) {
+  margin: 0 0 38px;
+  counter-reset: rules;
+  font-size: 16px;
+}
+
+:local(.rules li) {
+  position: relative;
+  padding: 0 0 0 21px;
+  margin: 0 0 1.5em;
+}
+
+:local(.rules li:before) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  counter-increment: rules;
+  content: counter(rules)'.';
+  color: #C4C4C4;
+}
+
+:local(.trusted) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+:local(.trusted .trigger) {
+  display: inline-block;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  :local(.acceptCard) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

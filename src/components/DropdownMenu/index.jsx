@@ -1,28 +1,26 @@
 import { Link } from 'react-router-dom';
 import { Tooltip } from 'react-tippy';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { createRef, memo } from 'react';
 import IconDots from '../Icons/Dots';
 import styles from './styles.css';
-import tooltipMenuStyles from '../TooltipMenu/styles.css'; // TODO: Move to this ./styles.css
 
-// TODO: Replace all another dropdown
 const DropdownMenu = (props) => {
-  const [tooltipVisibility, setTooltipVisibility] = useState(false);
+  const tooltip = createRef();
 
   return (
     <Tooltip
+      ref={tooltip}
       arrow
       useContext
       interactive
       disabled={props.disabled}
       theme="dropdown"
-      position="bottom-center"
-      trigger="click"
-      open={tooltipVisibility}
-      onRequestClose={() => setTooltipVisibility(false)}
+      distance={props.distance}
+      position={props.position}
+      trigger={props.trigger}
       html={(
-        <div className={tooltipMenuStyles.tooltipMenu}>
+        <div className={styles.tooltipMenu}>
           {props.items.map((item) => {
             const LinkTag = item.url ? Link : 'button';
 
@@ -30,9 +28,10 @@ const DropdownMenu = (props) => {
               <LinkTag
                 key={item.title}
                 to={item.url}
-                className={tooltipMenuStyles.item}
+                className={styles.item}
                 onClick={() => {
-                  setTooltipVisibility(false);
+                  tooltip.current.hideTooltip();
+
                   if (item.onClick) {
                     item.onClick();
                   }
@@ -45,14 +44,13 @@ const DropdownMenu = (props) => {
         </div>
       )}
     >
-      <div className={styles.icon}>
-        <button
-          className={styles.button}
-          onClick={() => setTooltipVisibility(!tooltipVisibility)}
-        >
-          <IconDots />
-        </button>
-      </div>
+      {props.children ||
+        <div className={styles.icon}>
+          <button className={styles.button}>
+            <IconDots />
+          </button>
+        </div>
+      }
     </Tooltip>
   );
 };
@@ -60,14 +58,22 @@ const DropdownMenu = (props) => {
 DropdownMenu.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     url: PropTypes.string,
-    title: PropTypes.string,
+    title: PropTypes.string.isRequired,
     onClick: PropTypes.func,
   })).isRequired,
   disabled: PropTypes.bool,
+  children: PropTypes.node,
+  trigger: PropTypes.string,
+  position: PropTypes.string,
+  distance: PropTypes.number,
 };
 
 DropdownMenu.defaultProps = {
   disabled: false,
+  children: null,
+  trigger: 'click',
+  position: 'bottom-center',
+  distance: null,
 };
 
-export default DropdownMenu;
+export default memo(DropdownMenu);
