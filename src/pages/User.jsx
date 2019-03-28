@@ -95,8 +95,11 @@ const UserPage = (props) => {
           />
           <EntryCreatedAt date={user.createdAt} />
           <Trust
+            trusted
             userName={getUserName(user)}
             userAvtarUrl={urls.getFileUrl(user.avatarFilename)}
+            onClickTrust={() => console.log('onClickTrust')}
+            onClickRevokeTrust={() => console.log('onClickRevokeTrust')}
           />
         </div>
         <div className="layout__main">

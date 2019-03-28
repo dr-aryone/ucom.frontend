@@ -30,7 +30,9 @@ const DropdownMenu = (props) => {
                 to={item.url}
                 className={styles.item}
                 onClick={() => {
-                  tooltip.current.hideTooltip();
+                  if (tooltip.current) {
+                    tooltip.current.hideTooltip();
+                  }
 
                   if (item.onClick) {
                     item.onClick();

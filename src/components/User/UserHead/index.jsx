@@ -69,6 +69,9 @@ const UserHead = (props) => {
 
         <div className={styles.usersLists}>
           <div>
+            <Followers title="Trusted by" usersIds={user.followedBy} />
+          </div>
+          <div>
             <Followers title="Followers" usersIds={user.followedBy} />
           </div>
           <div>

@@ -19,6 +19,8 @@ const Button = (props) => {
         [styles.grayBorder]: props.grayBorder,
         [styles.red]: props.red,
         [styles.transparent]: props.transparent,
+        [styles.big]: props.big,
+        [styles.cap]: props.cap,
       })}
     >
       <div className={styles.inner}>
@@ -37,6 +39,8 @@ Button.propTypes = {
   grayBorder: PropTypes.bool,
   red: PropTypes.bool,
   transparent: PropTypes.bool,
+  big: PropTypes.bool,
+  cap: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -47,6 +51,8 @@ Button.defaultProps = {
   grayBorder: false,
   red: false,
   transparent: false,
+  big: false,
+  cap: false,
 };
 
 export default memo(Button);

@@ -55,6 +55,16 @@
   color: #D8352F;
 }
 
+:local(.button.cap) {
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+}
+
+:local(.button.big) {
+  height: 60px;
+}
+
 :local(.inner) {
   white-space: nowrap;
   text-overflow: ellipsis;

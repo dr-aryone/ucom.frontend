@@ -12,6 +12,7 @@ import EntryListPopup from '../EntryListPopup';
 import { getUserName } from '../../utils/user';
 
 // TODO: Rename folder Followers to abstract name
+// TODO: Refactoring: make clean function without redux connect
 const Followers = (props) => {
   const [popupVisible, setPopupVisible] = useState(false);
   const hasUsers = () => props.usersIds.length > 0;
