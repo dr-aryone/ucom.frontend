@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import Followers from '../../Followers/Followers';
+import Followers from '../../Followers';
 import OrganizationFollowButton from '../OrganizationFollowButton';
 import { selectUser } from '../../../store/selectors';
 import { getOrganizationById } from '../../../store/organizations';
@@ -13,7 +13,7 @@ import ButtonEdit from '../../ButtonEdit';
 import Avatar from '../../EntryHeader/Avatar';
 import { formatRate } from '../../../utils/rate';
 import Menu from '../../EntryHeader/Menu';
-import { getUserName } from '../../../utils/user';
+import { getUserName, mapUserDataToFollowersProps } from '../../../utils/user';
 import EntrySubHeader from '../../EntrySubHeader';
 
 const OrganizationHeader = (props) => {
@@ -67,9 +67,15 @@ const OrganizationHeader = (props) => {
           </div>
 
           <div className={styles.usersLists}>
-            <div>
-              <Followers title="Members" usersIds={(organization.followedBy || []).map(item => item.id)} />
-            </div>
+            {organization.followedBy &&
+              <div>
+                <Followers
+                  title="Members"
+                  count={organization.followedBy.length}
+                  users={organization.followedBy.map(mapUserDataToFollowersProps)}
+                />
+              </div>
+            }
           </div>
         </div>
       </div>

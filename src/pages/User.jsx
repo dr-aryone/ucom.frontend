@@ -49,6 +49,7 @@ const UserPage = (props) => {
   }, [postId]);
 
   const user = getUserById(props.users, userIdOrName);
+
   if (loaded && !user) {
     return <NotFoundPage />;
   } else if (!user) {

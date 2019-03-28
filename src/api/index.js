@@ -59,8 +59,12 @@ class Api {
 
   async getMyself() {
     const response = await this.actions.get('/api/v1/myself');
+    const data = humps(response.data);
 
-    return humps(response.data);
+    // API HOT FIX https://github.com/UOSnetwork/ucom.backend/issues/84
+    data.organizations.forEach(item => delete item.followedBy);
+
+    return data;
   }
 
   async patchMyself(data) {

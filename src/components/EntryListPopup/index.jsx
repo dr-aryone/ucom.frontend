@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styles from './styles.css';
-import EntryCard from '../EntryCard';
+import EntryCard, { entryCardPropTypes } from '../EntryCard';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
 import OrganizationFollowButton from '../Organization/OrganizationFollowButton';
 import UserFollowButton from '../User/UserFollowButton';
+import Pagination from '../Pagination/index';
 
 // TODO: Replace and remove another popups
 const EntryListPopup = props => (
@@ -34,31 +35,42 @@ const EntryListPopup = props => (
             </div>
           ))}
         </div>
+
+        {props.metadata &&
+          <Pagination
+            {...props.metadata}
+            onChange={props.onChangePage}
+          />
+        }
       </div>
     </ModalContent>
   </Popup>
 );
 
-EntryListPopup.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    organization: PropTypes.bool,
-    avatarSrc: PropTypes.string,
-    url: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    nickname: PropTypes.string.isRequired,
-    currentRate: PropTypes.number,
-    disableRate: PropTypes.bool,
-    disableSign: PropTypes.bool,
-    isExternal: PropTypes.bool,
-    follow: PropTypes.bool,
-  })),
+export const entryListPopupItemPropTypes = {
+  ...entryCardPropTypes,
+  id: PropTypes.number.isRequired,
+  follow: PropTypes.bool,
+};
+
+export const entryListPopupPropTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape(entryListPopupItemPropTypes)),
   onClickClose: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
+  metadata: PropTypes.shape({
+    page: PropTypes.number,
+    perPage: PropTypes.number,
+    totalAmount: PropTypes.number,
+  }),
+  onChangePage: PropTypes.func,
 };
+
+EntryListPopup.propTypes = entryListPopupPropTypes;
 
 EntryListPopup.defaultProps = {
   data: [],
+  metadata: null,
+  onChangePage: null,
 };
 
 export default EntryListPopup;

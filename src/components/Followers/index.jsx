@@ -1,21 +1,14 @@
+import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, memo } from 'react';
 import UserPick from '../UserPick/UserPick';
-import { getUsersByIds } from '../../store/users';
-import { selectUser } from '../../store/selectors/user';
-import urls from '../../utils/urls';
 import styles from './styles.css';
-import EntryListPopup from '../EntryListPopup';
-import { getUserName } from '../../utils/user';
+import EntryListPopup, { entryListPopupItemPropTypes, entryListPopupPropTypes } from '../EntryListPopup';
 
-// TODO: Rename folder Followers to abstract name
-// TODO: Refactoring: make clean function without redux connect
 const Followers = (props) => {
   const [popupVisible, setPopupVisible] = useState(false);
-  const hasUsers = () => props.usersIds.length > 0;
+  const hasUsers = () => props.users.length > 0;
 
   const showPopup = () => {
     if (hasUsers()) {
@@ -27,24 +20,17 @@ const Followers = (props) => {
     setPopupVisible(false);
   }, [props.location]);
 
-  const users = getUsersByIds(props.users, props.usersIds);
-  const avatarUsers = users.slice(0, 2);
+  const avatarUsers = props.users.slice(0, 2);
 
   return (
     <Fragment>
       {popupVisible &&
         <EntryListPopup
           title={props.title}
-          data={users.map(item => ({
-            id: item.id,
-            avatarSrc: urls.getFileUrl(item.avatarFilename),
-            url: urls.getUserUrl(item.id),
-            title: getUserName(item),
-            nickname: item.accountName,
-            currentRate: item.currentRate,
-            follow: true,
-          }))}
+          data={props.users}
+          metadata={props.metadata}
           onClickClose={() => setPopupVisible(false)}
+          onChangePage={props.onChangePage}
         />
       }
 
@@ -58,7 +44,7 @@ const Followers = (props) => {
       >
         <div className={styles.info}>
           <div className={styles.count}>
-            {users.length}
+            {props.count}
           </div>
 
           <div className={styles.title}>
@@ -70,16 +56,16 @@ const Followers = (props) => {
           {avatarUsers.length === 2 &&
             <Fragment>
               <div className={styles.avatarSmall}>
-                <UserPick shadow stretch src={urls.getFileUrl(avatarUsers[1].avatarFilename)} />
+                <UserPick shadow stretch src={avatarUsers[1].avatarSrc} />
               </div>
               <div className={styles.avatar}>
-                <UserPick shadow stretch src={urls.getFileUrl(avatarUsers[0].avatarFilename)} />
+                <UserPick shadow stretch src={avatarUsers[0].avatarSrc} />
               </div>
             </Fragment>
           }
           {avatarUsers.length === 1 &&
             <div className={styles.avatar}>
-              <UserPick shadow stretch src={urls.getFileUrl(avatarUsers[0].avatarFilename)} />
+              <UserPick shadow stretch src={avatarUsers[0].avatarSrc} />
             </div>
           }
           {avatarUsers.length === 0 &&
@@ -93,17 +79,19 @@ const Followers = (props) => {
 
 Followers.propTypes = {
   title: PropTypes.string,
-  usersIds: PropTypes.arrayOf(PropTypes.number),
-  users: PropTypes.objectOf(PropTypes.any).isRequired,
+  users: PropTypes.arrayOf(PropTypes.shape(entryListPopupItemPropTypes)),
   location: PropTypes.objectOf(PropTypes.any).isRequired,
+  count: PropTypes.number,
+  metadata: entryListPopupPropTypes.metadata,
+  onChangePage: PropTypes.func,
 };
 
 Followers.defaultProps = {
   title: 'Followers',
-  usersIds: [],
+  users: [],
+  count: 0,
+  metadata: null,
+  onChangePage: null,
 };
 
-export default withRouter(connect(state => ({
-  users: state.users,
-  user: selectUser(state),
-}))(Followers));
+export default memo(withRouter(Followers));

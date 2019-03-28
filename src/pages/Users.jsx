@@ -158,6 +158,7 @@ const UsersPage = (props) => {
                     </div>
                   </div>
                 )}
+                {/* TODO Replace with components/paggination/ */}
                 <Pagination
                   className="table-content__pagination"
                   showTitle={false}

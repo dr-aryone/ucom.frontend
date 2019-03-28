@@ -27,6 +27,21 @@ const request = async (data) => {
 };
 
 export default {
+  async getOneUser({
+    userId,
+  }) {
+    const query = GraphQLSchema.getOneUser({
+      user_id: userId,
+    });
+
+    try {
+      const data = await request({ query });
+      return data.data.oneUser;
+    } catch (e) {
+      throw e;
+    }
+  },
+
   async getUserWallFeed({
     userId,
     page = 1,

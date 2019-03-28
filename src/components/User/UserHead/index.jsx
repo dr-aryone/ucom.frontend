@@ -2,15 +2,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styles from '../../EntryHeader/styles.css';
-import { getUserById } from '../../../store/users';
+import { getUserById, getUsersByIds } from '../../../store/users';
 import Avatar from '../../EntryHeader/Avatar';
 import urls from '../../../utils/urls';
 import { updateUser, addUsers } from '../../../actions/users';
-import { getUserName, userIsOwner } from '../../../utils/user';
+import { getUserName, userIsOwner, mapUserDataToFollowersProps } from '../../../utils/user';
 import UserStatus from '../UserStatus';
 import { formatRate } from '../../../utils/rate';
 import UserFollowButton from '../UserFollowButton';
-import Followers from '../../Followers/Followers';
+import Followers from '../../Followers';
 import ButtonEdit from '../../ButtonEdit';
 import Menu from '../../EntryHeader/Menu';
 
@@ -68,15 +68,36 @@ const UserHead = (props) => {
         }
 
         <div className={styles.usersLists}>
-          <div>
-            <Followers title="Trusted by" usersIds={user.followedBy} />
-          </div>
-          <div>
-            <Followers title="Followers" usersIds={user.followedBy} />
-          </div>
-          <div>
-            <Followers title="Following" usersIds={user.iFollow} />
-          </div>
+          {user.followedBy &&
+            <div>
+              <Followers
+                title="Trusted by"
+                count={user.followedBy.length}
+                users={getUsersByIds(props.users, user.followedBy)
+                  .map(mapUserDataToFollowersProps)}
+              />
+            </div>
+          }
+          {user.followedBy &&
+            <div>
+              <Followers
+                title="Followers"
+                count={user.followedBy.length}
+                users={getUsersByIds(props.users, user.followedBy)
+                  .map(mapUserDataToFollowersProps)}
+              />
+            </div>
+          }
+          {user.iFollow &&
+            <div>
+              <Followers
+                title="Following"
+                count={user.iFollow.length}
+                users={getUsersByIds(props.users, user.iFollow)
+                  .map(mapUserDataToFollowersProps)}
+              />
+            </div>
+          }
         </div>
       </div>
     </div>

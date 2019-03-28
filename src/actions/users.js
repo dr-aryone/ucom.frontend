@@ -8,6 +8,7 @@ import { setUser } from './';
 import { siteNotificationsSetUnreadAmount } from './siteNotifications';
 import { getAccountState } from './wallet';
 import { addOrganizations } from './organizations';
+import graphql from '../api/graphql';
 
 export const usersAddIFollow = payload => ({ type: 'USERS_ADD_I_FOLLOW', payload });
 export const usersRemoveIFollow = payload => ({ type: 'USERS_REMOVE_I_FOLLOW', payload });
@@ -69,11 +70,15 @@ export const fetchMyself = () => async (dispatch) => {
   loader.done();
 };
 
-export const fetchUser = userId => dispatch =>
-  api.getUser(userId)
-    .then((data) => {
-      dispatch(addUsers([data]));
-    });
+export const fetchUser = userId => async (dispatch) => {
+  try {
+    const data = await graphql.getOneUser({ userId: +userId });
+    dispatch(addUsers([data]));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
 
 export const updateUser = payload => async (dispatch) => {
   loader.start();
