@@ -10,7 +10,7 @@ import { getUserName, userIsOwner, mapUserDataToFollowersProps } from '../../../
 import UserStatus from '../UserStatus';
 import { formatRate } from '../../../utils/rate';
 import UserFollowButton from '../UserFollowButton';
-import Followers from '../../Followers';
+import Followers, { followersPropTypes } from '../../Followers';
 import ButtonEdit from '../../ButtonEdit';
 import Menu from '../../EntryHeader/Menu';
 
@@ -72,9 +72,10 @@ const UserHead = (props) => {
             <div>
               <Followers
                 title="Trusted by"
-                count={user.followedBy.length}
-                users={getUsersByIds(props.users, user.followedBy)
-                  .map(mapUserDataToFollowersProps)}
+                count={props.trustedByUsersCount}
+                users={getUsersByIds(props.users, props.trustedByUsersIds).map(mapUserDataToFollowersProps)}
+                metadata={props.trustedByMetadata}
+                onChangePage={props.trustedByOnChangePage}
               />
             </div>
           }
@@ -111,6 +112,17 @@ UserHead.propTypes = {
     id: PropTypes.number,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  trustedByUsersCount: PropTypes.number,
+  trustedByUsersIds: PropTypes.arrayOf(PropTypes.number),
+  trustedByMetadata: followersPropTypes.metadata,
+  trustedByOnChangePage: PropTypes.func,
+};
+
+UserHead.defaultProps = {
+  trustedByUsersCount: 0,
+  trustedByUsersIds: [],
+  trustedByMetadata: null,
+  trustedByOnChangePage: null,
 };
 
 export default connect(state => ({

@@ -15,7 +15,7 @@
   text-align: center;
   cursor: pointer;
   color: #000;
-  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
 }
 
 :local(.button:hover) {
@@ -53,6 +53,11 @@
 :local(.button.transparent:hover) {
   border-color: transparent;
   color: #D8352F;
+}
+
+:local(.button.disabled) {
+  opacity: 0.3;
+  cursor: default;
 }
 
 :local(.button.cap) {

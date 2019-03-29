@@ -11,6 +11,11 @@ const Followers = (props) => {
   const hasUsers = () => props.users.length > 0;
 
   const showPopup = () => {
+    if (props.onClick) {
+      props.onClick();
+      return;
+    }
+
     if (hasUsers()) {
       setPopupVisible(true);
     }
@@ -77,14 +82,17 @@ const Followers = (props) => {
   );
 };
 
-Followers.propTypes = {
+export const followersPropTypes = {
   title: PropTypes.string,
   users: PropTypes.arrayOf(PropTypes.shape(entryListPopupItemPropTypes)),
   location: PropTypes.objectOf(PropTypes.any).isRequired,
   count: PropTypes.number,
   metadata: entryListPopupPropTypes.metadata,
   onChangePage: PropTypes.func,
+  onClick: PropTypes.func,
 };
+
+Followers.propTypes = followersPropTypes;
 
 Followers.defaultProps = {
   title: 'Followers',
@@ -92,6 +100,7 @@ Followers.defaultProps = {
   count: 0,
   metadata: null,
   onChangePage: null,
+  onClick: null,
 };
 
 export default memo(withRouter(Followers));

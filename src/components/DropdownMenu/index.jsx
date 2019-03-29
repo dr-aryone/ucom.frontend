@@ -75,7 +75,7 @@ DropdownMenu.defaultProps = {
   children: null,
   trigger: 'click',
   position: 'bottom-center',
-  distance: null,
+  distance: 10,
 };
 
 export default memo(DropdownMenu);

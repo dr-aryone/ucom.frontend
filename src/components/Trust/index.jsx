@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { memo, useState, Fragment } from 'react';
+import React, { memo, useState, useEffect, Fragment } from 'react';
 import styles from './styles.css';
 import Button from '../Button/index';
 import UserPick from '../UserPick/UserPick';
@@ -9,6 +9,14 @@ import Popup from '../Popup';
 const Trust = (props) => {
   const [untrustPopupVisible, setUntrustPopupVisible] = useState(false);
   const [acceptCardVisible, setAcceptCardVisible] = useState(false);
+
+  useEffect(() => {
+    if (props.trusted) {
+      setAcceptCardVisible(false);
+    } else {
+      setUntrustPopupVisible(false);
+    }
+  }, [props.trusted]);
 
   return (
     <Fragment>
@@ -25,7 +33,16 @@ const Trust = (props) => {
               <li>This trust revoke transaction will be put in your profile feed and the feed of your followers.</li>
             </ol>
 
-            <Button strech big cap red onClick={props.onClickRevokeTrust}>Revoke trust</Button>
+            <Button
+              big
+              cap
+              red
+              strech
+              disabled={props.loading}
+              onClick={props.onClickUntrust}
+            >
+              Revoke trust
+            </Button>
           </div>
         </Popup>
       }
@@ -94,13 +111,23 @@ const Trust = (props) => {
             </ol>
 
             <div className={styles.action}>
-              <Button strech red onClick={props.onClickTrust}>
+              <Button
+                strech
+                red
+                onClick={props.onClickTrust}
+                disabled={props.loading}
+              >
                 Trust
               </Button>
             </div>
 
             <div className={styles.action}>
-              <Button strech transparent onClick={() => setAcceptCardVisible(false)}>
+              <Button
+                strech
+                transparent
+                disabled={props.loading}
+                onClick={() => setAcceptCardVisible(false)}
+              >
                 Cancel
               </Button>
             </div>
@@ -116,11 +143,13 @@ Trust.propTypes = {
   userAvtarUrl: PropTypes.string.isRequired,
   trusted: PropTypes.bool,
   onClickTrust: PropTypes.func.isRequired,
-  onClickRevokeTrust: PropTypes.func.isRequired,
+  onClickUntrust: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
 };
 
 Trust.defaultProps = {
   trusted: false,
+  loading: false,
 };
 
 export default memo(Trust);

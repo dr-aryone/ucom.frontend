@@ -5,6 +5,7 @@ import { getBackendConfig } from '../utils/config';
 import { getToken } from '../utils/token';
 import { COMMENTS_PER_PAGE } from '../utils/comments';
 import { FEED_PER_PAGE, OVERVIEW_SIDE_PER_PAGE } from '../utils/feed';
+import { LIST_ORDER_BY, LIST_PER_PAGE } from '../utils/list';
 
 const request = async (data) => {
   const options = {
@@ -27,12 +28,71 @@ const request = async (data) => {
 };
 
 export default {
-  async getOneUser({
+  async getUserPageData({
+    userId,
+    trustedByOrderBy = LIST_ORDER_BY,
+    trustedByPerPage = LIST_PER_PAGE,
+    trustedByPage = 1,
+  }) {
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getOneUserQueryPart({
+        filters: {
+          user_id: +userId,
+        },
+      }),
+      GraphQLSchema.getOneUserTrustedByQueryPart({
+        filters: {
+          user_id: +userId,
+        },
+        order_by: trustedByOrderBy,
+        per_page: trustedByPerPage,
+        page: trustedByPage,
+      }),
+    ]);
+
+    try {
+      const data = await request({ query });
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getUserTrustedBy({
+    userId,
+    orderBy = LIST_ORDER_BY,
+    perPage = LIST_PER_PAGE,
+    page = 1,
+  }) {
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getOneUserTrustedByQueryPart({
+        filters: {
+          user_id: +userId,
+        },
+        order_by: orderBy,
+        per_page: perPage,
+        page,
+      }),
+    ]);
+
+    try {
+      const data = await request({ query });
+      return data.data.oneUserTrustedBy;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async fetchUser({
     userId,
   }) {
-    const query = GraphQLSchema.getOneUser({
-      user_id: userId,
-    });
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getOneUserQueryPart({
+        filters: {
+          user_id: +userId,
+        },
+      }),
+    ]);
 
     try {
       const data = await request({ query });

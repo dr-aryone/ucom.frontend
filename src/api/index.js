@@ -8,7 +8,7 @@ import { getBrainkey } from '../utils/brainkey';
 import { getBackendConfig } from '../utils/config';
 import snakes from '../utils/snakes';
 
-const { WalletApi } = require('ucom-libs-wallet');
+const { WalletApi, SocialApi } = require('ucom-libs-wallet');
 const AppTransaction = require('ucom-libs-social-transactions');
 
 const { TransactionFactory } = AppTransaction;
@@ -222,6 +222,36 @@ class Api {
     );
 
     const response = await this.actions.post(`/api/v1/users/${userId}/unfollow`, {
+      signed_transaction: signedTransaction,
+    });
+
+    return humps(response.data);
+  }
+
+  async trustUser(ownerAccountName, userAccountName, userId) {
+    const ownerBrainkey = getBrainkey();
+    const ownerPrivateKey = getActivePrivateKey(ownerBrainkey);
+    const signedTransaction = await SocialApi.getTrustUserSignedTransactionsAsJson(
+      ownerAccountName,
+      ownerPrivateKey,
+      userAccountName,
+    );
+    const response = await this.actions.post(`/api/v1/users/${userId}/trust`, {
+      signed_transaction: signedTransaction,
+    });
+
+    return humps(response.data);
+  }
+
+  async untrustUser(ownerAccountName, userAccountName, userId) {
+    const ownerBrainkey = getBrainkey();
+    const ownerPrivateKey = getActivePrivateKey(ownerBrainkey);
+    const signedTransaction = await SocialApi.getUnTrustUserSignedTransactionsAsJson(
+      ownerAccountName,
+      ownerPrivateKey,
+      userAccountName,
+    );
+    const response = await this.actions.post(`/api/v1/users/${userId}/untrust`, {
       signed_transaction: signedTransaction,
     });
 

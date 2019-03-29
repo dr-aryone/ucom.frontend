@@ -13,6 +13,7 @@ const Button = (props) => {
       href={props.url}
       target={props.external ? '_blank' : undefined}
       onClick={props.onClick}
+      disabled={props.disabled}
       className={classNames({
         [styles.button]: true,
         [styles.strech]: props.strech,
@@ -21,6 +22,7 @@ const Button = (props) => {
         [styles.transparent]: props.transparent,
         [styles.big]: props.big,
         [styles.cap]: props.cap,
+        [styles.disabled]: props.disabled,
       })}
     >
       <div className={styles.inner}>
@@ -41,6 +43,7 @@ Button.propTypes = {
   transparent: PropTypes.bool,
   big: PropTypes.bool,
   cap: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -53,6 +56,7 @@ Button.defaultProps = {
   transparent: false,
   big: false,
   cap: false,
+  disabled: false,
 };
 
 export default memo(Button);
