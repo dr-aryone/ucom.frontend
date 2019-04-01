@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import Dropzone from 'react-dropzone';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import styles from './styles.css';
 import IconUpload from './IconUpload';
 import UserPick from '../../UserPick/UserPick';
+import DropzoneWrapper from '../../DropzoneWrapper';
 
 const Avatar = (props) => {
   const [dropActive, setDropActive] = useState(false);
@@ -24,7 +24,7 @@ const Avatar = (props) => {
       />
 
       {props.changeEnabled &&
-        <Dropzone
+        <DropzoneWrapper
           multiple={false}
           accept="image/jpeg, image/png, image/gif"
           className={classNames({
@@ -34,13 +34,13 @@ const Avatar = (props) => {
           onDragEnter={() => setDropActive(true)}
           onDragLeave={() => setDropActive(false)}
           onDrop={() => setDropActive(false)}
-          onDropAccepted={files => props.onChange && props.onChange(files[0])}
+          onChange={props.onChange}
         >
           <span className={styles.uploadIcon}>
             <IconUpload />
           </span>
           <span className={styles.uploadLabel}>Upload</span>
-        </Dropzone>
+        </DropzoneWrapper>
       }
     </div>
   );

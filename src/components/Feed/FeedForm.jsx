@@ -115,13 +115,11 @@ class FeedForm extends PureComponent {
             ) : (
               <DropZone
                 className="drop-zone_clip"
-                accept="image/jpeg, image/png"
-                maxSize={1000000}
-                onDrop={(files) => {
-                  getBase64FromFile(files[0]).then((base64Cover) => {
+                onDrop={(file) => {
+                  getBase64FromFile(file).then((base64Cover) => {
                     this.setState({
                       base64Cover,
-                      fileImg: files[0],
+                      fileImg: file,
                     });
                   });
                 }}

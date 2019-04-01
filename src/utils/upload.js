@@ -1,8 +1,10 @@
-export const UPLOAD_SIZE_LIMIT = 1000000;
+export const UPLOAD_SIZE_LIMIT = 1048576;
 export const UPLOAD_SIZE_LIMIT_ERROR = 'File exceed the 1 Mb limit';
 export const UPLAOD_ERROR_BASE = 'Error, try uploading file again later';
 export const AVATAR_MAX_WIDTH = 300;
 export const AVATAR_MAX_HEIGHT = 300;
+export const IMAGE_MAX_WIDTH = 3840;
+export const IMAGE_MAX_HEIGHT = 2160;
 
 export const getBase64FromFile = file => (
   new Promise((resolve, reject) => {
@@ -23,6 +25,12 @@ export const getBase64FromFile = file => (
 export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', quality = 1) => (
   new Promise((resolve, reject) => {
     const fileName = file.name;
+    if (file.type === 'image/gif') {
+      if (file.size > UPLOAD_SIZE_LIMIT) {
+        reject(UPLOAD_SIZE_LIMIT_ERROR);
+      }
+      resolve(file);
+    }
 
     getBase64FromFile(file)
       .then((result) => {
@@ -50,6 +58,11 @@ export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', qu
               type,
               lastModified: Date.now(),
             });
+
+            if (file.size > UPLOAD_SIZE_LIMIT) {
+              reject(UPLOAD_SIZE_LIMIT_ERROR);
+            }
+
             resolve(file);
           }, type, quality);
         };
@@ -62,3 +75,4 @@ export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', qu
 
 
 export const compressAvatar = file => compressImage(file, AVATAR_MAX_WIDTH, AVATAR_MAX_HEIGHT);
+export const compressUploadedImage = file => compressImage(file, IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT);

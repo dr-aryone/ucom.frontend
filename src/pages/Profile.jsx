@@ -99,7 +99,7 @@ class ProfilePage extends PureComponent {
                               <div className="field__input">
                                 <div className="field__section">
                                   <DropZone
-                                    onDrop={files => this.props.userFormSetForm({ avatarFilename: files[0] })}
+                                    onDrop={file => this.props.userFormSetForm({ avatarFilename: file })}
                                     text="Add or drag img"
                                   />
                                 </div>
