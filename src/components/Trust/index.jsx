@@ -1,3 +1,4 @@
+import { scroller, Element } from 'react-scroll';
 import PropTypes from 'prop-types';
 import React, { memo, useState, useEffect, Fragment } from 'react';
 import styles from './styles.css';
@@ -47,7 +48,7 @@ const Trust = (props) => {
         </Popup>
       }
 
-      <div className={styles.trust}>
+      <Element name="trust" className={styles.trust}>
         {props.trusted &&
           <div className={styles.trusted}>
             <DropdownMenu
@@ -76,7 +77,15 @@ const Trust = (props) => {
           <Button
             strech
             grayBorder
-            onClick={() => setAcceptCardVisible(true)}
+            onClick={() => {
+              scroller.scrollTo('trust', {
+                duration: 1000,
+                delay: 100,
+                offset: -70,
+                smooth: true,
+              });
+              setAcceptCardVisible(true);
+            }}
           >
             Trust&nbsp;
             <UserPick
@@ -133,7 +142,7 @@ const Trust = (props) => {
             </div>
           </div>
         }
-      </div>
+      </Element>
     </Fragment>
   );
 };
