@@ -80,10 +80,10 @@ const Tag = (props) => {
     <LayoutBase gray>
       <div className="layout layout_profile">
         <div className="layout__header">
-          <div className={headerStyles.entryHead}>
+          <div className={`${headerStyles.entryHead} ${headerStyles.tag}`}>
             <div className={`${headerStyles.main} ${headerStyles.noAvatar}`}>
               <div className={headerStyles.info}>
-                <div className={headerStyles.userName}>#{tag.title}</div>
+                <div className={`${headerStyles.userName} ${headerStyles.big}`}>#{tag.title}</div>
               </div>
               <div className={headerStyles.rate}>{formatRate(tag.currentRate)}°</div>
             </div>
