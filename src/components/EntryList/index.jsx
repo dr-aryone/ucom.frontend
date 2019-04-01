@@ -2,18 +2,10 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { useState, Fragment } from 'react';
-// import UserListPopup from './UserListPopup';
-// import UserListPopupMore from './UserListPopupMore';
-// import urls from '../../utils/urls';
-// import { getUsersByIds } from '../../store/users';
 import EntryCard from '../EntryCard';
-// import Popup from '../Popup';
-// import ModalContent from '../ModalContent';
-// import { getUserName } from '../../utils/user';
 import styles from '../List/styles.css';
-import EntryListPopup from '../EntryListPopup';
+import EntryListPopup, { entryListPopupPropTypes } from '../EntryListPopup';
 
-// TODO: Replace and remove all another list
 const EntryItem = (props) => {
   const LinkTag = props.isExternal ? 'a' : Link;
 
@@ -27,65 +19,6 @@ const EntryItem = (props) => {
     >
       <EntryCard disabledLink {...{ ...props }} />
     </LinkTag>
-  );
-};
-
-const EntryList = (props) => {
-  const [popupVisible, setPopupVisible] = useState(false);
-
-  if (!props.data.length) {
-    return null;
-  }
-
-  const visibleItems = props.data.slice(0, props.limit);
-
-  return (
-    <Fragment>
-      {visibleItems.map(item => <EntryItem key={item.id} {...{ ...item }} />)}
-
-      {props.data.length > props.limit &&
-        <div className={styles.more}>
-          <span
-            role="presentation"
-            className={styles.moreLink}
-            onClick={() => {
-              setPopupVisible(true);
-              // if (props.loadMore) {
-              //   props.loadMore();
-              // }
-            }}
-          >
-            View All
-          </span>
-        </div>
-      }
-
-      {popupVisible &&
-        <EntryListPopup
-          title={props.title}
-          data={props.data}
-          onClickClose={() => setPopupVisible(false)}
-        />
-      }
-
-
-      {/* {popupVisible &&
-        <Popup onClickClose={() => setPopupVisible(false)}>
-          <ModalContent onClickClose={() => setPopupVisible(false)}>
-            {props.tagTitle ? (
-              <UserListPopupMore
-                usersIds={props.usersIds}
-                tagTitle={props.tagTitle}
-              />
-            ) : (
-              <UserListPopup
-                usersIds={props.usersIds}
-              />
-            )}
-          </ModalContent>
-        </Popup>
-      } */}
-    </Fragment>
   );
 };
 
@@ -116,24 +49,70 @@ EntryItem.defaultProps = {
   follow: false,
 };
 
-EntryList.propTypes = {
+const EntryList = (props) => {
+  const [popupVisible, setPopupVisible] = useState(false);
+
+  if (!props.data.length) {
+    return null;
+  }
+
+  const visibleItems = props.data.slice(0, props.limit);
+
+  return (
+    <Fragment>
+      {visibleItems.map(item => <EntryItem key={item.id} {...{ ...item }} />)}
+
+      {(props.showViewMore || props.data.length > props.limit) &&
+        <div className={styles.more}>
+          <span
+            role="presentation"
+            className={styles.moreLink}
+            onClick={() => {
+              setPopupVisible(true);
+              if (props.onClickViewAll) {
+                props.onClickViewAll();
+              }
+            }}
+          >
+            View All
+          </span>
+        </div>
+      }
+
+      {popupVisible &&
+        <EntryListPopup
+          title={props.title}
+          data={props.popupData || props.data}
+          onClickClose={() => setPopupVisible(false)}
+          metadata={props.popupMetadata}
+          onChangePage={props.onChangePage}
+        />
+      }
+    </Fragment>
+  );
+};
+
+export const entryListPropTypes = {
   data: PropTypes.arrayOf(PropTypes.shape(entryItemProps)),
   limit: PropTypes.number,
   title: PropTypes.string.isRequired,
-
-  // users: PropTypes.objectOf(PropTypes.any).isRequired,
-  // limit: PropTypes.number,
-  // loadMore: PropTypes.func,
-  // tagTitle: PropTypes.string,
+  onChangePage: PropTypes.func,
+  popupData: PropTypes.arrayOf(PropTypes.shape(entryItemProps)),
+  popupMetadata: entryListPopupPropTypes.metadata,
+  onClickViewAll: PropTypes.func,
+  showViewMore: PropTypes.bool,
 };
+
+EntryList.propTypes = entryListPropTypes;
 
 EntryList.defaultProps = {
   data: [],
   limit: 3,
-  // usersIds: [],
-  // limit: 5,
-  // loadMore: null,
-  // tagTitle: null,
+  onChangePage: null,
+  popupData: undefined,
+  popupMetadata: undefined,
+  showViewMore: undefined,
+  onClickViewAll: undefined,
 };
 
 export default connect(state => ({

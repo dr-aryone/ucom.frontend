@@ -30,13 +30,14 @@ PaginationWrapper.propTypes = {
   page: PropTypes.number,
   perPage: PropTypes.number,
   totalAmount: PropTypes.number,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
 };
 
 PaginationWrapper.defaultProps = {
   page: null,
   perPage: null,
   totalAmount: null,
+  onChange: null,
 };
 
 export default PaginationWrapper;

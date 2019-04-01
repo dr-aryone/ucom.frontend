@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import LayoutBase from '../components/Layout/LayoutBase';
 import Feed from '../components/Feed/FeedUser';
@@ -20,22 +19,45 @@ import { getOrganizationByIds } from '../store/organizations';
 import EntryListSection from '../components/EntryListSection';
 import EntryCreatedAt from '../components/EntryCreatedAt';
 import Footer from '../components/Footer';
+import { addUsers } from '../actions/users';
+import loader from '../utils/loader';
+
+const ENTRY_SECTION_LIMIT = 3;
 
 const Tag = (props) => {
   const tagTitle = props.match.params.title;
   const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState(false);
+  const [usersPopupIds, setUsersPopupIds] = useState([]);
+  const [usersPopupMetadata, setUsersPopupMetadata] = useState({});
 
   const getTag = async () => {
     try {
       const tag = await api.getTag(props.match.params.title);
-      props.addTags([tag]);
+      props.dispatch(addTags([tag]));
     } catch (e) {
       console.error(e);
     }
 
     setLoading(false);
     setLoaded(true);
+  };
+
+  const getTagUsers = async (page = 1) => {
+    loader.start();
+    try {
+      const data = await api.getTagUsers({
+        tagTitle,
+        page,
+        lastId: usersPopupIds[usersPopupIds.length - 1],
+      });
+      props.dispatch(addUsers(data.data));
+      setUsersPopupIds(data.data.map(i => i.id));
+      setUsersPopupMetadata(data.metadata);
+    } catch (e) {
+      console.error(e);
+    }
+    loader.done();
   };
 
   useEffect(() => {
@@ -70,9 +92,6 @@ const Tag = (props) => {
                 <div>
                   <Stats title="Posts" amount={tag.posts.metadata.totalAmount} />
                 </div>
-                <div>
-                  <Stats title="Following" amount={tag.users.metadata.totalAmount} />
-                </div>
               </div>
             </div>
           </div>
@@ -80,9 +99,8 @@ const Tag = (props) => {
         <div className="layout__sidebar">
           {tag.users &&
             <EntryListSection
-              // TODO: Load More
-              // tagTitle={tagTitle}
               title="Top uses by"
+              limit={ENTRY_SECTION_LIMIT}
               data={getUsersByIds(props.users, tag.users.data).map(item => ({
                 id: item.id,
                 avatarSrc: urls.getFileUrl(item.avatarFilename),
@@ -92,12 +110,25 @@ const Tag = (props) => {
                 currentRate: item.currentRate,
                 follow: true,
               }))}
+              popupData={getUsersByIds(props.users, usersPopupIds).map(item => ({
+                id: item.id,
+                avatarSrc: urls.getFileUrl(item.avatarFilename),
+                url: urls.getUserUrl(item.id),
+                title: getUserName(item),
+                nickname: item.accountName,
+                currentRate: item.currentRate,
+                follow: true,
+              }))}
+              popupMetadata={usersPopupMetadata}
+              onClickViewAll={getTagUsers}
+              onChangePage={getTagUsers}
+              showViewMore={tag.users.metadata.totalAmount > ENTRY_SECTION_LIMIT}
             />
           }
 
           {tag.orgs &&
+            // TODO: Refactoring like tag users
             <EntryListSection
-              // TODO: Load More
               title="Communities"
               data={getOrganizationByIds(props.organizations, tag.orgs.data).map(item => ({
                 id: item.id,
@@ -149,23 +180,18 @@ Tag.propTypes = {
     }),
   }).isRequired,
   tags: PropTypes.objectOf(PropTypes.any).isRequired,
-  addTags: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       title: PropTypes.string,
     }),
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default connect(
-  state => ({
-    posts: state.posts,
-    tags: state.tags,
-    user: state.user,
-    users: state.users,
-    organizations: state.organizations,
-  }),
-  dispatch => bindActionCreators({
-    addTags,
-  }, dispatch),
-)(Tag);
+export default connect(state => ({
+  posts: state.posts,
+  tags: state.tags,
+  user: state.user,
+  users: state.users,
+  organizations: state.organizations,
+}))(Tag);

@@ -7,6 +7,7 @@ import { getActivePrivateKey } from '../utils/keys';
 import { getBrainkey } from '../utils/brainkey';
 import { getBackendConfig } from '../utils/config';
 import snakes from '../utils/snakes';
+import { LIST_PER_PAGE } from '../utils/list';
 
 const { WalletApi, SocialApi } = require('ucom-libs-wallet');
 const AppTransaction = require('ucom-libs-social-transactions');
@@ -163,8 +164,8 @@ class Api {
 
   async getTagUsers({
     tagTitle,
-    perPage,
-    page,
+    perPage = LIST_PER_PAGE,
+    page = 1,
     lastId,
   }) {
     const response = await this.actions.get(`/api/v1/tags/${tagTitle}/users/?&v2=true&page=${page}&per_page=${perPage}&last_id=${lastId}`);
