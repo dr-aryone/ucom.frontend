@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import TributeWrapper from './TributeWrapper';
 
 const Textarea = ({
-  label, value, placeholder, rows, onChange, className, error, ...rest
+  label, value, placeholder, rows, onChange, className, error, isMentioned, ...rest
 }) => (
   <div className={cn(
       'textarea',
@@ -12,18 +13,35 @@ const Textarea = ({
     )}
   >
     { label && <label className="textarea__label">{label}</label> }
-    <textarea
-      className="textarea__text"
-      value={value === null ? '' : value}
-      rows={rows}
-      placeholder={placeholder}
-      onChange={(e) => {
+    {isMentioned ?
+      <TributeWrapper onChange={e => onChange(e)}>
+        <textarea
+          className="textarea__text"
+          value={value === null ? '' : value}
+          rows={rows}
+          placeholder={placeholder}
+          onChange={(e) => {
+            if (typeof onChange === 'function') {
+              onChange(e.target.value);
+            }
+          }}
+          {...rest}
+        />
+      </TributeWrapper>
+      :
+      <textarea
+        className="textarea__text"
+        value={value === null ? '' : value}
+        rows={rows}
+        placeholder={placeholder}
+        onChange={(e) => {
         if (typeof onChange === 'function') {
           onChange(e.target.value);
         }
       }}
-      {...rest}
-    />
+        {...rest}
+      />
+      }
     {error && <div className="textarea__error">{error}</div>}
   </div>
 );

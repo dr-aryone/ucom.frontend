@@ -5,6 +5,7 @@ import styles from './styles.css';
 import TextareaAutosize from '../../TextareaAutosize';
 import { PLACEHOLDER, STATUS_MAX_LENGTH } from './index';
 import { isSubmitKey, isEscKey } from '../../../utils/keyboard';
+import { getClosest } from '../../../utils/dom';
 
 const UserStatusForm = (props) => {
   let element;
@@ -15,7 +16,7 @@ const UserStatusForm = (props) => {
       return;
     }
 
-    if (!element.contains(e.target)) {
+    if (!element.contains(e.target) && !getClosest(e.target, '.tribute-container')) {
       props.onClickHide();
     }
   };
@@ -43,6 +44,7 @@ const UserStatusForm = (props) => {
         maxLength={STATUS_MAX_LENGTH}
         value={moodMessage}
         onChange={e => setMoodMessage(e.target.value)}
+        onChangeValue={e => setMoodMessage(e)}
         onKeyDown={(e) => {
           if (isEscKey(e)) {
             props.onClickHide();

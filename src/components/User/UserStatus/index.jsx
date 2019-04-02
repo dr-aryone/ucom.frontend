@@ -10,6 +10,7 @@ import IconEdit from '../../Icons/Edit';
 import Form from './Form';
 import styles from './styles.css';
 import { userIsOwner } from '../../../utils/user';
+import { sanitizeCommentText, checkMentionTag } from '../../../utils/text';
 
 export const PLACEHOLDER = 'What’s Ur Passion…';
 export const STATUS_MAX_LENGTH = 130;
@@ -40,9 +41,12 @@ const UserStatus = (props) => {
   return (
     <div className={styles.status}>
       {!userIsOwner(user, props.owner) ? (
-        <div className={styles.message}>
-          {moodMessage || 'What’s Ur @Passion…'}
-        </div>
+        <div
+          className={styles.message}
+          dangerouslySetInnerHTML={{
+            __html: sanitizeCommentText(checkMentionTag(moodMessage || PLACEHOLDER)),
+          }}
+        />
       ) : (
         <div
           role="presentation"
@@ -52,8 +56,12 @@ const UserStatus = (props) => {
             [styles.messageEmpty]: !moodMessage,
           })}
           onClick={() => showForm()}
+
         >
-          {moodMessage || PLACEHOLDER}
+          <span dangerouslySetInnerHTML={{
+              __html: sanitizeCommentText(checkMentionTag(moodMessage || PLACEHOLDER)),
+            }}
+          />
           <span className={styles.editIcon}>
             <IconEdit />
           </span>
