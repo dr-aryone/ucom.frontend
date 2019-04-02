@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 import moment from 'moment';
-import { fetchPost, getOnePostOffer } from '../../../actions/posts';
+import { fetchPost, getOnePostOffer, getOnePostOfferWithUserAirdrop } from '../../../actions/posts';
 import Rate from '../../Rate';
 import PostRating from '../../Rating/PostRating';
 import urls from '../../../utils/urls';
@@ -25,6 +25,8 @@ import { selectUser } from '../../../store/selectors/user';
 
 const OfferSidebar = (props) => {
   const [sharePopup, toggleSharePopup] = useState(false);
+  const [conditions, setConditions] = useState();
+  const postId = Number(props.postId);
 
   const toggleShare = () => {
     toggleSharePopup(!sharePopup);
@@ -38,13 +40,21 @@ const OfferSidebar = (props) => {
 
   useEffect(() => {
     if (props.postId) {
-      props.fetchPost(props.postId);
+      // props.fetchPost(props.postId);
+      props.getOnePostOfferWithUserAirdrop({ postId }).then((data) => {
+        console.log(data);
+        setConditions(data.oneUserAirdrop);
+      });
     }
     props.fetchMyself();
   }, [props.postId]);
 
   const owner = getUserById(props.users, props.user.id);
-  const post = getPostById(props.posts, props.postId);
+  const post = getPostById(props.posts, postId);
+
+  if (conditions && conditions.authGithub === true) {
+    console.log('ppppppp: ', conditions);
+  }
 
   if (!post) {
     return null;
@@ -66,16 +76,18 @@ const OfferSidebar = (props) => {
           <span className={styles.statusIcon}><Done /></span>
           <span>Recieved</span>
         </div>
-        <div className={styles.tokens}>
-          <div className={styles.tokensColumn}>
-            <div className={styles.tokenNumber}>3 000</div>
-            <span className={styles.tokenCurr}>UOS</span>
+        {conditions &&
+          <div className={styles.tokens}>
+            <div className={styles.tokensColumn}>
+              <div className={styles.tokenNumber}>{(conditions.tokens[0].amountClaim).toLocaleString('ru-RU')}</div>
+              <span className={styles.tokenCurr}>UOS</span>
+            </div>
+            <div className={styles.tokensColumn}>
+              <div className={styles.tokenNumber}>{(conditions.tokens[1].amountClaim).toLocaleString('ru-RU')}</div>
+              <span className={styles.tokenCurr}>UOS.Futures</span>
+            </div>
           </div>
-          <div className={styles.tokensColumn}>
-            <div className={styles.tokenNumber}>3 000</div>
-            <span className={styles.tokenCurr}>UOS.Futures</span>
-          </div>
-        </div>
+        }
       </div>
       <div className={styles.condition}>
         <div className={styles.conditionTitle}>How to Enter Airdrop:</div>
@@ -94,7 +106,7 @@ const OfferSidebar = (props) => {
           </div>
         </div>
         <div className={styles.option}>
-          {conds.gh === true ? (
+          {conditions && conditions.authGithub === true ? (
             <div className={styles.optionStatus}><Done /></div>
           ) : (
             <div className={styles.optionStatus}><Two /></div>
@@ -111,7 +123,7 @@ const OfferSidebar = (props) => {
           </div>
         </div>
         <div className={styles.option}>
-          <div className={styles.optionStatus}><Three /></div>
+          <div className={styles.optionStatus}>{conditions && conditions.authMyself === true ? <Done /> : <Three />}</div>
           <div className={styles.optionBlock}>
             <a href="/communities/107" target="_blank" className={styles.optionTitle}>Join DevExchange</a>
             <div className={styles.optionText}>to see your Importance in action and talk to community members</div>
@@ -150,7 +162,7 @@ export default connect(
   }),
   dispatch => bindActionCreators({
     fetchPost,
-    getOnePostOffer,
+    getOnePostOfferWithUserAirdrop,
     authShowPopup,
     fetchMyself,
   }, dispatch),

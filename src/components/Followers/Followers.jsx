@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import React, { PureComponent, Fragment } from 'react';
 import Avatar from '../Avatar';
 import Popup from '../Popup';
@@ -11,6 +12,7 @@ import UserListAirdrop from '../User/UsersListAirdrop';
 import { getFileUrl } from '../../utils/upload';
 import { getUsersByIds } from '../../store/users';
 import { selectUser } from '../../store/selectors/user';
+import { getManyUsers } from '../../actions/users';
 
 class Followers extends PureComponent {
   constructor(props) {
@@ -18,7 +20,19 @@ class Followers extends PureComponent {
 
     this.state = {
       popupVisible: false,
+      usersAirdrop: [],
     };
+
+    if (props.airDrop) {
+      this.props.getManyUsers({
+        airdrops: { id: 1 }, // airdrop_id
+        orderBy: 'score',
+        page: 1,
+        perPage: 10,
+      }).then((data) => {
+        this.setState({ usersAirdrop: data.data.map(item => item.id) });
+      });
+    }
   }
 
   componentWillReceiveProps(prevProps) {
@@ -27,18 +41,30 @@ class Followers extends PureComponent {
     }
   }
 
-  hidePopup() {
+  hidePopup(props) {
+    console.log(props);
+    if (props.onClickClose) {
+      props.onClickClose();
+      return;
+    }
+
     this.setState({ popupVisible: false });
   }
 
-  showPopup() {
+  showPopup(props) {
+    console.log(props);
+    if (props.onClick) {
+      props.onClick();
+      return;
+    }
+
     if (this.props.usersIds.length > 0) {
       this.setState({ popupVisible: true });
     }
   }
 
   render() {
-    if (!this.props.usersIds) {
+    if (!this.props.usersIds && !this.props.airDrop) {
       return null;
     }
 
@@ -50,8 +76,8 @@ class Followers extends PureComponent {
         {this.state.popupVisible && (
           <Popup onClickClose={() => this.hidePopup()}>
             <ModalContent onClickClose={() => this.hidePopup()}>
-              {this.props.airDrop ? (
-                <UserListAirdrop title={this.props.title} usersIds={this.props.usersIds} />
+              {this.props.airDrop && this.state.usersAirdrop ? (
+                <UserListAirdrop title={this.props.title} />
               ) : (
                 <UserListPopup title={this.props.title} usersIds={this.props.usersIds} />
               )}
@@ -69,7 +95,7 @@ class Followers extends PureComponent {
                   { 'button-clean_link': users.length },
                 )}
               >
-                {users.length}
+                {this.state.usersAirdrop.length || users.length}
               </button>
             </div>
 
@@ -107,13 +133,20 @@ Followers.propTypes = {
   title: PropTypes.string,
   usersIds: PropTypes.arrayOf(PropTypes.number),
   users: PropTypes.objectOf(PropTypes.object),
+  onClick: PropTypes.func,
 };
 
 Followers.defaultProps = {
   title: 'Followers',
 };
 
-export default withRouter(connect(state => ({
-  users: state.users,
-  user: selectUser(state),
-}))(Followers));
+export default withRouter(connect(
+  state => ({
+    users: state.users,
+    user: selectUser(state),
+  }),
+  dispatch => bindActionCreators({
+    getManyUsers,
+  }, dispatch),
+)(Followers));
+

@@ -121,6 +121,14 @@ export const getOnePostOffer = ({
       commentsPage,
       commentsPerPage,
     });
+    dispatch(commentsAddContainerData({
+      containerId: COMMENTS_CONTAINER_ID_POST,
+      entryId: postId,
+      parentId: 0,
+      comments: data.onePostOffer.comments.data,
+      metadata: data.onePostOffer.comments.metadata,
+    }));
+    delete data.onePostOffer.comments;
     dispatch(addPosts([data.onePostOffer]));
     return data;
   } catch (e) {
@@ -142,6 +150,14 @@ export const getOnePostOfferWithUserAirdrop = ({
       commentsPage,
       commentsPerPage,
     });
+    dispatch(commentsAddContainerData({
+      containerId: COMMENTS_CONTAINER_ID_POST,
+      entryId: postId,
+      parentId: 0,
+      comments: data.onePostOffer.comments.data,
+      metadata: data.onePostOffer.comments.metadata,
+    }));
+    delete data.onePostOffer.comments;
     dispatch(addPosts([data.onePostOffer]));
     return data;
   } catch (e) {

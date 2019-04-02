@@ -46,7 +46,7 @@ const UserCardLine = (props) => {
         </div>
       </div>
       <div className={styles.blockGh}>
-        <div className={styles.nameGh}>{props.name}</div>
+        <div className={styles.nameGh}>{props.nameGh}</div>
       </div>
       <div className={styles.blockScore}>
         <div className={styles.nameGh}>{formatRate(props.rate)}</div>
@@ -59,11 +59,13 @@ UserCardLine.propTypes = {
   userPickSrc: PropTypes.string,
   userPickAlt: PropTypes.string,
   name: PropTypes.string.isRequired,
+  nameGh: PropTypes.string.isRequired,
   rate: PropTypes.number.isRequired,
   accountName: PropTypes.string.isRequired,
   url: PropTypes.string,
   isOwner: PropTypes.bool,
   sign: PropTypes.string,
+  order: PropTypes.number,
 };
 
 UserCardLine.defaultProps = {

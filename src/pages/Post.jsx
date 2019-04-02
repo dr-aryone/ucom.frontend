@@ -21,14 +21,8 @@ import { COMMENTS_CONTAINER_ID_POST } from '../utils/comments';
 import { commentsResetContainerDataByEntryId } from '../actions/comments';
 import ShareButton from '../components/ShareButton';
 import ShareBlock from '../components/ShareBlock';
-import { getAirdropOfferId } from '../utils/config';
-import Offer from './Offer';
 
 const PostPage = (props) => {
-  const airdropOfferId = getAirdropOfferId();
-  if (+airdropOfferId === +props.match.params.postId) {
-    return <Offer />;
-  }
   const { postId } = props.match.params;
   const [sharePopup, toggleSharePopup] = useState(false);
 
