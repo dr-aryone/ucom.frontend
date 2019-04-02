@@ -20,7 +20,7 @@ import feed from './feed';
 import tags from './tags';
 import communityFeed from './communityFeed';
 import tagsFeed from './tagsFeed';
-import { reducer as user } from './user';
+import user from './user';
 
 export const createStore = () => {
   const reducers = redux.combineReducers({

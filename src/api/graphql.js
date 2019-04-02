@@ -77,6 +77,13 @@ export default {
 
     try {
       const data = await request({ query });
+
+      // TODO: Hot fix for backend bug
+      data.data.oneUserTrustedBy.data.forEach((item) => {
+        delete item.iFollow;
+        delete item.followedBy;
+      });
+
       return data.data.oneUserTrustedBy;
     } catch (e) {
       throw e;
@@ -314,4 +321,3 @@ export default {
     }
   },
 };
-

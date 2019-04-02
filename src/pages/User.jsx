@@ -132,7 +132,7 @@ const UserPage = (props) => {
           />
           <EntryCreatedAt date={user.createdAt} />
 
-          {!userIsOwner(user, props.owner) &&
+          {!userIsOwner(user, props.owner) && !props.ownerIsLoading &&
             <Trust
               loading={trustLoading}
               trusted={user && user.myselfData && user.myselfData.trust}
@@ -205,6 +205,11 @@ UserPage.propTypes = {
       trust: PropTypes.bool,
     }),
   }).isRequired,
+  ownerIsLoading: PropTypes.bool,
+};
+
+UserPage.defaultProps = {
+  ownerIsLoading: true,
 };
 
 export const getUserPageData = (store, params) => {
@@ -226,4 +231,5 @@ export default connect(state => ({
   users: state.users,
   posts: state.posts,
   owner: selectUser(state),
+  ownerIsLoading: state.user.loading,
 }))(UserPage);

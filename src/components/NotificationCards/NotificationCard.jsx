@@ -80,7 +80,7 @@ const getTitle = (props) => {
           <Link to={urls.getUserUrl(props.data.user.id)}>
             <strong>{getUserName(props.data.user)}</strong>
           </Link>
-          &nbsp;trust you
+          &nbsp;trusts you
         </Fragment>
       );
 

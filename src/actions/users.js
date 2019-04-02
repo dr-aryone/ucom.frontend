@@ -4,7 +4,7 @@ import { getToken, removeToken } from '../utils/token';
 import loader from '../utils/loader';
 // import { enableGtm } from '../utils/gtm';
 import { addServerErrorNotification } from './notifications';
-import { setUser } from './';
+import { setUser, setUserLoading } from './';
 import { siteNotificationsSetUnreadAmount } from './siteNotifications';
 import { getAccountState } from './wallet';
 import { addOrganizations } from './organizations';
@@ -48,6 +48,7 @@ export const fetchMyself = () => async (dispatch) => {
     return;
   }
 
+  dispatch(setUserLoading(true));
   loader.start();
 
   try {
@@ -67,6 +68,7 @@ export const fetchMyself = () => async (dispatch) => {
     removeToken();
   }
 
+  dispatch(setUserLoading(false));
   loader.done();
 };
 

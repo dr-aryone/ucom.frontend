@@ -118,7 +118,7 @@ const users = (state = getInitialState(), action) => {
           [action.payload.userId]: {
             ...state.data[action.payload.userId],
             myselfData: {
-              ...(state.data[action.payload.userId] ? [action.payload.userId].myselfData : null),
+              ...(state.data[action.payload.userId] ? state.data[action.payload.userId].myselfData : null),
               trust: action.payload.trust,
             },
           },

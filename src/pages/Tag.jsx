@@ -32,6 +32,8 @@ const Tag = (props) => {
   const [usersPopupMetadata, setUsersPopupMetadata] = useState({});
 
   const getTag = async () => {
+    setLoading(true);
+
     try {
       const tag = await api.getTag(props.match.params.title);
       props.dispatch(addTags([tag]));
@@ -39,8 +41,8 @@ const Tag = (props) => {
       console.error(e);
     }
 
-    setLoading(false);
     setLoaded(true);
+    setLoading(false);
   };
 
   const getTagUsers = async (page = 1) => {
