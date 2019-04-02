@@ -34,6 +34,9 @@ const FeedUser = (props) => {
         postTypeId: POST_TYPE_DIRECT_ID,
       },
     });
+    if (props.callbackOnSubmit) {
+      props.callbackOnSubmit();
+    }
   };
 
   useEffect(() => {
@@ -76,6 +79,7 @@ FeedUser.propTypes = {
   feedCreatePost: PropTypes.func.isRequired,
   feedInputInitialText: PropTypes.string,
   filter: PropTypes.func,
+  callbackOnSubmit: PropTypes.func,
 };
 
 FeedUser.defaultProps = {
@@ -84,6 +88,7 @@ FeedUser.defaultProps = {
   tagIdentity: null,
   feedInputInitialText: null,
   filter: null,
+  callbackOnSubmit: null,
 };
 
 export default connect(

@@ -153,7 +153,7 @@ const Tag = (props) => {
                 const post = getPostById(props.posts, postId);
                 return post && post.description && existHashTag(post.description, tagTitle);
               }}
-              callbackOnSubmit={() => delay(() => getTag(tagTitle), 500)}
+              callbackOnSubmit={() => delay(() => getTag(tagTitle), 600)}
             />
           }
         </div>
