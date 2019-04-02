@@ -29,7 +29,7 @@ const request = async (data) => {
 
 export default {
   async getUserPageData({
-    userId,
+    userIdentity,
     trustedByOrderBy = LIST_ORDER_BY,
     trustedByPerPage = LIST_PER_PAGE,
     trustedByPage = 1,
@@ -37,12 +37,12 @@ export default {
     const query = GraphQLSchema.getQueryMadeFromParts([
       GraphQLSchema.getOneUserQueryPart({
         filters: {
-          user_id: +userId,
+          user_identity: `${userIdentity}`,
         },
       }),
       GraphQLSchema.getOneUserTrustedByQueryPart({
         filters: {
-          user_id: +userId,
+          user_identity: `${userIdentity}`,
         },
         order_by: trustedByOrderBy,
         per_page: trustedByPerPage,
@@ -59,7 +59,7 @@ export default {
   },
 
   async getUserTrustedBy({
-    userId,
+    userIdentity,
     orderBy = LIST_ORDER_BY,
     perPage = LIST_PER_PAGE,
     page = 1,
@@ -67,7 +67,7 @@ export default {
     const query = GraphQLSchema.getQueryMadeFromParts([
       GraphQLSchema.getOneUserTrustedByQueryPart({
         filters: {
-          user_id: +userId,
+          user_identity: `${userIdentity}`,
         },
         order_by: orderBy,
         per_page: perPage,
@@ -91,12 +91,12 @@ export default {
   },
 
   async fetchUser({
-    userId,
+    userIdentity,
   }) {
     const query = GraphQLSchema.getQueryMadeFromParts([
       GraphQLSchema.getOneUserQueryPart({
         filters: {
-          user_id: +userId,
+          user_identity: `${userIdentity}`,
         },
       }),
     ]);
@@ -110,19 +110,25 @@ export default {
   },
 
   async getUserWallFeed({
-    userId,
+    userIdentity,
     page = 1,
     perPage = FEED_PER_PAGE,
     commentsPage = 1,
     commentsPerPage = COMMENTS_PER_PAGE,
   }) {
-    const query = GraphQLSchema.getUserWallFeedQuery(
-      userId,
-      page,
-      perPage,
-      commentsPage,
-      commentsPerPage,
-    );
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getUserWallFeedQueryPart({
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+        page,
+        per_page: perPage,
+        comments: {
+          page: commentsPage,
+          per_page: commentsPerPage,
+        },
+      }),
+    ]);
 
     try {
       const data = await request({ query });

@@ -72,9 +72,9 @@ export const fetchMyself = () => async (dispatch) => {
   loader.done();
 };
 
-export const fetchUser = userId => async (dispatch) => {
+export const fetchUser = userIdentity => async (dispatch) => {
   try {
-    const data = await graphql.fetchUser({ userId });
+    const data = await graphql.fetchUser({ userIdentity });
     dispatch(addUsers([data]));
     return data;
   } catch (e) {
@@ -83,14 +83,14 @@ export const fetchUser = userId => async (dispatch) => {
 };
 
 export const fetchUserPageData = ({
-  userId,
+  userIdentity,
   trustedByOrderBy,
   trustedByPerPage,
   trustedByPage,
 }) => async (dispatch) => {
   try {
     const data = await graphql.getUserPageData({
-      userId,
+      userIdentity,
       trustedByOrderBy,
       trustedByPerPage,
       trustedByPage,
@@ -104,14 +104,14 @@ export const fetchUserPageData = ({
 };
 
 export const fetchUserTrustedBy = ({
-  userId,
+  userIdentity,
   orderBy,
   perPage,
   page,
 }) => async (dispatch) => {
   try {
     const data = await graphql.getUserTrustedBy({
-      userId,
+      userIdentity,
       orderBy,
       perPage,
       page,
