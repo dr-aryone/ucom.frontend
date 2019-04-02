@@ -13,6 +13,7 @@ const DropzoneWrapper = (props) => {
   return (
     <Dropzone
       {...rest}
+      multiple={multiple}
       onDropAccepted={async (files) => {
         if (props.onChange) {
           try {
