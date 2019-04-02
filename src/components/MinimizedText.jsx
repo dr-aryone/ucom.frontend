@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import React, { Fragment } from 'react';
-import { sanitizeCommentText, checkMentionTag } from '../utils/text';
+import { sanitizeCommentText, checkMentionTag, checkHashTag } from '../utils/text';
 
 const MinimizedText = props => (
   <div
@@ -17,7 +17,7 @@ const MinimizedText = props => (
       )}
     >
       <p dangerouslySetInnerHTML={{
-          __html: sanitizeCommentText(checkMentionTag(props.text)),
+          __html: sanitizeCommentText(checkMentionTag(checkHashTag(props.text))),
         }}
       />
     </div>
