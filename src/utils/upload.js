@@ -1,4 +1,5 @@
-export const UPLOAD_SIZE_LIMIT = 1048576;
+export const UPLOAD_SIZE_LIMIT = 5242880;
+export const UPLOAD_SIZE_LIMIT_GIF = 1048576;
 export const UPLOAD_SIZE_LIMIT_ERROR = 'File exceed the 1 Mb limit';
 export const UPLAOD_ERROR_BASE = 'Error, try uploading file again later';
 export const AVATAR_MAX_WIDTH = 300;
@@ -26,7 +27,7 @@ export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', qu
   new Promise((resolve, reject) => {
     const fileName = file.name;
     if (file.type === 'image/gif') {
-      if (file.size > UPLOAD_SIZE_LIMIT) {
+      if (file.size > UPLOAD_SIZE_LIMIT_GIF) {
         reject(UPLOAD_SIZE_LIMIT_ERROR);
       }
       resolve(file);
