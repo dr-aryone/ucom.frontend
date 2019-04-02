@@ -8,11 +8,12 @@ const DropZone = (props) => {
   const {
     onDrop,
     text,
+    multiple,
   } = props;
   return (
     <div className={classNames('drop-zone', props.className)}>
       <DropzoneWrapper
-        multiple={props.multiple}
+        multiple={multiple}
         className="drop-zone__input"
         onChange={onDrop}
       >
@@ -26,11 +27,13 @@ const DropZone = (props) => {
 
 DropZone.propTypes = {
   text: PropTypes.string,
+  multiple: PropTypes.bool,
   onDrop: PropTypes.func.isRequired,
 };
 
 DropZone.defaultProps = {
   text: '',
+  multiple: false,
 };
 
 export default DropZone;

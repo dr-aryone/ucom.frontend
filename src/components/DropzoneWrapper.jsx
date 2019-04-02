@@ -8,7 +8,7 @@ import { compressUploadedImage } from '../utils/upload';
 
 const DropzoneWrapper = (props) => {
   const {
-    addErrorNotification, children, onChange, ...rest
+    addErrorNotification, children, onChange, multiple, ...rest
   } = props;
   return (
     <Dropzone
@@ -16,7 +16,11 @@ const DropzoneWrapper = (props) => {
       onDropAccepted={async (files) => {
         if (props.onChange) {
           try {
-            props.onChange(await compressUploadedImage(files[0]));
+            if (multiple) {
+              props.onChange(files.map(file => compressUploadedImage(file)));
+            } else {
+              props.onChange(await compressUploadedImage(files[0]));
+            }
           } catch (e) {
             addErrorNotification(e);
           }
