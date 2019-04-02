@@ -20,7 +20,14 @@ const users = (state = getInitialState(), action) => {
         ...state,
         data: {
           ...state.data,
-          ...users.reduce((result, user) => ({ ...result, [user.id]: { ...state.data[user.id], ...user } }), {}),
+          ...users.reduce((result, user) => ({
+            ...result,
+            [user.id]: {
+              ...state.data[user.id],
+              ...result[user.id],
+              ...user,
+            },
+          }), {}),
         },
       };
     }
@@ -102,6 +109,21 @@ const users = (state = getInitialState(), action) => {
         },
       };
     }
+
+    case 'USERS_SET_TRUST':
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.payload.userId]: {
+            ...state.data[action.payload.userId],
+            myselfData: {
+              ...(state.data[action.payload.userId] ? [action.payload.userId].myselfData : null),
+              trust: action.payload.trust,
+            },
+          },
+        },
+      };
 
     default:
       return state;

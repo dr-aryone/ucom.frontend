@@ -8,6 +8,7 @@ import { setUser } from './';
 import { siteNotificationsSetUnreadAmount } from './siteNotifications';
 import { getAccountState } from './wallet';
 import { addOrganizations } from './organizations';
+import graphql from '../api/graphql';
 
 export const usersAddIFollow = payload => ({ type: 'USERS_ADD_I_FOLLOW', payload });
 export const usersRemoveIFollow = payload => ({ type: 'USERS_REMOVE_I_FOLLOW', payload });
@@ -69,11 +70,56 @@ export const fetchMyself = () => async (dispatch) => {
   loader.done();
 };
 
-export const fetchUser = userId => dispatch =>
-  api.getUser(userId)
-    .then((data) => {
-      dispatch(addUsers([data]));
+export const fetchUser = userId => async (dispatch) => {
+  try {
+    const data = await graphql.fetchUser({ userId });
+    dispatch(addUsers([data]));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchUserPageData = ({
+  userId,
+  trustedByOrderBy,
+  trustedByPerPage,
+  trustedByPage,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getUserPageData({
+      userId,
+      trustedByOrderBy,
+      trustedByPerPage,
+      trustedByPage,
     });
+    const { oneUser, oneUserTrustedBy } = data;
+    dispatch(addUsers(oneUserTrustedBy.data.concat([oneUser])));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchUserTrustedBy = ({
+  userId,
+  orderBy,
+  perPage,
+  page,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getUserTrustedBy({
+      userId,
+      orderBy,
+      perPage,
+      page,
+    });
+    dispatch(addUsers(data.data));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
 
 export const updateUser = payload => async (dispatch) => {
   loader.start();
@@ -136,4 +182,52 @@ export const unfollowUser = data => async (dispatch) => {
   }
 
   loader.done();
+};
+
+export const trustUser = ({
+  userId,
+  userAccountName,
+  ownerAccountName,
+}) => async (dispatch) => {
+  try {
+    await api.trustUser(
+      ownerAccountName,
+      userAccountName,
+      userId,
+    );
+    dispatch({
+      type: 'USERS_SET_TRUST',
+      payload: {
+        userId,
+        trust: true,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    dispatch(addServerErrorNotification(e));
+  }
+};
+
+export const untrustUser = ({
+  userId,
+  userAccountName,
+  ownerAccountName,
+}) => async (dispatch) => {
+  try {
+    await api.untrustUser(
+      ownerAccountName,
+      userAccountName,
+      userId,
+    );
+    dispatch({
+      type: 'USERS_SET_TRUST',
+      payload: {
+        userId,
+        trust: false,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    dispatch(addServerErrorNotification(e));
+  }
 };

@@ -8,7 +8,8 @@
   background: #fff;
 }
 
-:local(.entryHead.organization) {
+:local(.entryHead.organization),
+:local(.entryHead.tag) {
   border-radius: 0;
 }
 
@@ -76,6 +77,11 @@
   font-weight: bold;
   line-height: 34px;
   color: #000;
+}
+
+:local(.userName.big) {
+  font-size: 48px;
+  line-height: 60px;
 }
 
 :local(.followButton) {

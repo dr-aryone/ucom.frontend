@@ -1,4 +1,5 @@
 import humps from 'lodash-humps';
+import urls from './urls';
 
 export const getYearOfDate = (date) => {
   if (!date) {
@@ -31,3 +32,13 @@ export const userIsFollowed = (followers, userId) => {
 };
 
 export const userIsOwner = (user, owner) => user && owner && +user.id === +owner.id;
+
+export const mapUserDataToFollowersProps = user => ({
+  id: user.id,
+  follow: true,
+  avatarSrc: urls.getFileUrl(user.avatarFilename),
+  url: urls.getUserUrl(user.id),
+  title: getUserName(user),
+  nickname: user.accountName,
+  currentRate: user.currentRate,
+});
