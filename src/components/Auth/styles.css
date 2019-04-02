@@ -1,0 +1,132 @@
+:local(.auth) {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-self: flex-start;
+  box-sizing: border-box;
+  min-width: calc(100% - 80px);
+  min-height: calc(100% - 80px);
+  margin: 40px;
+  border-radius: 12px;
+  box-shadow:  0px 0px 20px rgba(184, 184, 184, 0.25);
+  background: #fff;
+}
+
+:local(.icon) {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+:local(.close) {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  cursor: pointer;
+}
+
+:local(.navigation) {
+  position: absolute;
+  top: 36px;
+  left: 36px;
+  cursor: pointer;
+}
+
+:local(.navigation .icon) {
+  transition: fill 0.2s ease;
+}
+
+:local(.navigation:hover .icon) {
+  fill: #D8352F;
+}
+
+:local(.navigation .label) {
+  position: absolute;
+  z-index: -1;
+  left: 100%;
+  top: 0;
+  line-height: 24px;
+  padding-left: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease, z-index 0s linear 0.2s;
+}
+
+:local(.navigation:hover .label) {
+  z-index: 0;
+  opacity: 1;
+  transition: opacity 0.2s ease, z-index 0s linear 0s;
+}
+
+:local(.navText) {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+}
+
+:local(.content) {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+:local(.content .main) {
+  flex: 1 1 auto;
+}
+
+:local(.content .bottom) {
+  padding: 29px 0;
+  text-align: center;
+  font-size: 16px;
+  color: #585858;
+}
+
+:local(.form) {
+  padding: 115px 0 0;
+}
+
+:local(.form .title) {
+  margin: 0 0 130px;
+}
+
+:local(.title) {
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 34px;
+  text-align: center;
+}
+
+:local(.field) {
+  margin: 0 0 90px;
+}
+
+:local(.input) {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  margin: 0;
+  font-size: 16px;
+  border: 1px solid #B1B1B1;
+  border-width: 0 0 1px;
+  outline: none;
+}
+
+:local(.input::placeholder) {
+  opacity: 1;
+  color: #585858;
+}
+
+@media (max-width: 767px) {
+  :local(.auth) {
+    min-width: calc(100% - 8px);
+    min-height: calc(100% - 8px);
+    margin: 4px;
+  }
+}

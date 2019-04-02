@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { Route, Switch, withRouter } from 'react-router';
 import React, { useEffect, Fragment } from 'react';
@@ -6,7 +7,7 @@ import { initNotificationsListeners, siteNotificationsSetUnreadAmount } from '..
 import { fetchMyself } from '../actions/users';
 import UserMenu from './UserMenu/UserMenu';
 import Page from './Page';
-import Auth from './Auth';
+import Auth from './Auth/index';
 import Notifications from './Notifications';
 import socket from '../api/socket';
 import config from '../../package.json';
@@ -41,6 +42,11 @@ const App = (props) => {
       <Notifications />
     </Fragment>
   );
+};
+
+App.propTypes = {
+  fetchMyself: PropTypes.func.isRequired,
+  initNotificationsListeners: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(
