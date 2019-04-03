@@ -9,8 +9,8 @@ export const escapeQuotes = memoize((text = '') => text.replace(/&quot;/g, '"'))
 const makeLinkTag = (match) => {
   match = match.toLowerCase();
   const link = match.slice(0, 1) === '>' ? match.slice(1).replace('#', '').trim() : match.replace('#', '').trim();
-  const result = match.slice(0, 1) === '>' ? `><a href='/tags/${link}' class='tag_link' target='_blank'>${match.slice(1)}</a>` :
-    `<a href='/tags/${link}' class='tag_link' target='_blank'>${match}</a>`;
+  const result = match.slice(0, 1) === '>' ? `> <a href='/tags/${link}' class='tag_link' target='_blank'>${match.slice(1)}</a>` :
+    ` <a href='/tags/${link}' class='tag_link' target='_blank'>${match[0] === ' ' ? match.slice(1) : match}</a>`;
   return result;
 };
 
@@ -27,8 +27,8 @@ export const existHashTag = (text, tag) => {
 const makeLinkMention = (match) => {
   match = match.toLowerCase();
   const accountName = match.slice(0, 1) === '>' ? match.slice(1).replace('@', '').trim() : match.replace('@', '').trim();
-  const result = match.slice(0, 1) === '>' ? `><a href=${urls.getUserUrl(accountName)} class='mention_link' target='_blank'>${match.slice(1)}</a>` :
-    `<a href=${urls.getUserUrl(accountName)} class='mention_link' target='_blank'>${match}</a>`;
+  const result = match.slice(0, 1) === '>' ? `> <a href=${urls.getUserUrl(accountName)} class='mention_link' target='_blank'>${match.slice(1)}</a>` :
+    ` <a href=${urls.getUserUrl(accountName)} class='mention_link' target='_blank'>${match[0] === ' ' ? match.slice(1) : match}</a>`;
   return result;
 };
 

@@ -57,8 +57,11 @@ const UserStatus = (props) => {
             [styles.messageEditable]: true,
             [styles.messageEmpty]: !moodMessage,
           })}
-          onClick={() => showForm()}
-
+          onClick={(e) => {
+            if (e.target.tagName !== 'A') {
+              showForm();
+            }
+          }}
         >
           <span dangerouslySetInnerHTML={dangerousInnerHTML} />
           <span className={styles.editIcon}>
