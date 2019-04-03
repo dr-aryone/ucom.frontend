@@ -55,7 +55,7 @@ export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', qu
 
           const ctx = canvasEl.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
-          const newFileName = fileName.split('.').map(e => (e === 'png' ? 'jpg' : e)).join('.');
+          const newFileName = `${fileName.substr(0, fileName.lastIndexOf('.'))}.jpg`;
           ctx.canvas.toBlob((blob) => {
             const file = new File([blob], newFileName, {
               type,
