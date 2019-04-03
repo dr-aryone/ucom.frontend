@@ -49,6 +49,7 @@
   top: 0;
   line-height: 24px;
   padding-left: 12px;
+  white-space: nowrap;
   opacity: 0;
   transition: opacity 0.2s ease, z-index 0s linear 0.2s;
 }
@@ -69,10 +70,12 @@
 :local(.content) {
   flex: 1 1 auto;
   display: flex;
+  box-sizing: border-box;
   flex-direction: column;
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
+  padding: 0 10px;
 }
 
 :local(.content .main) {
@@ -86,6 +89,13 @@
   color: #585858;
 }
 
+:local(.title) {
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 34px;
+  text-align: center;
+}
+
 :local(.form) {
   padding: 115px 0 0;
 }
@@ -94,11 +104,8 @@
   margin: 0 0 130px;
 }
 
-:local(.title) {
-  font-size: 28px;
-  font-weight: bold;
-  line-height: 34px;
-  text-align: center;
+:local(.form .title.saveKey) {
+  margin: 0 0 70px;
 }
 
 :local(.field) {
@@ -121,6 +128,92 @@
 :local(.input::placeholder) {
   opacity: 1;
   color: #585858;
+}
+
+:local(.action) {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+:local(.error) {
+  margin: 20px 0 -40px;
+  font-size: 16px;
+  text-align: center;
+}
+
+:local(.error .text) {
+  vertical-align: middle;
+}
+
+:local(.error svg) {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 8px 0 0;
+}
+
+:local(.user) {
+  padding: 56px 0 0;
+  text-align: center;
+}
+
+:local(.user .userPick) {
+  margin: 0 0 16px;
+}
+
+:local(.user .name) {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+:local(.user .accountName) {
+  font-size: 14px;
+  color: #585858;
+}
+
+:local(.copy) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 24px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 2px;
+  background: #F5F6F6;
+}
+
+:local(.copy .key) {
+  padding: 0 12px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:local(.copy .label) {
+  transition: color 0.2s ease;
+  cursor: pointer;
+  color: #D8352F;
+}
+
+:local(.copy .label:hover) {
+  color: #C32924;
+}
+
+:local(.saveKeyText) {
+  margin: 0 0 64px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 28px;
+}
+
+:local(.navLink) {
+  cursor: pointer;
+}
+
+:local(.navLink svg) {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 @media (max-width: 767px) {

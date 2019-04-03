@@ -1,66 +1,68 @@
 import PropTypes from 'prop-types';
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import styles from './styles.css';
 import Popup from '../Popup';
 import IconClose from '../Icons/Close';
-import IconArrowLeft from '../Icons/ArrowLeft';
-import Button from '../Button/index';
+import Account from './Account';
+import SocialKey from './SocialKey';
+import NewSocialKey from './NewSocialKey';
+import SaveSocialKey from './SaveSocialKey';
 
-const Auth = props => (
-  <Popup
-    onClickClose={props.onClickClose}
-  >
-    <div className={styles.auth}>
-      <div
-        role="presentation"
-        className={styles.close}
-        onClick={props.onClickClose}
-      >
-        <span className={styles.icon}>
-          <IconClose />
-        </span>
-      </div>
+const STEP_ACCOUNT = 1;
+const STEP_SOCIAL_KEY = 2;
+const STEP_NEW_SOCIAL_KEY = 3;
+const STEP_SAVE_SOCIAL_KEY = 4;
 
-      <div className={styles.navigation}>
-        <span className={styles.icon}>
-          <IconArrowLeft />
-        </span>
-        <span className={styles.label}>
-          <span className={styles.navText}>Authorization</span>
-        </span>
-      </div>
+const Auth = (props) => {
+  const [currentStep, setCurrentStep] = useState(STEP_SAVE_SOCIAL_KEY);
 
-      <div className={styles.content}>
-        <div className={styles.main}>
-          <div className={styles.form}>
-            <h2 className={styles.title}>What’s Your U°OS Account Name?</h2>
-            <div className={styles.field}>
-              <input
-                type="text"
-                className={styles.input}
-                placeholder="@account_name"
-              />
-            </div>
-            <div className={styles.action}>
-              <Button
-                red
-                big
-                cap
-                strech
-              >
-                Proceed
-              </Button>
-            </div>
-          </div>
+  return (
+    <Popup
+      onClickClose={props.onClickClose}
+    >
+      <div className={styles.auth}>
+        <div
+          role="presentation"
+          className={styles.close}
+          onClick={props.onClickClose}
+        >
+          <span className={styles.icon}>
+            <IconClose />
+          </span>
         </div>
-        <div className={styles.bottom}>
-          Don’t have an account?&nbsp;
-          <a href="#" className={styles.navText}>Create one</a>
-        </div>
+
+        {(() => {
+          switch (currentStep) {
+            case STEP_SOCIAL_KEY:
+              return (
+                <SocialKey
+                  onClickBack={() => setCurrentStep(STEP_ACCOUNT)}
+                  onClickNewKeys={() => setCurrentStep(STEP_NEW_SOCIAL_KEY)}
+                />
+              );
+            case STEP_NEW_SOCIAL_KEY:
+              return (
+                <NewSocialKey
+                  onClickBack={() => setCurrentStep(STEP_SOCIAL_KEY)}
+                  onClickProceed={() => setCurrentStep(STEP_SAVE_SOCIAL_KEY)}
+                />
+              );
+            case STEP_SAVE_SOCIAL_KEY:
+              return (
+                <SaveSocialKey />
+              );
+            default:
+              return (
+                <Account
+                  onClickProceed={() => setCurrentStep(STEP_SOCIAL_KEY)}
+                />
+              );
+          }
+        })()}
       </div>
-    </div>
-  </Popup>
-);
+    </Popup>
+  );
+};
 
 Auth.propTypes = {
   onClickClose: PropTypes.func,
