@@ -1,6 +1,8 @@
 import humps from 'lodash-humps';
 import urls from './urls';
 
+export const USER_ACCOUNT_LENGTH = 12;
+
 export const getYearOfDate = (date) => {
   if (!date) {
     return null;
