@@ -39,7 +39,7 @@ const UserPage = (props) => {
     loader.start();
     try {
       const data = await props.dispatch(fetchUserPageData({
-        userId: userIdOrName,
+        userIdentity: userIdOrName,
       }));
       setTrustedByUsersIds(data.oneUserTrustedBy.data.map(i => i.id));
       setTrustedByMetadata(data.oneUserTrustedBy.metadata);
@@ -54,7 +54,7 @@ const UserPage = (props) => {
     loader.start();
     try {
       const data = await props.dispatch(fetchUserTrustedBy({
-        userId: userIdOrName,
+        userIdentity: userIdOrName,
         page,
       }));
       setTrustedByUsersIds(data.data.map(i => i.id));
@@ -214,7 +214,7 @@ UserPage.defaultProps = {
 
 export const getUserPageData = (store, params) => {
   const userPromise = store.dispatch(fetchUserPageData({
-    userId: params.userId,
+    userIdentity: params.userId,
   }));
   const postPromise = params.postId ? store.dispatch(fetchPost(params.postId)) : null;
   const feedPromise = store.dispatch(feedGetUserPosts({
@@ -222,6 +222,7 @@ export const getUserPageData = (store, params) => {
     page: 1,
     perPage: FEED_PER_PAGE,
     userId: params.userId,
+    userIdentity: params.userId,
   }));
 
   return Promise.all([userPromise, postPromise, feedPromise]);
