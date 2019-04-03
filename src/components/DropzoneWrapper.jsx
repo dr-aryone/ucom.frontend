@@ -18,7 +18,7 @@ const DropzoneWrapper = (props) => {
         if (props.onChange) {
           try {
             if (multiple) {
-              props.onChange(files.map(file => compressUploadedImage(file)));
+              props.onChange(await Promise.all(files.map(file => compressUploadedImage(file))));
             } else {
               props.onChange(await compressUploadedImage(files[0]));
             }
@@ -43,4 +43,10 @@ export default connect(
 DropzoneWrapper.propTypes = {
   addErrorNotification: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
+  onChange: PropTypes.func.isRequired,
+  multiple: PropTypes.bool,
+};
+
+DropzoneWrapper.defaultProps = {
+  multiple: false,
 };
