@@ -49,7 +49,9 @@ const Auth = (props) => {
               );
             case STEP_SAVE_SOCIAL_KEY:
               return (
-                <SaveSocialKey />
+                <SaveSocialKey
+                  onClickBack={() => setCurrentStep(STEP_SOCIAL_KEY)}
+                />
               );
             default:
               return (
