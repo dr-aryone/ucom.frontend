@@ -226,6 +226,37 @@
   text-align: center;
 }
 
+:local(.copyPopup) {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 800px;
+  padding: 40px;
+  background: #fff;
+}
+
+:local(.copyPopup .close) {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  cursor: pointer;
+}
+
+:local(.copyPopup .title) {
+  margin: 0 0 30px;
+  text-align: left;
+}
+
+:local(.copyPopup .text) {
+  margin: 0 0 40px;
+  font-size: 16px;
+  line-height: 28px;
+}
+
+:local(.copyPopup .action) {
+  margin: 0;
+}
+
 @media (max-width: 767px) {
   :local(.auth) {
     min-width: calc(100% - 8px);

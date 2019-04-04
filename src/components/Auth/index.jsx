@@ -14,7 +14,7 @@ const STEP_NEW_SOCIAL_KEY = 3;
 const STEP_SAVE_SOCIAL_KEY = 4;
 
 const Auth = (props) => {
-  const [currentStep, setCurrentStep] = useState(STEP_SAVE_SOCIAL_KEY);
+  const [currentStep, setCurrentStep] = useState(STEP_ACCOUNT);
 
   return (
     <Popup
@@ -57,6 +57,7 @@ const Auth = (props) => {
               return (
                 <Account
                   onClickProceed={() => setCurrentStep(STEP_SOCIAL_KEY)}
+
                 />
               );
           }
