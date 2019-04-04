@@ -30,8 +30,8 @@ const Button = (props) => {
         }
       }}
     >
-      { props.withCheckedIcon && renderCheckedIcon() }
       { props.text || props.children }
+      { props.withCheckedIcon && renderCheckedIcon() }
     </button>
   );
 };

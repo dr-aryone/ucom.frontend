@@ -24,6 +24,7 @@
     "camelcase": "off",
     "class-methods-use-this": "off",
     "no-console": [1, {"allow": ["error"] }],
+    "no-nested-ternary": "off",
     "jsx-a11y/no-autofocus": "off",
     "global-require": "off"
   }

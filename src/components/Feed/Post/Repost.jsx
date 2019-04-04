@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import React from 'react';
-import { getFileUrl } from '../../../utils/upload';
 import { getUserName } from '../../../utils/user';
 import urls from '../../../utils/urls';
 import { getPostById } from '../../../store/posts';
@@ -53,7 +52,7 @@ const Repost = (props) => {
           userName={getUserName(post.post.user)}
           accountName={post.post.user.accountName}
           profileLink={urls.getUserUrl(post.post.user.id)}
-          avatarUrl={getFileUrl(post.post.user.avatarFilename)}
+          avatarUrl={urls.getFileUrl(post.post.user.avatarFilename)}
         />
 
         {post.post.postTypeId === POST_TYPE_MEDIA_ID ? (
@@ -65,7 +64,7 @@ const Repost = (props) => {
             title={post.post.title || post.post.leadingText}
             url={getPostUrl(post.post.id)}
             userUrl={urls.getUserUrl(post.post.user && post.post.user.id)}
-            userImageUrl={getFileUrl(post.post.user && post.post.user.avatarFilename)}
+            userImageUrl={urls.getFileUrl(post.post.user && post.post.user.avatarFilename)}
             userName={getUserName(post.post.user)}
             accountName={post.post.user && post.post.user.accountName}
             tags={post.post.postTypeId && [getPostTypeById(post.post.postTypeId)]}

@@ -4,13 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import FeedForm from '../../FeedForm';
 import IconEdit from '../../../Icons/Edit';
-import { getFileUrl } from '../../../../utils/upload';
 import { updatePost } from '../../../../actions/posts';
 import { getPostById } from '../../../../store/posts';
 import { postIsEditable } from '../../../../utils/posts';
 import DescDirectPost from './DescDirectPost';
 import { checkMentionTag, escapeQuotes } from '../../../../utils/text';
 import styles from './styles.css';
+import urls from '../../../../utils/urls';
 
 class PostFeedContent extends PureComponent {
   constructor(props) {
@@ -60,7 +60,7 @@ class PostFeedContent extends PureComponent {
               <Fragment>
                 {post.mainImageFilename && !this.state.formIsVisible && (
                   <div className={styles.cover}>
-                    <img src={getFileUrl(post.mainImageFilename)} alt="cover" />
+                    <img src={urls.getFileUrl(post.mainImageFilename)} alt="cover" />
                   </div>
                 )}
                 {post.description &&

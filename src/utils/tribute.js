@@ -1,5 +1,5 @@
-import { getFileUrl } from './upload';
 import api from '../api';
+import urls from '../utils/urls';
 
 export const MENTION_LIST_ITEMS_LIMIT = 20;
 
@@ -26,7 +26,7 @@ export const defaultTributeConfig = {
   item => (`
     <div class="tribute-container__item" contenteditable="false">
       ${item.original.avatarFilename ?
-      `<img class="tribute-container__avatar" src="${getFileUrl(item.original.avatarFilename)}"/>` :
+      `<img class="tribute-container__avatar" src="${urls.getFileUrl(item.original.avatarFilename)}"/>` :
       `<div class="tribute-container__avatar">${UserHTML}</div>`}
       <div class="tribute-container__block-names">
         <span class="user-option__name" >${item.original.firstName || item.original.accountName}</span>

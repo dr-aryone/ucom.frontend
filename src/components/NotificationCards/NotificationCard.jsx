@@ -11,7 +11,6 @@ import { DownvoteIcon, UpvoteIcon, SuccessIcon, ShareIcon, AtIcon } from '../Ico
 import InputErrorIcon from '../Icons/InputError';
 import InputCompleteIcon from '../Icons/InputComplete';
 import { getUserName } from '../../utils/user';
-import { getFileUrl } from '../../utils/upload';
 import { getOrganizationUrl } from '../../utils/organization';
 import { confirmNotification, declineNotification, seenNotification } from '../../actions/siteNotifications';
 
@@ -37,6 +36,7 @@ import {
   USER_SHARE_YOUR_MEDIA_POST,
   USER_HAS_MENTIONED_YOU_IN_POST,
   USER_HAS_MENTIONED_YOU_IN_COMMENT,
+  USER_TRUST_YOU,
 } from '../../store/siteNotifications';
 
 const getAvatarIcon = (eventId) => {
@@ -72,6 +72,18 @@ const getTitle = (props) => {
   if (!props.eventId) return null;
 
   switch (props.eventId) {
+    case USER_TRUST_YOU:
+      if (!(props.data && props.data.user)) return null;
+
+      return (
+        <Fragment>
+          <Link to={urls.getUserUrl(props.data.user.id)}>
+            <strong>{getUserName(props.data.user)}</strong>
+          </Link>
+          &nbsp;trusts you
+        </Fragment>
+      );
+
     case USER_FOLLOWS_YOU:
       if (!(props.data && props.data.user)) return null;
 
@@ -139,7 +151,7 @@ const getTitle = (props) => {
           <Link to={urls.getUserUrl(props.data.user.id)}>
             <strong>{getUserName(props.data.user)}</strong>
           </Link>
-          &nbsp;started following&nbsp;
+          &nbsp;joined&nbsp;
           <Link to={getOrganizationUrl(props.targetEntity.organization.id)}>
             <strong>{props.targetEntity.organization.title}</strong>
           </Link>
@@ -330,7 +342,7 @@ const getCover = (props) => {
       return (
         <div className="site-notification__cover">
           <Link to={getOrganizationUrl(props.data.organization.id)}>
-            <Avatar src={getFileUrl(props.data.organization.avatarFilename)} square />
+            <Avatar src={urls.getFileUrl(props.data.organization.avatarFilename)} square />
           </Link>
         </div>
       );
@@ -342,7 +354,7 @@ const getCover = (props) => {
       return (
         <div className="site-notification__cover">
           <Link to={urls.getPostUrl(props.data.post)}>
-            <Avatar square isPost src={getFileUrl(props.data.post.mainImageFilename)} />
+            <Avatar square isPost src={urls.getFileUrl(props.data.post.mainImageFilename)} />
           </Link>
         </div>
       );
@@ -353,7 +365,7 @@ const getCover = (props) => {
       return (
         <div className="site-notification__cover">
           <Link to={urls.getPostUrl(props.data.comment.post)}>
-            <Avatar square isPost src={getFileUrl(props.data.comment.post.mainImageFilename)} />
+            <Avatar square isPost src={urls.getFileUrl(props.data.comment.post.mainImageFilename)} />
           </Link>
         </div>
       );
@@ -365,7 +377,7 @@ const getCover = (props) => {
       return (
         <div className="site-notification__cover">
           <Link to={urls.getPostUrl(props.targetEntity.post)}>
-            <Avatar square isPost src={getFileUrl(props.targetEntity.post.mainImageFilename)} />
+            <Avatar square isPost src={urls.getFileUrl(props.targetEntity.post.mainImageFilename)} />
           </Link>
         </div>
       );
@@ -379,7 +391,7 @@ const getCover = (props) => {
         return (
           <div className="site-notification__cover">
             <Link to={urls.getPostUrl(props.targetEntity.post)}>
-              <Avatar square isPost src={getFileUrl(props.targetEntity.post.mainImageFilename)} />
+              <Avatar square isPost src={urls.getFileUrl(props.targetEntity.post.mainImageFilename)} />
             </Link>
           </div>
         );
@@ -389,7 +401,7 @@ const getCover = (props) => {
         return (
           <div className="site-notification__cover">
             <Link to={getOrganizationUrl(props.targetEntity.organization.id)}>
-              <Avatar src={getFileUrl(props.targetEntity.organization.avatarFilename)} square />
+              <Avatar src={urls.getFileUrl(props.targetEntity.organization.avatarFilename)} square />
             </Link>
           </div>
         );
@@ -414,12 +426,13 @@ const getAvatar = (props) => {
           <Link to={urls.getUserUrl(props.data.post.user.id)}>
             <Avatar
               isPost
-              src={getFileUrl(props.data.post.user.avatarFilename)}
+              src={urls.getFileUrl(props.data.post.user.avatarFilename)}
               icon={getAvatarIcon(props.eventId)}
             />
           </Link>
         </div>
       );
+
     case USER_HAS_MENTIONED_YOU_IN_COMMENT:
       if (!(props.data && props.data.comment && props.data.comment.user)) return null;
 
@@ -428,7 +441,7 @@ const getAvatar = (props) => {
           <Link to={urls.getUserUrl(props.data.comment.user.id)}>
             <Avatar
               isPost
-              src={getFileUrl(props.data.comment.user.avatarFilename)}
+              src={urls.getFileUrl(props.data.comment.user.avatarFilename)}
               icon={getAvatarIcon(props.eventId)}
             />
           </Link>
@@ -442,16 +455,17 @@ const getAvatar = (props) => {
       return (
         <div className="site-notification__avatar">
           <Link to={urls.getUserUrl(props.data.comment.user.id)}>
-            <Avatar src={getFileUrl(props.data.comment.user.avatarFilename)} />
+            <Avatar src={urls.getFileUrl(props.data.comment.user.avatarFilename)} />
           </Link>
         </div>
       );
+
     default: {
       return props.data && props.data.user ? (
         <div className="site-notification__avatar">
           <Link to={urls.getUserUrl(props.data.user.id)}>
             <Avatar
-              src={getFileUrl(props.data.user.avatarFilename)}
+              src={urls.getFileUrl(props.data.user.avatarFilename)}
               icon={getAvatarIcon(props.eventId)}
             />
           </Link>

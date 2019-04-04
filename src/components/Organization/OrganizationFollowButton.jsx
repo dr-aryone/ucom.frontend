@@ -7,6 +7,7 @@ import { selectUser } from '../../store/selectors/user';
 import { followOrganization, unfollowOrganization } from '../../actions/organizations';
 import { getUserById } from '../../store/users';
 import { authShowPopup } from '../../actions/auth';
+import IconCheck from '../Icons/Check';
 
 const OrganizationFollowButton = (props) => {
   if (!props.organizationId) {
@@ -22,21 +23,34 @@ const OrganizationFollowButton = (props) => {
 
   const userIsFollow = props.user.id ? (organization.followedBy || []).some(item => owner && +item.id === +owner.id) : false;
 
-  return (
+  const text = userIsFollow ? 'Following' : 'Follow';
+
+
+  const onClick = () => {
+    if (!owner) {
+      props.authShowPopup();
+      return;
+    }
+
+    (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner });
+  };
+
+  return props.asLink ? (
+    <button
+      className="link red"
+      onClick={onClick}
+    >
+      {text}
+      {userIsFollow && <IconCheck />}
+    </button>
+  ) : (
     <Button
       isStretched
       size="medium"
       theme="transparent"
       withCheckedIcon={userIsFollow}
-      text={userIsFollow ? 'Following' : 'Follow'}
-      onClick={() => {
-        if (!owner) {
-          props.authShowPopup();
-          return;
-        }
-
-        (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner });
-      }}
+      text={userIsFollow ? 'Joined' : 'Join'}
+      onClick={onClick}
     />
   );
 };
@@ -48,6 +62,11 @@ OrganizationFollowButton.propTypes = {
   organizationId: PropTypes.number.isRequired,
   users: PropTypes.objectOf(PropTypes.object).isRequired,
   organizations: PropTypes.objectOf(PropTypes.object).isRequired,
+  asLink: PropTypes.bool,
+};
+
+OrganizationFollowButton.defaultProps = {
+  asLink: false,
 };
 
 export default connect(

@@ -22,7 +22,7 @@ const UserCardLineTitle = () => (
     <div className={styles.blockGh}>
       <div className={styles.columnTitle}>Github Name</div>
     </div>
-    <div className={styles.blockScore}>
+    <div className={styles.blockScoreTitle}>
       <div className={styles.columnTitle}>Github SCore</div>
     </div>
   </div>
@@ -46,10 +46,10 @@ const UserCardLine = (props) => {
         </div>
       </div>
       <div className={styles.blockGh}>
-        <div className={styles.nameGh}>{props.nameGh}</div>
+        <div className={styles.nameGh}><span className={styles.nameGhPlaceholder}>GitHub</span>{props.nameGh}</div>
       </div>
       <div className={styles.blockScore}>
-        <div className={styles.nameGh}>{formatRate(props.rate)}</div>
+        <div>{formatRate(props.rate)}</div>
       </div>
     </LinkTag>
   );

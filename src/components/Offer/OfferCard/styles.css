@@ -69,7 +69,7 @@
     margin-top: 100px;
     display: grid;
     grid-template-columns: 1fr max-content;
-    grid-gap: 10px;
+    grid-gap: 20px;
   }
 
   .btn {
@@ -90,10 +90,10 @@
 .postBorder .postCardCover {
   margin: 0 -10px;
 }
-
+/*
 .postCard svg path {
-  fill: #000;
-}
+  fill: #fff;
+} */
 
 .postCardCover {
   position: absolute;
@@ -156,7 +156,8 @@
 }
 
 .rate div {
-  font-size: 16px;
+  font-size: 28px;
+  line-height: 34px;
   font-weight: bold;
 }
 
@@ -290,5 +291,30 @@
 
 .postCardSmallRepost.postCardWithCover {
   margin: 0 -10px;
+}
+
+@media(max-width: 414px) {
+  .postCard {
+    margin: 0 -20px;
+    height: 385px;
+  }
+
+  .title {
+    margin-top: 40px;
+  }
+
+  .rate {
+    top: 16px;
+    right: 20px;
+  }
+
+  .rate div {
+    font-size: 16px;
+    line-height: normal;
+  }
+
+  .infoblockBottom {
+    margin-top: 60px;
+  }
 }
 

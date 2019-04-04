@@ -5,7 +5,7 @@ import loader from '../utils/loader';
 import graphql from '../api/graphql';
 // import { enableGtm } from '../utils/gtm';
 import { addServerErrorNotification } from './notifications';
-import { setUser } from './';
+import { setUser, setUserLoading } from './';
 import { siteNotificationsSetUnreadAmount } from './siteNotifications';
 import { getAccountState } from './wallet';
 import { addOrganizations } from './organizations';
@@ -48,6 +48,7 @@ export const fetchMyself = () => async (dispatch) => {
     return;
   }
 
+  dispatch(setUserLoading(true));
   loader.start();
 
   try {
@@ -67,14 +68,60 @@ export const fetchMyself = () => async (dispatch) => {
     removeToken();
   }
 
+  dispatch(setUserLoading(false));
   loader.done();
 };
 
-export const fetchUser = userId => dispatch =>
-  api.getUser(userId)
-    .then((data) => {
-      dispatch(addUsers([data]));
+export const fetchUser = userIdentity => async (dispatch) => {
+  try {
+    const data = await graphql.fetchUser({ userIdentity });
+    dispatch(addUsers([data]));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchUserPageData = ({
+  userIdentity,
+  trustedByOrderBy,
+  trustedByPerPage,
+  trustedByPage,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getUserPageData({
+      userIdentity,
+      trustedByOrderBy,
+      trustedByPerPage,
+      trustedByPage,
     });
+    const { oneUser, oneUserTrustedBy } = data;
+    dispatch(addUsers(oneUserTrustedBy.data.concat([oneUser])));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchUserTrustedBy = ({
+  userIdentity,
+  orderBy,
+  perPage,
+  page,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getUserTrustedBy({
+      userIdentity,
+      orderBy,
+      perPage,
+      page,
+    });
+    dispatch(addUsers(data.data));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
 
 export const updateUser = payload => async (dispatch) => {
   loader.start();
@@ -145,7 +192,7 @@ export const getManyUsers = ({
   page,
   perPage,
   isMyself,
-}) => async () => {
+}) => async (dispatch) => {
   try {
     const data = await graphql.getManyUsers({
       airdropFilter,
@@ -154,9 +201,59 @@ export const getManyUsers = ({
       perPage,
       isMyself,
     });
+    // console.log('users: ', data);
+    dispatch(addUsers([data]));
     return data;
   } catch (e) {
     console.error(e);
     throw e;
+  }
+};
+
+export const trustUser = ({
+  userId,
+  userAccountName,
+  ownerAccountName,
+}) => async (dispatch) => {
+  try {
+    await api.trustUser(
+      ownerAccountName,
+      userAccountName,
+      userId,
+    );
+    dispatch({
+      type: 'USERS_SET_TRUST',
+      payload: {
+        userId,
+        trust: true,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    dispatch(addServerErrorNotification(e));
+  }
+};
+
+export const untrustUser = ({
+  userId,
+  userAccountName,
+  ownerAccountName,
+}) => async (dispatch) => {
+  try {
+    await api.untrustUser(
+      ownerAccountName,
+      userAccountName,
+      userId,
+    );
+    dispatch({
+      type: 'USERS_SET_TRUST',
+      payload: {
+        userId,
+        trust: false,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    dispatch(addServerErrorNotification(e));
   }
 };

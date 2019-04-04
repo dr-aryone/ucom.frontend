@@ -4,9 +4,9 @@ import UserCard from '../components/UserCard';
 import api from '../api';
 import { getOrganizationUrl } from '../utils/organization';
 import IconTableTriangle from '../components/Icons/TableTriangle';
-import { getFileUrl } from '../utils/upload';
 import LayoutBase from '../components/Layout/LayoutBase';
 import loader from '../utils/loader';
+import urls from '../utils/urls';
 
 class EventsPage extends PureComponent {
   constructor(props) {
@@ -129,7 +129,7 @@ class EventsPage extends PureComponent {
                           <td className="list-table__cell list-table__cell_name" data-title="Name">
                             <UserCard
                               profileLink={getOrganizationUrl(item.id)}
-                              avatarUrl={getFileUrl(item.avatarFilename)}
+                              avatarUrl={urls.getFileUrl(item.avatarFilename)}
                               userName={item.title}
                               accountName={item.nickname}
                               sign="@"

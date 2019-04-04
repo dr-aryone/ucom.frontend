@@ -2,9 +2,9 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+// import classNames from 'classnames';
+import moment from 'moment';
 import LayoutBase from '../components/Layout/LayoutBase';
-import OfferHeader from '../components/Offer/OfferHeader';
 import { fetchPost, postsFetch, getOnePostOffer, getOnePostOfferWithUserAirdrop } from '../actions/posts';
 import { getPostById } from '../store/posts';
 import OfferCard from '../components/Offer/OfferCard';
@@ -22,23 +22,26 @@ import { getManyUsers } from '../actions/users';
 import api from '../api';
 import ProgressBar from '../components/ProgressBar';
 import { getPercent } from '../utils/text';
+import EntrySubHeader from '../components/EntrySubHeader';
+import stylesSubHeader from '../components/EntrySubHeader/styles.css';
+import { getOrganization } from '../actions/organizations';
 
-const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
 const Offer = (props) => {
   const [token] = useState(getToken());
   const [cookie] = useState(getCookie(`${CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB}`));
-  const [usersIds, setUsersIds] = useState([]);
+  const [users, setUsers] = useState([]);
   const [conditions, setConditions] = useState();
-  const [tokens, setTokens] = useState([]);
   const postId = 14317;
   const post = getPostById(props.posts, postId);
 
   const pairAccounts = async () => {
-    if (cookie && token && !conditions.conditions.authGithub && !conditions.conditions.authMyself) {
+    console.log('aa');
+    if (cookie && token && conditions && conditions.conditions.authGithub === false && !conditions.conditions.authMyself === false) {
       try {
-        const data = await api.syncAccountGithub(token, cookie);
+        console.log('aaaaaaaa');
+        await api.syncAccountGithub(token, cookie);
       } catch (e) {
         console.error(e);
       }
@@ -47,15 +50,10 @@ const Offer = (props) => {
 
   useEffect(() => {
     pairAccounts();
-  }, [cookie, token]);
-  // console.log('cookie: ', cookie);
-  // console.log('token: ', token);
+  }, [cookie, token, conditions]);
+  console.log('cookie: ', cookie);
+  console.log('token: ', token);
 
-  useEffect(() => {
-    if (postId) {
-      props.fetchPost(postId);
-    }
-  }, [postId]);
 
   useEffect(() => {
     loader.start();
@@ -69,6 +67,7 @@ const Offer = (props) => {
       postId,
     }).then((data) => {
       // console.log(data);
+      props.getOrganization(data.onePostOffer.organization.id);
       setConditions(data.oneUserAirdrop);
     });
     props.getManyUsers({
@@ -77,9 +76,10 @@ const Offer = (props) => {
       page: 1,
       perPage: 10,
     }).then((data) => {
-      // console.log(data);
-      setUsersIds(data.data.map(item => item.id));
+      // console.log('users: ', data);
+      setUsers(data.data);
     });
+
     loader.done();
   }, [postId]);
 
@@ -87,28 +87,44 @@ const Offer = (props) => {
     return null;
   }
 
+  useEffect(() => {
+    pairAccounts();
+  }, [cookie, token, conditions]);
+
+  console.log('conditions: ', conditions);
+
   return (
     <LayoutBase>
       <div className="container container_post">
-        <OfferHeader
-          org={post.organization}
-        />
-        <OfferCard
-          postId={postId}
-          coverUrl={getPostCover(post)}
-          rate={post.currentRate}
-          title={post.title}
-          url={urls.getPostUrl(post)}
-          userUrl={urls.getUserUrl(post.user.id)}
-          userImageUrl={urls.getFileUrl(post.user.avatarFilename)}
-          userName={getUserName(post.user)}
-          accountName={post.user.accountName}
-          finishedAt={post.finishedAt}
-          usersIds={usersIds}
-          status={conditions || null}
-          token={token}
-          cookie={(conditions && conditions.conditions.authGithub) || cookie}
-        />
+        <div className={stylesSubHeader.wrapperOffer}>
+          <EntrySubHeader
+            organization
+            showFollow
+            userUrl={urls.getOrganizationUrl(post.organization.id)}
+            userName={post.organization.title}
+            userAvatarUrl={urls.getFileUrl(post.organization.avatarFilename)}
+            userId={+post.organization.id}
+            userRate={+post.organization.currentRate}
+          />
+
+          <OfferCard
+            postId={postId}
+            coverUrl={getPostCover(post)}
+            rate={post.currentRate}
+            title={post.title}
+            url={urls.getPostUrl(post)}
+            userUrl={urls.getUserUrl(post.user.id)}
+            userImageUrl={urls.getFileUrl(post.user.avatarFilename)}
+            userName={getUserName(post.user)}
+            accountName={post.user.accountName}
+            finishedAt={post.finishedAt}
+            users={users}
+            count={+users.length}
+            conditions={conditions || null}
+            token={token}
+            // cookie={(conditions && conditions.conditions.authGithub) || cookie}
+          />
+        </div>
         <div className={styles.content}>
           <div className={styles.textBlock}>
             {conditions && conditions.score !== 0 &&
@@ -120,7 +136,7 @@ const Offer = (props) => {
             </div>
             <div className={styles.section}>
               <div className={styles.title}>Tokens Airdrop</div>
-              <div className={styles.text}>You can register your GitHub account's Importance on the U°OS network, using TestNet tokens, that are issued to you, proportionally to your GitHub account score. Your account and Importance score will be available to you and you only via the private key. Overall, there are two types of tokens — U°OS TestNet tokens and U°OS Futures. U°OS TestNet tokens are used to register your Importance on U°OS, while U°OS Futures can be directly exchanged to the U°OS MainNet tokens. An additional pool of MainNet U°OS tokens will be distributed to all accounts, proportionally to their Importance at the start of MainNet.</div>
+              <div className={styles.text}>You can register your GitHub account&apos;s Importance on the U°OS network, using TestNet tokens, that are issued to you, proportionally to your GitHub account score. Your account and Importance score will be available to you and you only via the private key. Overall, there are two types of tokens — U°OS TestNet tokens and U°OS Futures. U°OS TestNet tokens are used to register your Importance on U°OS, while U°OS Futures can be directly exchanged to the U°OS MainNet tokens. An additional pool of MainNet U°OS tokens will be distributed to all accounts, proportionally to their Importance at the start of MainNet.</div>
               {post.offerData &&
                 <Fragment>
                   <div className={styles.progress}>
@@ -161,14 +177,20 @@ const Offer = (props) => {
               <div className={styles.btn}>Get your Score</div>
             </div>
 
-            <div className={styles.commentsCount}>Comments {props.commentsCount}</div>
+            <div className={styles.commentsCount}>Comments {post.commentsCount}</div>
             <div className="post-body__comments">
               <Comments postId={postId} containerId={COMMENTS_CONTAINER_ID_POST} />
             </div>
           </div>
           <div className={styles.sidebar}>
             <OfferSidebar
+              rate={+post.currentRate}
               postId={postId}
+              createdAt={moment(post.createdAt).format('D MMM YYYY')}
+              link={urls.getPostUrl(post)}
+              repostAvailable={post.myselfData && post.myselfData.repostAvailable}
+              conditions={conditions || null}
+              cookie={cookie}
             />
           </div>
         </div>
@@ -178,11 +200,11 @@ const Offer = (props) => {
 };
 
 Offer.propTypes = {
-  commentsResetContainerDataByEntryId: PropTypes.func,
-  fetchPost: PropTypes.func,
-  postsFetch: PropTypes.func,
-  getOnePostOfferWithUserAirdrop: PropTypes.func,
-  getManyUsers: PropTypes.func,
+  posts: PropTypes.objectOf(PropTypes.any).isRequired,
+  commentsResetContainerDataByEntryId: PropTypes.func.isRequired,
+  getOnePostOfferWithUserAirdrop: PropTypes.func.isRequired,
+  getManyUsers: PropTypes.func.isRequired,
+  getOrganization: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -197,6 +219,7 @@ export default connect(
     getOnePostOffer,
     getOnePostOfferWithUserAirdrop,
     getManyUsers,
+    getOrganization,
   }, dispatch),
 )(Offer);
 

@@ -1,22 +1,8 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import styles from './styles.css';
 
 class ProgressBar extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      percentage: props.percentage,
-    };
-    // this.nextStep = this.nextStep.bind(this);
-  }
-
-  // nextStep() {
-  //   if (this.state.percentage === 100) {
-  //     return this.setState({ percentage: this.state.percentage + 20 });
-  //   }
-  // }
-
   render() {
     return (
       <div>
@@ -35,5 +21,17 @@ const Line = props => (
 const Filler = props => (
   <div className={styles.filler} style={{ width: `${props.percentage}%` }} />
 );
+
+ProgressBar.propTypes = {
+  percentage: PropTypes.number.isRequired,
+};
+
+Line.propTypes = {
+  percentage: PropTypes.number.isRequired,
+};
+
+Filler.propTypes = {
+  percentage: PropTypes.number.isRequired,
+};
 
 export default ProgressBar;

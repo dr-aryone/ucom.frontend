@@ -5,7 +5,7 @@ import { components } from 'react-select';
 import AsyncSelect from 'react-select/lib/Async';
 import UserCard from './UserCard';
 import Close from './Icons/Close';
-import { getFileUrl } from '../utils/upload';
+import urls from '../utils/urls';
 
 const SelectUserOption = props => (
   <components.Option {...props}>
@@ -13,7 +13,7 @@ const SelectUserOption = props => (
       squareAvatar
       roundedAvatar
       userName={props.data.title}
-      avatarUrl={getFileUrl(props.data.avatarFilename)}
+      avatarUrl={urls.getFileUrl(props.data.avatarFilename)}
       accountName={props.data.nickname}
     />
   </components.Option>

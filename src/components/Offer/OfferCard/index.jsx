@@ -7,28 +7,23 @@ import styles from './styles.css';
 import Avatar from '../../Avatar';
 import { sanitizePostTitle } from '../../../utils/text';
 import Countdown from '../../Countdown';
-import Followers from '../../Followers/Followers';
+import Followers from '../../Followers';
 import Popup from '../../Popup';
 import ModalContent from '../../ModalContent';
 import UserListAirdrop from '../../User/UsersListAirdrop';
-// import { authShowPopup } from '../../../actions/auth';
+import { mapUserDataToFollowersProps } from '../../../utils/user';
 
 const OfferCard = (props) => {
   const [popupVisible, setPopupVisible] = useState(false);
-  const PostLink = props.url ? Link : 'span';
   const LinkTag = props.userUrl ? Link : 'div';
-  const conditions = props.status;
-
-  console.log('props: ', conditions);
-
-  console.log(props.token);
+  const { conditions } = props;
 
   return (
     <Fragment>
       {popupVisible && (
-        <Popup onClickClose={() => this.hidePopup()}>
-          <ModalContent onClickClose={() => this.hidePopup()}>
-            <UserListAirdrop title={this.props.title} />
+        <Popup onClickClose={() => setPopupVisible(false)}>
+          <ModalContent mod="airdrop" onClickClose={() => setPopupVisible(false)}>
+            <UserListAirdrop users={props.users} title={props.title} />
           </ModalContent>
         </Popup>
       )}
@@ -39,11 +34,11 @@ const OfferCard = (props) => {
         )}
       >
         {(props.coverUrl && props.coverUrl.length > 0) ? (
-          <PostLink to={props.url} className={styles.postCardCover}>
+          <div className={styles.postCardCover}>
             <img className={styles.pic} src={props.coverUrl} alt="" />
-          </PostLink>
+          </div>
         ) : (
-          <PostLink to={props.url} className={styles.media} />
+          <div className={styles.media} />
         )}
 
         {props.rate !== undefined && (
@@ -76,10 +71,12 @@ const OfferCard = (props) => {
             <Countdown date={props.finishedAt} />
           </div>
           <Followers
-            airDrop
+            // airDrop
             onClick={() => setPopupVisible(true)}
-            usersIds={props.usersIds}
+            users={(props.users).map(mapUserDataToFollowersProps)}
+            // users={props.usersIds}
             title="Participants"
+            count={props.count}
           />
           {conditions && conditions.conditions.authGithub === false &&
             <a
@@ -115,13 +112,23 @@ const OfferCard = (props) => {
 };
 
 OfferCard.propTypes = {
-  url: PropTypes.string,
-  finishedAt: PropTypes.string,
+  conditions: PropTypes.objectOf(PropTypes.any),
+  users: PropTypes.arrayOf(PropTypes.any).isRequired,
+  userUrl: PropTypes.string.isRequired,
+  finishedAt: PropTypes.string.isRequired,
   coverUrl: PropTypes.string,
   rate: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
   userImageUrl: PropTypes.string,
-  userName: PropTypes.string,
+  userName: PropTypes.string.isRequired,
+  count: PropTypes.number,
+};
+
+OfferCard.defaultProps = {
+  count: 0,
+  coverUrl: null,
+  userImageUrl: null,
+  rate: 0,
 };
 
 export default OfferCard;

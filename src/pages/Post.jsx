@@ -102,6 +102,7 @@ const PostPage = (props) => {
                           postId={props.post.id}
                           onClickClose={toggleShare}
                           repostAvailable={props.post.myselfData.repostAvailable}
+                          postTypeId={props.post.postTypeId}
                         />
                       </div>
                     ) : null }

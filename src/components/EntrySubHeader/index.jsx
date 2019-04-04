@@ -1,0 +1,57 @@
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import React from 'react';
+import styles from './styles.css';
+import UserPick from '../UserPick/UserPick';
+import UserFollowButton from '../User/UserFollowButton';
+import OrganizationFollowButton from '../Organization/OrganizationFollowButton';
+import { formatRate } from '../../utils/rate';
+
+const EntrySubHeader = props => (
+  <div className={styles.subHeader}>
+    <div className={styles.userPick}>
+      <UserPick
+        organization={props.organization}
+        shadow
+        stretch
+        url={props.userUrl}
+        alt={props.userName}
+        src={props.userAvatarUrl}
+      />
+    </div>
+    <div className={styles.name}>
+      <Link className="red" to={props.userUrl}>{props.userName}</Link>
+    </div>
+    <div className={styles.rate}>
+      {formatRate(props.userRate)}°
+    </div>
+
+    {props.showFollow &&
+      <div className={styles.followLink}>
+        {props.organization ? (
+          <OrganizationFollowButton asLink organizationId={+props.userId} />
+        ) : (
+          <UserFollowButton asLink userId={props.userId} />
+        )}
+      </div>
+    }
+  </div>
+);
+
+EntrySubHeader.propTypes = {
+  userUrl: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
+  userAvatarUrl: PropTypes.string.isRequired,
+  userId: PropTypes.number.isRequired,
+  userRate: PropTypes.number,
+  showFollow: PropTypes.bool,
+  organization: PropTypes.bool,
+};
+
+EntrySubHeader.defaultProps = {
+  userRate: 0,
+  showFollow: false,
+  organization: false,
+};
+
+export default EntrySubHeader;

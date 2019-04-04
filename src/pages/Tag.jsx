@@ -1,36 +1,65 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import LayoutBase from '../components/Layout/LayoutBase';
-import TagHead from '../components/Tag/TagHead';
 import Feed from '../components/Feed/FeedUser';
 import { TAG_FEED_ID } from '../utils/feed';
 import api from '../api';
-import TagOrganizations from '../components/Tag/TagOrganizations';
-import TagUsers from '../components/Tag/TagUsers';
-import TagCreatedAt from '../components/Tag/TagCreatedAt';
 import { addTags } from '../actions/tags';
 import NotFoundPage from './NotFoundPage';
 import { existHashTag } from '../utils/text';
 import { getPostById } from '../store/posts';
+import headerStyles from '../components/EntryHeader/styles.css';
+import { formatRate } from '../utils/rate';
+import Stats from '../components/Followers/Stats';
+import urls from '../utils/urls';
+import { getUserName } from '../utils/user';
+import { getUsersByIds } from '../store/users';
+import { getOrganizationByIds } from '../store/organizations';
+import EntryListSection from '../components/EntryListSection';
+import EntryCreatedAt from '../components/EntryCreatedAt';
+import Footer from '../components/Footer';
+import { addUsers } from '../actions/users';
+import loader from '../utils/loader';
+
+const ENTRY_SECTION_LIMIT = 3;
 
 const Tag = (props) => {
   const tagTitle = props.match.params.title;
-
   const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState(false);
+  const [usersPopupIds, setUsersPopupIds] = useState([]);
+  const [usersPopupMetadata, setUsersPopupMetadata] = useState({});
 
   const getTag = async () => {
+    setLoading(true);
+
     try {
       const tag = await api.getTag(props.match.params.title);
-      props.addTags([tag]);
+      props.dispatch(addTags([tag]));
     } catch (e) {
       console.error(e);
     }
 
-    setLoading(false);
     setLoaded(true);
+    setLoading(false);
+  };
+
+  const getTagUsers = async (page = 1) => {
+    loader.start();
+    try {
+      const data = await api.getTagUsers({
+        tagTitle,
+        page,
+        lastId: usersPopupIds[usersPopupIds.length - 1],
+      });
+      props.dispatch(addUsers(data.data));
+      setUsersPopupIds(data.data.map(i => i.id));
+      setUsersPopupMetadata(data.metadata);
+    } catch (e) {
+      console.error(e);
+    }
+    loader.done();
   };
 
   useEffect(() => {
@@ -50,49 +79,89 @@ const Tag = (props) => {
   }
 
   return (
-    <LayoutBase>
-      <div className="content content_sheet">
-        <div className="content__inner content__inner_straight">
-          {tag &&
-            <TagHead
-              title={tag.title}
-              currentRate={tag.currentRate}
-              postsAmount={tag.posts.metadata.totalAmount}
-              usersAmount={tag.users.metadata.totalAmount}
+    <LayoutBase gray>
+      <div className="layout layout_profile">
+        <div className="layout__header">
+          <div className={`${headerStyles.entryHead} ${headerStyles.tag}`}>
+            <div className={`${headerStyles.main} ${headerStyles.noAvatar}`}>
+              <div className={headerStyles.info}>
+                <div className={`${headerStyles.userName} ${headerStyles.big}`}>#{tag.title}</div>
+              </div>
+              <div className={headerStyles.rate}>{formatRate(tag.currentRate)}°</div>
+            </div>
+            <div className={headerStyles.side}>
+              <div className={headerStyles.usersLists}>
+                <div>
+                  <Stats title="Posts" amount={tag.posts.metadata.totalAmount} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="layout__sidebar">
+          {tag.users &&
+            <EntryListSection
+              title="Top uses by"
+              limit={ENTRY_SECTION_LIMIT}
+              data={getUsersByIds(props.users, tag.users.data).map(item => ({
+                id: item.id,
+                avatarSrc: urls.getFileUrl(item.avatarFilename),
+                url: urls.getUserUrl(item.id),
+                title: getUserName(item),
+                nickname: item.accountName,
+                currentRate: item.currentRate,
+                follow: true,
+              }))}
+              popupData={getUsersByIds(props.users, usersPopupIds).map(item => ({
+                id: item.id,
+                avatarSrc: urls.getFileUrl(item.avatarFilename),
+                url: urls.getUserUrl(item.id),
+                title: getUserName(item),
+                nickname: item.accountName,
+                currentRate: item.currentRate,
+                follow: true,
+              }))}
+              popupMetadata={usersPopupMetadata}
+              onClickViewAll={getTagUsers}
+              onChangePage={getTagUsers}
+              showViewMore={tag.users.metadata.totalAmount > ENTRY_SECTION_LIMIT}
             />
           }
 
-          <div className="grid grid_user">
-            <div className="grid__item">
-              {tag &&
-                <Feed
-                  feedTypeId={TAG_FEED_ID}
-                  userId={props.user.data.id}
-                  tagIdentity={tag.title}
-                  feedInputInitialText={tag.title}
-                  filter={(postId) => {
-                    const post = getPostById(props.posts, postId);
-                    return post && post.description && existHashTag(post.description, tag.title);
-                  }}
-                />
-              }
-            </div>
+          {tag.orgs &&
+            // TODO: Refactoring like tag users
+            <EntryListSection
+              title="Communities"
+              data={getOrganizationByIds(props.organizations, tag.orgs.data).map(item => ({
+                id: item.id,
+                organization: true,
+                avatarSrc: urls.getFileUrl(item.avatarFilename),
+                url: urls.getOrganizationUrl(item.id),
+                title: item.title,
+                nickname: item.nickname,
+                currentRate: item.currentRate,
+              }))}
+            />
+          }
 
-            {tag &&
-              <div className="grid__item">
-                <TagUsers
-                  users={tag.users.data}
-                  tagTitle={tagTitle}
-                />
-                <TagOrganizations
-                  orgs={tag.orgs.data}
-                  orgsAmount={tag.orgs.metadata.totalAmount}
-                  tagTitle={tagTitle}
-                />
-                <TagCreatedAt createdAt={tag.createdAt} />
-              </div>
-            }
-          </div>
+          <EntryCreatedAt date={tag.createdAt} />
+        </div>
+        <div className="layout__main">
+          {tag &&
+            <Feed
+              feedTypeId={TAG_FEED_ID}
+              userId={props.user.data.id}
+              tagIdentity={tag.title}
+              feedInputInitialText={tag.title}
+              filter={(postId) => {
+                const post = getPostById(props.posts, postId);
+                return post && post.description && existHashTag(post.description, tag.title);
+              }}
+            />
+          }
+        </div>
+        <div className="layout__footer">
+          <Footer />
         </div>
       </div>
     </LayoutBase>
@@ -100,6 +169,8 @@ const Tag = (props) => {
 };
 
 Tag.propTypes = {
+  users: PropTypes.objectOf(PropTypes.any).isRequired,
+  organizations: PropTypes.objectOf(PropTypes.any).isRequired,
   posts: PropTypes.shape({
     data: PropTypes.shape({
       description: PropTypes.string,
@@ -111,21 +182,18 @@ Tag.propTypes = {
     }),
   }).isRequired,
   tags: PropTypes.objectOf(PropTypes.any).isRequired,
-  addTags: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       title: PropTypes.string,
     }),
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default connect(
-  state => ({
-    posts: state.posts,
-    tags: state.tags,
-    user: state.user,
-  }),
-  dispatch => bindActionCreators({
-    addTags,
-  }, dispatch),
-)(Tag);
+export default connect(state => ({
+  posts: state.posts,
+  tags: state.tags,
+  user: state.user,
+  users: state.users,
+  organizations: state.organizations,
+}))(Tag);

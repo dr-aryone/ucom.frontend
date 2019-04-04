@@ -7,6 +7,7 @@ import { selectUser } from '../../store/selectors/user';
 import { followUser, unfollowUser } from '../../actions/users';
 import { getUserById } from '../../store/users';
 import { authShowPopup } from '../../actions/auth';
+import IconCheck from '../Icons/Check';
 
 const UserFollowButton = (props) => {
   if (!props.userId) {
@@ -25,22 +26,34 @@ const UserFollowButton = (props) => {
     false;
 
   const userIsOwner = owner && Number(owner.id) === Number(user.id);
-  return (
+  const text = (userIsFollowing || userIsOwner) ? 'Following' : 'Follow';
+
+  const onClick = () => {
+    if (!props.user.id) {
+      props.authShowPopup();
+      return;
+    }
+
+    (userIsFollowing ? props.unfollowUser : props.followUser)({ user, owner });
+  };
+
+  return props.asLink ? (
+    <button
+      className="link red"
+      onClick={onClick}
+    >
+      {text}
+      {(userIsFollowing || userIsOwner) && <IconCheck />}
+    </button>
+  ) : (
     <Button
       isStretched
       isDisabled={userIsOwner}
       size="medium"
       theme="transparent"
       withCheckedIcon={userIsFollowing || userIsOwner}
-      text={(userIsFollowing || userIsOwner) ? 'Following' : 'Follow'}
-      onClick={() => {
-        if (!props.user.id) {
-          props.authShowPopup();
-          return;
-        }
-
-        (userIsFollowing ? props.unfollowUser : props.followUser)({ user, owner });
-      }}
+      text={text}
+      onClick={onClick}
     />
   );
 };
@@ -51,6 +64,14 @@ UserFollowButton.propTypes = {
   authShowPopup: PropTypes.func.isRequired,
   userId: PropTypes.number.isRequired,
   users: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired,
+  asLink: PropTypes.bool,
+};
+
+UserFollowButton.defaultProps = {
+  asLink: false,
 };
 
 export default connect(

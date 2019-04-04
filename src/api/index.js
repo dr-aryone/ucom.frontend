@@ -7,8 +7,9 @@ import { getActivePrivateKey } from '../utils/keys';
 import { getBrainkey } from '../utils/brainkey';
 import { getBackendConfig } from '../utils/config';
 import snakes from '../utils/snakes';
+import { LIST_PER_PAGE } from '../utils/list';
 
-const { WalletApi } = require('ucom-libs-wallet');
+const { WalletApi, SocialApi } = require('ucom-libs-wallet');
 const AppTransaction = require('ucom-libs-social-transactions');
 const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
@@ -60,12 +61,16 @@ class Api {
 
   async getMyself() {
     const response = await this.actions.get('/api/v1/myself');
+    const data = humps(response.data);
 
-    return humps(response.data);
+    // API HOT FIX https://github.com/UOSnetwork/ucom.backend/issues/84
+    data.organizations.forEach(item => delete item.followedBy);
+
+    return data;
   }
 
   async patchMyself(data) {
-    const response = await this.actions.patch('/api/v1/myself', data);
+    const response = await this.actions.patch('/api/v1/myself', snakes(data));
 
     return humps(response.data);
   }
@@ -160,8 +165,8 @@ class Api {
 
   async getTagUsers({
     tagTitle,
-    perPage,
-    page,
+    perPage = LIST_PER_PAGE,
+    page = 1,
     lastId,
   }) {
     const response = await this.actions.get(`/api/v1/tags/${tagTitle}/users/?&v2=true&page=${page}&per_page=${perPage}&last_id=${lastId}`);
@@ -219,6 +224,36 @@ class Api {
     );
 
     const response = await this.actions.post(`/api/v1/users/${userId}/unfollow`, {
+      signed_transaction: signedTransaction,
+    });
+
+    return humps(response.data);
+  }
+
+  async trustUser(ownerAccountName, userAccountName, userId) {
+    const ownerBrainkey = getBrainkey();
+    const ownerPrivateKey = getActivePrivateKey(ownerBrainkey);
+    const signedTransaction = await SocialApi.getTrustUserSignedTransactionsAsJson(
+      ownerAccountName,
+      ownerPrivateKey,
+      userAccountName,
+    );
+    const response = await this.actions.post(`/api/v1/users/${userId}/trust`, {
+      signed_transaction: signedTransaction,
+    });
+
+    return humps(response.data);
+  }
+
+  async untrustUser(ownerAccountName, userAccountName, userId) {
+    const ownerBrainkey = getBrainkey();
+    const ownerPrivateKey = getActivePrivateKey(ownerBrainkey);
+    const signedTransaction = await SocialApi.getUnTrustUserSignedTransactionsAsJson(
+      ownerAccountName,
+      ownerPrivateKey,
+      userAccountName,
+    );
+    const response = await this.actions.post(`/api/v1/users/${userId}/untrust`, {
       signed_transaction: signedTransaction,
     });
 

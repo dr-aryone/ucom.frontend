@@ -6,6 +6,11 @@ import IconRepost from '../Icons/Repost';
 import IconCopyLink from '../Icons/CopyLink';
 import { addRepost } from '../../actions/posts';
 import { selectUser } from '../../store/selectors/user';
+import styles from './styles.css';
+import IconFacebook from '../Icons/Socials/Share/Facebook';
+import IconTwitter from '../Icons/Socials/Share/Twitter';
+import IconTelegram from '../Icons/Socials/Share/Telegram';
+import { POST_TYPE_MEDIA_ID } from '../../utils/posts';
 
 class ShareBlock extends PureComponent {
   constructor(props) {
@@ -37,24 +42,35 @@ class ShareBlock extends PureComponent {
 
   render() {
     return (
-      <div className="share-btn" ref={(el) => { this.el = el; }}>
+      <div className={styles.share} ref={(el) => { this.el = el; }}>
         {this.props.repostAvailable &&
           <div
-            className="repost__block"
+            className={styles.repostBlock}
             role="presentation"
             onClick={() => {
               this.props.addRepost(this.props.postId);
               this.props.onClickClose();
             }}
           >
-            <IconRepost className="repost__icon" />
+            <IconRepost className={styles.repostIcon} />
             <span>Repost to my profile</span>
           </div>
         }
-        <div className="copylink__block">
+        {(this.props.postTypeId === POST_TYPE_MEDIA_ID ||
+          this.props.postPostTypeId === POST_TYPE_MEDIA_ID) &&
+          <div className={styles.social}>
+            Share to
+            <div className={styles.socialIcons}>
+              <a href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.origin + (this.props.linkPost || this.props.link)}`} target="_blank" rel="noopener noreferrer" className={styles.icon}><IconFacebook /></a>
+              <a href={`https://twitter.com/intent/tweet?url=${window.location.origin + (this.props.linkPost || this.props.link)}`} target="_blank" rel="noopener noreferrer" className={styles.icon}><IconTwitter /></a>
+              <a href={`https://telegram.me/share/url?url=${window.location.origin + (this.props.linkPost || this.props.link)}`} target="_blank" rel="noopener noreferrer" className={styles.icon}><IconTelegram /></a>
+            </div>
+          </div>
+        }
+        <div className={styles.copylink__block}>
           <span>Copy link</span>
-          <div className="copylink">
-            <a target="_blank" rel="noopener noreferrer" href={this.props.link} className="copylink__link">{window.location.origin + this.props.link}</a>
+          <div className={styles.copylink}>
+            <a target="_blank" rel="noopener noreferrer" href={this.props.link} className={styles.copylinkTitle}>{window.location.origin + this.props.link}</a>
             <IconCopyLink onClick={this.copyToClipboard()} />
           </div>
         </div>
@@ -65,10 +81,13 @@ class ShareBlock extends PureComponent {
 
 ShareBlock.propTypes = {
   link: PropTypes.string,
+  linkPost: PropTypes.string,
   addRepost: PropTypes.func,
   onClickClose: PropTypes.func,
   repostAvailable: PropTypes.bool,
   postId: PropTypes.number,
+  postTypeId: PropTypes.number,
+  postPostTypeId: PropTypes.number,
 };
 
 export default connect(

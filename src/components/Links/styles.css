@@ -1,0 +1,24 @@
+:local(.links) {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  font-size: 16px;
+  line-height: 28px;
+}
+
+:local(.links svg) {
+  min-width: 20px;
+  fill: #D8E8E8;
+}
+
+:local(.item) {
+  display: grid;
+  grid-template-columns: min-content min-content;
+  grid-column-gap: 16px;
+  align-items: center;
+  margin: 0 0 16px;
+}
+
+:local(.item:last-child) {
+  margin-bottom: 0;
+}

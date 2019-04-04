@@ -1,0 +1,128 @@
+:local(.menu [data-tooltipped]),
+:local(.itemMenu [data-tooltipped]) {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+:local(.discussions:hover .menu [data-tooltipped]),
+:local(.menu) :global([data-tooltipped].active),
+:local(.item:hover [data-tooltipped]),
+:local(.itemMenu) :global([data-tooltipped].active) {
+  opacity: 1;
+}
+
+:local(.form) {
+  display: grid;
+  grid-template-columns: 1fr max-content max-content;
+  grid-column-gap: 16px;
+}
+
+:local(.form) + :local(.list) {
+  margin: 20px 0 0;
+}
+
+:local(.iconWrapper) {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+:local(.icon) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  outline: none;
+  background: none;
+}
+
+:local(.icon svg) {
+  fill: #c4c4c4;
+  transition: fill 0.2s ease;
+}
+
+:local(.icon:hover svg) {
+  fill: #767676;
+}
+
+:local(.list) {
+  margin: 0 -15px;
+  background: #f1f2f2;
+}
+
+:local(.item) {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  grid-column-gap: 16px;
+  align-items: center;
+  padding: 8px 15px 11px 15px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+  background: #f9f9f9;
+}
+
+:local(.item.editable) {
+  grid-template-columns: 1fr max-content max-content;
+}
+
+:local(.dragged .item) {
+  transform: rotate(-1deg);
+}
+
+:local(.item:hover),
+:local(.dragged .item) {
+  box-shadow: 0px 0.5px 2px rgba(60, 68, 75, 0.2);
+  z-index: 1;
+}
+
+:local(.title) {
+  margin: 0 0 4px;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:local(.author) {
+  font-size: 12px;
+  color: #979797;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:local(.count) {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #979797;
+  fill: #979797;
+}
+
+:local(.item.hidden .main),
+:local(.item.hidden .count),
+:local(.item.hidden .itemMenu) {
+  opacity: 0.2;
+}
+
+:local(.count svg) {
+  margin: 0 0 0 3px;
+  width: 10px;
+  height: 10px;
+}
+
+:local(.main) {
+  overflow: hidden;
+}
+
+:local(.more) {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}

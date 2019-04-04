@@ -1,0 +1,42 @@
+:local(.organizationCard) {
+  display: grid;
+  grid-template-columns: 36px 1fr min-content;
+  grid-column-gap: 10px;
+  grid-row-gap: 2px;
+  width: 100%;
+}
+
+:local(.userPick) {
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+
+:local(.title) {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  font-size: 14px;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:local(.nickname) {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  font-size: 12px;
+  color: #000;
+  opacity: 0.6;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:local(.rate) {
+  grid-column-start: 3;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  font-size: 14px;
+  font-weight: bold;
+  color: #585858;
+}

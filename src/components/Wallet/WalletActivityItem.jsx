@@ -5,10 +5,10 @@ import {
   WalletCommentIcon, WalletVoteIcon, WalletNetIcon, WalletCPUIcon, WalletEmissionIcon, WalletCPUNETIcon, WalletFromIcon,
   WalletToIcon, WalletSnowflakeIcon, WalletDropIcon, WalletRAMIcon,
 } from '../Icons/WalletIcons';
-import { getFileUrl } from '../../utils/upload';
 import WalletActivityPopup from './WalletActivityPopup';
 import ModalContent from '../ModalContent';
 import Popup from '../Popup';
+import urls from '../../utils/urls';
 
 const round = amount => Math.round(amount * 100) / 100;
 
@@ -30,11 +30,11 @@ const getAvatar = (props) => {
   switch (props.trType) {
     case types.TR_TYPE__TRANSFER_FROM:
       if (!props.user) return null;
-      return <Avatar src={getFileUrl(props.user.avatarFilename)} icon={<WalletFromIcon />} />;
+      return <Avatar src={urls.getFileUrl(props.user.avatarFilename)} icon={<WalletFromIcon />} />;
 
     case types.TR_TYPE__TRANSFER_TO:
       if (!props.user) return null;
-      return <Avatar src={getFileUrl(props.user.avatarFilename)} icon={<WalletToIcon />} />;
+      return <Avatar src={urls.getFileUrl(props.user.avatarFilename)} icon={<WalletToIcon />} />;
 
     case types.TR_TYPE_BUY_RAM:
       return <Avatar srcComponent={<WalletRAMIcon />} icon={<WalletFromIcon />} />;
