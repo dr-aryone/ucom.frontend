@@ -3,15 +3,32 @@ import React, { memo, Fragment, useState } from 'react';
 import styles from './styles.css';
 import Button from '../Button/index';
 import IconInputError from '../Icons/InputError';
+import {
+  USER_ACCOUNT_NAME_SYMBOLS_REG_EXP,
+  USER_ACCOUNT_NAME_REG_EXP,
+} from '../../utils/user';
+
+const ERROR_WRONG_ACCOUNT_NAME = 'Wrong Account Name format';
 
 const Account = (props) => {
   const [accountName, setAccountName] = useState('');
+  const [formError, setFormError] = useState('');
 
   return (
     <Fragment>
       <div className={styles.content}>
         <div className={styles.main}>
-          <div className={styles.form}>
+          <form
+            className={styles.form}
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (!USER_ACCOUNT_NAME_REG_EXP.test(accountName.substr(1))) {
+                setFormError(ERROR_WRONG_ACCOUNT_NAME);
+                return;
+              }
+              props.onSubmit(accountName.substr(1));
+            }}
+          >
             <h2 className={styles.title}>What’s Your U°OS Account Name?</h2>
             <div className={styles.field}>
               <input
@@ -31,17 +48,22 @@ const Account = (props) => {
                   }
                 }}
                 onChange={(e) => {
-                  let { value } = e.target;
-                  if (value.length && value[0] !== '@') {
-                    value = `@${value}`;
-                  }
+                  const value = `@${e.target.value.replace('@', '')}`;
                   setAccountName(value);
+                  if (!USER_ACCOUNT_NAME_SYMBOLS_REG_EXP.test(value.substr(1))) {
+                    setFormError(ERROR_WRONG_ACCOUNT_NAME);
+                  } else {
+                    setFormError('');
+                  }
+                  props.onChange(accountName.substr(1));
                 }}
               />
-              <div className={styles.error}>
-                <IconInputError />
-                <span className={styles.text}>Such account does not exist in a blockchain</span>
-              </div>
+              {(formError || props.error) &&
+                <div className={styles.error}>
+                  <IconInputError />
+                  <span className={styles.text}>{formError || props.error}</span>
+                </div>
+              }
             </div>
             <div className={styles.action}>
               <Button
@@ -49,12 +71,12 @@ const Account = (props) => {
                 big
                 cap
                 strech
-                onClick={props.onClickProceed}
+                disabled={props.loading || formError || props.error}
               >
                 Proceed
               </Button>
             </div>
-          </div>
+          </form>
         </div>
         <div className={styles.bottom}>
           Don’t have an account?&nbsp;
@@ -66,7 +88,15 @@ const Account = (props) => {
 };
 
 Account.propTypes = {
-  onClickProceed: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  error: PropTypes.string,
+  loading: PropTypes.bool,
+};
+
+Account.defaultProps = {
+  error: '',
+  loading: false,
 };
 
 export default memo(Account);

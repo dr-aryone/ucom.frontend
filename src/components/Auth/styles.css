@@ -153,6 +153,7 @@
 }
 
 :local(.user) {
+  margin: 0 0 -59px;
   padding: 56px 0 0;
   text-align: center;
 }
