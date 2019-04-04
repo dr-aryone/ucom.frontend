@@ -20,6 +20,7 @@ const FeedUser = (props) => {
       userId: props.userId,
       organizationId: props.organizationId,
       tagIdentity: props.tagIdentity,
+      userIdentity: props.userId,
     });
     loader.done();
   };
@@ -51,6 +52,7 @@ const FeedUser = (props) => {
       userId: props.userId,
       organizationId: props.organizationId,
       tagIdentity: props.tagIdentity,
+      userIdentity: props.userId,
     });
   }, [props.userId, props.organizationId, props.tagIdentity]);
 

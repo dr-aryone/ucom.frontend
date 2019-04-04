@@ -71,17 +71,6 @@ const UserHead = (props) => {
           {user.followedBy &&
             <div>
               <Followers
-                title="Trusted by"
-                count={props.trustedByUsersCount}
-                users={getUsersByIds(props.users, props.trustedByUsersIds).map(mapUserDataToFollowersProps)}
-                metadata={props.trustedByMetadata}
-                onChangePage={props.trustedByOnChangePage}
-              />
-            </div>
-          }
-          {user.followedBy &&
-            <div>
-              <Followers
                 title="Followers"
                 count={user.followedBy.length}
                 users={getUsersByIds(props.users, user.followedBy)
@@ -96,6 +85,17 @@ const UserHead = (props) => {
                 count={user.iFollow.length}
                 users={getUsersByIds(props.users, user.iFollow)
                   .map(mapUserDataToFollowersProps)}
+              />
+            </div>
+          }
+          {user.followedBy &&
+            <div>
+              <Followers
+                title="Trusted by"
+                count={props.trustedByUsersCount}
+                users={getUsersByIds(props.users, props.trustedByUsersIds).map(mapUserDataToFollowersProps)}
+                metadata={props.trustedByMetadata}
+                onChangePage={props.trustedByOnChangePage}
               />
             </div>
           }

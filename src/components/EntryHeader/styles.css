@@ -95,6 +95,7 @@
   grid-row-gap: 20px;
   grid-auto-flow: column;
   grid-auto-columns: max-content;
+  align-items: center;
   justify-content: flex-end;
   min-height: 48px;
 }

@@ -4,7 +4,7 @@ import { getToken, removeToken } from '../utils/token';
 import loader from '../utils/loader';
 // import { enableGtm } from '../utils/gtm';
 import { addServerErrorNotification } from './notifications';
-import { setUser } from './';
+import { setUser, setUserLoading } from './';
 import { siteNotificationsSetUnreadAmount } from './siteNotifications';
 import { getAccountState } from './wallet';
 import { addOrganizations } from './organizations';
@@ -48,6 +48,7 @@ export const fetchMyself = () => async (dispatch) => {
     return;
   }
 
+  dispatch(setUserLoading(true));
   loader.start();
 
   try {
@@ -67,12 +68,13 @@ export const fetchMyself = () => async (dispatch) => {
     removeToken();
   }
 
+  dispatch(setUserLoading(false));
   loader.done();
 };
 
-export const fetchUser = userId => async (dispatch) => {
+export const fetchUser = userIdentity => async (dispatch) => {
   try {
-    const data = await graphql.fetchUser({ userId });
+    const data = await graphql.fetchUser({ userIdentity });
     dispatch(addUsers([data]));
     return data;
   } catch (e) {
@@ -81,14 +83,14 @@ export const fetchUser = userId => async (dispatch) => {
 };
 
 export const fetchUserPageData = ({
-  userId,
+  userIdentity,
   trustedByOrderBy,
   trustedByPerPage,
   trustedByPage,
 }) => async (dispatch) => {
   try {
     const data = await graphql.getUserPageData({
-      userId,
+      userIdentity,
       trustedByOrderBy,
       trustedByPerPage,
       trustedByPage,
@@ -102,14 +104,14 @@ export const fetchUserPageData = ({
 };
 
 export const fetchUserTrustedBy = ({
-  userId,
+  userIdentity,
   orderBy,
   perPage,
   page,
 }) => async (dispatch) => {
   try {
     const data = await graphql.getUserTrustedBy({
-      userId,
+      userIdentity,
       orderBy,
       perPage,
       page,

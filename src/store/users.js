@@ -1,4 +1,5 @@
 import { compact, uniq } from 'lodash';
+import { USER_ACCOUNT_LENGTH } from '../utils/user';
 
 const getInitialState = () => ({
   data: {},
@@ -118,7 +119,7 @@ const users = (state = getInitialState(), action) => {
           [action.payload.userId]: {
             ...state.data[action.payload.userId],
             myselfData: {
-              ...(state.data[action.payload.userId] ? [action.payload.userId].myselfData : null),
+              ...(state.data[action.payload.userId] ? state.data[action.payload.userId].myselfData : null),
               trust: action.payload.trust,
             },
           },
@@ -131,10 +132,13 @@ const users = (state = getInitialState(), action) => {
 };
 
 export const getUserById = (users, userIdOrName) => {
-  if (Number.isNaN(+userIdOrName)) {
-    return Object.values(users.data).find(e => e.accountName === userIdOrName);
+  let result;
+
+  if (Number.isNaN(+userIdOrName) || `${userIdOrName}`.length === USER_ACCOUNT_LENGTH) {
+    result = Object.values(users.data).find(e => e.accountName === userIdOrName);
   }
-  return users.data[userIdOrName];
+
+  return result || users.data[userIdOrName];
 };
 
 export const getUsersByIds = (users, ids = [], limit) => {
