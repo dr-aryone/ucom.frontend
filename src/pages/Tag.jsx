@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { delay } from 'lodash';
 import LayoutBase from '../components/Layout/LayoutBase';
 import Feed from '../components/Feed/FeedUser';
 import { TAG_FEED_ID } from '../utils/feed';
@@ -153,7 +152,7 @@ const Tag = (props) => {
                 const post = getPostById(props.posts, postId);
                 return post && post.description && existHashTag(post.description, tagTitle);
               }}
-              callbackOnSubmit={() => delay(() => getTag(tagTitle), 600)}
+              callbackOnSubmit={() => setTimeout(() => getTag(tagTitle), 600)}
             />
           }
         </div>
