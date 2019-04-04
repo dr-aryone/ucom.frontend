@@ -23,6 +23,8 @@ import { fetchMyself } from '../../../actions/users';
 import { getUserById } from '../../../store/users';
 import { selectUser } from '../../../store/selectors/user';
 
+const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
+
 const OfferSidebar = (props) => {
   const [sharePopup, toggleSharePopup] = useState(false);
   const [conditions, setConditions] = useState();
@@ -32,17 +34,12 @@ const OfferSidebar = (props) => {
     toggleSharePopup(!sharePopup);
   };
 
-  const conds = {
-    gh: true,
-    u: true,
-    org: true,
-  };
-
   useEffect(() => {
     if (props.postId) {
       // props.fetchPost(props.postId);
+      // const { postId } = props.postId;
       props.getOnePostOfferWithUserAirdrop({ postId }).then((data) => {
-        console.log(data);
+        // console.log(data);
         setConditions(data.oneUserAirdrop);
       });
     }
@@ -50,15 +47,20 @@ const OfferSidebar = (props) => {
   }, [props.postId]);
 
   const owner = getUserById(props.users, props.user.id);
-  const post = getPostById(props.posts, postId);
+  const post = getPostById(props.posts, props.postId);
 
-  if (conditions && conditions.authGithub === true) {
-    console.log('ppppppp: ', conditions);
-  }
+  // if (conditions && conditions.conditions.authGithub === true) {
+  //   console.log('ppppppp: ', conditions);
+  // }
 
   if (!post) {
     return null;
   }
+
+  // console.log('token: ', props.token);
+  // console.log('cookie: ', props.cookie);
+
+  // console.log(post);
 
   return (
     <Fragment>
@@ -66,33 +68,42 @@ const OfferSidebar = (props) => {
         <Rate className="rate_medium" value={+post.currentRate} label="" />
         <PostRating postId={post.id} />
       </div>
-      <div className={styles.airdrop}>
-        <div className={styles.status}>
-          <div>Airdrop Status:</div>
-          {/* <div className={classNames(
-            `${styles.statusIcon}`,
-            { [styles.statusIconPending]: conds.gh === true },
-          )}> */}
-          <span className={styles.statusIcon}><Done /></span>
-          <span>Recieved</span>
-        </div>
-        {conditions &&
-          <div className={styles.tokens}>
-            <div className={styles.tokensColumn}>
-              <div className={styles.tokenNumber}>{(conditions.tokens[0].amountClaim).toLocaleString('ru-RU')}</div>
-              <span className={styles.tokenCurr}>UOS</span>
-            </div>
-            <div className={styles.tokensColumn}>
-              <div className={styles.tokenNumber}>{(conditions.tokens[1].amountClaim).toLocaleString('ru-RU')}</div>
-              <span className={styles.tokenCurr}>UOS.Futures</span>
-            </div>
+      {conditions && (conditions.airdropStatus === AirdropStatuses.PENDING || conditions.airdropStatus === AirdropStatuses.RECEIVED) &&
+        <div className={styles.airdrop}>
+          <div className={styles.status}>
+            <div>Airdrop Status:</div>
+            {conditions.airdropStatus === AirdropStatuses.PENDING &&
+              <Fragment>
+                <span className={styles.statusIcon}><Dots /></span>
+                <span className={styles.statusPending}>In progress</span>
+              </Fragment>
+            }
+            {conditions.airdropStatus === AirdropStatuses.RECEIVED &&
+              <Fragment>
+                <span className={styles.statusIcon}><DoneSmall /></span>
+                <span className={styles.statusReceived}>Recieved</span>
+              </Fragment>
+            }
           </div>
-        }
-      </div>
+          {conditions &&
+            <div className={styles.tokens}>
+              <div className={styles.tokensColumn}>
+                <div className={styles.tokenNumber}>{(conditions.tokens[0].amountClaim).toLocaleString('ru-RU')}</div>
+                <span className={styles.tokenCurr}>UOS</span>
+              </div>
+              <div className={styles.tokensColumn}>
+                <div className={styles.tokenNumber}>{(conditions.tokens[1].amountClaim).toLocaleString('ru-RU')}</div>
+                <span className={styles.tokenCurr}>UOS.Futures</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
       <div className={styles.condition}>
         <div className={styles.conditionTitle}>How to Enter Airdrop:</div>
         <div className={styles.option}>
-          <div className={styles.optionStatus}><One /></div>
+          <div className={styles.optionStatus}>{conditions && conditions.conditions.authGithub === true ? <Done /> : <One />}</div>
           <div className={styles.optionBlock}>
             <a
               // users/?${location.search}&
@@ -106,11 +117,7 @@ const OfferSidebar = (props) => {
           </div>
         </div>
         <div className={styles.option}>
-          {conditions && conditions.authGithub === true ? (
-            <div className={styles.optionStatus}><Done /></div>
-          ) : (
-            <div className={styles.optionStatus}><Two /></div>
-          )}
+          <div className={styles.optionStatus}>{conditions && conditions.conditions.authMyself === true ? <Done /> : <Two />}</div>
           <div className={styles.optionBlock}>
             <div
               role="presentation"
@@ -123,7 +130,7 @@ const OfferSidebar = (props) => {
           </div>
         </div>
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{conditions && conditions.authMyself === true ? <Done /> : <Three />}</div>
+          <div className={styles.optionStatus}>{conditions && conditions.conditions.followingDevExchange === true ? <Done /> : <Three />}</div>
           <div className={styles.optionBlock}>
             <a href="/communities/107" target="_blank" className={styles.optionTitle}>Join DevExchange</a>
             <div className={styles.optionText}>to see your Importance in action and talk to community members</div>

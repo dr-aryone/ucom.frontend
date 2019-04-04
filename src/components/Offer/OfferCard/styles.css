@@ -24,12 +24,15 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #FFFFFF;
+  transition: background 0.2s ease;
   /* margin-left: 50px; */
 }
 
 .btn:hover {
   background: #C32924;
   cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease;
 }
 
 .btn.result {
@@ -37,12 +40,16 @@
   border: 1px solid #fff;
   color: #fff;
   border-radius: 4px;
+  transition: color 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .btn.result:hover {
   background: transparent;
   color: #D8352F;
   border-color: #D8352F;
+  transition: color 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .infoblockBottom {

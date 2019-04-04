@@ -27,6 +27,18 @@
   line-height: normal;
 }
 
+.statusPending {
+  color: #FFBD3C;
+}
+
+.statusReceived {
+  color: #40C58B;
+}
+
+.statusError {
+  color: #D8352F;
+}
+
 .statusIcon {
   margin-left: 15px;
   margin-right: 8px;

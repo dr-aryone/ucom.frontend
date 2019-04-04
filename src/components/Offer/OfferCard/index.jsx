@@ -11,11 +11,17 @@ import Followers from '../../Followers/Followers';
 import Popup from '../../Popup';
 import ModalContent from '../../ModalContent';
 import UserListAirdrop from '../../User/UsersListAirdrop';
+// import { authShowPopup } from '../../../actions/auth';
 
 const OfferCard = (props) => {
   const [popupVisible, setPopupVisible] = useState(false);
   const PostLink = props.url ? Link : 'span';
   const LinkTag = props.userUrl ? Link : 'div';
+  const conditions = props.status;
+
+  console.log('props: ', conditions);
+
+  console.log(props.token);
 
   return (
     <Fragment>
@@ -75,12 +81,33 @@ const OfferCard = (props) => {
             usersIds={props.usersIds}
             title="Participants"
           />
-          <div className={classNames(
-            `${styles.btn}`,
-            // `${styles.result}`,
-        )}>
-            Get your Score
-          </div>
+          {conditions && conditions.conditions.authGithub === false &&
+            <a
+              className={styles.btn}
+              href="https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/?mock_external_id=true"
+            >
+              Get your score
+            </a>
+          }
+          {conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === false &&
+            <div
+              role="presentation"
+              // onClick={() => props.authShowPopup()}
+              className={styles.btn}
+            >
+              Sign up
+            </div>
+          }
+          {conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === true &&
+            <div
+              className={classNames(
+                `${styles.btn}`,
+                `${styles.result}`,
+              )}
+            >
+              See Results
+            </div>
+          }
         </div>
       </div>
     </Fragment>

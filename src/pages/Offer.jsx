@@ -27,29 +27,16 @@ const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
 const Offer = (props) => {
-  const [token, setToken] = useState(getToken());
-  const [cookie, setCookie] = useState(getCookie(`${CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB}`));
+  const [token] = useState(getToken());
+  const [cookie] = useState(getCookie(`${CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB}`));
   const [usersIds, setUsersIds] = useState([]);
   const [conditions, setConditions] = useState();
   const [tokens, setTokens] = useState([]);
   const postId = 14317;
-  // const tokens = [
-  //   {
-  //     amount_claim: 123456789,
-  //     amount_left: 121234561,
-  //     symbol: 'UOS',
-  //   },
-  //   {
-  //     amount_claim: 123456789,
-  //     amount_left: 71289,
-  //     symbol: 'UOS.F',
-  //   },
-  // ];
-
   const post = getPostById(props.posts, postId);
 
   const pairAccounts = async () => {
-    if (cookie && token) {
+    if (cookie && token && !conditions.conditions.authGithub && !conditions.conditions.authMyself) {
       try {
         const data = await api.syncAccountGithub(token, cookie);
       } catch (e) {
@@ -61,6 +48,8 @@ const Offer = (props) => {
   useEffect(() => {
     pairAccounts();
   }, [cookie, token]);
+  // console.log('cookie: ', cookie);
+  // console.log('token: ', token);
 
   useEffect(() => {
     if (postId) {
@@ -79,7 +68,7 @@ const Offer = (props) => {
     props.getOnePostOfferWithUserAirdrop({
       postId,
     }).then((data) => {
-      console.log(data);
+      // console.log(data);
       setConditions(data.oneUserAirdrop);
     });
     props.getManyUsers({
@@ -98,10 +87,6 @@ const Offer = (props) => {
     return null;
   }
 
-  console.log('post.offerData: ', post);
-
-  console.log('conditions: ', conditions);
-
   return (
     <LayoutBase>
       <div className="container container_post">
@@ -109,7 +94,7 @@ const Offer = (props) => {
           org={post.organization}
         />
         <OfferCard
-          id={postId}
+          postId={postId}
           coverUrl={getPostCover(post)}
           rate={post.currentRate}
           title={post.title}
@@ -120,7 +105,9 @@ const Offer = (props) => {
           accountName={post.user.accountName}
           finishedAt={post.finishedAt}
           usersIds={usersIds}
-          status={conditions ? conditions.airdropStatus : null}
+          status={conditions || null}
+          token={token}
+          cookie={(conditions && conditions.conditions.authGithub) || cookie}
         />
         <div className={styles.content}>
           <div className={styles.textBlock}>
