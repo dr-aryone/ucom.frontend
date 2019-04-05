@@ -16,13 +16,18 @@ const makeLinkTag = (match) => {
 
 export const checkHashTag = memoize((text = '') => text.replace(/(^|\s|>)#[a-zA-Z]\w*/gm, makeLinkTag));
 
-export const existHashTag = (text, tag) => {
-  const result = text.match(/#[a-zA-Z]\w*/gm);
+export const existHashTag = memoize((text, tag) => {
+  if (!text || !tag) {
+    return false;
+  }
+  const textLowerCase = text.toLowerCase();
+  const tagLowerCase = tag.toLowerCase();
+  const result = textLowerCase.match(/#[a-zA-Z]\w*/gm);
   if (result) {
-    return result.some(item => item === `#${tag}`);
+    return result.some(i => i === `#${tagLowerCase}`);
   }
   return false;
-};
+});
 
 const makeLinkMention = (match) => {
   match = match.toLowerCase();
