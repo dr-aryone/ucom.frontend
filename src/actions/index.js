@@ -1,6 +1,9 @@
+// TODO: Refactoring (split and separate to sub files)
+
 import { POSTS_DRAFT_LOCALSTORAGE_KEY } from '../utils/posts';
 
-export const setUser = payload => ({ payload, type: 'SET_USER' });
+export const setUser = payload => ({ type: 'SET_USER', payload });
+export const setUserLoading = (loading = false) => ({ type: 'SET_LOADING', payload: loading });
 export const removeUser = () => ({ type: 'REMOVE_USER' });
 export const setPostData = payload => ({ type: 'SET_POST_DATA', payload });
 export const setPostDataToLS = () => (dispatch, getState) => {

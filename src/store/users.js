@@ -1,4 +1,5 @@
 import { compact, uniq } from 'lodash';
+import { USER_ACCOUNT_LENGTH } from '../utils/user';
 
 const getInitialState = () => ({
   data: {},
@@ -20,7 +21,14 @@ const users = (state = getInitialState(), action) => {
         ...state,
         data: {
           ...state.data,
-          ...users.reduce((result, user) => ({ ...result, [user.id]: { ...state.data[user.id], ...user } }), {}),
+          ...users.reduce((result, user) => ({
+            ...result,
+            [user.id]: {
+              ...state.data[user.id],
+              ...result[user.id],
+              ...user,
+            },
+          }), {}),
         },
       };
     }
@@ -103,16 +111,34 @@ const users = (state = getInitialState(), action) => {
       };
     }
 
+    case 'USERS_SET_TRUST':
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.payload.userId]: {
+            ...state.data[action.payload.userId],
+            myselfData: {
+              ...(state.data[action.payload.userId] ? state.data[action.payload.userId].myselfData : null),
+              trust: action.payload.trust,
+            },
+          },
+        },
+      };
+
     default:
       return state;
   }
 };
 
 export const getUserById = (users, userIdOrName) => {
-  if (Number.isNaN(+userIdOrName)) {
-    return Object.values(users.data).find(e => e.accountName === userIdOrName);
+  let result;
+
+  if (Number.isNaN(+userIdOrName) || `${userIdOrName}`.length === USER_ACCOUNT_LENGTH) {
+    result = Object.values(users.data).find(e => e.accountName === userIdOrName);
   }
-  return users.data[userIdOrName];
+
+  return result || users.data[userIdOrName];
 };
 
 export const getUsersByIds = (users, ids = [], limit) => {

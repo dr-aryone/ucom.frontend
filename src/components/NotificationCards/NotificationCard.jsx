@@ -36,6 +36,7 @@ import {
   USER_SHARE_YOUR_MEDIA_POST,
   USER_HAS_MENTIONED_YOU_IN_POST,
   USER_HAS_MENTIONED_YOU_IN_COMMENT,
+  USER_TRUST_YOU,
 } from '../../store/siteNotifications';
 
 const getAvatarIcon = (eventId) => {
@@ -71,6 +72,18 @@ const getTitle = (props) => {
   if (!props.eventId) return null;
 
   switch (props.eventId) {
+    case USER_TRUST_YOU:
+      if (!(props.data && props.data.user)) return null;
+
+      return (
+        <Fragment>
+          <Link to={urls.getUserUrl(props.data.user.id)}>
+            <strong>{getUserName(props.data.user)}</strong>
+          </Link>
+          &nbsp;trusts you
+        </Fragment>
+      );
+
     case USER_FOLLOWS_YOU:
       if (!(props.data && props.data.user)) return null;
 
@@ -419,6 +432,7 @@ const getAvatar = (props) => {
           </Link>
         </div>
       );
+
     case USER_HAS_MENTIONED_YOU_IN_COMMENT:
       if (!(props.data && props.data.comment && props.data.comment.user)) return null;
 
@@ -445,6 +459,7 @@ const getAvatar = (props) => {
           </Link>
         </div>
       );
+
     default: {
       return props.data && props.data.user ? (
         <div className="site-notification__avatar">

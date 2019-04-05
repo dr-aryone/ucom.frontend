@@ -8,7 +8,8 @@
   background: #fff;
 }
 
-:local(.entryHead.organization) {
+:local(.entryHead.organization),
+:local(.entryHead.tag) {
   border-radius: 0;
 }
 
@@ -78,6 +79,11 @@
   color: #000;
 }
 
+:local(.userName.big) {
+  font-size: 48px;
+  line-height: 60px;
+}
+
 :local(.followButton) {
   width: 160px;
 }
@@ -89,6 +95,7 @@
   grid-row-gap: 20px;
   grid-auto-flow: column;
   grid-auto-columns: max-content;
+  align-items: center;
   justify-content: flex-end;
   min-height: 48px;
 }
