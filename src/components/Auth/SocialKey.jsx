@@ -47,7 +47,7 @@ const Account = (props) => {
             <h2 className={styles.title}>Enter Your Social Key to Authorize</h2>
             <div className={styles.field}>
               <input
-                type="text"
+                type="password"
                 className={styles.input}
                 placeholder="Private Social Key"
                 value={socialKey}

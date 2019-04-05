@@ -3,14 +3,23 @@ import classNames from 'classnames';
 import React, { useEffect, useRef } from 'react';
 import CloseIcon from './Icons/Close';
 
+let openedPopupsCount = 0;
+
 const Popup = (props) => {
   const el = useRef(null);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    openedPopupsCount++;
 
     return () => {
-      document.body.style.overflow = '';
+      if (openedPopupsCount > 0) {
+        openedPopupsCount--;
+      }
+
+      if (openedPopupsCount === 0) {
+        document.body.style.overflow = '';
+      }
     };
   }, []);
 

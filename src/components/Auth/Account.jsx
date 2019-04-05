@@ -55,7 +55,9 @@ const Account = (props) => {
                   } else {
                     setFormError('');
                   }
-                  props.onChange(accountName.substr(1));
+                  if (props.onChange) {
+                    props.onChange(accountName.substr(1));
+                  }
                 }}
               />
               {(formError || props.error) &&
@@ -89,7 +91,7 @@ const Account = (props) => {
 
 Account.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   error: PropTypes.string,
   loading: PropTypes.bool,
 };
@@ -97,6 +99,7 @@ Account.propTypes = {
 Account.defaultProps = {
   error: '',
   loading: false,
+  onChange: undefined,
 };
 
 export default memo(Account);

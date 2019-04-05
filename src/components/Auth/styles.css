@@ -1,4 +1,4 @@
-:local(.auth) {
+.auth {
   display: flex;
   flex-direction: column;
   position: relative;
@@ -12,7 +12,7 @@
   background: #fff;
 }
 
-:local(.icon) {
+.icon {
   display: flex;
   width: 24px;
   height: 24px;
@@ -20,29 +20,29 @@
   justify-content: center;
 }
 
-:local(.close) {
+.close {
   position: absolute;
   top: 30px;
   right: 30px;
   cursor: pointer;
 }
 
-:local(.navigation) {
+.navigation {
   position: absolute;
   top: 36px;
   left: 36px;
   cursor: pointer;
 }
 
-:local(.navigation .icon) {
+.navigation .icon {
   transition: fill 0.2s ease;
 }
 
-:local(.navigation:hover .icon) {
+.navigation:hover .icon {
   fill: #D8352F;
 }
 
-:local(.navigation .label) {
+.navigation .label {
   position: absolute;
   z-index: -1;
   left: 100%;
@@ -54,20 +54,20 @@
   transition: opacity 0.2s ease, z-index 0s linear 0.2s;
 }
 
-:local(.navigation:hover .label) {
+.navigation:hover .label {
   z-index: 0;
   opacity: 1;
   transition: opacity 0.2s ease, z-index 0s linear 0s;
 }
 
-:local(.navText) {
+.navText {
   text-transform: uppercase;
   font-size: 12px;
   font-weight: bold;
   letter-spacing: 0.12em;
 }
 
-:local(.content) {
+.content {
   flex: 1 1 auto;
   display: flex;
   box-sizing: border-box;
@@ -78,41 +78,45 @@
   padding: 0 10px;
 }
 
-:local(.content .main) {
+.content.generateKey {
+  max-width: 866px;
+}
+
+.content .main {
   flex: 1 1 auto;
 }
 
-:local(.content .bottom) {
+.content .bottom {
   padding: 29px 0;
   text-align: center;
   font-size: 16px;
   color: #585858;
 }
 
-:local(.title) {
+.title {
   font-size: 28px;
   font-weight: bold;
   line-height: 34px;
   text-align: center;
 }
 
-:local(.form) {
+.form {
   padding: 115px 0 0;
 }
 
-:local(.form .title) {
+.form .title {
   margin: 0 0 130px;
 }
 
-:local(.form .title.saveKey) {
+.form .title.saveKey {
   margin: 0 0 70px;
 }
 
-:local(.field) {
+.field {
   margin: 0 0 90px;
 }
 
-:local(.input) {
+.input {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -125,55 +129,55 @@
   outline: none;
 }
 
-:local(.input::placeholder) {
+.input::placeholder {
   opacity: 1;
   color: #585858;
 }
 
-:local(.action) {
+.action {
   width: 100%;
   max-width: 200px;
   margin: 0 auto;
 }
 
-:local(.error) {
+.error {
   margin: 20px 0 -40px;
   font-size: 16px;
   text-align: center;
 }
 
-:local(.error .text) {
+.error .text {
   vertical-align: middle;
 }
 
-:local(.error svg) {
+.error svg {
   display: inline-block;
   vertical-align: middle;
   margin: 0 8px 0 0;
 }
 
-:local(.user) {
+.user {
   margin: 0 0 -59px;
   padding: 56px 0 0;
   text-align: center;
 }
 
-:local(.user .userPick) {
+.user .userPick {
   margin: 0 0 16px;
 }
 
-:local(.user .name) {
+.user .name {
   margin: 0 0 10px;
   font-size: 16px;
   font-weight: bold;
 }
 
-:local(.user .accountName) {
+.user .accountName {
   font-size: 14px;
   color: #585858;
 }
 
-:local(.copy) {
+.copy {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -184,50 +188,50 @@
   background: #F5F6F6;
 }
 
-:local(.copy .key) {
+.copy .key {
   padding: 0 12px 0 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-:local(.copy .label) {
+.copy .label {
   transition: color 0.2s ease;
   cursor: pointer;
   color: #D8352F;
 }
 
-:local(.copy .label:hover) {
+.copy .label:hover {
   color: #C32924;
 }
 
-:local(.saveKeyText) {
+.saveKeyText {
   margin: 0 0 64px;
   text-align: center;
   font-size: 16px;
   line-height: 28px;
 }
 
-:local(.navLink) {
+.navLink {
   cursor: pointer;
 }
 
-:local(.navLink svg) {
+.navLink svg {
   display: inline-block;
   vertical-align: middle;
   margin: 0 0 0 12px;
   transition: fill 0.2s ease;
 }
 
-:local(.navLink:hover svg) {
+.navLink:hover svg {
   fill: #D8352F;
 }
 
-:local(.proceedLink) {
+.proceedLink {
   text-align: center;
 }
 
-:local(.copyPopup) {
+.copyPopup {
   position: relative;
   box-sizing: border-box;
   width: 100%;
@@ -236,30 +240,30 @@
   background: #fff;
 }
 
-:local(.copyPopup .close) {
+.copyPopup .close {
   position: absolute;
   right: 24px;
   top: 24px;
   cursor: pointer;
 }
 
-:local(.copyPopup .title) {
+.copyPopup .title {
   margin: 0 0 30px;
   text-align: left;
 }
 
-:local(.copyPopup .text) {
+.copyPopup .text {
   margin: 0 0 40px;
   font-size: 16px;
   line-height: 28px;
 }
 
-:local(.copyPopup .action) {
+.copyPopup .action {
   margin: 0;
 }
 
 @media (max-width: 767px) {
-  :local(.auth) {
+  .auth {
     min-width: calc(100% - 8px);
     min-height: calc(100% - 8px);
     margin: 4px;

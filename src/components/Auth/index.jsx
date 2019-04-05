@@ -6,38 +6,43 @@ import Popup from '../Popup';
 import IconClose from '../Icons/Close';
 import Account from './Account';
 import SocialKey from './SocialKey';
-import NewSocialKey from './NewSocialKey';
+import GenerateSocialKey from './GenerateSocialKey';
 import SaveSocialKey from './SaveSocialKey';
 import { fetchUser } from '../../actions/users';
 import loader from '../../utils/loader';
 import { getUserById } from '../../store/users';
 import urls from '../../utils/urls';
 import { getUserName } from '../../utils/user';
+import { authHidePopup } from '../../actions/auth';
 
 const STEP_ACCOUNT = 1;
 const STEP_SOCIAL_KEY = 2;
 const STEP_NEW_SOCIAL_KEY = 3;
 const STEP_SAVE_SOCIAL_KEY = 4;
 
-const ERROR_ACCOUNT_NOT_EXIST = 'Such Фccount does not exist in a blockchain';
+const ERROR_ACCOUNT_NOT_EXIST = 'Such account does not exist in a blockchain';
 
 const Auth = (props) => {
+  if (!props.visibility) {
+    return null;
+  }
+
   const [currentStep, setCurrentStep] = useState(STEP_ACCOUNT);
   const [loading, setLoading] = useState(false);
   const [accountError, setAccountError] = useState('');
-  const [socialKeyError, setSocialKeyError] = useState('');
   const [userId, setUserId] = useState(null);
+  const [socialKey, setSocialKey] = useState(null);
   const user = getUserById(props.users, userId);
 
   return (
     <Popup
-      onClickClose={props.onClickClose}
+      onClickClose={() => props.dispatch(authHidePopup())}
     >
       <div className={styles.auth}>
         <div
           role="presentation"
           className={styles.close}
-          onClick={props.onClickClose}
+          onClick={() => props.dispatch(authHidePopup())}
         >
           <span className={styles.icon}>
             <IconClose />
@@ -46,31 +51,36 @@ const Auth = (props) => {
 
         {(() => {
           switch (currentStep) {
-            case STEP_SOCIAL_KEY:
-              return user && (
+            case STEP_SOCIAL_KEY: {
+              if (!user) {
+                setCurrentStep(STEP_ACCOUNT);
+                return null;
+              }
+
+              return (
                 <SocialKey
-                  error={socialKeyError}
-                  loading={loading}
                   userName={getUserName(user)}
                   userAccountName={user.accountName}
                   userAvatarSrc={urls.getFileUrl(user.avatarFilename)}
                   onClickBack={() => setCurrentStep(STEP_ACCOUNT)}
                   onClickNewKeys={() => setCurrentStep(STEP_NEW_SOCIAL_KEY)}
-                  onSubmit={() => {
-                    // TODO: Auth with social key, need backed
-                  }}
                 />
               );
+            }
             case STEP_NEW_SOCIAL_KEY:
               return (
-                <NewSocialKey
+                <GenerateSocialKey
                   onClickBack={() => setCurrentStep(STEP_SOCIAL_KEY)}
-                  onClickProceed={() => setCurrentStep(STEP_SAVE_SOCIAL_KEY)}
+                  onSubmit={(socialKey) => {
+                    setSocialKey(socialKey);
+                    setCurrentStep(STEP_SAVE_SOCIAL_KEY);
+                  }}
                 />
               );
             case STEP_SAVE_SOCIAL_KEY:
               return (
                 <SaveSocialKey
+                  socialKey={socialKey}
                   onClickBack={() => setCurrentStep(STEP_SOCIAL_KEY)}
                 />
               );
@@ -106,14 +116,16 @@ const Auth = (props) => {
 };
 
 Auth.propTypes = {
-  onClickClose: PropTypes.func,
   users: PropTypes.objectOf(PropTypes.any).isRequired,
+  visibility: PropTypes.bool,
+  dispatch: PropTypes.func.isRequired,
 };
 
 Auth.defaultProps = {
-  onClickClose: undefined,
+  visibility: false,
 };
 
 export default connect(state => ({
   users: state.users,
+  visibility: state.auth.visibility,
 }))(memo(Auth));

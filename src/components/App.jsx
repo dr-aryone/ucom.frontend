@@ -7,7 +7,8 @@ import { initNotificationsListeners, siteNotificationsSetUnreadAmount } from '..
 import { fetchMyself } from '../actions/users';
 import UserMenu from './UserMenu/UserMenu';
 import Page from './Page';
-import Auth from './Auth/index';
+import Auth from './Auth';
+import NewAuth from './Auth/index';
 import Notifications from './Notifications';
 import socket from '../api/socket';
 import config from '../../package.json';
@@ -35,7 +36,8 @@ const App = (props) => {
           {routes.map(r => <Route exact path={r.path} component={r.component} key={r.path} />)}
         </Switch>
 
-        <Auth />
+        {/* TODO: Remove old app, then new feature complete */}
+        {typeof window !== 'undefined' && window.newAuth === true ? <NewAuth /> : <Auth />}
         <UserMenu />
       </Page>
 
