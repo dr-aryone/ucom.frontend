@@ -22,11 +22,13 @@
   "backend": {
     "staging": {
       "httpEndpoint": "https://staging-backend.u.community",
-      "socketEndpoint": "https://websocket-staging.u.community:443"
+      "socketEndpoint": "https://websocket-staging.u.community:443",
+      "uploaderEndpoint": "https://staging-uploader.u.community"
     },
     "production": {
       "httpEndpoint": "https://backend.u.community",
-      "socketEndpoint": "https://websocket.u.community:443"
+      "socketEndpoint": "https://websocket.u.community:443",
+      "uploaderEndpoint": "https://uploader.u.community/api/v1/images/one-image"
     }
   },
   "iframely": {
