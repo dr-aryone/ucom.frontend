@@ -6,13 +6,18 @@ const URL_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+
 
 export const escapeQuotes = memoize((text = '') => text.replace(/&quot;/g, '"'));
 
-const makeLinkTag = (match) => {
+const makeActiveLink = (trigger, makeRoute, className) => (...args) => {
+  let match = args[0];
+  const isFirst = !args[2];
   match = match.toLowerCase();
-  const link = match.slice(0, 1) === '>' ? match.slice(1).replace('#', '').trim() : match.replace('#', '').trim();
-  const result = match.slice(0, 1) === '>' ? `><a href='/tags/${link}' class='tag_link' target='_blank'>${match.slice(1)}</a>` :
-    `<a href='/tags/${link}' class='tag_link' target='_blank'>${match}</a>`;
+  const link = match.slice(0, 1) === '>' ? match.slice(1).replace(trigger, '').trim() : match.replace(trigger, '').trim();
+  const result = match.slice(0, 1) === '>' ? `> <a href='${makeRoute(link)}' class='${className}' target='_blank'>${match.slice(1)}</a>` :
+    `${isFirst ? '' : ' '}<a href='${makeRoute(link)}' class='${className}' target='_blank'>${match[0] === ' ' ? match.slice(1) : match}</a>`;
   return result;
 };
+
+export const makeLinkTag = makeActiveLink('#', urls.getTagUrl, 'tag_link');
+export const makeLinkMention = makeActiveLink('@', urls.getUserUrl, 'mention_link');
 
 export const checkHashTag = memoize((text = '') => text.replace(/(^|\s|>)#[a-zA-Z]\w*/gm, makeLinkTag));
 
@@ -28,14 +33,6 @@ export const existHashTag = memoize((text, tag) => {
   }
   return false;
 });
-
-const makeLinkMention = (match) => {
-  match = match.toLowerCase();
-  const accountName = match.slice(0, 1) === '>' ? match.slice(1).replace('@', '').trim() : match.replace('@', '').trim();
-  const result = match.slice(0, 1) === '>' ? `><a href=${urls.getUserUrl(accountName)} class='mention_link' target='_blank'>${match.slice(1)}</a>` :
-    `<a href=${urls.getUserUrl(accountName)} class='mention_link' target='_blank'>${match}</a>`;
-  return result;
-};
 
 export const checkMentionTag = memoize((text = '') => text.replace(/(^|\s|>)@[a-zA-Z0-9]\w*/gm, makeLinkMention));
 
