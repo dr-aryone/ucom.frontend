@@ -6,7 +6,6 @@ import Feed from '../components/Feed/FeedUser';
 import { TAG_FEED_ID } from '../utils/feed';
 import api from '../api';
 import { addTags } from '../actions/tags';
-import NotFoundPage from './NotFoundPage';
 import { existHashTag } from '../utils/text';
 import { getPostById } from '../store/posts';
 import headerStyles from '../components/EntryHeader/styles.css';
@@ -27,7 +26,6 @@ const ENTRY_SECTION_LIMIT = 3;
 const Tag = (props) => {
   const tagTitle = props.match.params.title;
   const [loading, setLoading] = useState(true);
-  const [loaded, setLoaded] = useState(false);
   const [usersPopupIds, setUsersPopupIds] = useState([]);
   const [usersPopupMetadata, setUsersPopupMetadata] = useState({});
 
@@ -41,7 +39,6 @@ const Tag = (props) => {
       console.error(e);
     }
 
-    setLoaded(true);
     setLoading(false);
   };
 
@@ -68,14 +65,10 @@ const Tag = (props) => {
     }
   }, [tagTitle]);
 
-  const tag = props.tags.data[props.match.params.title];
+  const tag = props.tags.data[tagTitle];
 
   if (loading) {
     return null;
-  }
-
-  if (loaded && !tag) {
-    return <NotFoundPage />;
   }
 
   return (
@@ -85,78 +78,81 @@ const Tag = (props) => {
           <div className={`${headerStyles.entryHead} ${headerStyles.tag}`}>
             <div className={`${headerStyles.main} ${headerStyles.noAvatar}`}>
               <div className={headerStyles.info}>
-                <div className={`${headerStyles.userName} ${headerStyles.big}`}>#{tag.title}</div>
+                <div className={`${headerStyles.userName} ${headerStyles.big}`}>#{tagTitle}</div>
               </div>
-              <div className={headerStyles.rate}>{formatRate(tag.currentRate)}°</div>
+              <div className={headerStyles.rate}>{formatRate(tag ? tag.currentRate : 0)}°</div>
             </div>
             <div className={headerStyles.side}>
               <div className={headerStyles.usersLists}>
                 <div>
-                  <Stats title="Posts" amount={tag.posts.metadata.totalAmount} />
+                  <Stats title="Posts" amount={tag ? tag.posts.metadata.totalAmount : 0} />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="layout__sidebar">
-          {tag.users &&
-            <EntryListSection
-              title="Top uses by"
-              limit={ENTRY_SECTION_LIMIT}
-              data={getUsersByIds(props.users, tag.users.data).map(item => ({
-                id: item.id,
-                avatarSrc: urls.getFileUrl(item.avatarFilename),
-                url: urls.getUserUrl(item.id),
-                title: getUserName(item),
-                nickname: item.accountName,
-                currentRate: item.currentRate,
-                follow: true,
-              }))}
-              popupData={getUsersByIds(props.users, usersPopupIds).map(item => ({
-                id: item.id,
-                avatarSrc: urls.getFileUrl(item.avatarFilename),
-                url: urls.getUserUrl(item.id),
-                title: getUserName(item),
-                nickname: item.accountName,
-                currentRate: item.currentRate,
-                follow: true,
-              }))}
-              popupMetadata={usersPopupMetadata}
-              onClickViewAll={getTagUsers}
-              onChangePage={getTagUsers}
-              showViewMore={tag.users.metadata.totalAmount > ENTRY_SECTION_LIMIT}
-            />
-          }
+        {tag &&
+          <div className="layout__sidebar">
+            {tag.users &&
+              <EntryListSection
+                title="Top uses by"
+                limit={ENTRY_SECTION_LIMIT}
+                data={getUsersByIds(props.users, tag.users.data).map(item => ({
+                  id: item.id,
+                  avatarSrc: urls.getFileUrl(item.avatarFilename),
+                  url: urls.getUserUrl(item.id),
+                  title: getUserName(item),
+                  nickname: item.accountName,
+                  currentRate: item.currentRate,
+                  follow: true,
+                }))}
+                popupData={getUsersByIds(props.users, usersPopupIds).map(item => ({
+                  id: item.id,
+                  avatarSrc: urls.getFileUrl(item.avatarFilename),
+                  url: urls.getUserUrl(item.id),
+                  title: getUserName(item),
+                  nickname: item.accountName,
+                  currentRate: item.currentRate,
+                  follow: true,
+                }))}
+                popupMetadata={usersPopupMetadata}
+                onClickViewAll={getTagUsers}
+                onChangePage={getTagUsers}
+                showViewMore={tag.users.metadata.totalAmount > ENTRY_SECTION_LIMIT}
+              />
+            }
 
-          {tag.orgs &&
-            // TODO: Refactoring like tag users
-            <EntryListSection
-              title="Communities"
-              data={getOrganizationByIds(props.organizations, tag.orgs.data).map(item => ({
-                id: item.id,
-                organization: true,
-                avatarSrc: urls.getFileUrl(item.avatarFilename),
-                url: urls.getOrganizationUrl(item.id),
-                title: item.title,
-                nickname: item.nickname,
-                currentRate: item.currentRate,
-              }))}
-            />
-          }
+            {tag.orgs &&
+              // TODO: Refactoring like tag users
+              <EntryListSection
+                title="Communities"
+                data={getOrganizationByIds(props.organizations, tag.orgs.data).map(item => ({
+                  id: item.id,
+                  organization: true,
+                  avatarSrc: urls.getFileUrl(item.avatarFilename),
+                  url: urls.getOrganizationUrl(item.id),
+                  title: item.title,
+                  nickname: item.nickname,
+                  currentRate: item.currentRate,
+                }))}
+              />
+            }
 
-          <EntryCreatedAt date={tag.createdAt} />
-        </div>
+            <EntryCreatedAt date={tag.createdAt} />
+          </div>
+        }
         <div className="layout__main">
-          {tag &&
+          {tagTitle &&
             <Feed
               feedTypeId={TAG_FEED_ID}
               userId={props.user.data.id}
-              tagIdentity={tag.title}
-              feedInputInitialText={tag.title}
+              tagIdentity={tagTitle}
+              feedInputInitialText={tagTitle}
               filter={(postId) => {
                 const post = getPostById(props.posts, postId);
-                return post && post.description && existHashTag(post.description, tag.title);
+                return post && post.description && existHashTag(post.description, tagTitle);
               }}
+              callbackOnSubmit={() => setTimeout(() => getTag(tagTitle), 600)}
             />
           }
         </div>

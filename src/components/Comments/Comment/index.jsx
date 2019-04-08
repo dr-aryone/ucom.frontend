@@ -7,7 +7,7 @@ import Form from '../Form';
 import ShowReplies from '../ShowReplies';
 import CommentRating from '../../Rating/CommentRating';
 import { COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST } from '../../../utils/comments';
-import { sanitizeCommentText, checkMentionTag } from '../../../utils/text';
+import { sanitizeCommentText, checkMentionTag, checkHashTag } from '../../../utils/text';
 
 const Comment = (props) => {
   const [formVisible, setFormVisible] = useState({ visible: false, name: '' });
@@ -37,7 +37,7 @@ const Comment = (props) => {
           <div
             className={styles.text}
             dangerouslySetInnerHTML={{
-              __html: sanitizeCommentText(checkMentionTag(props.text)),
+              __html: sanitizeCommentText(checkMentionTag(checkHashTag(props.text))),
             }}
           />
 
