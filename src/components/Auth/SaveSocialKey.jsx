@@ -5,7 +5,7 @@ import IconArrowRight from '../Icons/ArrowRight';
 import Popup from '../Popup';
 import IconClose from '../Icons/Close';
 import Button from '../Button/index';
-import { copyToClipboard } from '../../utils/text';
+import CopyPanel from '../CopyPanel';
 
 const SaveSocialKey = (props) => {
   const [popupVisible, setPopupVisible] = useState(false);
@@ -46,17 +46,12 @@ const SaveSocialKey = (props) => {
           <div className={styles.form}>
             <h2 className={`${styles.title} ${styles.saveKey}`}>Save Your Social Key</h2>
             <div className={styles.copy}>
-              <span className={styles.key}>{props.socialKey}</span>
-              <span
-                role="presentation"
-                className={styles.label}
-                onClick={() => {
-                  copyToClipboard(props.socialKey);
+              <CopyPanel
+                value={props.socialKey}
+                onCopy={() => {
                   setHasCopiedKey(true);
                 }}
-              >
-                Copy
-              </span>
+              />
             </div>
             <div className={styles.saveKeyText}>
               This is your Social Private Key.<br />

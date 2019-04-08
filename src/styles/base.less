@@ -29,7 +29,8 @@ a, .link {
     text-decoration: underline;
   }
 
-  &.red {
+  &.red,
+  &.red-hover {
     text-decoration: none;
     transition: color 0.2s ease;
 
@@ -37,6 +38,15 @@ a, .link {
     &.active {
       color: #D8352F;
       text-decoration: none;
+    }
+  }
+
+  &.red {
+    color: #D8352F;
+
+    &:hover,
+    &.active {
+      color: #C32924;
     }
   }
 }

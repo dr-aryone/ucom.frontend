@@ -1,0 +1,49 @@
+.settings {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-column-gap: 100px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 86px 0 128px 0;
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.settings p {
+  margin: 0 0 35px;
+}
+
+h2.title {
+  margin: 0 0 41px;
+  font-size: 48px;
+  line-height: 54px;
+  color: #E4E4E4;
+}
+
+h3.title {
+  margin: 0 0 29px;
+  line-height: 34px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+h4.title {
+  margin: 0 0 26px;
+  line-height: 24px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.header {
+  margin: 0 0 88px;
+}
+
+.subSection {
+  margin: 0 0 63px;
+}
+
+.copy {
+  margin: 0 0 32px;
+  font-size: 14px;
+}

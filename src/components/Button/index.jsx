@@ -21,6 +21,8 @@ const Button = (props) => {
         [styles.red]: props.red,
         [styles.transparent]: props.transparent,
         [styles.big]: props.big,
+        [styles.small]: props.small,
+        [styles.medium]: props.big,
         [styles.cap]: props.cap,
         [styles.disabled]: props.disabled,
       })}
@@ -42,6 +44,7 @@ Button.propTypes = {
   red: PropTypes.bool,
   transparent: PropTypes.bool,
   big: PropTypes.bool,
+  small: PropTypes.bool,
   cap: PropTypes.bool,
   disabled: PropTypes.bool,
 };
@@ -55,6 +58,7 @@ Button.defaultProps = {
   red: false,
   transparent: false,
   big: false,
+  small: false,
   cap: false,
   disabled: false,
 };

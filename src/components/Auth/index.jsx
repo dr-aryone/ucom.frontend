@@ -1,9 +1,7 @@
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import React, { memo, useState } from 'react';
-import styles from './styles.css';
-import Popup from '../Popup';
-import IconClose from '../Icons/Close';
+import React, { useState } from 'react';
+import Popup, { Content } from '../Popup';
 import Account from './Account';
 import SocialKey from './SocialKey';
 import GenerateSocialKey from './GenerateSocialKey';
@@ -35,20 +33,8 @@ const Auth = (props) => {
   const user = getUserById(props.users, userId);
 
   return (
-    <Popup
-      onClickClose={() => props.dispatch(authHidePopup())}
-    >
-      <div className={styles.auth}>
-        <div
-          role="presentation"
-          className={styles.close}
-          onClick={() => props.dispatch(authHidePopup())}
-        >
-          <span className={styles.icon}>
-            <IconClose />
-          </span>
-        </div>
-
+    <Popup onClickClose={() => props.dispatch(authHidePopup())}>
+      <Content onClickClose={() => props.dispatch(authHidePopup())}>
         {(() => {
           switch (currentStep) {
             case STEP_SOCIAL_KEY: {
@@ -110,7 +96,7 @@ const Auth = (props) => {
               );
           }
         })()}
-      </div>
+      </Content>
     </Popup>
   );
 };
@@ -128,4 +114,4 @@ Auth.defaultProps = {
 export default connect(state => ({
   users: state.users,
   visibility: state.auth.visibility,
-}))(memo(Auth));
+}))(Auth);

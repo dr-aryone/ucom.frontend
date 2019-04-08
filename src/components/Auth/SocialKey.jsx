@@ -78,7 +78,7 @@ const Account = (props) => {
         </div>
         <div className={styles.bottom}>
           <span
-            className="link red"
+            className="link red-hover"
             role="presentation"
             onClick={props.onClickNewKeys}
           >

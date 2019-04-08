@@ -13,6 +13,7 @@ import socket from '../api/socket';
 import config from '../../package.json';
 import { enableGtm } from '../utils/gtm';
 import routes from '../routes';
+import Settings from '../components/Settings';
 
 const App = (props) => {
   useEffect(() => {
@@ -35,6 +36,7 @@ const App = (props) => {
           {routes.map(r => <Route exact path={r.path} component={r.component} key={r.path} />)}
         </Switch>
 
+        <Settings />
         <Auth />
         <UserMenu />
       </Page>
