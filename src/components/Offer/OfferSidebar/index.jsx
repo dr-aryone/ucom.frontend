@@ -10,11 +10,12 @@ import Three from '../../Icons/Airdrop/Three';
 import Done from '../../Icons/Airdrop/Done';
 import DoneSmall from '../../Icons/Airdrop/DoneSmall';
 import Dots from '../../Icons/Airdrop/Dots';
-// import Error from '../../Icons/Airdrop/Error';
+import Error from '../../Icons/Airdrop/Error';
 import IconShareCircle from '../../Icons/ShareCircle';
 import ShareBlock from '../../ShareBlock';
 import styles from './styles.css';
 import { authShowPopup } from '../../../actions/auth';
+import IconTelegram from '../../Icons/Socials/TelegramBlack';
 
 const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
@@ -37,40 +38,60 @@ const OfferSidebar = (props) => {
         <Rate className="rate_medium" value={props.rate} label="" />
         <PostRating postId={props.postId} />
       </div>
-      {(conditions.airdropStatus === AirdropStatuses.PENDING || conditions.airdropStatus === AirdropStatuses.RECEIVED) &&
+      {((conditions.airdropStatus === AirdropStatuses.PENDING ||
+        conditions.airdropStatus === AirdropStatuses.RECEIVED) ||
+        (conditions.conditions.authGithub === true &&
+          conditions.conditions.authMyself === true &&
+          conditions.conditions.followingDevExchange === true)) &&
+          <div className={styles.airdrop}>
+            <div className={styles.status}>
+              <div>Airdrop Status:</div>
+              {(conditions.airdropStatus === AirdropStatuses.PENDING ||
+                (conditions.conditions.authGithub === true &&
+                  conditions.conditions.authMyself === true &&
+                  conditions.conditions.followingDevExchange === true)) &&
+                  <Fragment>
+                    <span className={styles.statusIcon}><Dots /></span>
+                    <span className={styles.statusPending}>In progress</span>
+                  </Fragment>
+              }
+              {conditions.airdropStatus === AirdropStatuses.RECEIVED &&
+                <Fragment>
+                  <span className={styles.statusIcon}><DoneSmall /></span>
+                  <span className={styles.statusReceived}>Recieved</span>
+                </Fragment>
+              }
+            </div>
+            <div className={styles.tokens}>
+              <div className={styles.tokensColumn}>
+                <div className={styles.tokenNumber}>{(conditions.tokens[0].amountClaim).toLocaleString('ru-RU')}</div>
+                <span className={styles.tokenCurr}>UOS</span>
+              </div>
+              <div className={styles.tokensColumn}>
+                <div className={styles.tokenNumber}>{(conditions.tokens[1].amountClaim).toLocaleString('ru-RU')}</div>
+                <span className={styles.tokenCurr}>UOS.Futures</span>
+              </div>
+            </div>
+          </div>
+      }
+      {conditions.airdropStatus === AirdropStatuses.ERROR &&
         <div className={styles.airdrop}>
           <div className={styles.status}>
             <div>Airdrop Status:</div>
-            {conditions.airdropStatus === AirdropStatuses.PENDING &&
-              <Fragment>
-                <span className={styles.statusIcon}><Dots /></span>
-                <span className={styles.statusPending}>In progress</span>
-              </Fragment>
-            }
-            {conditions.airdropStatus === AirdropStatuses.RECEIVED &&
-              <Fragment>
-                <span className={styles.statusIcon}><DoneSmall /></span>
-                <span className={styles.statusReceived}>Recieved</span>
-              </Fragment>
-            }
+            <Fragment>
+              <span className={styles.statusIcon}><Error /></span>
+              <span className={styles.statusError}>Error occured</span>
+            </Fragment>
           </div>
-          <div className={styles.tokens}>
-            <div className={styles.tokensColumn}>
-              <div className={styles.tokenNumber}>{(conditions.tokens[0].amountClaim).toLocaleString('ru-RU')}</div>
-              <span className={styles.tokenCurr}>UOS</span>
-            </div>
-            <div className={styles.tokensColumn}>
-              <div className={styles.tokenNumber}>{(conditions.tokens[1].amountClaim).toLocaleString('ru-RU')}</div>
-              <span className={styles.tokenCurr}>UOS.Futures</span>
-            </div>
+          <div className={styles.statusErrorText}>
+            Something went wrong, please contact us in <a href="https://t.me/uos_network_en" target="_blank" rel="noopener noreferrer"><IconTelegram />Chat</a>
           </div>
         </div>
       }
-
       <div className={styles.condition}>
         <div className={styles.conditionTitle}>How to Enter Airdrop:</div>
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{props.cookie || conditions.conditions.authGithub === true ? <Done /> : <One />}</div>
+          <div className={styles.optionStatus}>{conditions.conditions.authGithub === true || props.cookie ? <Done /> : <One />}</div>
           <div className={styles.optionBlock}>
             <a
               // users/?${location.search}&
@@ -137,11 +158,14 @@ OfferSidebar.propTypes = {
   link: PropTypes.string.isRequired,
   repostAvailable: PropTypes.bool,
   cookie: PropTypes.string,
+  // token: PropTypes.string,
 };
 
 OfferSidebar.defaultProps = {
   rate: 0,
   repostAvailable: false,
+  cookie: '',
+  // token: '',
 };
 
 export default connect(

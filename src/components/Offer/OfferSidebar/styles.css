@@ -39,6 +39,26 @@
   color: #D8352F;
 }
 
+.statusErrorText {
+  font-size: 16px;
+  line-height: normal;
+  display: inline;
+}
+
+.statusErrorText a {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: normal;
+}
+
+.statusErrorText svg {
+  display: inline-block;
+  padding-top: 3px;
+  margin-right: 3px;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
 .statusIcon {
   margin-left: 15px;
   margin-right: 8px;

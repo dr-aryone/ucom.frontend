@@ -201,7 +201,6 @@ export const getManyUsers = ({
       perPage,
       isMyself,
     });
-    // console.log('users: ', data);
     dispatch(addUsers([data]));
     return data;
   } catch (e) {

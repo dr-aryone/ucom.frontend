@@ -85,3 +85,17 @@
   text-align: right;
   color: #ABABAB;
 }
+
+@media(max-width: 900px) {
+  .section {
+    margin-bottom: 50px;
+  }
+
+  .title {
+    margin-bottom: 20px;
+  }
+
+  .score {
+    margin-bottom: 40px;
+  }
+}

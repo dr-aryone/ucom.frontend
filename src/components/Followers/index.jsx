@@ -27,8 +27,6 @@ const Followers = (props) => {
 
   const avatarUsers = props.users.slice(0, 2);
 
-  console.log('avatarUsers: ', avatarUsers);
-
   return (
     <Fragment>
       {popupVisible &&

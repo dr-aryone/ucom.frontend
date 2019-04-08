@@ -7,8 +7,8 @@ import { COMMENTS_PER_PAGE } from '../utils/comments';
 import { FEED_PER_PAGE, OVERVIEW_SIDE_PER_PAGE } from '../utils/feed';
 import { LIST_ORDER_BY, LIST_PER_PAGE } from '../utils/list';
 
-const request = async (data) => {
-  const options = {
+const request = async (data, extraOptions = {}) => {
+  let options = {
     baseURL: getBackendConfig().httpEndpoint,
     headers: {},
   };
@@ -18,6 +18,15 @@ const request = async (data) => {
   if (token) {
     options.headers.Authorization = `Bearer ${token}`;
   }
+
+  options = {
+    ...options,
+    ...extraOptions,
+    headers: {
+      ...options.headers,
+      ...extraOptions.headers,
+    },
+  };
 
   try {
     const resp = await axios.post('/graphql', data, options);
@@ -363,7 +372,7 @@ export default {
         },
       },
     },
-  }) {
+  }, options = {}) {
     const query = GraphQLSchema.getOnePostOfferWithUserAirdrop(
       airdropFilter,
       postId,
@@ -372,7 +381,7 @@ export default {
     );
 
     try {
-      const data = await request({ query });
+      const data = await request({ query }, options);
       return data.data;
     } catch (e) {
       throw e;

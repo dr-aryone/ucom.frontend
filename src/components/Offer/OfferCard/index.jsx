@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Rate from '../../Rate';
 import styles from './styles.css';
 import Avatar from '../../Avatar';
@@ -12,11 +13,30 @@ import Popup from '../../Popup';
 import ModalContent from '../../ModalContent';
 import UserListAirdrop from '../../User/UsersListAirdrop';
 import { mapUserDataToFollowersProps } from '../../../utils/user';
+import { authShowPopup } from '../../../actions/auth';
 
 const OfferCard = (props) => {
+  const [btnFixed, setBtnFixed] = useState(false);
+  const [btnFixedActive, setBtnFixedActive] = useState(false);
   const [popupVisible, setPopupVisible] = useState(false);
   const LinkTag = props.userUrl ? Link : 'div';
   const { conditions } = props;
+  const month = new Date(props.startedAt).toLocaleString('en-us', { month: 'long' });
+  const day = new Date(props.startedAt).getDate();
+
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 485 && window.innerWidth < 414) {
+        setBtnFixed(true);
+        setTimeout(() => {
+          setBtnFixedActive(true);
+        }, 100);
+      } else {
+        setBtnFixed(false);
+        setBtnFixedActive(false);
+      }
+    });
+  }, []);
 
   return (
     <Fragment>
@@ -68,19 +88,28 @@ const OfferCard = (props) => {
 
         <div className={styles.infoblockBottom}>
           <div className={styles.timer}>
-            <Countdown date={props.finishedAt} />
+            {Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) > 0 ? (
+              <div className={styles.startedAt}>
+                <div className={styles.startedAtTitle}>Starts</div>
+                <div className={styles.startedAtDate}>{`${month}, ${day}`}</div>
+              </div>
+            ) : (
+              <Countdown date={props.finishedAt} />
+            )}
           </div>
           <Followers
-            // airDrop
             onClick={() => setPopupVisible(true)}
             users={(props.users).map(mapUserDataToFollowersProps)}
-            // users={props.usersIds}
             title="Participants"
             count={props.count}
           />
-          {conditions && conditions.conditions.authGithub === false &&
+          {((conditions && conditions.conditions.authGithub === false) || !props.cookie) &&
             <a
-              className={styles.btn}
+              className={classNames(
+                `${styles.btn}`,
+                { [styles.btnFixed]: btnFixed === true },
+                { [styles.btnFixedActive]: btnFixedActive === true },
+              )}
               href="https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/?mock_external_id=true"
             >
               Get your score
@@ -89,18 +118,24 @@ const OfferCard = (props) => {
           {conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === false &&
             <div
               role="presentation"
-              // onClick={() => props.authShowPopup()}
-              className={styles.btn}
+              onClick={() => props.authShowPopup()}
+              className={classNames(
+                `${styles.btn}`,
+                { [styles.btnFixed]: btnFixed === true },
+                { [styles.btnFixedActive]: btnFixedActive === true },
+              )}
             >
               Sign up
             </div>
           }
-          {conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === true &&
+          {((conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === true) || (props.cookie && props.token)) &&
             <div
+              role="presentation"
               className={classNames(
                 `${styles.btn}`,
                 `${styles.result}`,
               )}
+              onClick={() => setPopupVisible(true)}
             >
               See Results
             </div>
@@ -116,12 +151,16 @@ OfferCard.propTypes = {
   users: PropTypes.arrayOf(PropTypes.any).isRequired,
   userUrl: PropTypes.string.isRequired,
   finishedAt: PropTypes.string.isRequired,
+  startedAt: PropTypes.string.isRequired,
   coverUrl: PropTypes.string,
   rate: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   title: PropTypes.string.isRequired,
   userImageUrl: PropTypes.string,
   userName: PropTypes.string.isRequired,
   count: PropTypes.number,
+  authShowPopup: PropTypes.func,
+  cookie: PropTypes.string,
+  token: PropTypes.string,
 };
 
 OfferCard.defaultProps = {
@@ -129,6 +168,13 @@ OfferCard.defaultProps = {
   coverUrl: null,
   userImageUrl: null,
   rate: 0,
+  cookie: '',
+  token: '',
 };
 
-export default OfferCard;
+export default connect(
+  null,
+  dispatch => ({
+    authShowPopup: () => dispatch(authShowPopup()),
+  }),
+)(OfferCard);

@@ -28,6 +28,26 @@
   /* margin-left: 50px; */
 }
 
+.btn.btnFixed {
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+
+.btn.btnFixed.btnFixedActive {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  left: 20px;
+  margin: 0 auto;
+  height: 50px;
+  max-width: 280px;
+  width: 100%;
+  background: #D8352F;
+  z-index: 99999999999999999999999;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
 .btn:hover {
   background: #C32924;
   cursor: pointer;
@@ -225,6 +245,26 @@
   min-width: 260px;
 }
 
+.startedAtTitle {
+  font-weight: 500;
+  font-size: 10px;
+  line-height: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  opacity: 0.6;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.startedAtDate {
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 36px;
+  letter-spacing: 0.06em;
+  color: #FFFFFF;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
 @media (max-width: 767px) {
   .postCardSmall {
     padding: 20px;
@@ -315,6 +355,11 @@
 
   .infoblockBottom {
     margin-top: 60px;
+  }
+
+  .startedAtDate {
+    font-size: 16px;
+    line-height: normal;
   }
 }
 
