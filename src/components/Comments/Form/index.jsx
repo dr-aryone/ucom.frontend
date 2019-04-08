@@ -9,17 +9,11 @@ import { COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST } from '../
 import TributeWrapper from '../../TributeWrapper';
 import IconEnter from '../../Icons/Enter';
 import { isSubmitKey, isEscKey } from '../../../utils/keyboard';
-import DropZone from '../../DropZone';
-import IconClose from '../../Icons/Close';
-import { getBase64FromFile } from '../../../utils/upload';
 
 // TODO: Upload images
 
 const Form = (props) => {
   const [message, setMessage] = useState(props.message);
-  const [entityImages, setEntityImages] = useState(props.entityImages);
-  const [base64Cover, setBase64Cover] = useState(props.message);
-
   const textareaEl = useRef(null);
 
   const reset = () => {
@@ -37,7 +31,6 @@ const Form = (props) => {
         postId: props.postId,
         commentId: props.commentId,
         message,
-        entityImages,
       });
       reset();
     }
@@ -91,46 +84,6 @@ const Form = (props) => {
           </div>
 
           <div className={styles.actions}>
-            {(base64Cover) ? (
-              <div className="cover cover_small">
-                <div className="cover__inner">
-                  <div className="cover__remove">
-                    <button
-                      type="button"
-                      className="button-clean button-clean_close"
-                      onClick={() => {
-                        thiprops.updatePost({
-                            data: {
-                              mainImageFilename: '',
-                            },
-                            postId: this.props.postId,
-                          });
-
-                        this.setState({ base64Cover: '', fileUrl: '', fileImg: '' });
-                      }}
-                    >
-                      <IconClose />
-                    </button>
-                  </div>
-
-                  <img className="cover__img" src={base64Cover || fileUrl} alt="" />
-                </div>
-              </div>
-              ) : (
-                <DropZone
-                  className="drop-zone_clip"
-                  accept="image/jpeg, image/png"
-                  maxSize={1000000}
-                  onDrop={(files) => {
-                    getBase64FromFile(files[0]).then((base64Cover) => {
-                      this.setState({
-                        base64Cover,
-                        fileImg: files[0],
-                      });
-                    });
-                  }}
-                />
-              )}
             {props.uploadEnabled &&
               <div className={styles.action}>
                 <svg width="9" height="19" viewBox="0 0 9 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -158,7 +111,6 @@ const Form = (props) => {
     </div>
   );
 };
-
 Form.propTypes = {
   flat: PropTypes.bool,
   message: PropTypes.string,
@@ -178,7 +130,6 @@ Form.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onReset: PropTypes.func,
 };
-
 Form.defaultProps = {
   flat: false,
   message: '',
@@ -192,5 +143,4 @@ Form.defaultProps = {
   userName: null,
   onReset: null,
 };
-
 export default Form;
