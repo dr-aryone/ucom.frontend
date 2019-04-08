@@ -110,7 +110,7 @@ const OfferCard = (props) => {
                 { [styles.btnFixed]: btnFixed === true },
                 { [styles.btnFixedActive]: btnFixedActive === true },
               )}
-              href="https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/?mock_external_id=true"
+              href="https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/posts/14317?mock_external_id=true"
             >
               Get your score
             </a>
