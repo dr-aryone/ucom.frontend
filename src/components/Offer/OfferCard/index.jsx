@@ -128,7 +128,7 @@ const OfferCard = (props) => {
               Sign up
             </div>
           }
-          {((conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === true) || (props.cookie && props.token)) &&
+          {(conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === true) &&
             <div
               role="presentation"
               className={classNames(
