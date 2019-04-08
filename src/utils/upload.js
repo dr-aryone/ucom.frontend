@@ -1,6 +1,6 @@
-export const UPLOAD_SIZE_LIMIT = 5242880;
+export const UPLOAD_SIZE_LIMIT = 3145728;
 export const UPLOAD_SIZE_LIMIT_GIF = 1048576;
-export const UPLOAD_SIZE_LIMIT_ERROR = 'File exceed the 5 Mb limit';
+export const UPLOAD_SIZE_LIMIT_ERROR = 'File exceed the 3 Mb limit';
 export const UPLOAD_SIZE_LIMIT_ERROR_GIF = 'File exceed the 1 Mb limit';
 export const UPLAOD_ERROR_BASE = 'Error, try uploading file again later';
 export const AVATAR_MAX_WIDTH = 300;
