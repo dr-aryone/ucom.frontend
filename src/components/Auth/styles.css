@@ -1,0 +1,226 @@
+.icon {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.close {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  cursor: pointer;
+}
+
+.navigation {
+  position: absolute;
+  top: 36px;
+  left: 36px;
+  cursor: pointer;
+}
+
+.navigation .icon {
+  transition: fill 0.2s ease;
+}
+
+.navigation:hover .icon {
+  fill: #D8352F;
+}
+
+.navigation .label {
+  position: absolute;
+  z-index: -1;
+  left: 100%;
+  top: 0;
+  line-height: 24px;
+  padding-left: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease, z-index 0s linear 0.2s;
+}
+
+.navigation:hover .label {
+  z-index: 0;
+  opacity: 1;
+  transition: opacity 0.2s ease, z-index 0s linear 0s;
+}
+
+.navText {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+}
+
+.content {
+  flex: 1 1 auto;
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.content.generateKey {
+  max-width: 866px;
+}
+
+.content .main {
+  flex: 1 1 auto;
+}
+
+.content .bottom {
+  padding: 29px 0;
+  text-align: center;
+  font-size: 16px;
+  color: #585858;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 34px;
+  text-align: center;
+}
+
+.form {
+  padding: 115px 0 0;
+}
+
+.form .title {
+  margin: 0 0 130px;
+}
+
+.form .title.saveKey {
+  margin: 0 0 70px;
+}
+
+.field {
+  margin: 0 0 90px;
+}
+
+.input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  margin: 0;
+  font-size: 16px;
+  border: 1px solid #B1B1B1;
+  border-width: 0 0 1px;
+  outline: none;
+}
+
+.input::placeholder {
+  opacity: 1;
+  color: #585858;
+}
+
+.action {
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.error {
+  margin: 20px 0 -40px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.error .text {
+  vertical-align: middle;
+}
+
+.error svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 8px 0 0;
+}
+
+.user {
+  margin: 0 0 -59px;
+  padding: 56px 0 0;
+  text-align: center;
+}
+
+.user .userPick {
+  margin: 0 0 16px;
+}
+
+.user .name {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.user .accountName {
+  font-size: 14px;
+  color: #585858;
+}
+
+.copy {
+  margin: 0 0 24px;
+  font-size: 16px;
+}
+
+.saveKeyText {
+  margin: 0 0 64px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.navLink {
+  cursor: pointer;
+}
+
+.navLink svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0 0 12px;
+  transition: fill 0.2s ease;
+}
+
+.navLink:hover svg {
+  fill: #D8352F;
+}
+
+.proceedLink {
+  text-align: center;
+}
+
+.copyPopup {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 800px;
+  padding: 40px;
+  background: #fff;
+}
+
+.copyPopup .close {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  cursor: pointer;
+}
+
+.copyPopup .title {
+  margin: 0 0 30px;
+  text-align: left;
+}
+
+.copyPopup .text {
+  margin: 0 0 40px;
+  font-size: 16px;
+  line-height: 28px;
+}
+
+.copyPopup .action {
+  margin: 0;
+}
