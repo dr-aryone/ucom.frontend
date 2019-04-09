@@ -1,16 +1,29 @@
+import { Element } from 'react-scroll';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Popup, { Content } from '../Popup';
 import styles from './styles.css';
 import CopyPanel from '../CopyPanel';
 import Button from '../Button/index';
+import VerticalMenu from '../VerticalMenu/index';
 
 const Settings = props => (
   <Popup onClickClose={props.onClickClose}>
     <Content onClickClose={() => {}}>
       <div className={styles.settings}>
         <div className={styles.sidebar}>
-          sidebar
+          <VerticalMenu
+            sections={[{
+              title: 'Resourses',
+              name: 'Resourses',
+            }, {
+              title: 'Keys',
+              name: 'Keys',
+            }, {
+              title: 'Referral Link',
+              name: 'ReferralLink',
+            }]}
+          />
         </div>
         <div className={styles.content}>
           <div className={styles.header}>
@@ -18,7 +31,7 @@ const Settings = props => (
             <p>This section contains settings of your blockchain account.</p>
           </div>
 
-          <div className={styles.section}>
+          <Element className={styles.section} name="Keys">
             <h3 className={styles.title}>Keys</h3>
             <div className={styles.subSection}>
               <h4 className={styles.title}>Social Keys</h4>
@@ -52,9 +65,9 @@ const Settings = props => (
                 <Button strech small>Show</Button>
               </div>
             </div>
-          </div>
+          </Element>
 
-          <div className={styles.section}>
+          <Element name="ReferralLink" className={styles.section}>
             <h3 className={styles.title}>Referral Link</h3>
             <p>Provide a referral link to your friend and gain importance from your referrals, registered on the platform. You get half the importance they acquire.</p>
             <div className={styles.copy}>
@@ -63,7 +76,7 @@ const Settings = props => (
                 value="u.community/invite4rom_KR"
               />
             </div>
-          </div>
+          </Element>
         </div>
       </div>
     </Content>

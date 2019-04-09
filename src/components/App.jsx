@@ -13,6 +13,7 @@ import socket from '../api/socket';
 import config from '../../package.json';
 import { enableGtm } from '../utils/gtm';
 import routes from '../routes';
+import Settings from '../components/Settings';
 
 const App = (props) => {
   useEffect(() => {
@@ -39,6 +40,7 @@ const App = (props) => {
         <UserMenu />
       </Page>
 
+      <Settings />
       <Notifications />
     </Fragment>
   );
