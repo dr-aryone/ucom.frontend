@@ -151,21 +151,19 @@ const OfferSidebar = (props) => {
 
 OfferSidebar.propTypes = {
   conditions: PropTypes.objectOf(PropTypes.any),
-  authShowPopup: PropTypes.func,
+  authShowPopup: PropTypes.func.isRequired,
   rate: PropTypes.number,
   postId: PropTypes.number.isRequired,
   createdAt: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   repostAvailable: PropTypes.bool,
   cookie: PropTypes.string,
-  // token: PropTypes.string,
 };
 
 OfferSidebar.defaultProps = {
   rate: 0,
   repostAvailable: false,
   cookie: '',
-  // token: '',
 };
 
 export default connect(

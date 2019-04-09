@@ -158,9 +158,8 @@ OfferCard.propTypes = {
   userImageUrl: PropTypes.string,
   userName: PropTypes.string.isRequired,
   count: PropTypes.number,
-  authShowPopup: PropTypes.func,
+  authShowPopup: PropTypes.func.isRequired,
   cookie: PropTypes.string,
-  token: PropTypes.string,
 };
 
 OfferCard.defaultProps = {
@@ -169,7 +168,6 @@ OfferCard.defaultProps = {
   userImageUrl: null,
   rate: 0,
   cookie: '',
-  token: '',
 };
 
 export default connect(
