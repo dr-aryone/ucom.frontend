@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import React from 'react';
+import classNames from 'classnames';
 import styles from './styles.css';
 import UserPick from '../UserPick/UserPick';
 import UserFollowButton from '../User/UserFollowButton';
@@ -8,7 +9,12 @@ import OrganizationFollowButton from '../Organization/OrganizationFollowButton';
 import { formatRate } from '../../utils/rate';
 
 const EntrySubHeader = props => (
-  <div className={styles.subHeader}>
+  <div
+    className={classNames(
+      `${styles.subHeader}`,
+      { [styles.subHeaderSquare]: props.organization },
+    )}
+  >
     <div className={styles.userPick}>
       <UserPick
         organization={props.organization}

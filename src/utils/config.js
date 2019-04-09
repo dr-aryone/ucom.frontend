@@ -19,8 +19,3 @@ export const getUosGroupId = () => {
 
   return id;
 };
-
-export const getAirdropOfferId = () => {
-  const id = config.airdropOfferId;
-  return id;
-};

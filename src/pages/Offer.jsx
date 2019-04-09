@@ -22,15 +22,16 @@ import api from '../api';
 import EntrySubHeader from '../components/EntrySubHeader';
 import stylesSubHeader from '../components/EntrySubHeader/styles.css';
 import { getOrganization } from '../actions/organizations';
+import { airdropId, getAirdropOfferId } from '../utils/airdrop';
 
 const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
 const Offer = (props) => {
+  const postId = getAirdropOfferId();
   const token = getToken();
-  const cookie = getCookie(`${CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB}`);
+  const cookie = getCookie(CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB);
   const [users, setUsers] = useState([]);
   const [conditions, setConditions] = useState(null);
-  const postId = 14317;
   const post = getPostById(props.posts, postId);
 
   const pairAccounts = async () => {
@@ -62,7 +63,7 @@ const Offer = (props) => {
       setConditions(data.oneUserAirdrop);
     });
     props.getManyUsers({
-      airdrops: { id: 1 },
+      airdrops: airdropId,
       orderBy: 'score',
       page: 1,
       perPage: 10,
@@ -81,9 +82,8 @@ const Offer = (props) => {
     pairAccounts();
   }, [cookie, token, conditions]);
 
-
   return (
-    <LayoutBase>
+    <LayoutBase gray>
       <div className="container container_post">
         <div className={stylesSubHeader.wrapperOffer}>
           <EntrySubHeader
@@ -109,7 +109,7 @@ const Offer = (props) => {
             startedAt={post.startedAt}
             users={users}
             count={+users.length}
-            conditions={conditions || null}
+            conditions={conditions}
             cookie={cookie}
             token={token}
           />
@@ -130,7 +130,7 @@ const Offer = (props) => {
               createdAt={moment(post.createdAt).format('D MMM YYYY')}
               link={urls.getPostUrl(post)}
               repostAvailable={post.myselfData && post.myselfData.repostAvailable}
-              conditions={conditions || null}
+              conditions={conditions}
               cookie={cookie}
               token={token}
             />
@@ -167,7 +167,7 @@ export default connect(
 
 export const getPostOfferData = async (store) => {
   try {
-    const postId = 14317;
+    const postId = getAirdropOfferId();
     await store.dispatch(getOnePostOfferWithUserAirdrop({ postId }));
   } catch (e) {
     throw e;

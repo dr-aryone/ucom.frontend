@@ -24,18 +24,24 @@ const OfferCard = (props) => {
   const month = new Date(props.startedAt).toLocaleString('en-us', { month: 'long' });
   const day = new Date(props.startedAt).getDate();
 
+  const checkSizeWindow = () => {
+    if (window.scrollY > 485 && window.innerWidth < 414) {
+      setBtnFixed(true);
+      setTimeout(() => {
+        setBtnFixedActive(true);
+      }, 100);
+    } else {
+      setBtnFixed(false);
+      setBtnFixedActive(false);
+    }
+  };
+
   useEffect(() => {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 485 && window.innerWidth < 414) {
-        setBtnFixed(true);
-        setTimeout(() => {
-          setBtnFixedActive(true);
-        }, 100);
-      } else {
-        setBtnFixed(false);
-        setBtnFixedActive(false);
-      }
-    });
+    window.addEventListener('scroll', checkSizeWindow);
+
+    return () => {
+      window.removeEventListener('scroll', checkSizeWindow);
+    };
   }, []);
 
   return (
@@ -82,7 +88,7 @@ const OfferCard = (props) => {
                 size="xmsmall"
               />
             </LinkTag>
-            <LinkTag to={props.userUrl}><div className={styles.name}>{props.userName}</div></LinkTag>
+            <LinkTag to={props.userUrl}><span className={styles.name}>{props.userName}</span></LinkTag>
           </div>
         )}
 
@@ -98,6 +104,7 @@ const OfferCard = (props) => {
             )}
           </div>
           <Followers
+            colorLight
             onClick={() => setPopupVisible(true)}
             users={(props.users).map(mapUserDataToFollowersProps)}
             title="Participants"
@@ -147,7 +154,13 @@ const OfferCard = (props) => {
 };
 
 OfferCard.propTypes = {
-  conditions: PropTypes.objectOf(PropTypes.any),
+  conditions: PropTypes.shape({
+    condition: PropTypes.objectOf(PropTypes.shape({
+      authGithub: PropTypes.bool,
+      authMyself: PropTypes.bool,
+      followingDevExchange: PropTypes.bool,
+    })),
+  }),
   users: PropTypes.arrayOf(PropTypes.any).isRequired,
   userUrl: PropTypes.string.isRequired,
   finishedAt: PropTypes.string.isRequired,
@@ -168,6 +181,7 @@ OfferCard.defaultProps = {
   userImageUrl: null,
   rate: 0,
   cookie: '',
+  conditions: null,
 };
 
 export default connect(

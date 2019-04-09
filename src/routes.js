@@ -16,7 +16,7 @@ import GovernancePage from './components/Governance/Governance';
 import Tag from './pages/Tag';
 import Faq from './pages/Faq';
 import Statistics from './pages/Statistics';
-import { getAirdropOfferId } from './utils/config';
+import { getAirdropOfferId } from './utils/airdrop';
 
 const airdropOfferId = getAirdropOfferId();
 

@@ -48,6 +48,10 @@
   opacity: 1;
 }
 
+:local(.subHeader.subHeaderSquare) {
+  border-radius: 0;
+}
+
 :local(.userPick) {
   position: absolute;
   top: 16px;
@@ -128,5 +132,15 @@
 
   :local(.followLink) {
     right: 20px;
+  }
+}
+
+@media (max-width: 414px) {
+  :local(.subHeaderSquare) {
+    margin: 0 -14px;
+  }
+
+  :local(.wrapperOffer) {
+    margin: 73px 0 0;
   }
 }

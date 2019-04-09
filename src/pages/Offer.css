@@ -2,6 +2,7 @@
   display: flex;
   padding: 80px 100px;
   justify-content: space-between;
+  background: #fff;
 }
 
 .textBlock {
@@ -42,5 +43,11 @@
     position: relative;
     top: auto;
     height: auto;
+  }
+}
+
+@media(max-width: 414px) {
+  .textBlock {
+    margin-right: 0;
   }
 }

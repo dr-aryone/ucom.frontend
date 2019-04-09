@@ -1,36 +1,12 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { padStart } from 'lodash';
 import styles from './styles.css';
 
-class Countdown extends Component {
-  constructor(props) {
-    super(props);
+const Countdown = (props) => {
+  const [date, setDate] = useState();
 
-    this.state = {
-      days: 0,
-      hours: 0,
-      min: 0,
-      sec: 0,
-    };
-  }
-
-  componentDidMount() {
-    // update every second
-    this.interval = setInterval(() => {
-      const date = this.calculateCountdown(this.props.date);
-      if (date) {
-        this.setState(date);
-      } else {
-        this.stop();
-      }
-    }, 1000);
-  }
-
-  componentWillUnmount() {
-    this.stop();
-  }
-
-  calculateCountdown(endDate) {
+  const calculateCountdown = (endDate) => {
     let diff = (Date.parse(new Date(endDate)) - Date.parse(new Date())) / 1000;
 
     // clear countdown when date is reached
@@ -65,50 +41,49 @@ class Countdown extends Component {
     timeLeft.sec = diff;
 
     return timeLeft;
+  };
+
+  useEffect(() => {
+    const int = setInterval(() => {
+      const date = calculateCountdown(props.date);
+      if (date) {
+        setDate(date);
+      } else {
+        clearInterval(int);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(int);
+    };
+  }, []);
+
+  if (!date) {
+    return null;
   }
 
-  stop() {
-    clearInterval(this.interval);
-  }
-
-  addLeadingZeros(value) {
-    value = String(value);
-    while (value.length < 2) {
-      value = 0 + value;
-    }
-    return value;
-  }
-
-  render() {
-    const countDown = this.state;
-
-    return (
-      <div className={styles.countdown}>
-        <div className={styles.column}>
-          <div>
-            <div className={styles.number}>{this.addLeadingZeros(countDown.days)}</div>
-            <div className={styles.text}>{countDown.days === 1 ? 'Day' : 'Days'}</div>
-          </div>
-        </div>
-        <div className={styles.column}>
-          <div>
-            <span className={styles.number}>{this.addLeadingZeros(countDown.hours)}:</span>
-            <span className={styles.number}>{this.addLeadingZeros(countDown.min)}:</span>
-            <span className={styles.number}>{this.addLeadingZeros(countDown.sec)}</span>
-            <div className={styles.text}>Hours</div>
-          </div>
+  return (
+    <div className={styles.countdown}>
+      <div className={styles.column}>
+        <div>
+          <div className={styles.number}>{padStart(date.days, 2, '0')}</div>
+          <div className={styles.text}>{date.days === 1 ? 'Day' : 'Days'}</div>
         </div>
       </div>
-    );
-  }
-}
-
-Countdown.propTypes = {
-  date: PropTypes.string,
+      <div className={styles.column}>
+        <div>
+          <span className={styles.number}>{padStart(date.hours, 2, '0')}:</span>
+          <span className={styles.number}>{padStart(date.min, 2, '0')}:</span>
+          <span className={styles.number}>{padStart(date.sec, 2, '0')}</span>
+          <div className={styles.text}>Hours</div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-// Countdown.defaultProps = {
-//   date: new Date(),
-// };
+Countdown.propTypes = {
+  date: PropTypes.string.isRequired,
+};
 
 export default Countdown;

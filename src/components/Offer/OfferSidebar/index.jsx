@@ -1,7 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import classNames from 'classnames';
 import Rate from '../../Rate';
 import PostRating from '../../Rating/PostRating';
 import One from '../../Icons/Airdrop/One';
@@ -20,22 +19,22 @@ import IconTelegram from '../../Icons/Socials/TelegramBlack';
 const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
 const OfferSidebar = (props) => {
-  const [sharePopup, toggleSharePopup] = useState(false);
+  const [sharePopupVisibility, setSharePopupVisibility] = useState(false);
 
   const toggleShare = () => {
-    toggleSharePopup(!sharePopup);
+    setSharePopupVisibility(!sharePopupVisibility);
   };
 
-  if (!props.conditions) {
+  const { conditions } = props;
+
+  if (!conditions) {
     return null;
   }
-
-  const { conditions } = props;
 
   return (
     <Fragment>
       <div className={styles.rateVote}>
-        <Rate className="rate_medium" value={props.rate} label="" />
+        <Rate className="rate_mediumSlim" value={props.rate} label="" />
         <PostRating postId={props.postId} />
       </div>
       {((conditions.airdropStatus === AirdropStatuses.PENDING ||
@@ -94,7 +93,6 @@ const OfferSidebar = (props) => {
           <div className={styles.optionStatus}>{conditions.conditions.authGithub === true || props.cookie ? <Done /> : <One />}</div>
           <div className={styles.optionBlock}>
             <a
-              // users/?${location.search}&
               href="https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/posts/14317?mock_external_id=true
             "
               className={styles.optionTitle}
@@ -134,7 +132,7 @@ const OfferSidebar = (props) => {
         <IconShareCircle />
         <span>Share</span>
 
-        {sharePopup ? (
+        {sharePopupVisibility ? (
           <div className="post-body__share-popup">
             <ShareBlock
               link={props.link}
@@ -150,7 +148,19 @@ const OfferSidebar = (props) => {
 };
 
 OfferSidebar.propTypes = {
-  conditions: PropTypes.objectOf(PropTypes.any),
+  conditions: PropTypes.shape({
+    airdropStatus: PropTypes.number,
+    score: PropTypes.number,
+    userId: PropTypes.number,
+    condition: PropTypes.objectOf(PropTypes.shape({
+      authGithub: PropTypes.bool,
+      authMyself: PropTypes.bool,
+      followingDevExchange: PropTypes.bool,
+    })),
+    tokens: PropTypes.arrayOf(PropTypes.shape({
+      amountClaim: PropTypes.number,
+    })),
+  }),
   authShowPopup: PropTypes.func.isRequired,
   rate: PropTypes.number,
   postId: PropTypes.number.isRequired,
@@ -164,6 +174,7 @@ OfferSidebar.defaultProps = {
   rate: 0,
   repostAvailable: false,
   cookie: '',
+  conditions: null,
 };
 
 export default connect(

@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import UserPick from '../../UserPick/UserPick';
@@ -9,12 +8,7 @@ import { formatRate } from '../../../utils/rate';
 const UserCardLineTitle = () => (
   <div className={styles.userCardTitle}>
     <div className={styles.block}>
-      <div className={classNames(
-        `${styles.order}`,
-        `${styles.columnTitle}`,
-    )}>
-      #
-      </div>
+      <div className={`${styles.order} ${styles.columnTitle}`}>#</div>
       <div className={styles.title}>
         <div className={styles.columnTitle}>Name</div>
       </div>
@@ -62,10 +56,10 @@ UserCardLine.propTypes = {
   nameGh: PropTypes.string.isRequired,
   rate: PropTypes.number.isRequired,
   accountName: PropTypes.string.isRequired,
+  order: PropTypes.number.isRequired,
   url: PropTypes.string,
   isOwner: PropTypes.bool,
   sign: PropTypes.string,
-  order: PropTypes.number,
 };
 
 UserCardLine.defaultProps = {

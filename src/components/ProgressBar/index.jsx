@@ -1,16 +1,12 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.css';
 
-class ProgressBar extends PureComponent {
-  render() {
-    return (
-      <div>
-        <Line percentage={this.props.percentage} />
-      </div>
-    );
-  }
-}
+const ProgressBar = props => (
+  <div>
+    <Line percentage={props.percentage} />
+  </div>
+);
 
 const Line = props => (
   <div className={styles.bar}>

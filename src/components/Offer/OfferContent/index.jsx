@@ -28,7 +28,7 @@ const OfferContent = props => (
           </div>
           <ProgressBar
             className={styles.filler}
-            percentage={Number(getPercent(props.tokens[0].amount_left, props.tokens[0].amount_claim))}
+            percentage={Number(getPercent(props.tokens[0].amountLeft, props.tokens[0].amountClaim))}
           />
 
           <div className={styles.progress}>
@@ -37,7 +37,7 @@ const OfferContent = props => (
           </div>
           <ProgressBar
             className={styles.filler}
-            percentage={Number(getPercent(props.tokens[1].amount_left, props.tokens[1].amount_claim))}
+            percentage={Number(getPercent(props.tokens[1].amountLeft, props.tokens[1].amountClaim))}
           />
         </Fragment>
       }

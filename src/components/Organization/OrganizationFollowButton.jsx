@@ -23,7 +23,7 @@ const OrganizationFollowButton = (props) => {
 
   const userIsFollow = props.user.id ? (organization.followedBy || []).some(item => owner && +item.id === +owner.id) : false;
 
-  const text = userIsFollow ? 'Following' : 'Follow';
+  const text = userIsFollow ? 'Joined' : 'Join';
 
 
   const onClick = () => {
