@@ -299,8 +299,6 @@ class Api {
   }
 
   async createComment(data, postId, commentId) {
-    console.log(data);
-
     let url = `/api/v1/posts/${postId}/comments`;
 
     if (commentId) {

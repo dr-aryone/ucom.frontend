@@ -10,62 +10,6 @@ const getInitialState = () => ({
 });
 
 const comments = (state = getInitialState(), action) => {
-  if (action.lal && action.type === 'ADD_COMMENTS') {
-    console.log(state, 'ADD_COMMENTS');
-
-    return {
-      ...state,
-      data: {
-        ...state.data,
-        ...action.payload.reduce((result, item) => ({
-          ...result,
-          [item.id]: { ...state.data[item.id], ...item },
-        }), {}),
-      },
-    };
-  }
-
-  if (action.lal && action.type === 'COMMENTS_ADD_CONTAINER_DATA') {
-    console.log({
-      ...state,
-      containersData: {
-        ...state.containersData,
-        [action.payload.containerId]: {
-          ...state.containersData[action.payload.containerId],
-          [action.payload.entryId]: {
-            ...state.containersData[action.payload.containerId][action.payload.entryId],
-            commentIds: uniq(state.containersData[action.payload.containerId][action.payload.entryId]
-              ? state.containersData[action.payload.containerId][action.payload.entryId].commentIds.concat(action.payload.commentIds)
-              : action.payload.commentIds),
-            metadata: {
-              ...(state.containersData[action.payload.containerId][action.payload.entryId] ? state.containersData[action.payload.containerId][action.payload.entryId].metadata : null),
-              ...(action.payload.metadata ? { [action.payload.parentId]: action.payload.metadata } : null),
-            },
-          },
-        },
-      },
-    }, state, 'COMMENTS_ADD_CONTAINER_DATA');
-
-    return {
-      ...state,
-      containersData: {
-        ...state.containersData,
-        [action.payload.containerId]: {
-          ...state.containersData[action.payload.containerId],
-          [action.payload.entryId]: {
-            ...state.containersData[action.payload.containerId][action.payload.entryId],
-            commentIds: uniq(state.containersData[action.payload.containerId][action.payload.entryId]
-              ? state.containersData[action.payload.containerId][action.payload.entryId].commentIds.concat(action.payload.commentIds)
-              : action.payload.commentIds),
-            metadata: {
-              ...(state.containersData[action.payload.containerId][action.payload.entryId] ? state.containersData[action.payload.containerId][action.payload.entryId].metadata : null),
-              ...(action.payload.metadata ? { [action.payload.parentId]: action.payload.metadata } : null),
-            },
-          },
-        },
-      },
-    };
-  }
   switch (action.type) {
     case 'RESET_COMMENTS':
       return getInitialState();

@@ -19,7 +19,7 @@ import api from '../../../api';
 
 const Form = (props) => {
   const [message, setMessage] = useState(props.message);
-  const [entityImages, setEntityImages] = useState(props.entityImages);
+  const [entityImages, setEntityImages] = useState({ gallery: [] });
   const [base64Cover, setBase64Cover] = useState('');
 
   const textareaEl = useRef(null);

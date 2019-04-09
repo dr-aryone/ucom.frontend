@@ -65,8 +65,25 @@ const Comment = (props) => {
 
       {replys.map(comment => (
         <Comment
-          {...{ ...comment, ...props }}
+          containerId={props.containerId}
           key={comment.id}
+          postId={props.postId}
+          id={comment.id}
+          depth={comment.depth}
+          text={comment.text}
+          images={comment.images}
+          date={comment.date}
+          userId={comment.userId}
+          userAccountName={comment.userAccountName}
+          replys={comment.replys}
+          nextDepthTotalAmount={comment.nextDepthTotalAmount}
+          metadata={props.metadata}
+          ownerId={props.ownerId}
+          ownerImageUrl={props.ownerImageUrl}
+          ownerPageUrl={props.ownerPageUrl}
+          ownerName={props.ownerName}
+          onSubmit={props.onSubmit}
+          onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
           setFormVisible({ visible: true, name: comment.userAccountName });
         }}
@@ -77,9 +94,11 @@ const Comment = (props) => {
         ((props.nextDepthTotalAmount > 0 && !props.metadata[props.id]) ||
         (props.metadata[props.id] && props.metadata[props.id].hasMore)) &&
         <ShowReplies
-          {...{ ...props }}
+          containerId={props.containerId}
+          postId={props.postId}
           parentId={props.id}
           parentDepth={props.depth}
+          depth={props.depth}
           onClick={props.onClickShowReplies}
           page={props.metadata[props.id] ? props.metadata[props.id].page + 1 : 1}
         />
@@ -87,11 +106,28 @@ const Comment = (props) => {
 
       {newReplys.map(comment => (
         <Comment
-          {...{ ...comment, ...props }}
+          containerId={props.containerId}
           key={comment.id}
+          postId={props.postId}
+          id={comment.id}
+          depth={comment.depth}
+          text={comment.text}
+          images={comment.images}
+          date={comment.date}
+          userId={comment.userId}
+          userAccountName={comment.userAccountName}
+          replys={comment.replys}
+          nextDepthTotalAmount={comment.nextDepthTotalAmount}
+          metadata={props.metadata}
+          ownerId={props.ownerId}
+          ownerImageUrl={props.ownerImageUrl}
+          ownerPageUrl={props.ownerPageUrl}
+          ownerName={props.ownerName}
+          onSubmit={props.onSubmit}
+          onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
-            setFormVisible({ visible: true, name: comment.userAccountName });
-          }}
+          setFormVisible({ visible: true, name: comment.userAccountName });
+        }}
         />
       ))}
 
