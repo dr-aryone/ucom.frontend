@@ -25,3 +25,13 @@
   border-color: #000;
   text-decoration: none;
 }
+
+.item:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .item {
+    padding-left: 20px;
+  }
+}
