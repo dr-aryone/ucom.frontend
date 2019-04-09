@@ -8,21 +8,25 @@ import Button from '../Button/index';
 import VerticalMenu from '../VerticalMenu/index';
 
 const Settings = props => (
-  <Popup onClickClose={props.onClickClose}>
+  <Popup id="settings-popup" onClickClose={props.onClickClose}>
     <Content onClickClose={() => {}}>
       <div className={styles.settings}>
         <div className={styles.sidebar}>
           <VerticalMenu
-            sections={[{
-              title: 'Resourses',
-              name: 'Resourses',
-            }, {
-              title: 'Keys',
-              name: 'Keys',
-            }, {
-              title: 'Referral Link',
-              name: 'ReferralLink',
-            }]}
+            sticky
+            stickyTop={86}
+            sections={[
+              { title: 'Resourses', name: 'Resourses' },
+              { title: 'Keys', name: 'Keys' },
+              { title: 'Referral Link', name: 'ReferralLink' },
+            ]}
+            scrollerOptions={{
+              spy: true,
+              duration: 500,
+              delay: 100,
+              smooth: true,
+              containerId: 'settings-popup',
+            }}
           />
         </div>
         <div className={styles.content}>
@@ -30,6 +34,10 @@ const Settings = props => (
             <h2 className={styles.title}>Account Settings</h2>
             <p>This section contains settings of your blockchain account.</p>
           </div>
+
+          <Element className={styles.section} name="Resourses">
+            <h3 className={styles.title}>Resources</h3>
+          </Element>
 
           <Element className={styles.section} name="Keys">
             <h3 className={styles.title}>Keys</h3>

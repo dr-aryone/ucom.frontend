@@ -26,6 +26,7 @@ const Popup = (props) => {
 
   return (
     <div
+      id={props.id}
       ref={el}
       role="presentation"
       className={classNames({
@@ -53,15 +54,17 @@ const Popup = (props) => {
 };
 
 Popup.propTypes = {
+  id: PropTypes.string,
+  mod: PropTypes.string,
   onClickClose: PropTypes.func,
   children: PropTypes.node.isRequired,
-  mod: PropTypes.string,
   showCloseIcon: PropTypes.bool,
 };
 
 Popup.defaultProps = {
-  onClickClose: null,
+  id: undefined,
   mod: null,
+  onClickClose: null,
   showCloseIcon: false,
 };
 
