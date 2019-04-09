@@ -21,9 +21,11 @@ import tags from './tags';
 import communityFeed from './communityFeed';
 import tagsFeed from './tagsFeed';
 import user from './user';
+import settings from './settings';
 
 export const createStore = () => {
   const reducers = redux.combineReducers({
+    settings,
     user,
     post,
     auth,
