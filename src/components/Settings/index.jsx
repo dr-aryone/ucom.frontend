@@ -40,13 +40,17 @@ const Settings = props => (
             <div className={styles.subSection}>
               <h4 className={styles.title}>Password for Active Key</h4>
               <p>You can set a Password to save a pair of encrypted Active Keys in your browser. This allows you to send the transactions, that require Active Keys, using your Password instead. You will need to enter the Brainkey to unlock your Active Keys.</p>
-              <Button small>Set Password</Button>
+              <div className={styles.action}>
+                <Button strech small>Set Password</Button>
+              </div>
             </div>
 
             <div className={styles.subSection}>
               <h4 className={styles.title}>Get Owner and Active key pairs with Brainkey</h4>
               <p>Here you can generate your keys from Brainkey.</p>
-              <Button small>Show</Button>
+              <div className={styles.action}>
+                <Button strech small>Show</Button>
+              </div>
             </div>
           </div>
 

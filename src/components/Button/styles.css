@@ -25,6 +25,7 @@
 
 :local(.button.strech) {
   width: 100%;
+  padding: 0;
 }
 
 :local(.button.grayBorder) {
