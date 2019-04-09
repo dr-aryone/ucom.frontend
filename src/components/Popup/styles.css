@@ -13,25 +13,25 @@
   background: rgba(151, 151, 151, 0.6);
 }
 
-.popup.user-menu {
+.popup:global(.user-menu) {
   top: 50px;
   min-height: calc(100vh - 91px);
   background: #fff;
 }
 
-.popup.user-menu:after {
+.popup:global(.user-menu):after {
   display: none;
 }
 
-.popup.user-menu.popup_blocked {
+.popup:global(.user-menu.popup_blocked) {
   margin-top: 91px;
 }
 
-.popup.dark {
+.popup:global(.dark) {
   background: rgba(23, 25, 27, 0.75);
 }
 
-.popup.search {
+.popup:global(.search) {
   position: relative;
   background: #fff;
   align-items: flex-start;
