@@ -1,7 +1,7 @@
 import HomePage, { getHomePageData } from './pages/Home';
 import UserPage, { getUserPageData } from './pages/User';
 import EditPostPage from './pages/EditPost';
-import ProfilePage from './pages/Profile';
+// import ProfilePage from './pages/Profile';
 import PostPage, { getPostPageData } from './pages/Post';
 import OverviewPage, { getPageData } from './pages/Overview';
 import UsersPage from './pages/Users';
@@ -10,6 +10,7 @@ import OrganizationsPage from './pages/Organizations';
 import OrganizationsCreatePage from './pages/OrganizationsCreate';
 import OrganizationPage from './pages/Organization';
 import NotFoundPage from './pages/NotFoundPage';
+import Profile from './pages/Pro';
 import RegistrationPage from './components/Registration/Registration';
 import GovernancePage from './components/Governance/Governance';
 import Tag from './pages/Tag';
@@ -51,7 +52,7 @@ export default [{
   component: RegistrationPage,
 }, {
   path: '/profile',
-  component: ProfilePage,
+  component: Profile,
 }, {
   path: '/users',
   component: UsersPage,
