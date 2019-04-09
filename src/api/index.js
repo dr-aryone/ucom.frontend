@@ -100,6 +100,7 @@ class Api {
   }
 
   async createPost(data) {
+    console.log(snakes(data));
     const response = await this.actions.post('/api/v1/posts', snakes(data));
 
     return response.data;
@@ -298,6 +299,8 @@ class Api {
   }
 
   async createComment(data, postId, commentId) {
+    console.log(data);
+
     let url = `/api/v1/posts/${postId}/comments`;
 
     if (commentId) {

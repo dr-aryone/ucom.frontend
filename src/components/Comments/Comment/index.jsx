@@ -24,7 +24,7 @@ const Comment = (props) => {
           />
         </div>
         <div className={styles.content}>
-          {props.images.length > 0 &&
+          {props.images && props.images.length > 0 &&
             <div className={styles.gallery}>
               <Gallery
                 images={props.images}
@@ -65,27 +65,11 @@ const Comment = (props) => {
 
       {replys.map(comment => (
         <Comment
-          containerId={props.containerId}
+          {...{ ...comment, ...props }}
           key={comment.id}
-          postId={props.postId}
-          id={comment.id}
-          depth={comment.depth}
-          text={comment.text}
-          date={comment.date}
-          userId={comment.userId}
-          userAccountName={comment.userAccountName}
-          replys={comment.replys}
-          nextDepthTotalAmount={comment.nextDepthTotalAmount}
-          metadata={props.metadata}
-          ownerId={props.ownerId}
-          ownerImageUrl={props.ownerImageUrl}
-          ownerPageUrl={props.ownerPageUrl}
-          ownerName={props.ownerName}
-          onSubmit={props.onSubmit}
-          onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
-            setFormVisible({ visible: true, name: comment.userAccountName });
-          }}
+          setFormVisible({ visible: true, name: comment.userAccountName });
+        }}
         />
       ))}
 
@@ -93,11 +77,9 @@ const Comment = (props) => {
         ((props.nextDepthTotalAmount > 0 && !props.metadata[props.id]) ||
         (props.metadata[props.id] && props.metadata[props.id].hasMore)) &&
         <ShowReplies
-          containerId={props.containerId}
-          postId={props.postId}
+          {...{ ...props }}
           parentId={props.id}
           parentDepth={props.depth}
-          depth={props.depth}
           onClick={props.onClickShowReplies}
           page={props.metadata[props.id] ? props.metadata[props.id].page + 1 : 1}
         />
@@ -105,24 +87,8 @@ const Comment = (props) => {
 
       {newReplys.map(comment => (
         <Comment
-          containerId={props.containerId}
+          {...{ ...comment, ...props }}
           key={comment.id}
-          postId={props.postId}
-          id={comment.id}
-          depth={comment.depth}
-          text={comment.text}
-          date={comment.date}
-          userId={comment.userId}
-          userAccountName={comment.userAccountName}
-          replys={comment.replys}
-          nextDepthTotalAmount={comment.nextDepthTotalAmount}
-          metadata={props.metadata}
-          ownerId={props.ownerId}
-          ownerImageUrl={props.ownerImageUrl}
-          ownerPageUrl={props.ownerPageUrl}
-          ownerName={props.ownerName}
-          onSubmit={props.onSubmit}
-          onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
             setFormVisible({ visible: true, name: comment.userAccountName });
           }}
@@ -131,15 +97,13 @@ const Comment = (props) => {
 
       {formVisible && formVisible.visible &&
         <Form
+          {...{ ...props }}
           depth={props.depth + 1}
-          containerId={props.containerId}
-          postId={props.postId}
           commentId={props.id}
           autoFocus
           userImageUrl={props.ownerImageUrl}
           userPageUrl={props.ownerPageUrl}
           userName={props.ownerName}
-          onSubmit={props.onSubmit}
           onReset={() => setFormVisible({ visible: false, name: '' })}
           message={formVisible.visible && formVisible.name !== '' ? `@${formVisible.name} ` : `@${props.userAccountName} `}
         />

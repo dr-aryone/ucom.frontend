@@ -8,21 +8,25 @@ export const AVATAR_MAX_HEIGHT = 300;
 export const IMAGE_MAX_WIDTH = 3840;
 export const IMAGE_MAX_HEIGHT = 2160;
 
-export const getBase64FromFile = file => (
-  new Promise((resolve, reject) => {
-    if (!file) {
-      reject(new Error('Error: Can\'t get base 64 from file'));
-    }
+export const getBase64FromFile = (file) => {
+  try {
+    return new Promise((resolve, reject) => {
+      if (!file) {
+        reject(new Error('Error: Can\'t get base 64 from file'));
+      }
 
-    const reader = new FileReader();
+      const reader = new FileReader();
 
-    reader.onloadend = () => {
-      resolve(reader.result);
-    };
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
 
-    reader.readAsDataURL(file);
-  })
-);
+      reader.readAsDataURL(file);
+    });
+  } catch (e) {
+    return console.log(e);
+  }
+};
 
 export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', quality = 1) => (
   new Promise((resolve, reject) => {

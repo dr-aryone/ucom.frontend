@@ -1,4 +1,4 @@
-:local(.otherImages) {
+.otherImages {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 8px;
@@ -7,20 +7,21 @@
   margin: 5px 0 0;
 }
 
-:local(.imageWrapper) {
+.imageWrapper {
   position: relative;
   z-index: 0;
+  max-width: 200px
 }
 
-:local(.image) {
+.image {
   display: block;
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
   object-fit: cover;
+  object-fit: scale-down;
   cursor: pointer;
 }
 
-:local(.label) {
+.label {
   position: absolute;
   z-index: 1;
   top: 0;
