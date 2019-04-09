@@ -15,7 +15,7 @@ const UserStatusForm = (props) => {
       return;
     }
 
-    if (!element.contains(e.target)) {
+    if (!element.contains(e.target) && !e.target.closest('.tribute-container')) {
       props.onClickHide();
     }
   };
@@ -43,6 +43,7 @@ const UserStatusForm = (props) => {
         maxLength={STATUS_MAX_LENGTH}
         value={moodMessage}
         onChange={e => setMoodMessage(e.target.value)}
+        onChangeValue={e => setMoodMessage(e)}
         onKeyDown={(e) => {
           if (isEscKey(e)) {
             props.onClickHide();

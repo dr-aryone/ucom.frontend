@@ -1,5 +1,6 @@
 import autosize from 'autosize';
 import React, { useEffect, useRef } from 'react';
+import TributeWrapper from './TributeWrapper';
 
 const TextareaAutosize = (props) => {
   const textareaEl = useRef(null);
@@ -15,9 +16,12 @@ const TextareaAutosize = (props) => {
   useEffect(() => {
     autosize.update(textareaEl.current);
   }, [props.value]);
-
+  const { onChangeValue, ...rest } = props;
   return (
-    <textarea ref={textareaEl} {...props} />
+    <TributeWrapper onChange={e => onChangeValue(e)}>
+      <textarea ref={textareaEl} {...rest} />
+    </TributeWrapper>
+
   );
 };
 
