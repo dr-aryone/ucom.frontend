@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import styles from './styles.css';
 import { COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST } from '../../../utils/comments';
+import { getCommentsOnComment } from '../../../actions/comments';
 
 const ShowReplies = props => (
   <div className={styles.showReplies} depth={props.depth}>
@@ -13,9 +16,9 @@ const ShowReplies = props => (
     <div
       role="presentation"
       className={styles.title}
-      onClick={() => props.onClick({
+      onClick={() => props.getCommentsOnComment({
         containerId: props.containerId,
-        postId: props.postId,
+        commentableId: props.postId,
         parentId: props.parentId,
         parentDepth: props.parentDepth,
         page: props.page,
@@ -29,7 +32,7 @@ const ShowReplies = props => (
 ShowReplies.propTypes = {
   containerId: PropTypes.oneOf([COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST]).isRequired,
   depth: PropTypes.number,
-  onClick: PropTypes.func.isRequired,
+  getCommentsOnComment: PropTypes.func.isRequired,
   postId: PropTypes.number.isRequired,
   parentId: PropTypes.number.isRequired,
   parentDepth: PropTypes.number.isRequired,
@@ -45,4 +48,9 @@ ShowReplies.defaultProps = {
   showNext: false,
 };
 
-export default ShowReplies;
+export default connect(
+  null,
+  dispatch => bindActionCreators({
+    getCommentsOnComment,
+  }, dispatch),
+)(ShowReplies);

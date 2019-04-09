@@ -24,7 +24,7 @@ export default connect(
           userAccountName: getUserById(state.users, comment.user).accountName,
           nextDepthTotalAmount: comment.metadata.nextDepthTotalAmount,
           parentId: comment.parentId || 0,
-          images: (comment && comment.entityImages) ? comment.entityImages.gallery : [],
+          // images: (comment && comment.entityImages) ? comment.entityImages.gallery : [],
         })));
 
       ({ metadata } = commentsData);

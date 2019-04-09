@@ -5,7 +5,7 @@ import { UPVOTE_STATUS, DOWNVOTE_STATUS } from '../utils/posts';
 import { addServerErrorNotification } from './notifications';
 import { addUsers } from './users';
 
-export const addComments = comments => (dispatch) => {
+export const addComments = (comments, lal) => (dispatch) => {
   const users = [];
 
   comments.forEach((comment) => {
@@ -20,6 +20,7 @@ export const addComments = comments => (dispatch) => {
   dispatch({
     type: 'ADD_COMMENTS',
     payload: comments,
+    lal,
   });
 };
 
@@ -72,8 +73,9 @@ export const commentsAddContainerData = ({
   parentId,
   comments,
   metadata,
+  lal,
 }) => (dispatch) => {
-  dispatch(addComments(comments));
+  dispatch(addComments(comments, lal));
   dispatch({
     type: 'COMMENTS_ADD_CONTAINER_DATA',
     payload: {
@@ -83,6 +85,7 @@ export const commentsAddContainerData = ({
       metadata,
       commentIds: comments.map(i => i.id),
     },
+    lal,
   });
 };
 
@@ -137,6 +140,7 @@ export const getCommentsOnComment = ({
       parentId,
       metadata: data.metadata,
       comments: data.data,
+      lal: true,
     }));
   } catch (e) {
     console.error(e);
