@@ -2,6 +2,8 @@ import { isObject } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { defaultTributeConfig } from '../utils/tribute';
+import { compressUploadedImage } from '../utils/upload';
+import { IMG_URL_REGEXP } from '../utils/text';
 
 class TributeWrapper extends PureComponent {
   constructor(props) {
@@ -18,12 +20,35 @@ class TributeWrapper extends PureComponent {
     if (this.props.onChange) {
       this.element.addEventListener('tribute-replaced', this.onChangeValue);
     }
+
+    if (this.props.onImage) {
+      this.element.addEventListener('paste', this.onPaste.bind(this));
+    }
   }
 
   componentWillUnmount() {
     this.tribute.detach(this.element);
     if (this.props.onChange) {
       this.element.removeEventListener('tribute-replaced', this.onChangeValue);
+    }
+
+    if (this.props.onImage) {
+      this.element.removeEventListener('paste', this.onPaste.bind(this));
+    }
+  }
+
+  async onPaste(event) {
+    const { items } = (event.clipboardData || event.originalEvent.clipboardData);
+    const { onImage } = this.props;
+    let blob = null;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') === 0) {
+        blob = items[i].getAsFile();
+      }
+    }
+
+    if (blob !== null) {
+      onImage(await compressUploadedImage(blob));
     }
   }
 
@@ -43,6 +68,15 @@ class TributeWrapper extends PureComponent {
             this.props.children.ref.current = element;
           }
         },
+        onChange: this.props.isToLink ? (e) => {
+          this.props.onChange(e.target.value.replace(IMG_URL_REGEXP, (url) => {
+            this.props.onUrl(url);
+            this.props.onImagesReady(url);
+            return '';
+          }));
+        } : (e) => {
+          this.props.onChange(e.target.value);
+        },
       })
     );
   }
@@ -54,11 +88,13 @@ TributeWrapper.propTypes = {
   }).isRequired,
   config: PropTypes.objectOf(PropTypes.any),
   onChange: PropTypes.func,
+  onImage: PropTypes.func,
 };
 
 TributeWrapper.defaultProps = {
   config: {},
   onChange: null,
+  onImage: null,
 };
 
 export default TributeWrapper;

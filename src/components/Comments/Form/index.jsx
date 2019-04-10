@@ -15,8 +15,6 @@ import { getBase64FromFile } from '../../../utils/upload';
 import IconClip from '../../Icons/Clip';
 import api from '../../../api';
 
-// TODO: Upload images
-
 const Form = (props) => {
   const [message, setMessage] = useState(props.message);
   const [entityImages, setEntityImages] = useState({ gallery: [] });
@@ -48,7 +46,6 @@ const Form = (props) => {
 
   useEffect(() => {
     autosize(textareaEl.current);
-
     return () => {
       autosize.destroy(textareaEl);
     };
@@ -57,6 +54,16 @@ const Form = (props) => {
   useEffect(() => {
     autosize.update(textareaEl.current);
   }, [message]);
+
+  const onImage = (files) => {
+    getBase64FromFile(files[0]).then(async (base64Cover) => {
+      setBase64Cover(base64Cover);
+      const data = await api.uploadPostImage(files[0]);
+      const { url } = data.files[0];
+      // setEntityImages({ gallery: [...entityImages.gallery, { url }] });
+      setEntityImages({ gallery: [{ url }] });
+    });
+  };
 
   return (
     <div
@@ -74,7 +81,13 @@ const Form = (props) => {
         <div className={styles.content}>
           <div className={styles.field}>
             <div className={styles.inputWrapper}>
-              <TributeWrapper onChange={message => setMessage(message)}>
+              <TributeWrapper
+                isToLink
+                onUrl={setBase64Cover}
+                onImagesReady={url => setEntityImages({ gallery: [{ url }] })}
+                onChange={(message) => { setMessage(message); setTimeout(() => autosize.update(textareaEl.current), 0); }}
+                onImage={e => onImage([e])}
+              >
                 <textarea
                   ref={textareaEl}
                   autoFocus={props.autoFocus}
@@ -105,14 +118,7 @@ const Form = (props) => {
                       className={styles.dropZoneComments}
                       multiple
                       nonDefaultclass
-                      onDrop={(files) => {
-                        getBase64FromFile(files[0]).then(async (base64Cover) => {
-                          setBase64Cover(base64Cover);
-                          const data = await api.uploadPostImage(files[0]);
-                          const { url } = data.files[0];
-                          setEntityImages({ gallery: [...entityImages.gallery, { url }] });
-                        });
-                      }}
+                      onDrop={onImage}
                     />
                   </Fragment>
                 </div>
@@ -134,26 +140,27 @@ const Form = (props) => {
           }
         </div>
       </div>
-      {base64Cover ? (
-        <div className="cover cover_small">
-          <div className="cover__inner">
-            <div className="cover__remove">
-              <button
-                type="button"
-                className="button-clean button-clean_close"
-                onClick={() => {
-                    setEntityImages('');
-                    setBase64Cover('');
-                }}
-              >
-                <IconClose />
-              </button>
-            </div>
+      {// TODO in Image.jsx
+        base64Cover ? (
+          <div className="cover cover_small">
+            <div className="cover__inner">
+              <div className="cover__remove">
+                <button
+                  type="button"
+                  className="button-clean button-clean_close"
+                  onClick={() => {
+                      setEntityImages('');
+                      setBase64Cover('');
+                  }}
+                >
+                  <IconClose />
+                </button>
+              </div>
 
-            <img className="cover__img" src={base64Cover} alt="" />
+              <img className="cover__img" src={base64Cover} alt="" />
+            </div>
           </div>
-        </div>
-        ) : null}
+          ) : null}
     </div>
   );
 };

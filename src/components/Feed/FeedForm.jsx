@@ -29,6 +29,15 @@ class FeedForm extends PureComponent {
     };
   }
 
+  onImage = (file) => {
+    getBase64FromFile(file).then((base64Cover) => {
+      this.setState({
+        base64Cover,
+        fileImg: file,
+      });
+    });
+  }
+
   sumbitForm = (message, fileImg) => {
     if (typeof this.props.onSubmit === 'function' && (message.trim().length !== 0 || (fileImg || this.state.fileUrl))) {
       if (fileImg !== '') {
@@ -40,7 +49,6 @@ class FeedForm extends PureComponent {
       }
     }
   }
-
 
   render() {
     const user = getUserById(this.props.users, this.props.user.id);
@@ -65,6 +73,16 @@ class FeedForm extends PureComponent {
           <div className="feed-form__message">
             <TributeWrapper
               onChange={message => this.setState({ message })}
+              onImage={this.onImage}
+              isToLink
+              onUrl={base64Cover => this.setState({
+                base64Cover,
+              })}
+              onImagesReady={
+                fileImg => this.setState({
+                  fileImg,
+                })
+              }
             >
               <textarea
                 autoFocus
@@ -115,14 +133,7 @@ class FeedForm extends PureComponent {
             ) : (
               <DropZone
                 className="drop-zone_clip"
-                onDrop={(file) => {
-                  getBase64FromFile(file).then((base64Cover) => {
-                    this.setState({
-                      base64Cover,
-                      fileImg: file,
-                    });
-                  });
-                }}
+                onDrop={this.onImage}
               />
             )}
           </div>
