@@ -1,0 +1,21 @@
+.copyPanel {
+  display: grid;
+  grid-template-columns: minmax(100px, max-content) 1fr max-content;
+  grid-column-gap: 10px;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 2px;
+  line-height: 1;
+  background: #F5F6F6;
+  align-items: center;
+}
+
+.copyPanel.noLabel {
+  grid-template-columns: 1fr max-content;
+}
+
+.copyPanel .value {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

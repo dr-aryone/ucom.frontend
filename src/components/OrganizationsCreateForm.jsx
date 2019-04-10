@@ -170,6 +170,7 @@ const OrganizationsCreatePage = (props) => {
                       <div className="field__label">Your idea</div>
                       <div className="field__input">
                         <Textarea
+                          isMentioned
                           placeholder="Type something..."
                           rows={4}
                           value={props.organization.data.about}

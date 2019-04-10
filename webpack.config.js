@@ -1,6 +1,7 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const path = require('path');
+const { exec } = require('child_process');
 
 module.exports = {
   entry: [
@@ -12,6 +13,15 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './src/favicon/*', flatten: true },
     ]),
+    {
+      apply: (compiler) => {
+        if (compiler.options.watch) {
+          compiler.hooks.afterEmit.tap('PM2ReloadPlugin', () => {
+            exec('pm2 reload all');
+          });
+        }
+      },
+    },
   ],
 
   module: {

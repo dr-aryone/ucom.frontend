@@ -134,6 +134,7 @@ class ProfilePage extends PureComponent {
                                   rows={6}
                                   value={about}
                                   onChange={about => this.props.userFormSetForm({ about })}
+                                  isMentioned
                                 />
                               </div>
                             </div>
