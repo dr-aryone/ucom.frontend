@@ -10,7 +10,6 @@
 .imageWrapper {
   position: relative;
   z-index: 0;
-  max-width: 200px
 }
 
 .image {
