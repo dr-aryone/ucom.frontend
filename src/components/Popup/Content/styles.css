@@ -12,6 +12,17 @@
   background: #fff;
 }
 
+.content.noRoundBorders {
+  border-radius: 0;
+}
+
+.content.walletAction {
+  min-width: 480px;
+  max-width: 480px;
+  min-height: auto;
+  align-self: auto;
+}
+
 .close {
   position: absolute;
   top: 30px;
@@ -32,5 +43,9 @@
     min-width: calc(100% - 8px);
     min-height: calc(100% - 8px);
     margin: 4px;
+  }
+
+  .content.walletAction {
+    min-width: calc(100% - 8px)
   }
 }

@@ -8,6 +8,7 @@ import CopyPanel from '../CopyPanel';
 import Button from '../Button/index';
 import VerticalMenu from '../VerticalMenu/index';
 import { settingsHide } from '../../actions/settings';
+import Resources from '../Resources';
 
 const Settings = (props) => {
   if (!props.settings.visible) {
@@ -47,6 +48,7 @@ const Settings = (props) => {
 
             <Element className={styles.section} name="Resourses">
               <h3 className={styles.title}>Resources</h3>
+              <Resources />
             </Element>
 
             <Element className={styles.section} name="Keys">
@@ -103,10 +105,10 @@ const Settings = (props) => {
 };
 
 Settings.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   settings: PropTypes.shape({
     visible: PropTypes.bool.isRequired,
   }).isRequired,
-  dispatch: PropTypes.func.isRequired,
 };
 
 export default connect(state => ({

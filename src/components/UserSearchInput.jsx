@@ -101,6 +101,8 @@ UserSearchInput.propTypes = {
 UserSearchInput.defaultProps = {
   isMulti: true,
   placeholder: 'Find people',
+  onChange: undefined,
+  value: undefined,
 };
 
 export default UserSearchInput;

@@ -9,6 +9,7 @@ import { siteNotificationsSetUnreadAmount } from './siteNotifications';
 import { getAccountState } from './wallet';
 import { addOrganizations } from './organizations';
 import graphql from '../api/graphql';
+import { walletGetAccount } from './walletSimple';
 
 export const usersAddIFollow = payload => ({ type: 'USERS_ADD_I_FOLLOW', payload });
 export const usersRemoveIFollow = payload => ({ type: 'USERS_REMOVE_I_FOLLOW', payload });
@@ -57,7 +58,8 @@ export const fetchMyself = () => async (dispatch) => {
     dispatch(setUser(data));
     dispatch(addUsers([data]));
     dispatch(siteNotificationsSetUnreadAmount(data.unreadMessagesCount));
-    dispatch(getAccountState());
+    dispatch(getAccountState()); // TODO: Remove
+    dispatch(walletGetAccount(data.accountName));
 
     // TODO: Сделать disable
     // if (process.env.NODE_ENV === 'production' && data.isTrackingAllowed) {

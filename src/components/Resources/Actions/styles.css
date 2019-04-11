@@ -1,0 +1,58 @@
+.content {
+  padding: 40px;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.title {
+  margin: 0 0 29px;
+  line-height: 34px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 20px;
+}
+
+.field {
+  display: block;
+  margin: 0 0 20px;
+}
+
+.error {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-column-gap: 16px;
+  align-items: center;
+  margin: 0 0 20px;
+  padding: 16px;
+  border: 1px solid #d8352f;
+  border-radius: 4px;
+}
+
+.cost {
+  text-align: center;
+  margin: 0 0 20px;
+}
+
+.cost .value {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.cost .label {
+  color: #767676;
+}
+
+.hint {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #767676;
+}
+
+.label {
+  margin: 0 0 12px;
+}

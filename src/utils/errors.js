@@ -49,13 +49,9 @@ export const parseWalletErros = (error) => {
 
     return data.errors;
   } catch (e) {
-    console.error(e);
+    return [{
+      message: 'Could not complete request, please try again later',
+      field: 'general',
+    }];
   }
-
-  const defaultErrors = [{
-    message: 'Could not complete request, please try again later',
-    field: 'general',
-  }];
-
-  return defaultErrors;
 };

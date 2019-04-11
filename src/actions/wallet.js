@@ -120,7 +120,9 @@ export const sendTokens = () => async (dispatch, getState) => {
     await api.sendTokens(accountNameFrom, accountNameTo, +amount, memo);
     dispatch(setWalletSendTokensVisible(false));
     dispatch(setWalletSendTokensLoading(false));
-    dispatch(addSuccessNotification({ message: 'Successfully sent tokens' }));
+    dispatch(addSuccessNotification('Successfully sent tokens'));
+    dispatch(walletTransactionsReset());
+    dispatch(fetchTransactionsList());
     loader.done();
     dispatch(getAccountState());
   } catch (e) {
@@ -149,7 +151,9 @@ export const stakeOrUnstakeTokens = () => async (dispatch, getState) => {
     await api.stakeOrUnstakeTokens(accountName, +netAmount, +cpuAmount);
     dispatch(setWalletEditStakeVisible(false));
     dispatch(setWalletEditStakeLoading(false));
-    dispatch(addSuccessNotification({ message: 'Successfully set stake' }));
+    dispatch(addSuccessNotification('Successfully set stake'));
+    dispatch(walletTransactionsReset());
+    dispatch(fetchTransactionsList());
     loader.done();
     dispatch(getAccountState());
   } catch (e) {
@@ -172,7 +176,9 @@ export const claimEmission = () => async (dispatch, getState) => {
   try {
     loader.start();
     await api.claimEmission(user.accountName);
-    dispatch(addSuccessNotification({ message: 'Successfully get emission' }));
+    dispatch(addSuccessNotification('Successfully get emission'));
+    dispatch(walletTransactionsReset());
+    dispatch(fetchTransactionsList());
     loader.done();
     dispatch(getAccountState());
   } catch (e) {
@@ -217,7 +223,9 @@ export const tradeRam = isBuy => async (dispatch, getState) => {
     await trade(user.accountName, +state.wallet.tradeRam.data.bytesAmount);
     dispatch(setWalletTradeRamVisible(false));
     dispatch(setWalletTradeRamLoading(false));
-    dispatch(addSuccessNotification({ message: 'Successfully trade ram' }));
+    dispatch(addSuccessNotification('Successfully trade ram'));
+    dispatch(walletTransactionsReset());
+    dispatch(fetchTransactionsList());
     loader.done();
     dispatch(getAccountState());
   } catch (e) {

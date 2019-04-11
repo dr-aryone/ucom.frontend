@@ -22,6 +22,7 @@ import communityFeed from './communityFeed';
 import tagsFeed from './tagsFeed';
 import user from './user';
 import settings from './settings';
+import walletSimple from './walletSimple';
 
 export const createStore = () => {
   const reducers = redux.combineReducers({
@@ -46,6 +47,7 @@ export const createStore = () => {
     tags,
     communityFeed,
     tagsFeed,
+    walletSimple,
   });
   const middlewares = [thunk];
   let preloadedState;
