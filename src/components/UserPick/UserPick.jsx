@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import React from 'react';
+import React, { memo } from 'react';
 import UserIcon from '../Icons/User';
 import OrganizationIcon from '../Icons/Organization';
 import styles from './styles.css';
@@ -57,4 +57,4 @@ UserPick.defaultProps = {
   size: null,
 };
 
-export default UserPick;
+export default memo(UserPick);

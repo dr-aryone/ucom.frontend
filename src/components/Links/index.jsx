@@ -13,7 +13,7 @@ const Links = props => (
       return (
         <li key={index} className={styles.item}>
           <SocialIcon sourceUrl={hostName} />
-          <a className="red" href={normalizeUrl(item)} rel="noopener noreferrer" target="_blank">{hostName}</a>
+          <a className="red-hover" href={normalizeUrl(item)} rel="noopener noreferrer" target="_blank">{hostName}</a>
         </li>
       );
     })}

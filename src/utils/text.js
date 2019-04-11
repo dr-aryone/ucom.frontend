@@ -118,7 +118,11 @@ export const calculateClosestTo0 = arr => arr.reduce(
 /* eslint-enable */
 
 export const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value);
+<<<<<<< HEAD
 
 export const getPercent = (left, total) => (
   Math.floor((left / total) * 100)
 );
+=======
+export const removeMultipleSpaces = memoize((str = '') => str.replace(/ +(?= )/g, ''));
+>>>>>>> 6660d161840c6d83094d44de8f14f848b8b91f7e

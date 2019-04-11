@@ -15,6 +15,10 @@ export const authShowPopup = () => (dispatch) => {
   dispatch(authSetVisibility(true));
 };
 
+export const authHidePopup = () => (dispatch) => {
+  dispatch(authSetVisibility(false));
+};
+
 export const authLogin = () => async (dispatch, getState) => {
   const state = getState();
 

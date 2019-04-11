@@ -27,7 +27,7 @@ const MinimizedText = props => (
         {props.disabledHide && !props.minimized ? null : (
           <div className="text__show-more">
             <button
-              className="link red"
+              className="link red-hover"
               onClick={() => {
                 if (props.onClickShowMore) {
                   props.onClickShowMore();

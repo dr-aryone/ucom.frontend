@@ -19,10 +19,10 @@ const Item = props => (
     >
       <div className={styles.main}>
         <div className={styles.title}>
-          <Link to={props.url} className="link red">{props.title}</Link>
+          <Link to={props.url} className="link red-hover">{props.title}</Link>
         </div>
         <div className={styles.author}>
-          by <Link to={props.authorUrl} className="link red">{props.author}</Link>
+          by <Link to={props.authorUrl} className="link red-hover">{props.author}</Link>
         </div>
       </div>
       <div className={styles.count}>

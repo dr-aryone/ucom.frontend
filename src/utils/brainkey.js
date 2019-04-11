@@ -1,6 +1,9 @@
 import crypto from 'crypto';
 import wordsDict from './wordsDict';
 
+export const BRAINKEY_SYMBOLS_REGEXP = /^[a-zA-Z_ ]*$/;
+export const BRAINKEY_LENGTH = 12;
+
 export const saveBrainkey = (token) => {
   localStorage.setItem('brainkey', token);
 };
