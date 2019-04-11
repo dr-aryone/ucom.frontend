@@ -80,6 +80,23 @@ export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', qu
   })
 );
 
-
 export const compressAvatar = file => compressImage(file, AVATAR_MAX_WIDTH, AVATAR_MAX_HEIGHT);
 export const compressUploadedImage = file => compressImage(file, IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT);
+
+export const getImageFromPasteEvent = async (event) => {
+  const { items } = (event.clipboardData || event.originalEvent.clipboardData);
+  let blob = null;
+
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf('image') === 0) {
+      blob = items[i].getAsFile();
+    }
+  }
+
+  if (blob) {
+    blob = await compressUploadedImage(blob);
+  }
+
+  return blob;
+};
+

@@ -85,8 +85,8 @@ const Comment = (props) => {
           onSubmit={props.onSubmit}
           onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
-          setFormVisible({ visible: true, name: comment.userAccountName });
-        }}
+            setFormVisible({ visible: true, name: comment.userAccountName });
+          }}
         />
       ))}
 
@@ -126,14 +126,14 @@ const Comment = (props) => {
           onSubmit={props.onSubmit}
           onClickShowReplies={props.onClickShowReplies}
           onClickReply={() => {
-          setFormVisible({ visible: true, name: comment.userAccountName });
-        }}
+            setFormVisible({ visible: true, name: comment.userAccountName });
+          }}
         />
       ))}
 
       {formVisible && formVisible.visible &&
         <Form
-          {...{ ...props }}
+          {...props}
           depth={props.depth + 1}
           commentId={props.id}
           autoFocus

@@ -2,7 +2,7 @@ import { isObject } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { defaultTributeConfig } from '../utils/tribute';
-import { compressUploadedImage } from '../utils/upload';
+import { getImageFromPasteEvent } from '../utils/upload';
 import { IMG_URL_REGEXP } from '../utils/text';
 
 class TributeWrapper extends PureComponent {
@@ -28,6 +28,7 @@ class TributeWrapper extends PureComponent {
 
   componentWillUnmount() {
     this.tribute.detach(this.element);
+
     if (this.props.onChange) {
       this.element.removeEventListener('tribute-replaced', this.onChangeValue);
     }
@@ -38,17 +39,11 @@ class TributeWrapper extends PureComponent {
   }
 
   async onPaste(event) {
-    const { items } = (event.clipboardData || event.originalEvent.clipboardData);
     const { onImage } = this.props;
-    let blob = null;
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].type.indexOf('image') === 0) {
-        blob = items[i].getAsFile();
-      }
-    }
+    const blob = await getImageFromPasteEvent(event);
 
     if (blob !== null) {
-      onImage(await compressUploadedImage(blob));
+      onImage(blob);
     }
   }
 
@@ -68,10 +63,9 @@ class TributeWrapper extends PureComponent {
             this.props.children.ref.current = element;
           }
         },
-        onChange: this.props.isToLink ? (e) => {
+        onChange: this.props.enabledImgUrlParse ? (e) => {
           this.props.onChange(e.target.value.replace(IMG_URL_REGEXP, (url) => {
-            this.props.onUrl(url);
-            this.props.onImagesReady(url);
+            this.props.onParseImgUrl(url);
             return '';
           }));
         } : (e) => {
@@ -89,12 +83,16 @@ TributeWrapper.propTypes = {
   config: PropTypes.objectOf(PropTypes.any),
   onChange: PropTypes.func,
   onImage: PropTypes.func,
+  onParseImgUrl: PropTypes.func,
+  enabledImgUrlParse: PropTypes.bool,
 };
 
 TributeWrapper.defaultProps = {
   config: {},
   onChange: null,
   onImage: null,
+  onParseImgUrl: null,
+  enabledImgUrlParse: false,
 };
 
 export default TributeWrapper;

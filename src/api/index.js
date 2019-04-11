@@ -100,7 +100,6 @@ class Api {
   }
 
   async createPost(data) {
-    console.log(snakes(data));
     const response = await this.actions.post('/api/v1/posts', snakes(data));
 
     return response.data;

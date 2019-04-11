@@ -72,16 +72,13 @@ class FeedForm extends PureComponent {
 
           <div className="feed-form__message">
             <TributeWrapper
+              enabledImgUrlParse
               onChange={message => this.setState({ message })}
               onImage={this.onImage}
-              isToLink
-              onUrl={base64Cover => this.setState({
-                base64Cover,
-              })}
-              onImagesReady={
-                fileImg => this.setState({
-                  fileImg,
-                })
+              onParseImgUrl={(url) => {
+                this.setState({ base64Cover: url });
+                this.setState({ fileImg: url });
+                }
               }
             >
               <textarea

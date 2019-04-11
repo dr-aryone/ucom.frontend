@@ -19,7 +19,6 @@ const Form = (props) => {
   const [message, setMessage] = useState(props.message);
   const [entityImages, setEntityImages] = useState({ gallery: [] });
   const [base64Cover, setBase64Cover] = useState('');
-
   const textareaEl = useRef(null);
 
   const reset = () => {
@@ -44,6 +43,16 @@ const Form = (props) => {
     }
   };
 
+  const onImage = async (files) => {
+    const base64Cover = await getBase64FromFile(files[0]);
+    setBase64Cover(base64Cover);
+    const data = await api.uploadPostImage(files[0]);
+    const { url } = data.files[0];
+    // TODO make multiple upon creating gallery
+    // setEntityImages({ gallery: [...entityImages.gallery, { url }] });
+    setEntityImages({ gallery: [{ url }] });
+  };
+
   useEffect(() => {
     autosize(textareaEl.current);
     return () => {
@@ -54,16 +63,6 @@ const Form = (props) => {
   useEffect(() => {
     autosize.update(textareaEl.current);
   }, [message]);
-
-  const onImage = (files) => {
-    getBase64FromFile(files[0]).then(async (base64Cover) => {
-      setBase64Cover(base64Cover);
-      const data = await api.uploadPostImage(files[0]);
-      const { url } = data.files[0];
-      // setEntityImages({ gallery: [...entityImages.gallery, { url }] });
-      setEntityImages({ gallery: [{ url }] });
-    });
-  };
 
   return (
     <div
@@ -82,10 +81,15 @@ const Form = (props) => {
           <div className={styles.field}>
             <div className={styles.inputWrapper}>
               <TributeWrapper
-                isToLink
-                onUrl={setBase64Cover}
-                onImagesReady={url => setEntityImages({ gallery: [{ url }] })}
-                onChange={(message) => { setMessage(message); setTimeout(() => autosize.update(textareaEl.current), 0); }}
+                enabledImgUrlParse
+                onParseImgUrl={(url) => {
+                    setBase64Cover(url);
+                    setEntityImages({ gallery: [{ url }] });
+                  }
+                }
+                onChange={(message) => {
+                  setMessage(message); setTimeout(() => autosize.update(textareaEl.current), 0);
+                }}
                 onImage={e => onImage([e])}
               >
                 <textarea
@@ -108,7 +112,7 @@ const Form = (props) => {
             </div>
 
             <div className={styles.actions}>
-              {base64Cover ? null : (
+              {!base64Cover && (
                 <div className={styles.containerActions}>
                   <Fragment>
                     <label name="img" className={styles.clipComments}>
@@ -179,7 +183,11 @@ Form.propTypes = {
   userName: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   onReset: PropTypes.func,
-  entityImages: PropTypes.objectOf(PropTypes.any),
+  entityImages: PropTypes.shape({
+    gallery: PropTypes.arrayOf(PropTypes.shape({
+      url: PropTypes.string.isRequired,
+    })),
+  }),
 };
 
 Form.defaultProps = {
