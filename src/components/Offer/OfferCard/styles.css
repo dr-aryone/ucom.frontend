@@ -167,15 +167,12 @@
   top: 50px;
   right: 87px;
   text-align: right;
-}
-
-.rate div {
   font-size: 28px;
   line-height: 34px;
   font-weight: bold;
 }
 
-.postCardWithCover .rate div,
+.postCardWithCover .rate,
 .postCardWithCover .title a,
 .postCardWithCover .views,
 .postCardWithCover .author,
@@ -333,9 +330,6 @@
   .rate {
     top: 16px;
     right: 20px;
-  }
-
-  .rate div {
     font-size: 16px;
     line-height: normal;
   }

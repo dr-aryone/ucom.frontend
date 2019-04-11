@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import React, { Fragment, useState, useEffect } from 'react';
-import Rate from '../../Rate';
+import React, { Fragment, useState } from 'react';
+import { formatRate } from '../../../utils/rate';
 import styles from './styles.css';
 import Avatar from '../../Avatar';
 import { sanitizePostTitle } from '../../../utils/text';
@@ -14,42 +14,43 @@ import ModalContent from '../../ModalContent';
 import UserListAirdrop from '../../User/UsersListAirdrop';
 import { mapUserDataToFollowersProps } from '../../../utils/user';
 import { authShowPopup } from '../../../actions/auth';
+import config from '../../../../package.json';
 
 const OfferCard = (props) => {
-  const [btnFixed, setBtnFixed] = useState(false);
-  const [btnFixedActive, setBtnFixedActive] = useState(false);
+  // const [btnFixed, setBtnFixed] = useState(false);
+  // const [btnFixedActive, setBtnFixedActive] = useState(false);
   const [popupVisible, setPopupVisible] = useState(false);
   const LinkTag = props.userUrl ? Link : 'div';
   const { conditions } = props;
   const month = new Date(props.startedAt).toLocaleString('en-us', { month: 'long' });
   const day = new Date(props.startedAt).getDate();
 
-  const checkSizeWindow = () => {
-    if (window.scrollY > 485 && window.innerWidth < 414) {
-      setBtnFixed(true);
-      setTimeout(() => {
-        setBtnFixedActive(true);
-      }, 100);
-    } else {
-      setBtnFixed(false);
-      setBtnFixedActive(false);
-    }
-  };
+  // const checkSizeWindow = () => {
+  //   if (window.scrollY > 485 && window.innerWidth < 414) {
+  //     setBtnFixed(true);
+  //     setTimeout(() => {
+  //       setBtnFixedActive(true);
+  //     }, 100);
+  //   } else {
+  //     setBtnFixed(false);
+  //     setBtnFixedActive(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    window.addEventListener('scroll', checkSizeWindow);
+  // useEffect(() => {
+  //   window.addEventListener('scroll', checkSizeWindow);
 
-    return () => {
-      window.removeEventListener('scroll', checkSizeWindow);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener('scroll', checkSizeWindow);
+  //   };
+  // }, []);
 
   return (
     <Fragment>
       {popupVisible && (
         <Popup onClickClose={() => setPopupVisible(false)}>
           <ModalContent mod="airdrop" onClickClose={() => setPopupVisible(false)}>
-            <UserListAirdrop users={props.users} title={props.title} />
+            <UserListAirdrop users={props.users} title={props.title} metadata={props.metadata} onChangePage={props.onChangePage} />
           </ModalContent>
         </Popup>
       )}
@@ -67,19 +68,17 @@ const OfferCard = (props) => {
           <div className={styles.media} />
         )}
 
-        {props.rate !== undefined && (
-          <div className={styles.rate}>
-            <Rate value={+props.rate} label="" />
-          </div>
-        )}
+        {props.rate !== undefined &&
+          <div className={styles.rate}>{formatRate(props.rate)}°</div>
+        }
 
-        {props.title && (
+        {props.title &&
           <h1 className={styles.title}>
             <div dangerouslySetInnerHTML={{ __html: sanitizePostTitle(props.title) }} />
           </h1>
-        )}
+        }
 
-        {props.userName && (
+        {props.userName &&
           <div className={styles.username}>
             <div className={styles.author}>by</div>
             <LinkTag to={props.userUrl}>
@@ -90,7 +89,7 @@ const OfferCard = (props) => {
             </LinkTag>
             <LinkTag to={props.userUrl}><span className={styles.name}>{props.userName}</span></LinkTag>
           </div>
-        )}
+        }
 
         <div className={styles.infoblockBottom}>
           <div className={styles.timer}>
@@ -108,16 +107,16 @@ const OfferCard = (props) => {
             onClick={() => setPopupVisible(true)}
             users={(props.users).map(mapUserDataToFollowersProps)}
             title="Participants"
-            count={props.count}
+            count={+props.count}
           />
           {((conditions && conditions.conditions.authGithub === false) || !props.cookie) &&
             <a
               className={classNames(
                 `${styles.btn}`,
-                { [styles.btnFixed]: btnFixed === true },
-                { [styles.btnFixedActive]: btnFixedActive === true },
+                {/* { [styles.btnFixed]: btnFixed === true },
+                { [styles.btnFixedActive]: btnFixedActive === true }, */},
               )}
-              href="https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/posts/14317?mock_external_id=true"
+              href={config.gitHubAuthLink}
             >
               Get your score
             </a>
@@ -128,8 +127,8 @@ const OfferCard = (props) => {
               onClick={() => props.authShowPopup()}
               className={classNames(
                 `${styles.btn}`,
-                { [styles.btnFixed]: btnFixed === true },
-                { [styles.btnFixedActive]: btnFixedActive === true },
+                {/* { [styles.btnFixed]: btnFixed === true },
+                { [styles.btnFixedActive]: btnFixedActive === true }, */ },
               )}
             >
               Sign up
@@ -161,6 +160,12 @@ OfferCard.propTypes = {
       followingDevExchange: PropTypes.bool,
     })),
   }),
+  metadata: PropTypes.shape({
+    page: PropTypes.number,
+    perPage: PropTypes.number,
+    totalAmount: PropTypes.number,
+  }).isRequired,
+  onChangePage: PropTypes.func.isRequired,
   users: PropTypes.arrayOf(PropTypes.any).isRequired,
   userUrl: PropTypes.string.isRequired,
   finishedAt: PropTypes.string.isRequired,

@@ -11,7 +11,6 @@ import { LIST_PER_PAGE } from '../utils/list';
 
 const { WalletApi, SocialApi } = require('ucom-libs-wallet');
 const AppTransaction = require('ucom-libs-social-transactions');
-const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
 const { TransactionFactory } = AppTransaction;
 
@@ -540,13 +539,8 @@ class Api {
     return humps(response.data);
   }
 
-  async syncAccountGithub(token, cookieGh) {
-    const response = await this.actions.post('/api/v1/users-external/users/pair', {}, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        [CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB]: cookieGh,
-      },
-    });
+  async syncAccountGithub(options) {
+    const response = await this.actions.post('/api/v1/users-external/users/pair', {}, options);
 
     return humps(response.data);
   }

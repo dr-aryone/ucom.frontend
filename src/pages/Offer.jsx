@@ -32,16 +32,40 @@ const Offer = (props) => {
   const cookie = getCookie(CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB);
   const [users, setUsers] = useState([]);
   const [conditions, setConditions] = useState(null);
+  const [metadata, setMetadata] = useState({ page: 1, perPage: 20 });
   const post = getPostById(props.posts, postId);
 
   const pairAccounts = async () => {
     if (cookie && token && conditions && (conditions.conditions.authGithub === false || conditions.conditions.authMyself === false)) {
+      const options = {
+        headers: {},
+      };
+      if (cookie) {
+        options.headers[CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB] = cookie;
+      }
       try {
         await api.syncAccountGithub(token, cookie);
       } catch (e) {
         console.error(e);
       }
     }
+  };
+
+  const getParticipants = (page = 1) => {
+    props.getManyUsers({
+      airdrops: airdropId,
+      orderBy: 'score',
+      page,
+      perPage: 10,
+    }).then((data) => {
+      setUsers(data.data);
+      setMetadata(data.metadata);
+    });
+  };
+
+  const onChangePage = (page) => {
+    getParticipants(page);
+    window.scrollTo(0, 'top');
   };
 
   useEffect(() => {
@@ -62,14 +86,8 @@ const Offer = (props) => {
       props.getOrganization(data.onePostOffer.organization.id);
       setConditions(data.oneUserAirdrop);
     });
-    props.getManyUsers({
-      airdrops: airdropId,
-      orderBy: 'score',
-      page: 1,
-      perPage: 10,
-    }).then((data) => {
-      setUsers(data.data);
-    });
+
+    getParticipants();
 
     loader.done();
   }, [postId]);
@@ -84,7 +102,7 @@ const Offer = (props) => {
 
   return (
     <LayoutBase gray>
-      <div className="container container_post">
+      <div className={styles.container}>
         <div className={stylesSubHeader.wrapperOffer}>
           <EntrySubHeader
             organization
@@ -98,7 +116,7 @@ const Offer = (props) => {
           <OfferCard
             postId={postId}
             coverUrl={getPostCover(post)}
-            rate={post.currentRate}
+            rate={+post.currentRate}
             title={post.title}
             url={urls.getPostUrl(post)}
             userUrl={urls.getUserUrl(post.user.id)}
@@ -108,10 +126,12 @@ const Offer = (props) => {
             finishedAt={post.finishedAt}
             startedAt={post.startedAt}
             users={users}
-            count={+users.length}
+            count={metadata.totalAmount}
             conditions={conditions}
             cookie={cookie}
             token={token}
+            metadata={metadata}
+            onChangePage={onChangePage}
           />
         </div>
         <div className={styles.content}>

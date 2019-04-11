@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Rate from '../../Rate';
+import { formatRate } from '../../../utils/rate';
 import PostRating from '../../Rating/PostRating';
 import One from '../../Icons/Airdrop/One';
 import Two from '../../Icons/Airdrop/Two';
@@ -15,6 +15,7 @@ import ShareBlock from '../../ShareBlock';
 import styles from './styles.css';
 import { authShowPopup } from '../../../actions/auth';
 import IconTelegram from '../../Icons/Socials/TelegramBlack';
+import config from '../../../../package.json';
 
 const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
@@ -34,7 +35,7 @@ const OfferSidebar = (props) => {
   return (
     <Fragment>
       <div className={styles.rateVote}>
-        <Rate className="rate_mediumSlim" value={props.rate} label="" />
+        <div className={styles.rate}>{formatRate(props.rate)}°</div>
         <PostRating postId={props.postId} />
       </div>
       {((conditions.airdropStatus === AirdropStatuses.PENDING ||
@@ -93,11 +94,9 @@ const OfferSidebar = (props) => {
           <div className={styles.optionStatus}>{conditions.conditions.authGithub === true || props.cookie ? <Done /> : <One />}</div>
           <div className={styles.optionBlock}>
             <a
-              href="https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/posts/14317?mock_external_id=true
-            "
+              href={config.gitHubAuthLink}
               className={styles.optionTitle}
-            >
-              Authorize GitHub
+            >Authorize GitHub
             </a>
             <div className={styles.optionText}>To get your Score system need acсess to your GitHub account data</div>
           </div>

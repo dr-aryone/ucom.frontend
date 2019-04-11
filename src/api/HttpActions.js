@@ -7,13 +7,22 @@ class HttpActions {
     this.request = axios.create({ baseURL });
   }
 
-  getDefaultOptions() {
+  getDefaultOptions(extraOptions = {}) {
     const token = getToken();
-    const options = { headers: {} };
+    let options = { headers: {} };
 
     if (token) {
       options.headers.Authorization = `Bearer ${token}`;
     }
+
+    options = {
+      ...options,
+      ...extraOptions,
+      headers: {
+        ...options.headers,
+        ...extraOptions.headers,
+      },
+    };
 
     return options;
   }

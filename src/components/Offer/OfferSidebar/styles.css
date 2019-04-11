@@ -9,7 +9,9 @@
 }
 
 .rate {
+  margin: 0 0 4px;
   font-size: 24px;
+  font-weight: 700;
 }
 
 .status {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import UserPick from '../../UserPick/UserPick';
@@ -26,26 +26,28 @@ const UserCardLine = (props) => {
   const LinkTag = props.url ? Link : 'div';
 
   return (
-    <LinkTag to={props.url} className={styles.userCard}>
-      <div className={styles.block}>
-        <div className={styles.order}>{props.order}</div>
-        <div className={styles.avatar}>
-          <UserPick isOwner={props.isOwner} src={props.userPickSrc} alt={props.userPickAlt} />
-        </div>
-        <div className={styles.title}>
-          <div className={styles.name}>{props.name}</div>
-          <div className={styles.accountName}>
-            {props.sign}{props.accountName}
+    <Fragment>
+      <LinkTag to={props.url} className={styles.userCard}>
+        <div className={styles.block}>
+          <div className={styles.order}>{props.order}</div>
+          <div className={styles.avatar}>
+            <UserPick isOwner={props.isOwner} src={props.userPickSrc} alt={props.userPickAlt} />
+          </div>
+          <div className={styles.title}>
+            <div className={styles.name}>{props.name}</div>
+            <div className={styles.accountName}>
+              {props.sign}{props.accountName}
+            </div>
           </div>
         </div>
-      </div>
-      <div className={styles.blockGh}>
-        <div className={styles.nameGh}><span className={styles.nameGhPlaceholder}>GitHub</span>{props.nameGh}</div>
-      </div>
-      <div className={styles.blockScore}>
-        <div>{formatRate(props.rate)}</div>
-      </div>
-    </LinkTag>
+        <div className={styles.blockGh}>
+          <div className={styles.nameGh}><span className={styles.nameGhPlaceholder}>GitHub</span>{props.nameGh}</div>
+        </div>
+        <div className={styles.blockScore}>
+          <div>{formatRate(props.rate)}</div>
+        </div>
+      </LinkTag>
+    </Fragment>
   );
 };
 
@@ -56,7 +58,7 @@ UserCardLine.propTypes = {
   nameGh: PropTypes.string.isRequired,
   rate: PropTypes.number.isRequired,
   accountName: PropTypes.string.isRequired,
-  order: PropTypes.number.isRequired,
+  order: PropTypes.string.isRequired,
   url: PropTypes.string,
   isOwner: PropTypes.bool,
   sign: PropTypes.string,

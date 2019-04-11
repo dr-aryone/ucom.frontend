@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Pagination from '../Pagination/index';
 import { getUserName } from '../../utils/user';
 import urls from '../../utils/urls';
 import { UserCardLine, UserCardLineTitle } from '../UserCardLine/Github';
@@ -17,7 +18,7 @@ const UserListAirdrop = (props) => {
         <UserCardLineTitle />
         {props.users && (props.users).map((item, index) => (
           <UserCardLine
-            order={index + 1}
+            order={`${props.metadata.page - 1 !== 0 ? props.metadata.page - 1 : ''}${index + 1}`}
             key={item.id}
             url={urls.getUserUrl(item.id)}
             userPickSrc={urls.getFileUrl(item.avatarFilename)}
@@ -28,6 +29,14 @@ const UserListAirdrop = (props) => {
             sign="@"
           />
         ))}
+        {props.metadata &&
+          <Pagination
+            totalAmount={props.metadata.totalAmount}
+            perPage={+props.metadata.perPage}
+            page={+props.metadata.page}
+            onChange={props.onChangePage}
+          />
+        }
       </div>
     </div>
   );
@@ -35,6 +44,12 @@ const UserListAirdrop = (props) => {
 
 UserListAirdrop.propTypes = {
   users: PropTypes.PropTypes.arrayOf(PropTypes.any).isRequired,
+  metadata: PropTypes.shape({
+    page: PropTypes.number,
+    perPage: PropTypes.number,
+    totalAmount: PropTypes.number,
+  }).isRequired,
+  onChangePage: PropTypes.func.isRequired,
 };
 
 UserListAirdrop.defaultTypes = {
