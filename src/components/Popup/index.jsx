@@ -1,16 +1,26 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import React, { useEffect, useRef } from 'react';
-import CloseIcon from './Icons/Close';
+import React, { useEffect, useRef, memo } from 'react';
+import CloseIcon from '../Icons/Close';
+import styles from './styles.css';
+
+let openedPopupsCount = 0;
 
 const Popup = (props) => {
   const el = useRef(null);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    openedPopupsCount++;
 
     return () => {
-      document.body.style.overflow = '';
+      if (openedPopupsCount > 0) {
+        openedPopupsCount--;
+      }
+
+      if (openedPopupsCount === 0) {
+        document.body.style.overflow = '';
+      }
     };
   }, []);
 
@@ -18,10 +28,10 @@ const Popup = (props) => {
     <div
       ref={el}
       role="presentation"
-      className={classNames(
-        'popup',
-        { [`popup_${props.mod}`]: Boolean(props.mod) },
-      )}
+      className={classNames({
+        [styles.popup]: true,
+        [props.mod]: !!props.mod,
+      })}
       onClick={(e) => {
         if (e.target === el.current && props.onClickClose) {
           props.onClickClose();
@@ -31,7 +41,7 @@ const Popup = (props) => {
       {props.onClickClose && props.showCloseIcon &&
         <span
           role="presentation"
-          className="popup__close"
+          className={styles.close}
           onClick={props.onClickClose}
         >
           <CloseIcon />
@@ -55,4 +65,5 @@ Popup.defaultProps = {
   showCloseIcon: false,
 };
 
-export default Popup;
+export { default as Content } from './Content';
+export default memo(Popup);

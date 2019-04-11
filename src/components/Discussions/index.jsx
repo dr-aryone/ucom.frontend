@@ -51,8 +51,8 @@ const Discussions = (props) => {
         {!formVisible && !visibleItems.length &&
           <div className={styles.empty}>
             Nothing here yet.&nbsp;
-            <button onClick={() => setFormVisible(true)} className="link red active">Add existing community article</button> or&nbsp;
-            <Link className="red active" to={props.newDiscussionUrl}>create new article.</Link>
+            <button onClick={() => setFormVisible(true)} className="link red-hover active">Add existing community article</button> or&nbsp;
+            <Link className="red-hover active" to={props.newDiscussionUrl}>create new article.</Link>
           </div>
         }
 
@@ -82,7 +82,7 @@ const Discussions = (props) => {
 
         {props.items.length > visibleItems.length &&
           <button
-            className={`link red ${styles.more}`}
+            className={`link red-hover ${styles.more}`}
             onClick={() => setItemsLimit(props.items.length)}
           >
             Show {props.items.length - visibleItems.length} more

@@ -103,6 +103,10 @@ export default {
 
     try {
       const data = await request({ query });
+      // TODO: Remove after backend fix 200 code when error;
+      if (data.errors) {
+        throw data.errors;
+      }
       return data.data.oneUser;
     } catch (e) {
       throw e;

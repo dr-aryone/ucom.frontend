@@ -13,13 +13,13 @@ const EntryContacts = (props) => {
       <div className={styles.title}>Contacts</div>
       <div className={styles.content}>
         {props.phone &&
-          <p><a className="red" href={`tel:${props.phone}`}>{props.phone}</a></p>
+          <p><a className="red-hover" href={`tel:${props.phone}`}>{props.phone}</a></p>
         }
         {props.email &&
-          <p><a className="red" href={`mailto:${props.email}`}>{props.email}</a></p>
+          <p><a className="red-hover" href={`mailto:${props.email}`}>{props.email}</a></p>
         }
         {props.site &&
-          <p><a className="red" target="_blank" rel="noopener noreferrer" href={props.site}>{extractHostname(props.site)}</a></p>
+          <p><a className="red-hover" target="_blank" rel="noopener noreferrer" href={props.site}>{extractHostname(props.site)}</a></p>
         }
       </div>
     </div>
