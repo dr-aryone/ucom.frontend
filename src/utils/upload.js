@@ -28,7 +28,7 @@ export const getBase64FromFile = (file) => {
   }
 };
 
-export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', quality = 1) => (
+export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', quality = 0.9) => (
   new Promise((resolve, reject) => {
     const fileName = file.name;
     if (file.type === 'image/gif') {
