@@ -1,17 +1,17 @@
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import Popup, { Content } from '../Popup';
+import Popup, { Content } from '../../Popup';
 import Account from './Account';
 import SocialKey from './SocialKey';
 import GenerateSocialKey from './GenerateSocialKey';
 import SaveSocialKey from './SaveSocialKey';
-import { fetchUser } from '../../actions/users';
-import loader from '../../utils/loader';
-import { getUserById } from '../../store/users';
-import urls from '../../utils/urls';
-import { getUserName } from '../../utils/user';
-import { authHidePopup } from '../../actions/auth';
+import { fetchUser } from '../../../actions/users';
+import loader from '../../../utils/loader';
+import { getUserById } from '../../../store/users';
+import urls from '../../../utils/urls';
+import { getUserName } from '../../../utils/user';
+import { authHidePopup } from '../../../actions/auth';
 
 const STEP_ACCOUNT = 1;
 const STEP_SOCIAL_KEY = 2;

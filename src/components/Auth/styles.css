@@ -68,6 +68,15 @@
   max-width: 866px;
 }
 
+.content.password {
+  max-width: 808px;
+}
+
+.content.password .formContent {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .content .main {
   flex: 1 1 auto;
 }
@@ -94,8 +103,19 @@
   margin: 0 0 130px;
 }
 
+.content.password .form .title {
+  margin-bottom: 37px;
+}
+
 .form .title.saveKey {
   margin: 0 0 70px;
+}
+
+.form .text {
+  margin: 0 0 30px;
+  line-height: 28px;
+  text-align: center;
+  font-size: 16px;
 }
 
 .field {
@@ -120,6 +140,10 @@
   color: #585858;
 }
 
+.input + .input {
+  margin-top: 30px;
+}
+
 .action {
   width: 100%;
   max-width: 200px;
@@ -127,7 +151,7 @@
 }
 
 .error {
-  margin: 20px 0 -40px;
+  margin: 20px 0 -48px;
   font-size: 16px;
   text-align: center;
 }

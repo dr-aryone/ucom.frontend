@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { memo, useState, Fragment } from 'react';
 import styles from './styles.css';
-import IconArrowRight from '../Icons/ArrowRight';
-import Popup from '../Popup';
-import IconClose from '../Icons/Close';
-import Button from '../Button/index';
-import CopyPanel from '../CopyPanel';
+import IconArrowRight from '../../Icons/ArrowRight';
+import Popup from '../../Popup';
+import IconClose from '../../Icons/Close';
+import Button from '../../Button/index';
+import CopyPanel from '../../CopyPanel';
 
 const SaveSocialKey = (props) => {
   const [popupVisible, setPopupVisible] = useState(false);

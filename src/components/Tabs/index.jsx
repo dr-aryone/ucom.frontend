@@ -20,7 +20,6 @@ const Tabs = props => (
 
       return (
         <LinkTag
-          activeClassName={styles.active}
           role={!item.url ? 'presentation' : undefined}
           key={index}
           to={item.url}
