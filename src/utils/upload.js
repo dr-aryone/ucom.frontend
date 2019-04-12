@@ -47,46 +47,6 @@ const getOrientation = (file, callback) => {
   reader.readAsArrayBuffer(file);
 };
 
-// const resetOrientation = (srcBase64, srcOrientation, callback) => {
-//   const img = new Image();
-
-//   img.onload = () => {
-//     const { width } = img;
-//     const { height } = img;
-//     const canvas = document.createElement('canvas');
-//     const ctx = canvas.getContext('2d');
-
-//     // set proper canvas dimensions before transform & export
-//     if (srcOrientation > 4 && srcOrientation < 9) {
-//       canvas.width = height;
-//       canvas.height = width;
-//     } else {
-//       canvas.width = width;
-//       canvas.height = height;
-//     }
-
-//     // transform context before drawing image
-//     switch (srcOrientation) {
-//       case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
-//       case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
-//       case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
-//       case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
-//       case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
-//       case 7: ctx.transform(0, -1, -1, 0, height, width); break;
-//       case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
-//       default: break;
-//     }
-
-//     // draw image
-//     ctx.drawImage(img, 0, 0);
-
-//     // export base64
-//     callback(canvas.toDataURL());
-//   };
-
-//   img.src = srcBase64;
-// };
-
 export const getBase64FromFile = (file) => {
   try {
     return new Promise((resolve, reject) => {
@@ -107,7 +67,7 @@ export const getBase64FromFile = (file) => {
   }
 };
 
-export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', quality = 0.9) => (
+export const compressImageAndRotate = (file, maxWidth, maxHeight, type = 'image/jpeg', quality = 0.9) => (
   new Promise((resolve, reject) => {
     const fileName = file.name;
     if (file.type === 'image/gif') {
@@ -140,7 +100,7 @@ export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', qu
           const canvasEl = document.createElement('canvas');
           const ctx = canvasEl.getContext('2d');
 
-          // rotation
+          // rotation images https://stackoverflow.com/a/40867559/9765570
           if (srcOrientation > 4 && srcOrientation < 9) {
             canvasEl.width = height;
             canvasEl.height = width;
@@ -182,8 +142,8 @@ export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', qu
   })
 );
 
-export const compressAvatar = file => compressImage(file, AVATAR_MAX_WIDTH, AVATAR_MAX_HEIGHT);
-export const compressUploadedImage = file => compressImage(file, IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT);
+export const compressAvatar = file => compressImageAndRotate(file, AVATAR_MAX_WIDTH, AVATAR_MAX_HEIGHT);
+export const compressUploadedImage = file => compressImageAndRotate(file, IMAGE_MAX_WIDTH, IMAGE_MAX_HEIGHT);
 
 export const getImageFromPasteEvent = async (event) => {
   const { items } = (event.clipboardData || event.originalEvent.clipboardData);
