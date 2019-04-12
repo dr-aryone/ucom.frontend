@@ -29,8 +29,8 @@ const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
 const Offer = (props) => {
   const postId = getAirdropOfferId();
-  const token = getToken();
-  const cookie = getCookie(CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB);
+  const [token, setToken] = useState(null);
+  const [cookie, setCookie] = useState(null);
   const [users, setUsers] = useState([]);
   const [conditions, setConditions] = useState(null);
   const [metadata, setMetadata] = useState({ page: 1, perPage: 20 });
@@ -106,6 +106,11 @@ const Offer = (props) => {
   useEffect(() => {
     pairAccounts();
   }, [cookie, token, conditions]);
+
+  useEffect(() => {
+    setToken(getToken());
+    setCookie(getCookie(CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB));
+  }, []);
 
   return (
     <LayoutBase gray>

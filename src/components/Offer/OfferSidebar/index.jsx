@@ -28,10 +28,6 @@ const OfferSidebar = (props) => {
 
   const { conditions } = props;
 
-  // if (!conditions) {
-  //   return null;
-  // }
-
   return (
     <Fragment>
       <div className={styles.rateVote}>
@@ -91,7 +87,9 @@ const OfferSidebar = (props) => {
       <div className={styles.condition}>
         <div className={styles.conditionTitle}>How to Enter Airdrop:</div>
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{(conditions && conditions.conditions.authGithub === true) || props.cookie ? <Done /> : <One />}</div>
+          <div className={styles.optionStatus}>
+            {(conditions && conditions.conditions.authGithub === true) || props.cookie !== null ? <Done /> : <One />}
+          </div>
           <div className={styles.optionBlock}>
             <a
               href={config.gitHubAuthLink}
@@ -174,7 +172,7 @@ OfferSidebar.propTypes = {
 OfferSidebar.defaultProps = {
   rate: 0,
   repostAvailable: false,
-  cookie: '',
+  cookie: null,
   conditions: null,
   postTypeId: 1,
 };

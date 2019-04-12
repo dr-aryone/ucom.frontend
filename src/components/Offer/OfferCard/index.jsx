@@ -109,7 +109,7 @@ const OfferCard = (props) => {
             title="Participants"
             count={+props.count}
           />
-          {((conditions && conditions.conditions.authGithub === false) || !props.cookie) &&
+          {((conditions && conditions.conditions.authGithub === false && conditions.conditions.followingDevExchange === false) || !props.cookie) &&
             <a
               className={classNames(
                 `${styles.btn}`,
@@ -121,7 +121,7 @@ const OfferCard = (props) => {
               Get your score
             </a>
           }
-          {conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === false &&
+          {((conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === false) || props.cookie) && !props.token &&
             <div
               role="presentation"
               onClick={() => props.authShowPopup()}
@@ -134,7 +134,7 @@ const OfferCard = (props) => {
               Sign up
             </div>
           }
-          {(!conditions || (conditions.conditions.authGithub === true && conditions.conditions.authMyself === true)) &&
+          {((conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === true) || (props.cookie && props.token)) &&
             <div
               role="presentation"
               className={classNames(
@@ -178,6 +178,7 @@ OfferCard.propTypes = {
   count: PropTypes.number,
   authShowPopup: PropTypes.func.isRequired,
   cookie: PropTypes.string,
+  token: PropTypes.string,
 };
 
 OfferCard.defaultProps = {
@@ -186,6 +187,7 @@ OfferCard.defaultProps = {
   userImageUrl: null,
   rate: 0,
   cookie: '',
+  token: '',
   conditions: null,
 };
 
