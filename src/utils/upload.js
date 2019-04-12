@@ -8,6 +8,85 @@ export const AVATAR_MAX_HEIGHT = 300;
 export const IMAGE_MAX_WIDTH = 3840;
 export const IMAGE_MAX_HEIGHT = 2160;
 
+const getOrientation = (file, callback) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const view = new DataView(e.target.result);
+    if (view.getUint16(0, false) !== 0xFFD8) {
+      return callback(-2);
+    }
+    const length = view.byteLength;
+    let offset = 2;
+    while (offset < length) {
+      if (view.getUint16(offset + 2, false) <= 8) return callback(-1);
+      const marker = view.getUint16(offset, false);
+      offset += 2;
+      if (marker === 0xFFE1) {
+        offset += 2;
+        if (view.getUint32(offset, false) !== 0x45786966) {
+          return callback(-1);
+        }
+
+        const little = view.getUint16(offset += 6, false) === 0x4949;
+        offset += view.getUint32(offset + 4, little);
+        const tags = view.getUint16(offset, little);
+        offset += 2;
+        for (let i = 0; i < tags; i++) {
+          if (view.getUint16(offset + (i * 12), little) === 0x0112) {
+            return callback(view.getUint16(offset + (i * 12) + 8, little));
+          }
+        }
+      } else if ((marker && 0xFF00) !== 0xFF00) {
+        break;
+      } else {
+        offset += view.getUint16(offset, false);
+      }
+    }
+    return callback(-1);
+  };
+  reader.readAsArrayBuffer(file);
+};
+
+// const resetOrientation = (srcBase64, srcOrientation, callback) => {
+//   const img = new Image();
+
+//   img.onload = () => {
+//     const { width } = img;
+//     const { height } = img;
+//     const canvas = document.createElement('canvas');
+//     const ctx = canvas.getContext('2d');
+
+//     // set proper canvas dimensions before transform & export
+//     if (srcOrientation > 4 && srcOrientation < 9) {
+//       canvas.width = height;
+//       canvas.height = width;
+//     } else {
+//       canvas.width = width;
+//       canvas.height = height;
+//     }
+
+//     // transform context before drawing image
+//     switch (srcOrientation) {
+//       case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
+//       case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
+//       case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
+//       case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
+//       case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
+//       case 7: ctx.transform(0, -1, -1, 0, height, width); break;
+//       case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
+//       default: break;
+//     }
+
+//     // draw image
+//     ctx.drawImage(img, 0, 0);
+
+//     // export base64
+//     callback(canvas.toDataURL());
+//   };
+
+//   img.src = srcBase64;
+// };
+
 export const getBase64FromFile = (file) => {
   try {
     return new Promise((resolve, reject) => {
@@ -24,7 +103,7 @@ export const getBase64FromFile = (file) => {
       reader.readAsDataURL(file);
     });
   } catch (e) {
-    return console.log(e);
+    return console.error(e);
   }
 };
 
@@ -37,6 +116,11 @@ export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', qu
       }
       resolve(file);
     }
+    let srcOrientation;
+
+    getOrientation(file, (orientation) => {
+      srcOrientation = orientation;
+    });
 
     getBase64FromFile(file)
       .then((result) => {
@@ -54,10 +138,28 @@ export const compressImage = (file, maxWidth, maxHeight, type = 'image/jpeg', qu
           }
 
           const canvasEl = document.createElement('canvas');
-          canvasEl.width = width;
-          canvasEl.height = height;
-
           const ctx = canvasEl.getContext('2d');
+
+          // rotation
+          if (srcOrientation > 4 && srcOrientation < 9) {
+            canvasEl.width = height;
+            canvasEl.height = width;
+          } else {
+            canvasEl.width = width;
+            canvasEl.height = height;
+          }
+
+          switch (srcOrientation) {
+            case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
+            case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
+            case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
+            case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
+            case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
+            case 7: ctx.transform(0, -1, -1, 0, height, width); break;
+            case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
+            default: break;
+          }
+
           ctx.drawImage(img, 0, 0, width, height);
           const newFileName = `${fileName.substr(0, fileName.lastIndexOf('.'))}.jpg`;
           ctx.canvas.toBlob((blob) => {
