@@ -1,0 +1,74 @@
+.tabs {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  grid-column-gap: 30px;
+  border-bottom: 1px solid #E8ECEC;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.tabs.capitalize {
+  text-transform: capitalize;
+}
+
+.tabs.noBorder {
+  border: none;
+}
+
+.tabs.withIndent {
+  margin: 0 0 40px;
+}
+
+.item {
+  margin: 0 0 -1px;
+  padding: 24px 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.item:hover,
+.item.active {
+  border-color: #d8352f;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.tabs:global(.thinBlack) {
+  border: none;
+}
+
+.tabs:global(.thinBlack) .item {
+  padding: 8px 0;
+  border-bottom-width: 1px;
+  opacity: 0.2;
+}
+
+.tabs:global(.thinBlack) .item:hover,
+.tabs:global(.thinBlack) .item.active {
+  border-color: #000;
+  opacity: 1;
+}
+
+@media (max-width: 767px) {
+  .tabs.responsive {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tabs.responsive .item {
+    padding: 14px 0;
+  }
+
+  .tabs.responsive .item.active,
+  .tabs.responsive .item:hover {
+    color: #d8352f;
+  }
+
+  .tabs:global(.thinBlack) .item:hover,
+  .tabs:global(.thinBlack) .item.active {
+    color: #000;
+  }
+}

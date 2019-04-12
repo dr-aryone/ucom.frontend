@@ -8,7 +8,7 @@ const Menu = () => (
     <DropdownMenu
       items={[{
         title: 'Copy Link',
-        onClick: () => copyToClipboard(window.location.href),
+        onClick: () => copyToClipboard(window.location.href), // TODO: Add success notification
       }]}
     />
   </div>

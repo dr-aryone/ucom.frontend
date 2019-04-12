@@ -2,6 +2,8 @@ import { memoize } from 'lodash';
 import sanitizeHtml from 'sanitize-html';
 import urls from './urls';
 
+export const COPY_TO_CLIPBOARD_SUCCESS_MESSAGE = 'Link copyed to clipboard';
+
 const URL_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
 export const escapeQuotes = memoize((text = '') => text.replace(/&quot;/g, '"'));

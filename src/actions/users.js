@@ -6,7 +6,6 @@ import loader from '../utils/loader';
 import { addServerErrorNotification } from './notifications';
 import { setUser, setUserLoading } from './';
 import { siteNotificationsSetUnreadAmount } from './siteNotifications';
-import { getAccountState } from './wallet';
 import { addOrganizations } from './organizations';
 import graphql from '../api/graphql';
 import { walletGetAccount } from './walletSimple';
@@ -58,7 +57,6 @@ export const fetchMyself = () => async (dispatch) => {
     dispatch(setUser(data));
     dispatch(addUsers([data]));
     dispatch(siteNotificationsSetUnreadAmount(data.unreadMessagesCount));
-    dispatch(getAccountState()); // TODO: Remove
     dispatch(walletGetAccount(data.accountName));
 
     // TODO: Сделать disable
