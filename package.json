@@ -117,7 +117,7 @@
     "textarea-caret": "^3.1.0",
     "tributejs": "git+https://github.com/UOSnetwork/tribute.git",
     "ucom-libs-graphql-schemas": "^1.10.1",
-    "ucom-libs-social-transactions": "^1.1.3",
+    "ucom-libs-social-transactions": "^1.1.4",
     "ucom-libs-wallet": "^1.8.3",
     "ucom.libs.common": "^1.5.0",
     "uuid": "^3.3.2",
