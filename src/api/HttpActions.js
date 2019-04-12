@@ -7,7 +7,7 @@ class HttpActions {
     this.request = axios.create({ baseURL });
   }
 
-  getDefaultOptions(extraOptions = {}) {
+  getOptions(extraOptions = {}) {
     const token = getToken();
     let options = { headers: {} };
 
@@ -28,7 +28,7 @@ class HttpActions {
   }
 
   get(url, params, options) {
-    const config = { params, ...this.getDefaultOptions(), ...options };
+    const config = { params, ...this.getOptions(options) };
 
     return this.request.get(url, config);
   }
@@ -38,7 +38,7 @@ class HttpActions {
       indices: true,
     });
 
-    return this.request.post(url, formData, { ...this.getDefaultOptions(), ...options });
+    return this.request.post(url, formData, { ...this.getOptions(options) });
   }
 
   patch(url, data, options) {
@@ -46,7 +46,7 @@ class HttpActions {
       indices: true,
     });
 
-    return this.request.patch(url, formData, { ...this.getDefaultOptions(), ...options });
+    return this.request.patch(url, formData, { ...this.getOptions(options) });
   }
 
   put(url, data, params, options) {
@@ -54,12 +54,12 @@ class HttpActions {
       indices: true,
     });
 
-    return this.request.put(url, formData, { params, ...this.getDefaultOptions(), ...options });
+    return this.request.put(url, formData, { params, ...this.getOptions(options) });
   }
 
   del(url, data, params, options) {
     const config = {
-      url, data, params, ...this.getDefaultOptions(), ...options,
+      url, data, params, ...this.getOptions(options),
     };
 
     return this.request.delete(url, config);

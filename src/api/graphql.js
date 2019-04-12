@@ -342,17 +342,29 @@ export default {
 
   async getOnePostOffer({
     postId,
-    commentsPage = 1,
-    commentsPerPage = COMMENTS_PER_PAGE,
-  }) {
+    commentsQuery = {
+      page: 1,
+      per_page: COMMENTS_PER_PAGE,
+    },
+    usersTeamQuery = {
+      page: 1,
+      per_page: 20,
+      order_by: '-score',
+      filters: {
+        airdrops: {
+          id: 1,
+        },
+      },
+    },
+  }, options = {}) {
     const query = GraphQLSchema.getOnePostOffer(
       postId,
-      commentsPage,
-      commentsPerPage,
+      commentsQuery,
+      usersTeamQuery,
     );
 
     try {
-      const data = await request({ query });
+      const data = await request({ query }, options);
       return data.data;
     } catch (e) {
       throw e;

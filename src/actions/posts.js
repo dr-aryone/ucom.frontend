@@ -114,13 +114,13 @@ export const getOnePostOffer = ({
   postId,
   commentsPage,
   commentsPerPage,
-}) => async (dispatch) => {
+}, options) => async (dispatch) => {
   try {
     const data = await graphql.getOnePostOffer({
       postId,
       commentsPage,
       commentsPerPage,
-    });
+    }, options);
     dispatch(commentsAddContainerData({
       containerId: COMMENTS_CONTAINER_ID_POST,
       entryId: postId,

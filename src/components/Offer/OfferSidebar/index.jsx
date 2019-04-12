@@ -28,9 +28,9 @@ const OfferSidebar = (props) => {
 
   const { conditions } = props;
 
-  if (!conditions) {
-    return null;
-  }
+  // if (!conditions) {
+  //   return null;
+  // }
 
   return (
     <Fragment>
@@ -38,7 +38,7 @@ const OfferSidebar = (props) => {
         <div className={styles.rate}>{formatRate(props.rate)}°</div>
         <PostRating postId={props.postId} />
       </div>
-      {((conditions.airdropStatus === AirdropStatuses.PENDING ||
+      {conditions && ((conditions.airdropStatus === AirdropStatuses.PENDING ||
         conditions.airdropStatus === AirdropStatuses.RECEIVED) ||
         (conditions.conditions.authGithub === true &&
           conditions.conditions.authMyself === true &&
@@ -74,7 +74,7 @@ const OfferSidebar = (props) => {
             </div>
           </div>
       }
-      {conditions.airdropStatus === AirdropStatuses.ERROR &&
+      {conditions && conditions.airdropStatus === AirdropStatuses.ERROR &&
         <div className={styles.airdrop}>
           <div className={styles.status}>
             <div>Airdrop Status:</div>
@@ -91,7 +91,7 @@ const OfferSidebar = (props) => {
       <div className={styles.condition}>
         <div className={styles.conditionTitle}>How to Enter Airdrop:</div>
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{conditions.conditions.authGithub === true || props.cookie ? <Done /> : <One />}</div>
+          <div className={styles.optionStatus}>{(conditions && conditions.conditions.authGithub === true) || props.cookie ? <Done /> : <One />}</div>
           <div className={styles.optionBlock}>
             <a
               href={config.gitHubAuthLink}
@@ -102,7 +102,7 @@ const OfferSidebar = (props) => {
           </div>
         </div>
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{conditions.conditions.authMyself === true ? <Done /> : <Two />}</div>
+          <div className={styles.optionStatus}>{conditions && conditions.conditions.authMyself === true ? <Done /> : <Two />}</div>
           <div className={styles.optionBlock}>
             <div
               role="presentation"
@@ -115,7 +115,7 @@ const OfferSidebar = (props) => {
           </div>
         </div>
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{conditions.conditions.followingDevExchange === true ? <Done /> : <Three />}</div>
+          <div className={styles.optionStatus}>{conditions && conditions.conditions.followingDevExchange === true ? <Done /> : <Three />}</div>
           <div className={styles.optionBlock}>
             <a href="/communities/107" target="_blank" className={styles.optionTitle}>Join DevExchange</a>
             <div className={styles.optionText}>to see your Importance in action and talk to community members</div>
@@ -138,6 +138,7 @@ const OfferSidebar = (props) => {
               postId={props.postId}
               onClickClose={toggleShare}
               repostAvailable={props.repostAvailable}
+              postTypeId={props.postTypeId}
             />
           </div>
         ) : null }
@@ -166,6 +167,7 @@ OfferSidebar.propTypes = {
   createdAt: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   repostAvailable: PropTypes.bool,
+  postTypeId: PropTypes.number,
   cookie: PropTypes.string,
 };
 
@@ -174,6 +176,7 @@ OfferSidebar.defaultProps = {
   repostAvailable: false,
   cookie: '',
   conditions: null,
+  postTypeId: 1,
 };
 
 export default connect(

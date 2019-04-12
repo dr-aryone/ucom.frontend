@@ -17,12 +17,13 @@ import { commentsResetContainerDataByEntryId } from '../actions/comments';
 import OfferSidebar from '../components/Offer/OfferSidebar';
 import OfferContent from '../components/Offer/OfferContent';
 import { getToken, getCookie } from '../utils/token';
-import { getManyUsers } from '../actions/users';
+import { getManyUsers, fetchMyself } from '../actions/users';
 import api from '../api';
 import EntrySubHeader from '../components/EntrySubHeader';
 import stylesSubHeader from '../components/EntrySubHeader/styles.css';
 import { getOrganization } from '../actions/organizations';
 import { airdropId, getAirdropOfferId } from '../utils/airdrop';
+import { selectUser } from '../store/selectors/user';
 
 const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
@@ -44,7 +45,7 @@ const Offer = (props) => {
         options.headers[CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB] = cookie;
       }
       try {
-        await api.syncAccountGithub(token, cookie);
+        await api.syncAccountGithub(options);
       } catch (e) {
         console.error(e);
       }
@@ -56,7 +57,7 @@ const Offer = (props) => {
       airdrops: airdropId,
       orderBy: 'score',
       page,
-      perPage: 10,
+      perPage: 20,
     }).then((data) => {
       setUsers(data.data);
       setMetadata(data.metadata);
@@ -80,17 +81,23 @@ const Offer = (props) => {
     if (cookie) {
       options.headers[CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB] = cookie;
     }
-    props.getOnePostOfferWithUserAirdrop({
-      postId,
-    }, options).then((data) => {
-      props.getOrganization(data.onePostOffer.organization.id);
-      setConditions(data.oneUserAirdrop);
-    });
+    if (Object.keys(props.user).length) {
+      props.getOnePostOfferWithUserAirdrop({
+        postId,
+      }, options).then((data) => {
+        props.getOrganization(data.onePostOffer.organization.id);
+        setConditions(data.oneUserAirdrop);
+      });
+    } else {
+      props.getOnePostOffer({ postId }, options).then((data) => {
+        props.getOrganization(data.onePostOffer.organization.id);
+      });
+    }
 
     getParticipants();
 
     loader.done();
-  }, [postId]);
+  }, [postId, props.user]);
 
   if (!post) {
     return null;
@@ -153,6 +160,7 @@ const Offer = (props) => {
               conditions={conditions}
               cookie={cookie}
               token={token}
+              postTypeId={post.postTypeId}
             />
           </div>
         </div>
@@ -163,7 +171,9 @@ const Offer = (props) => {
 
 Offer.propTypes = {
   posts: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
   commentsResetContainerDataByEntryId: PropTypes.func.isRequired,
+  getOnePostOffer: PropTypes.func.isRequired,
   getOnePostOfferWithUserAirdrop: PropTypes.func.isRequired,
   getManyUsers: PropTypes.func.isRequired,
   getOrganization: PropTypes.func.isRequired,
@@ -173,6 +183,7 @@ export default connect(
   state => ({
     posts: state.posts,
     users: state.users,
+    user: selectUser(state),
   }),
   dispatch => bindActionCreators({
     fetchPost,
@@ -182,6 +193,7 @@ export default connect(
     getOnePostOfferWithUserAirdrop,
     getManyUsers,
     getOrganization,
+    fetchMyself,
   }, dispatch),
 )(Offer);
 
