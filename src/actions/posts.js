@@ -40,14 +40,17 @@ export const addPosts = (postsData = []) => (dispatch) => {
   dispatch({ type: 'ADD_POSTS', payload: posts });
 };
 
-export const fetchPost = postId => dispatch =>
-  api.getPost(postId)
-    .then((data) => {
-      dispatch(addComments(humps(data.comments)));
-      dispatch(addPosts([data]));
-
-      return data;
-    });
+export const fetchPost = postId => async (dispatch) => {
+  try {
+    const data = await api.getPost(postId);
+    dispatch(addComments(humps(data.comments)));
+    dispatch(addPosts([data]));
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
 
 export const postsFetch = ({
   postId,

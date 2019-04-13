@@ -37,7 +37,14 @@ const App = (props) => {
     <Fragment>
       <Page>
         <Switch>
-          {routes.map(r => <Route exact path={r.path} component={r.component} key={r.path} />)}
+          {routes.map(r => (
+            <Route
+              exact={typeof r.exact === 'undefined' ? true : r.exact}
+              key={r.path}
+              path={r.path}
+              component={r.component}
+            />
+          ))}
         </Switch>
 
         <Auth />

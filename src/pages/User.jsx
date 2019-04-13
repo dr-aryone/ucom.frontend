@@ -29,13 +29,15 @@ import { authShowPopup } from '../actions/auth';
 
 const UserPage = (props) => {
   const userIdOrName = props.match.params.userId;
-  const postId = Number(props.match.params.postId);
+  const postId = +props.match.params.postId;
   const [loaded, setLoaded] = useState(false);
   const [trustedByUsersIds, setTrustedByUsersIds] = useState([]);
   const [trustedByMetadata, setTrustedByMetadata] = useState({});
   const [trustLoading, setTrustLoading] = useState(false);
+  const user = getUserById(props.users, userIdOrName);
+  const post = getPostById(props.posts, postId);
 
-  const fetchData = async () => {
+  const fetchUserData = async () => {
     loader.start();
     try {
       const data = await props.dispatch(fetchUserPageData({
@@ -44,7 +46,7 @@ const UserPage = (props) => {
       setTrustedByUsersIds(data.oneUserTrustedBy.data.map(i => i.id));
       setTrustedByMetadata(data.oneUserTrustedBy.metadata);
     } catch (e) {
-      console.error(e);
+      console.error(e); // TODO: Show error notification for all catch sections
     }
     loader.done();
     setLoaded(true);
@@ -65,20 +67,27 @@ const UserPage = (props) => {
     loader.done();
   };
 
+  const fetchPostData = async () => {
+    if (!postId) {
+      return;
+    }
+    loader.start();
+    try {
+      props.dispatch(fetchPost(postId));
+    } catch (e) {
+      console.error(e);
+    }
+    loader.done();
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchData();
+    fetchUserData();
   }, [userIdOrName]);
 
   useEffect(() => {
-    if (postId) {
-      loader.start();
-      props.dispatch(fetchPost(postId))
-        .then(loader.done);
-    }
+    fetchPostData();
   }, [postId]);
-
-  const user = getUserById(props.users, userIdOrName);
 
   if (loaded && !user) {
     return <NotFoundPage />;
@@ -86,13 +95,11 @@ const UserPage = (props) => {
     return null;
   }
 
-  const post = getPostById(props.posts, postId);
-  const userId = user.id;
-
   return (
     <LayoutBase gray>
+      {/* TODO: Disable scroll to top */}
       {post &&
-        <Popup onClickClose={() => props.history.push(urls.getUserUrl(userId))}>
+        <Popup onClickClose={() => props.history.push(urls.getUserUrl(user.id))}>
           <ModalContent mod="post">
             <Post id={post.id} postTypeId={post.postTypeId} />
           </ModalContent>
@@ -102,7 +109,7 @@ const UserPage = (props) => {
       <div className="layout layout_profile">
         <div className="layout__header">
           <UserHead
-            userId={userId}
+            userId={user.id}
             trustedByUsersCount={trustedByMetadata.totalAmount}
             trustedByUsersIds={trustedByUsersIds}
             trustedByMetadata={trustedByMetadata}
@@ -175,7 +182,7 @@ const UserPage = (props) => {
         </div>
         <div className="layout__main">
           <EntryAbout text={user.about} />
-          <Feed userId={userId} feedTypeId={USER_WALL_FEED_ID} />
+          <Feed userId={user.id} feedTypeId={USER_WALL_FEED_ID} />
         </div>
         <div className="layout__footer">
           <Footer />
