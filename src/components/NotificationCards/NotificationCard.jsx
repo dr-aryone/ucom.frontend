@@ -355,7 +355,7 @@ const getCover = (props) => {
       return (
         <div className="site-notification__cover">
           <Link to={urls.getPostUrl(props.data.post)}>
-            <Avatar square isPost src={urls.getFileUrl(props.data.post.mainImageFilename)} />
+            <Avatar square isPost src={urls.getFileUrl(getActualImage(props.data.post))} />
           </Link>
         </div>
       );
@@ -366,7 +366,7 @@ const getCover = (props) => {
       return (
         <div className="site-notification__cover">
           <Link to={urls.getPostUrl(props.data.comment.post)}>
-            <Avatar square isPost src={urls.getFileUrl(props.data.comment.post.mainImageFilename)} />
+            <Avatar square isPost src={urls.getFileUrl(getActualImage(props.data.comment.post))} />
           </Link>
         </div>
       );
@@ -378,7 +378,7 @@ const getCover = (props) => {
       return (
         <div className="site-notification__cover">
           <Link to={urls.getPostUrl(props.targetEntity.post)}>
-            <Avatar square isPost src={urls.getFileUrl(props.targetEntity.post.mainImageFilename)} />
+            <Avatar square isPost src={urls.getFileUrl(getActualImage(props.targetEntity.post))} />
           </Link>
         </div>
       );
@@ -392,7 +392,7 @@ const getCover = (props) => {
         return (
           <div className="site-notification__cover">
             <Link to={urls.getPostUrl(props.targetEntity.post)}>
-              <Avatar square isPost src={urls.getFileUrl(props.targetEntity.post.mainImageFilename)} />
+              <Avatar square isPost src={urls.getFileUrl(getActualImage(props.targetEntity.post))} />
             </Link>
           </div>
         );
