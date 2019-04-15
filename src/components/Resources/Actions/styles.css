@@ -33,6 +33,12 @@
   border-radius: 4px;
 }
 
+.error.flat {
+  grid-column-gap: 12px;
+  padding: 0;
+  border: none;
+}
+
 .cost {
   text-align: center;
   margin: 0 0 20px;
@@ -55,4 +61,33 @@
 
 .label {
   margin: 0 0 12px;
+}
+
+.text {
+  margin: 0 0 24px;
+}
+
+.text.intro {
+  margin: 0 0 47px;
+}
+
+.backLink {
+  margin: 35px 0 0;
+  text-align: center;
+}
+
+.action.multiple {
+  display: grid;
+  align-items: center;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  grid-gap: 20px;
+  justify-items: end;
+}
+
+@media (max-width:  767px) {
+  .action.multiple {
+    grid-auto-flow: row;
+    justify-items: center;
+  }
 }

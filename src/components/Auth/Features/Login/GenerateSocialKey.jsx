@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { memo, Fragment } from 'react';
-import styles from './styles.css';
-import IconArrowLeft from '../../Icons/ArrowLeft';
-import { getSocialPrivateKey } from '../../../utils/keys';
-import BrainkeyForm from '../BrainkeyForm';
+import styles from '../styles.css';
+import IconArrowLeft from '../../../Icons/ArrowLeft';
+import { getSocialPrivateKey } from '../../../../utils/keys';
+import BrainkeyForm from '../../Forms/BrainkeyForm';
 
 const GenerateSocialKey = props => (
   <Fragment>

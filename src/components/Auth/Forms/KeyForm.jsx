@@ -1,18 +1,27 @@
 import PropTypes from 'prop-types';
 import React, { memo, useState } from 'react';
-import styles from './styles.css';
-import Button from '../Button/index';
-import IconInputError from '../Icons/InputError';
+import styles from '../styles.css';
+import Button from '../../Button/index';
+import IconInputError from '../../Icons/InputError';
+import { privateKeyIsValid } from '../../../utils/keys';
+
+const KEY_ERROR = 'Wrong key format';
 
 const KeyForm = (props) => {
-  const [key, setKey] = useState('');
+  const [value, setValue] = useState('');
+  const [formError, setFormError] = useState('');
 
   return (
     <form
       className={styles.form}
       onSubmit={(e) => {
         e.preventDefault();
-        props.onSubmit(key);
+        if (!privateKeyIsValid(value)) {
+          setFormError(KEY_ERROR);
+          return;
+        }
+        setFormError('');
+        props.onSubmit(value);
       }}
     >
       <h2 className={styles.title}>{props.title}</h2>
@@ -20,18 +29,23 @@ const KeyForm = (props) => {
         <input
           className={styles.input}
           placeholder={props.placeholder}
-          value={key}
+          value={value}
           onChange={(e) => {
-            setKey(e.target.value);
+            setValue(e.target.value);
+            if (formError && !privateKeyIsValid(e.target.value)) {
+              setFormError(KEY_ERROR);
+            } else {
+              setFormError('');
+            }
             if (props.onChange) {
               props.onChange(e.target.value);
             }
           }}
         />
-        {props.error &&
+        {(formError || props.error) &&
           <div className={styles.error}>
             <IconInputError />
-            <span className={styles.text}>{props.error}</span>
+            <span className={styles.text}>{formError || props.error}</span>
           </div>
         }
       </div>
@@ -41,7 +55,7 @@ const KeyForm = (props) => {
           big
           cap
           strech
-          disabled={props.loading || props.error}
+          disabled={props.loading || props.error || formError}
         >
           {props.submitText}
         </Button>

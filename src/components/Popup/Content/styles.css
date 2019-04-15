@@ -7,18 +7,18 @@
   min-width: calc(100% - 80px);
   min-height: calc(100% - 80px);
   margin: 40px;
-  border-radius: 12px;
   box-shadow:  0px 0px 20px rgba(184, 184, 184, 0.25);
   background: #fff;
-}
-
-.content.noRoundBorders {
   border-radius: 0;
 }
 
+.content.roundBorders {
+  border-radius: 12px;
+}
+
 .content.walletAction {
-  min-width: 480px;
-  max-width: 480px;
+  min-width: 540px;
+  max-width: 540px;
   min-height: auto;
   align-self: auto;
 }

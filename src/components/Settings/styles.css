@@ -54,7 +54,9 @@ h4.title {
 }
 
 .action {
-  width: 152px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(max-content, 152px);
 }
 
 @media (max-width: 1023px) {

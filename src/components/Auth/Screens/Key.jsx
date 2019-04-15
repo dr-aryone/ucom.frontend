@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styles from '../styles.css';
-import KeyForm from '../KeyForm';
+import KeyForm from '../Forms/KeyForm';
 
 const ActiveKey = props => (
   <div className={`${styles.content} ${styles.generateKey}`}>
     <div className={styles.main}>
       <KeyForm
-        title="Enter Private Active Key"
-        placeholder="Active Private Key"
+        title={props.title}
+        placeholder={props.placeholder}
         submitText="Proceed"
         onSubmit={props.onSubmit}
       />
@@ -19,15 +19,24 @@ const ActiveKey = props => (
         role="presentation"
         onClick={props.onClickBack}
       >
-        I don’t have Active key
+        {props.backText}
       </span>
     </div>
   </div>
 );
 
 ActiveKey.propTypes = {
+  title: PropTypes.string,
+  placeholder: PropTypes.string,
+  backText: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   onClickBack: PropTypes.func.isRequired,
+};
+
+ActiveKey.defaultProps = {
+  title: 'Enter Private Active Key',
+  placeholder: 'Active Private Key',
+  backText: 'I don’t have Active key',
 };
 
 export default ActiveKey;

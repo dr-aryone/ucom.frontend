@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import React, { memo, useState } from 'react';
-import styles from './styles.css';
-import Button from '../Button/index';
-import IconInputError from '../Icons/InputError';
-import { BRAINKEY_SYMBOLS_REGEXP, BRAINKEY_LENGTH } from '../../utils/brainkey';
-import { removeMultipleSpaces } from '../../utils/text';
+import React, { useState } from 'react';
+import styles from '../styles.css';
+import Button from '../../Button/index';
+import IconInputError from '../../Icons/InputError';
+import { BRAINKEY_SYMBOLS_REGEXP, BRAINKEY_LENGTH } from '../../../utils/brainkey';
+import { removeMultipleSpaces } from '../../../utils/text';
 
 const ERROR_WRONG_BRAINKEY = 'Wrong brainkey format';
 
-const GenerateSocialKey = (props) => {
+const BrainkeyForm = (props) => {
   const [brainkey, setBrainkey] = useState('');
   const [formError, setFormError] = useState('');
 
@@ -29,6 +29,9 @@ const GenerateSocialKey = (props) => {
       }}
     >
       <h2 className={styles.title}>{props.title}</h2>
+      {props.description &&
+        <p className={styles.description}>{props.description}</p>
+      }
       <div className={styles.field}>
         <input
           className={styles.input}
@@ -69,15 +72,17 @@ const GenerateSocialKey = (props) => {
   );
 };
 
-GenerateSocialKey.propTypes = {
+BrainkeyForm.propTypes = {
   title: PropTypes.string.isRequired,
+  description: PropTypes.string,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
-GenerateSocialKey.defaultProps = {
+BrainkeyForm.defaultProps = {
+  description: undefined,
   onChange: undefined,
   onSubmit: undefined,
 };
 
-export default memo(GenerateSocialKey);
+export default BrainkeyForm;

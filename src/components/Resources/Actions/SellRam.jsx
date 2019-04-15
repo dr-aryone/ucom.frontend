@@ -14,7 +14,7 @@ const BuyRam = (props) => {
     <Popup onClickClose={() => props.dispatch(walletToggleSellRam(false))}>
       <Content
         walletAction
-        noRoundBorders
+        roundBorders={false}
         onClickClose={() => props.dispatch(walletToggleSellRam(false))}
       >
         <TradeRamForm

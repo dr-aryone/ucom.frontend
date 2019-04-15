@@ -11,6 +11,7 @@ import loader from '../../../utils/loader';
 import { parseWalletErros } from '../../../utils/errors';
 import api from '../../../api';
 import { addSuccessNotification } from '../../../actions/notifications';
+import GetActiveKey from '../../Auth/Features/GetActiveKey';
 
 const EditStake = (props) => {
   const [cpu, setCpu] = useState('');
@@ -44,83 +45,91 @@ const EditStake = (props) => {
   }
 
   return (
-    <Popup onClickClose={() => props.dispatch(walletToggleEditStake(false))}>
-      <Content
-        walletAction
-        noRoundBorders
-        onClickClose={() => props.dispatch(walletToggleEditStake(false))}
-      >
-        <form
-          className={styles.content}
-          onSubmit={async (e) => {
-            e.preventDefault();
-            setLoading(true);
-            loader.start();
-            try {
-              await props.dispatch(walletEditStake(props.owner.accountName, net, cpu));
-              setFormError(null);
-              props.dispatch(addSuccessNotification('Successfully set stake'));
-              setTimeout(() => {
-                props.dispatch(walletToggleEditStake(false));
-              }, 0);
-            } catch (e) {
-              const errors = parseWalletErros(e);
-              setFormError(errors[0].message);
-            }
-            setLoading(false);
-            loader.done();
-          }}
-        >
-          <h2 className={styles.title}>Set Stake</h2>
-          <div className={styles.fields}>
-            <div className={styles.field}>
-              <TextInput
-                touched
-                placeholder="6664"
-                label="UOS for CPU Time"
-                value={`${cpu}`}
-                onChange={async (value) => {
-                  const intValue = parseInt(value, 10);
-                  setCpu(intValue || '');
-                }}
-              />
-            </div>
-            <div className={styles.field}>
-              <TextInput
-                touched
-                placeholder="6664"
-                label="UOS for Network BW"
-                value={`${net}`}
-                onChange={async (value) => {
-                  const intValue = parseInt(value, 10);
-                  setNet(intValue || '');
-                }}
-              />
-            </div>
-          </div>
-          <div className={styles.hint}>
-            Unstaking UOS from Bandwidth or CPU takes 3 days. After 3 days, you can claim your unstaked UOS.
-          </div>
-          {formError &&
-            <div className={styles.error}>
-              <IconInputError />
-              <span>{formError}</span>
-            </div>
-          }
-          <div className={styles.action}>
-            <Button
-              cap
-              big
-              red
-              strech
-              disabled={!`${cpu}`.length || !`${net}`.length || loading}
+    <GetActiveKey
+      onSubmit={async () => {
+        setLoading(true);
+        loader.start();
+        try {
+          await props.dispatch(walletEditStake(props.owner.accountName, net, cpu));
+          setFormError(null);
+          props.dispatch(addSuccessNotification('Successfully set stake'));
+          setTimeout(() => {
+            props.dispatch(walletToggleEditStake(false));
+          }, 0);
+        } catch (e) {
+          const errors = parseWalletErros(e);
+          setFormError(errors[0].message);
+        }
+        setLoading(false);
+        loader.done();
+      }}
+    >
+      {requestActiveKey => (
+        <Popup onClickClose={() => props.dispatch(walletToggleEditStake(false))}>
+          <Content
+            walletAction
+            roundBorders={false}
+            onClickClose={() => props.dispatch(walletToggleEditStake(false))}
+          >
+            <form
+              className={styles.content}
+              onSubmit={async (e) => {
+                e.preventDefault();
+                requestActiveKey();
+              }}
             >
-              Update
-            </Button>
-          </div>
-        </form>
-      </Content>
-    </Popup>
+              <h2 className={styles.title}>Set Stake</h2>
+              <div className={styles.fields}>
+                <div className={styles.field}>
+                  <TextInput
+                    touched
+                    placeholder="6664"
+                    label="UOS for CPU Time"
+                    value={`${cpu}`}
+                    onChange={async (value) => {
+                      const intValue = parseInt(value, 10);
+                      setCpu(Number.isNaN(intValue) ? '' : intValue);
+                    }}
+                  />
+                </div>
+                <div className={styles.field}>
+                  <TextInput
+                    touched
+                    placeholder="6664"
+                    label="UOS for Network BW"
+                    value={`${net}`}
+                    onChange={async (value) => {
+                      const intValue = parseInt(value, 10);
+                      setNet(Number.isNaN(intValue) ? '' : intValue);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className={styles.hint}>
+                Unstaking UOS from Bandwidth or CPU takes 3 days. After 3 days, you can claim your unstaked UOS.
+              </div>
+              {formError &&
+                <div className={styles.error}>
+                  <IconInputError />
+                  <span>{formError}</span>
+                </div>
+              }
+              <div className={styles.action}>
+                <Button
+                  cap
+                  big
+                  red
+                  strech
+                  disabled={!`${cpu}`.length || !`${net}`.length || loading}
+                >
+                  Update
+                </Button>
+              </div>
+            </form>
+          </Content>
+        </Popup>
+      )}
+    </GetActiveKey>
   );
 };
 

@@ -9,10 +9,12 @@ import Button from '../Button/index';
 import VerticalMenu from '../VerticalMenu/index';
 import { settingsHide } from '../../actions/settings';
 import Resources from '../Resources';
-import ChangePassword from '../Auth/ChangePassword';
+import ChangePassword from '../Auth/Features/ChangePassword';
+import GenerateSocialKey from '../Auth/Features/GenerateSocialKey';
 
 const Settings = (props) => {
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
+  const [generateSocialKeyVisible, setGenerateSocialKeyVisible] = useState(false);
 
   if (!props.settings.visible) {
     return null;
@@ -72,6 +74,15 @@ const Settings = (props) => {
                       value="5JoEYU5adMz2GvfaacAntwPsZbFEzBMZafpTXJG6EkZf6dsKvjy"
                     />
                   </div>
+                  <div className={styles.action}>
+                    <Button
+                      strech
+                      small
+                      onClick={() => setGenerateSocialKeyVisible(true)}
+                    >
+                      Generate Social Key
+                    </Button>
+                  </div>
                 </div>
 
                 <div className={styles.subSection}>
@@ -113,7 +124,15 @@ const Settings = (props) => {
       </Popup>
 
       {changePasswordVisible &&
-        <ChangePassword />
+        <ChangePassword
+          onClickClose={() => setChangePasswordVisible(false)}
+        />
+      }
+
+      {generateSocialKeyVisible &&
+        <GenerateSocialKey
+          onClickClose={() => setGenerateSocialKeyVisible(false)}
+        />
       }
     </Fragment>
   );

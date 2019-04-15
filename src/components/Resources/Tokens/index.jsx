@@ -57,9 +57,10 @@ const Tokens = (props) => {
         }}
       />
 
-      {tokens.unstakingRequest &&
+      {tokens.unstakingRequest && tokens.unstakingRequest.amount > 0 &&
         <div className={styles.unstaking}>
-          You are unstaking <strong>{tokens.unstakingRequest.amount} {tokens.unstakingRequest.currency}</strong>, {moment(tokens.unstakingRequest.requestDatetime).fromNow()}
+          You are unstaking <strong>{tokens.unstakingRequest.amount} {tokens.unstakingRequest.currency}</strong>
+          {tokens.unstakingRequest.requestDatetime && `, ${moment(tokens.unstakingRequest.requestDatetime).fromNow()}`}
         </div>
       }
     </div>
@@ -75,7 +76,7 @@ Tokens.propTypes = {
       unstakingRequest: PropTypes.shape({
         amount: PropTypes.number.isRequired,
         currency: PropTypes.string.isRequired,
-        requestDatetime: PropTypes.string.isRequired,
+        requestDatetime: PropTypes.string,
       }),
     }),
   }).isRequired,

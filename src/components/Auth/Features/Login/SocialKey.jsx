@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { memo, Fragment } from 'react';
-import styles from './styles.css';
-import IconArrowLeft from '../../Icons/ArrowLeft';
-import UserPick from '../../UserPick/UserPick';
-import KeyFrom from '../KeyForm';
+import styles from '../styles.css';
+import IconArrowLeft from '../../../Icons/ArrowLeft';
+import UserPick from '../../../UserPick/UserPick';
+import KeyFrom from '../../Forms/KeyForm';
 
 const Account = props => (
   <Fragment>

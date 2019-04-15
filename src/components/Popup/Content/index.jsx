@@ -9,7 +9,7 @@ const Content = props => (
     className={classNames({
       [styles.content]: true,
       [styles.walletAction]: props.walletAction,
-      [styles.noRoundBorders]: props.noRoundBorders,
+      [styles.roundBorders]: props.roundBorders,
     })}
   >
     {props.onClickClose &&
@@ -31,13 +31,13 @@ Content.propTypes = {
   children: PropTypes.node.isRequired,
   onClickClose: PropTypes.func,
   walletAction: PropTypes.bool,
-  noRoundBorders: PropTypes.bool,
+  roundBorders: PropTypes.bool,
 };
 
 Content.defaultProps = {
   onClickClose: undefined,
   walletAction: false,
-  noRoundBorders: false,
+  roundBorders: true,
 };
 
 export default memo(Content);

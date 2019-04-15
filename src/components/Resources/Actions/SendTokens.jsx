@@ -28,7 +28,7 @@ const SendTokens = (props) => {
     <Popup onClickClose={() => props.dispatch(walletToggleSendTokens(false))}>
       <Content
         walletAction
-        noRoundBorders
+        roundBorders={false}
         onClickClose={() => props.dispatch(walletToggleSendTokens(false))}
       >
         <form
