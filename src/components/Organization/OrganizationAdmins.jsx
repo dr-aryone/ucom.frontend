@@ -20,10 +20,10 @@ const OrganizationAdmins = (props) => {
 
   return (
     <div className={styles.section}>
-      <div className={styles.title}>Adiministrators {users.length}</div>
+      <div className={styles.title}>Administrators {users.length}</div>
       <div className={styles.content}>
         <EntryList
-          title="Adiministrators"
+          title="Administrators"
           data={users.map(item => ({
             id: item.id,
             avatarSrc: urls.getFileUrl(item.avatarFilename),
