@@ -11,6 +11,7 @@ import DescDirectPost from './DescDirectPost';
 import { checkMentionTag, escapeQuotes } from '../../../../utils/text';
 import styles from './styles.css';
 import urls from '../../../../utils/urls';
+import { getEntryImageAttr } from '../../../../utils/upload';
 
 class PostFeedContent extends PureComponent {
   constructor(props) {
@@ -42,15 +43,13 @@ class PostFeedContent extends PureComponent {
           <div className={styles.form}>
             <FeedForm
               message={post.description}
-              postId={post.id}
-              post={post}
+              entityImages={post.entityImages}
               onCancel={this.hideForm}
-              onSubmit={(description, mainImageFilename, entityImages) => {
+              onSubmit={(description, entityImages) => {
                 this.hideForm();
-                console.log(entityImages);
                 this.props.updatePost({
                   postId: post.id,
-                  data: { description, mainImageFilename, entityImages },
+                  data: { description, entityImages },
                 });
               }}
             />
@@ -59,9 +58,9 @@ class PostFeedContent extends PureComponent {
           <Fragment>
             {(this.props.postTypeId === 10 || post.postTypeId === 10) ? (
               <Fragment>
-                {post.mainImageFilename && !this.state.formIsVisible && (
+                {getEntryImageAttr(post) && !this.state.formIsVisible && (
                   <div className={styles.cover}>
-                    <img src={urls.getFileUrl((post.entityImages && post.entityImages.articleTitle && post.entityImages.articleTitle[0].url) || post.mainImageFilename)} alt="cover" />
+                    <img src={urls.getFileUrl(getEntryImageAttr(post))} alt="cover" />
                   </div>
                 )}
                 {post.description &&

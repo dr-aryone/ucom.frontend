@@ -7,6 +7,7 @@ import { getPostUrl, getPostTypeById } from '../utils/posts';
 import api from '../api';
 import loader from '../utils/loader';
 import urls from '../utils/urls';
+import { getEntryImageAttr } from '../utils/upload';
 
 class PostsTable extends PureComponent {
   constructor(props) {
@@ -132,7 +133,7 @@ class PostsTable extends PureComponent {
                     <UserCard
                       squareAvatar
                       profileLink={getPostUrl(item.id)}
-                      avatarUrl={urls.getFileUrl(item.mainImageFilename)}
+                      avatarUrl={urls.getFileUrl(getEntryImageAttr(item))}
                       userName={item.title}
                       accountName={getPostTypeById(item.postTypeId)}
                       sign="#"

@@ -11,7 +11,7 @@ import { DownvoteIcon, UpvoteIcon, SuccessIcon, ShareIcon, AtIcon } from '../Ico
 import InputErrorIcon from '../Icons/InputError';
 import InputCompleteIcon from '../Icons/InputComplete';
 import { getUserName } from '../../utils/user';
-import { getActualImage } from '../../utils/upload';
+import { getEntryImageAttr } from '../../utils/upload';
 import { getOrganizationUrl } from '../../utils/organization';
 import { confirmNotification, declineNotification, seenNotification } from '../../actions/siteNotifications';
 
@@ -355,7 +355,7 @@ const getCover = (props) => {
       return (
         <div className="site-notification__cover">
           <Link to={urls.getPostUrl(props.data.post)}>
-            <Avatar square isPost src={urls.getFileUrl(getActualImage(props.data.post))} />
+            <Avatar square isPost src={urls.getFileUrl(getEntryImageAttr(props.data.post))} />
           </Link>
         </div>
       );
@@ -366,7 +366,7 @@ const getCover = (props) => {
       return (
         <div className="site-notification__cover">
           <Link to={urls.getPostUrl(props.data.comment.post)}>
-            <Avatar square isPost src={urls.getFileUrl(getActualImage(props.data.comment.post))} />
+            <Avatar square isPost src={urls.getFileUrl(getEntryImageAttr(props.data.comment.post))} />
           </Link>
         </div>
       );
@@ -378,7 +378,7 @@ const getCover = (props) => {
       return (
         <div className="site-notification__cover">
           <Link to={urls.getPostUrl(props.targetEntity.post)}>
-            <Avatar square isPost src={urls.getFileUrl(getActualImage(props.targetEntity.post))} />
+            <Avatar square isPost src={urls.getFileUrl(getEntryImageAttr(props.targetEntity.post))} />
           </Link>
         </div>
       );
@@ -392,7 +392,7 @@ const getCover = (props) => {
         return (
           <div className="site-notification__cover">
             <Link to={urls.getPostUrl(props.targetEntity.post)}>
-              <Avatar square isPost src={urls.getFileUrl(getActualImage(props.targetEntity.post))} />
+              <Avatar square isPost src={urls.getFileUrl(getEntryImageAttr(props.targetEntity.post))} />
             </Link>
           </div>
         );

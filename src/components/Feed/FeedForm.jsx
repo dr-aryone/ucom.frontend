@@ -1,191 +1,159 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import React, { PureComponent } from 'react';
+import React, { useState } from 'react';
 import Avatar from '../Avatar';
 import Button from '../Button';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
-import { getBase64FromFile } from '../../utils/upload';
-import { setPostData, validatePostField } from '../../actions';
+import { getEntryImageAttr } from '../../utils/upload';
 import { escapeQuotes } from '../../utils/text';
+import { removeCoverImages, changeCoverImagesUrl } from '../../utils/entityImages';
 import IconClip from '../Icons/Clip';
 import IconClose from '../Icons/Close';
 import DropZone from '../DropZone';
 import TributeWrapper from '../TributeWrapper';
-import { updatePost } from '../../actions/posts';
 import urls from '../../utils/urls';
+import api from '../../api';
 
-class FeedForm extends PureComponent {
-  constructor(props) {
-    super(props);
+const FeedForm = (props) => {
+  const initialText = props.initialText ? `#${props.initialText} ` : false;
+  const [message, setMessage] = useState(escapeQuotes(props.message) || initialText || '');
+  const [entityImages, setEntityImages] = useState(props.entityImages);
 
-    const initialText = this.props.initialText ? `#${this.props.initialText} ` : false;
+  const onImage = async (file) => {
+    const data = await api.uploadPostImage(file);
+    const { url } = data.files[0];
+    setEntityImages(changeCoverImagesUrl(entityImages, url));
+  };
 
-    this.state = {
-      message: escapeQuotes(this.props.message) || initialText || '',
-      base64Cover: '',
-      fileImg: '',
-      fileUrl: urls.getFileUrl(this.props.mainImageFilename) || '',
-    };
-  }
-
-  onImage = (file) => {
-    getBase64FromFile(file).then((base64Cover) => {
-      this.setState({
-        base64Cover,
-        fileImg: file,
-      });
-    });
-  }
-
-  sumbitForm = (message, fileImg, entityImages) => {
-    if (typeof this.props.onSubmit === 'function' && (message.trim().length !== 0 || (fileImg || this.state.fileUrl))) {
-      if (fileImg !== '') {
-        this.props.onSubmit(message, fileImg);
-      } else if (fileImg === '' && this.state.fileUrl === '') {
-        this.props.onSubmit(message, fileImg, entityImages);
-      } else if (fileImg === '' && this.state.fileUrl !== '') {
-        this.props.onSubmit(message);
-      }
+  const sumbitForm = (message, entityImages) => {
+    if (typeof props.onSubmit === 'function' && (message.trim().length !== 0 || getEntryImageAttr({ entityImages }))) {
+      props.onSubmit(message, JSON.stringify(entityImages));
     }
+  };
+
+  const user = getUserById(props.users, props.user.id);
+
+  if (!user) {
+    return null;
   }
 
-  render() {
-    const user = getUserById(this.props.users, this.props.user.id);
+  return (
+    <form
+      className="feed-form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        sumbitForm(message, entityImages);
+      }}
+    >
+      <div className="feed-form__field">
+        <div className="feed-form__avatar">
+          <Avatar src={urls.getFileUrl(user.avatarFilename)} />
+        </div>
 
-    if (!user) {
-      return null;
-    }
-
-    return (
-      <form
-        className="feed-form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          this.sumbitForm(this.state.message, this.state.fileImg, this.state.entityImages);
-        }}
-      >
-        <div className="feed-form__field">
-          <div className="feed-form__avatar">
-            <Avatar src={urls.getFileUrl(user.avatarFilename)} />
-          </div>
-
-          <div className="feed-form__message">
-            <TributeWrapper
-              enabledImgUrlParse
-              onChange={message => this.setState({ message })}
-              onImage={this.onImage}
-              onParseImgUrl={(url) => {
-                this.setState({ base64Cover: url });
-                this.setState({ fileImg: url });
+        <div className="feed-form__message">
+          <TributeWrapper
+            enabledImgUrlParse
+            onChange={message => setMessage(message)}
+            onImage={onImage}
+            onParseImgUrl={(url) => {
+              setEntityImages(changeCoverImagesUrl(entityImages, url));
+            }}
+          >
+            <textarea
+              autoFocus
+              rows="4"
+              className="feed-form__textarea"
+              placeholder="Leave a comment"
+              value={message}
+              onChange={e => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if ((e.ctrlKey && e.keyCode === 13) || (e.metaKey && e.keyCode === 13)) {
+                  e.preventDefault();
+                  sumbitForm(message, entityImages);
                 }
-              }
-            >
-              <textarea
-                autoFocus
-                rows="4"
-                className="feed-form__textarea"
-                placeholder="Leave a comment"
-                value={this.state.message}
-                onChange={e => this.setState({ message: e.target.value })}
-                onKeyDown={(e) => {
-                  if ((e.ctrlKey && e.keyCode === 13) || (e.metaKey && e.keyCode === 13)) {
-                    e.preventDefault();
-                    this.sumbitForm(this.state.message, this.state.fileImg);
-                  }
-                }}
-              />
-            </TributeWrapper>
-          </div>
+              }}
+            />
+          </TributeWrapper>
+        </div>
 
-          <div>
-            <label name="img" className="feed-form__clip">
-              <IconClip />
-            </label>
+        <div>
+          <label name="img" className="feed-form__clip">
+            <IconClip />
+          </label>
 
-            {(this.state.base64Cover || this.state.fileUrl) ? (
-              <div className="cover cover_small">
-                <div className="cover__inner">
-                  <div className="cover__remove">
-                    <button
-                      type="button"
-                      className="button-clean button-clean_close"
-                      onClick={() => {
-                        this.setState({
-                          base64Cover: '', fileUrl: '', fileImg: '', entityImages: JSON.stringify({}),
-                        });
-                      }}
-                    >
-                      <IconClose />
-                    </button>
-                  </div>
-
-                  <img className="cover__img" src={this.state.base64Cover || this.state.fileUrl} alt="" />
+          {getEntryImageAttr({ entityImages }) ? (
+            <div className="cover cover_small">
+              <div className="cover__inner">
+                <div className="cover__remove">
+                  <button
+                    type="button"
+                    className="button-clean button-clean_close"
+                    onClick={() => {
+                      setEntityImages(removeCoverImages(entityImages)); // JSON.stringify({ articleTitle: [] }),
+                    }}
+                  >
+                    <IconClose />
+                  </button>
                 </div>
-              </div>
-            ) : (
-              <DropZone
-                className="drop-zone_clip"
-                onDrop={this.onImage}
-              />
-            )}
-          </div>
-        </div>
 
-        <div className="feed-form__actions">
-          <div className="inline">
-            <div className="inline__item">
-              <Button
-                text="Cancel"
-                size="small"
-                theme="light"
-                onClick={() => {
-                  if (typeof this.props.onCancel === 'function') {
-                    this.props.onCancel();
-                  }
-                }}
-              />
+                <img className="cover__img" src={getEntryImageAttr({ entityImages })} alt="" />
+              </div>
             </div>
-            <div className="inline__item">
-              <Button
-                text={this.props.message || this.props.mainImageFilename ? 'Save' : 'Post'}
-                type="submit"
-                size="small"
-                theme="red"
-                isDisabled={(this.state.message.trim().length === 0 && this.state.base64Cover === '' && this.state.fileUrl === '') ||
-                ((this.state.message.trim().length === 0 && this.state.base64Cover !== '') &&
-                (this.state.message.trim().length === 0 && this.props.mainImageFilename !== '') &&
-                (this.state.message.trim().length === 0 && this.state.fileUrl !== ''))}
-              />
-            </div>
+          ) : (
+            <DropZone
+              className="drop-zone_clip"
+              onDrop={onImage}
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="feed-form__actions">
+        <div className="inline">
+          <div className="inline__item">
+            <Button
+              text="Cancel"
+              size="small"
+              theme="light"
+              onClick={() => {
+                if (typeof props.onCancel === 'function') {
+                  props.onCancel();
+                }
+              }}
+            />
+          </div>
+          <div className="inline__item">
+            <Button
+              text={props.message || getEntryImageAttr(props) ? 'Save' : 'Post'}
+              type="submit"
+              size="small"
+              theme="red"
+              isDisabled={message.trim().length === 0 && !getEntryImageAttr({ entityImages })}
+            />
           </div>
         </div>
-      </form>
-    );
-  }
-}
+      </div>
+    </form>
+  );
+};
 
 FeedForm.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   users: PropTypes.objectOf(PropTypes.object).isRequired,
   message: PropTypes.string,
+  entityImages: PropTypes.objectOf(PropTypes.array),
+  initialText: PropTypes.string,
 };
 
 FeedForm.defaultProps = {
   message: '',
+  initialText: '',
+  entityImages: {},
 };
 
-export default connect(
-  state => ({
-    users: state.users,
-    tags: state.tags,
-    posts: state.posts,
-    user: selectUser(state),
-  }),
-  dispatch => ({
-    updatePost,
-    setPostData: data => dispatch(setPostData(data)),
-    validatePostField: data => dispatch(validatePostField(data)),
-  }),
-)(FeedForm);
+export default connect(state => ({
+  users: state.users,
+  user: selectUser(state),
+}))(FeedForm);
