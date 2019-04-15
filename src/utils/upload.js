@@ -47,6 +47,8 @@ const getOrientation = (file, callback) => {
   reader.readAsArrayBuffer(file);
 };
 
+export const getActualImage = (file, index = 0, type = 'gallery') => ((file.entityImages && file.entityImages[type] && file.entityImages[type][index]) ? file.entityImages[type][index] : file.mainImageFilename);
+
 export const getBase64FromFile = (file) => {
   try {
     return new Promise((resolve, reject) => {

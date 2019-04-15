@@ -38,12 +38,12 @@ class FeedForm extends PureComponent {
     });
   }
 
-  sumbitForm = (message, fileImg) => {
+  sumbitForm = (message, fileImg, entityImages) => {
     if (typeof this.props.onSubmit === 'function' && (message.trim().length !== 0 || (fileImg || this.state.fileUrl))) {
       if (fileImg !== '') {
         this.props.onSubmit(message, fileImg);
       } else if (fileImg === '' && this.state.fileUrl === '') {
-        this.props.onSubmit(message, fileImg);
+        this.props.onSubmit(message, fileImg, entityImages);
       } else if (fileImg === '' && this.state.fileUrl !== '') {
         this.props.onSubmit(message);
       }
@@ -62,7 +62,7 @@ class FeedForm extends PureComponent {
         className="feed-form"
         onSubmit={(e) => {
           e.preventDefault();
-          this.sumbitForm(this.state.message, this.state.fileImg);
+          this.sumbitForm(this.state.message, this.state.fileImg, this.state.entityImages);
         }}
       >
         <div className="feed-form__field">
@@ -111,13 +111,9 @@ class FeedForm extends PureComponent {
                       type="button"
                       className="button-clean button-clean_close"
                       onClick={() => {
-                        this.props.updatePost({
-                            data: {
-                              mainImageFilename: '',
-                            },
-                            postId: this.props.postId,
-                          });
-                        this.setState({ base64Cover: '', fileUrl: '', fileImg: '' });
+                        this.setState({
+                          base64Cover: '', fileUrl: '', fileImg: '', entityImages: JSON.stringify({}),
+                        });
                       }}
                     >
                       <IconClose />
@@ -170,10 +166,14 @@ class FeedForm extends PureComponent {
 }
 
 FeedForm.propTypes = {
-  onCancel: PropTypes.func,
-  onSubmit: PropTypes.func,
-  users: PropTypes.objectOf(PropTypes.object),
+  onCancel: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  users: PropTypes.objectOf(PropTypes.object).isRequired,
   message: PropTypes.string,
+};
+
+FeedForm.defaultProps = {
+  message: '',
 };
 
 export default connect(

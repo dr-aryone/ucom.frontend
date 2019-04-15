@@ -11,6 +11,7 @@ import { DownvoteIcon, UpvoteIcon, SuccessIcon, ShareIcon, AtIcon } from '../Ico
 import InputErrorIcon from '../Icons/InputError';
 import InputCompleteIcon from '../Icons/InputComplete';
 import { getUserName } from '../../utils/user';
+import { getActualImage } from '../../utils/upload';
 import { getOrganizationUrl } from '../../utils/organization';
 import { confirmNotification, declineNotification, seenNotification } from '../../actions/siteNotifications';
 

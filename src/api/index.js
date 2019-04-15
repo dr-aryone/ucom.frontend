@@ -112,6 +112,7 @@ class Api {
   }
 
   async updatePost(data, id) {
+    console.log(snakes(data));
     const response = await this.actions.patch(`/api/v1/posts/${id}`, snakes(data));
 
     return humps(response.data);
