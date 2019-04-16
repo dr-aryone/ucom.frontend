@@ -109,12 +109,9 @@ const OfferCard = (props) => {
             title="Participants"
             count={+props.count}
           />
-          {(((conditions && conditions.conditions.authGithub === false && conditions.conditions.followingDevExchange === false) || !props.cookie) || (conditions && conditions.airdropStatus !== 3 &&
-          conditions.conditions.authGithub === false &&
-          conditions.conditions.authMyself === false &&
-          conditions.conditions.followingDevExchange === false) ||
-          (conditions && conditions.conditions.authGithub === false &&
-          conditions.conditions.authMyself === false)) &&
+
+
+          {((conditions && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false) || !props.cookie) &&
             <a
               className={classNames(
                 `${styles.btn}`,
