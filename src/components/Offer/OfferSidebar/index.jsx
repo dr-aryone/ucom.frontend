@@ -45,7 +45,8 @@ const OfferSidebar = (props) => {
               {(conditions.airdropStatus === AirdropStatuses.PENDING ||
                 (conditions.conditions.authGithub === true &&
                   conditions.conditions.authMyself === true &&
-                  conditions.conditions.followingDevExchange === true)) &&
+                  conditions.conditions.followingDevExchange === true &&
+                  conditions.airdropStatus !== AirdropStatuses.RECEIVED)) &&
                   <Fragment>
                     <span className={styles.statusIcon}><Dots /></span>
                     <span className={styles.statusPending}>In progress</span>
