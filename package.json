@@ -7,7 +7,7 @@
     "start": "npm run server | npm run dev",
     "server": "pm2 restart ecosystem-test.config.js",
     "dev": "BABEL_ENV=dev NODE_ENV=staging webpack --config ./webpack.config.js --mode development --watch",
-    "staging": "BABEL_ENV=staging NODE_ENV=staging webpack --config ./webpack.config.js --mode development",
+    "staging": "BABEL_ENV=staging NODE_ENV=staging webpack --config ./webpack.config.js --mode production",
     "production": "BABEL_ENV=production NODE_ENV=production webpack --config ./webpack.config.js --mode production"
   },
   "keywords": [],
