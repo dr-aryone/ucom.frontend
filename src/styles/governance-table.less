@@ -4,6 +4,7 @@
   line-height: 20px;
   white-space: nowrap;
   border-spacing: 0;
+  table-layout: fixed;
 
   @media (max-width: 1023px) {
     display: block;
@@ -55,7 +56,9 @@
   height: 80px;
   padding-left: 16px;
   padding-right: 10px;
-
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
   @media (max-width: 1023px) {
     display: block;
     border-bottom: 1px  solid #E8ECEC;
@@ -75,7 +78,7 @@
 }
 
 .governance-table__cell_id {
-  width: 40px;
+  width: 65px;
 }
 
 .governance-table__cell_name {
