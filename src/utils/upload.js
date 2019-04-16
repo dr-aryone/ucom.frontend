@@ -98,6 +98,7 @@ export const compressImageAndRotate = (file, maxWidth, maxHeight, type = 'image/
               height = maxHeight;
             }
           }
+
           const canvasEl = document.createElement('canvas');
           const ctx = canvasEl.getContext('2d');
 

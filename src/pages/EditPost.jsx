@@ -157,7 +157,7 @@ const EditPost = (props) => {
                 if (!props.post.data.id) {
                   dataToSave.title = data.title;
                   dataToSave.leadingText = data.leadingText;
-                  dataToSave.entityImages = data.entityImages;
+                  dataToSave.entityImages = JSON.stringify(data.entityImages);
                 }
 
                 props.dispatch(setDataToStoreToLS(dataToSave));
