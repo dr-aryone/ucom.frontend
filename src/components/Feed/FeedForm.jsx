@@ -5,9 +5,8 @@ import Avatar from '../Avatar';
 import Button from '../Button';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
-import { getEntryImageAttr } from '../../utils/upload';
 import { escapeQuotes } from '../../utils/text';
-import { removeCoverImages, changeCoverImagesUrl } from '../../utils/entityImages';
+import { removeCoverImage, changeCoverImageUrl, getCoverImage } from '../../utils/entityImages';
 import IconClip from '../Icons/Clip';
 import IconClose from '../Icons/Close';
 import DropZone from '../DropZone';
@@ -23,11 +22,11 @@ const FeedForm = (props) => {
   const onImage = async (file) => {
     const data = await api.uploadPostImage(file);
     const { url } = data.files[0];
-    setEntityImages(changeCoverImagesUrl(entityImages, url));
+    setEntityImages(changeCoverImageUrl(entityImages, url));
   };
 
   const sumbitForm = (message, entityImages) => {
-    if (typeof props.onSubmit === 'function' && (message.trim().length !== 0 || getEntryImageAttr({ entityImages }))) {
+    if (typeof props.onSubmit === 'function' && (message.trim().length !== 0 || getCoverImage({ entityImages }))) {
       props.onSubmit(message, JSON.stringify(entityImages));
     }
   };
@@ -57,7 +56,7 @@ const FeedForm = (props) => {
             onChange={message => setMessage(message)}
             onImage={onImage}
             onParseImgUrl={(url) => {
-              setEntityImages(changeCoverImagesUrl(entityImages, url));
+              setEntityImages(changeCoverImageUrl(entityImages, url));
             }}
           >
             <textarea
@@ -82,7 +81,7 @@ const FeedForm = (props) => {
             <IconClip />
           </label>
 
-          {getEntryImageAttr({ entityImages }) ? (
+          {getCoverImage({ entityImages }) ? (
             <div className="cover cover_small">
               <div className="cover__inner">
                 <div className="cover__remove">
@@ -90,14 +89,14 @@ const FeedForm = (props) => {
                     type="button"
                     className="button-clean button-clean_close"
                     onClick={() => {
-                      setEntityImages(removeCoverImages(entityImages)); // JSON.stringify({ articleTitle: [] }),
+                      setEntityImages(removeCoverImage(entityImages));
                     }}
                   >
                     <IconClose />
                   </button>
                 </div>
 
-                <img className="cover__img" src={getEntryImageAttr({ entityImages })} alt="" />
+                <img className="cover__img" src={getCoverImage({ entityImages })} alt="" />
               </div>
             </div>
           ) : (
@@ -125,11 +124,11 @@ const FeedForm = (props) => {
           </div>
           <div className="inline__item">
             <Button
-              text={props.message || getEntryImageAttr(props) ? 'Save' : 'Post'}
+              text={props.message || getCoverImage(props) ? 'Save' : 'Post'}
               type="submit"
               size="small"
               theme="red"
-              isDisabled={message.trim().length === 0 && !getEntryImageAttr({ entityImages })}
+              isDisabled={message.trim().length === 0 && !getCoverImage({ entityImages })}
             />
           </div>
         </div>

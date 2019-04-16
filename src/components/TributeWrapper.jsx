@@ -2,7 +2,7 @@ import { isObject } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { defaultTributeConfig } from '../utils/tribute';
-import { getImageFromPasteEvent } from '../utils/upload';
+import { getImageFromPasteEvent, VISUAL_DELAY } from '../utils/upload';
 import { IMG_URL_REGEXP } from '../utils/text';
 
 class TributeWrapper extends PureComponent {
@@ -72,7 +72,7 @@ class TributeWrapper extends PureComponent {
               this.props.onParseImgUrl(url);
               return '';
             }));
-          }, 1000);
+          }, VISUAL_DELAY);
         } : (e) => {
           this.props.onChange(e.target.value);
         },

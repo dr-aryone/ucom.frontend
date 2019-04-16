@@ -24,6 +24,7 @@ const Form = (props) => {
   const reset = () => {
     setMessage('');
     setBase64Cover('');
+    setEntityImages({ gallery: [] });
 
     if (props.onReset) {
       props.onReset();
@@ -88,7 +89,8 @@ const Form = (props) => {
                   }
                 }
                 onChange={(message) => {
-                  setMessage(message); setTimeout(() => autosize.update(textareaEl.current), 0);
+                  setMessage(message);
+                  setTimeout(() => autosize.update(textareaEl.current), 0);
                 }}
                 onImage={e => onImage([e])}
               >
@@ -144,27 +146,27 @@ const Form = (props) => {
           }
         </div>
       </div>
-      {// TODO in Image.jsx
-        base64Cover ? (
-          <div className="cover cover_small">
-            <div className="cover__inner">
-              <div className="cover__remove">
-                <button
-                  type="button"
-                  className="button-clean button-clean_close"
-                  onClick={() => {
-                      setEntityImages('');
-                      setBase64Cover('');
-                  }}
-                >
-                  <IconClose />
-                </button>
-              </div>
-
-              <img className="cover__img" src={base64Cover} alt="" />
+      {/* TODO in Image.jsx */}
+      {base64Cover && (
+        <div className="cover cover_small">
+          <div className="cover__inner">
+            <div className="cover__remove">
+              <button
+                type="button"
+                className="button-clean button-clean_close"
+                onClick={() => {
+                    setEntityImages('');
+                    setBase64Cover('');
+                }}
+              >
+                <IconClose />
+              </button>
             </div>
+
+            <img className="cover__img" src={base64Cover} alt="" />
           </div>
-          ) : null}
+        </div>
+      )}
     </div>
   );
 };

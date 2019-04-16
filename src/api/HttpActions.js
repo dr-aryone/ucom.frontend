@@ -35,7 +35,6 @@ class HttpActions {
   patch(url, data, options) {
     const formData = objectToFormData(data, {
       indices: true,
-      nulls: false,
     });
 
     return this.request.patch(url, formData, { ...this.getDefaultOptions(), ...options });

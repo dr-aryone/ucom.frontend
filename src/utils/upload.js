@@ -47,14 +47,6 @@ const getOrientation = (file, callback) => {
   reader.readAsArrayBuffer(file);
 };
 
-export const getEntryImageAttr = (entry, type = 'articleTitle', attr = 'url', index = 0) => {
-  try {
-    return entry.entityImages[type][index][attr];
-  } catch (e) {
-    return null;
-  }
-};
-
 export const getBase64FromFile = (file) => {
   try {
     return new Promise((resolve, reject) => {
@@ -97,14 +89,15 @@ export const compressImageAndRotate = (file, maxWidth, maxHeight, type = 'image/
         img.onload = () => {
           let { width, height } = img;
 
-          if (width > height && width > maxWidth) {
-            height *= maxWidth / width;
-            width = maxWidth;
-          } else if (height > maxHeight) {
-            width *= maxHeight / height;
-            height = maxHeight;
+          while (width > maxWidth || height > maxHeight) {
+            if (width > height && width > maxWidth) {
+              height *= maxWidth / width;
+              width = maxWidth;
+            } else if (height > maxHeight) {
+              width *= maxHeight / height;
+              height = maxHeight;
+            }
           }
-
           const canvasEl = document.createElement('canvas');
           const ctx = canvasEl.getContext('2d');
 
@@ -170,3 +163,4 @@ export const getImageFromPasteEvent = async (event) => {
   return blob;
 };
 
+export const VISUAL_DELAY = 1000;

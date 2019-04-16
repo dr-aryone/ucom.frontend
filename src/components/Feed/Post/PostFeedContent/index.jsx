@@ -11,7 +11,7 @@ import DescDirectPost from './DescDirectPost';
 import { checkMentionTag, escapeQuotes } from '../../../../utils/text';
 import styles from './styles.css';
 import urls from '../../../../utils/urls';
-import { getEntryImageAttr } from '../../../../utils/upload';
+import { getCoverImage } from '../../../../utils/entityImages';
 
 class PostFeedContent extends PureComponent {
   constructor(props) {
@@ -58,9 +58,9 @@ class PostFeedContent extends PureComponent {
           <Fragment>
             {(this.props.postTypeId === 10 || post.postTypeId === 10) ? (
               <Fragment>
-                {getEntryImageAttr(post) && !this.state.formIsVisible && (
+                {getCoverImage(post) && !this.state.formIsVisible && (
                   <div className={styles.cover}>
-                    <img src={urls.getFileUrl(getEntryImageAttr(post))} alt="cover" />
+                    <img src={urls.getFileUrl(getCoverImage(post))} alt="cover" />
                   </div>
                 )}
                 {post.description &&
