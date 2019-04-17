@@ -55,7 +55,7 @@ const OfferSidebar = (props) => {
               {conditions.airdropStatus === AirdropStatuses.RECEIVED &&
                 <Fragment>
                   <span className={styles.statusIcon}><DoneSmall /></span>
-                  <span className={styles.statusReceived}>Recieved</span>
+                  <span className={styles.statusReceived}>Received</span>
                 </Fragment>
               }
             </div>

@@ -112,8 +112,11 @@ const OfferCard = (props) => {
             count={+props.count}
           />
 
-          {((conditions && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false) ||
-          (!props.cookie && conditions && conditions.airdropStatus !== AirdropStatuses.RECEIVED && conditions.airdropStatus !== AirdropStatuses.PENDING)) &&
+          {}
+
+          {((!props.cookie && !conditions) ||
+            (conditions && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false) ||
+            ((conditions && conditions.airdropStatus !== AirdropStatuses.RECEIVED && conditions.airdropStatus !== AirdropStatuses.PENDING) && (conditions && conditions.airdropStatus === AirdropStatuses.NEW && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false))) &&
             <a
               className={classNames(
                 `${styles.btn}`,
