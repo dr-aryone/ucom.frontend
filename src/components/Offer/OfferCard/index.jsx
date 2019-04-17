@@ -16,6 +16,8 @@ import { mapUserDataToFollowersProps } from '../../../utils/user';
 import { authShowPopup } from '../../../actions/auth';
 import config from '../../../../package.json';
 
+const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
+
 const OfferCard = (props) => {
   // const [btnFixed, setBtnFixed] = useState(false);
   // const [btnFixedActive, setBtnFixedActive] = useState(false);
@@ -110,8 +112,8 @@ const OfferCard = (props) => {
             count={+props.count}
           />
 
-
-          {((conditions && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false) || !props.cookie) &&
+          {((conditions && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false) ||
+          (!props.cookie && conditions && conditions.airdropStatus !== AirdropStatuses.RECEIVED && conditions.airdropStatus !== AirdropStatuses.PENDING)) &&
             <a
               className={classNames(
                 `${styles.btn}`,
