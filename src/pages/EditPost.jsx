@@ -64,7 +64,8 @@ const EditPost = (props) => {
     setLoading(true);
 
     try {
-      const data = await saveFn(props.post.data, props.match.params.id);
+      const postData = { ...props.post.data, entityImages: JSON.stringify(props.post.data.entityImages) };
+      const data = await saveFn(postData, props.match.params.id);
       const postId = data.id || data.postId;
 
       props.dispatch(postSetSaved(true));
@@ -157,9 +158,8 @@ const EditPost = (props) => {
                 if (!props.post.data.id) {
                   dataToSave.title = data.title;
                   dataToSave.leadingText = data.leadingText;
-                  dataToSave.entityImages = JSON.stringify(data.entityImages);
+                  dataToSave.entityImages = data.entityImages;
                 }
-
                 props.dispatch(setDataToStoreToLS(dataToSave));
                 props.dispatch(validatePost());
               }}

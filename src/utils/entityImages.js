@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export const getEntryImageAttr = (entry, type, attr, index) => {
   try {
     return entry.entityImages[type][index][attr];
@@ -8,10 +10,16 @@ export const getEntryImageAttr = (entry, type, attr, index) => {
 
 export const removeCoverImage = entry => ({ ...entry, articleTitle: [] });
 
-export const changeCoverImageUrl = (entry, url) => ({
-  ...entry,
-  articleTitle: [{ url }],
-});
+export const changeCoverImageUrl = (entry, url) => {
+  if (_.isString(entry)) {
+    entry = JSON.parse(entry);
+  }
+
+  return {
+    ...entry,
+    articleTitle: [{ url }],
+  };
+};
 
 export const getCoverImage = entry =>
   getEntryImageAttr(entry, 'articleTitle', 'url', 0);
