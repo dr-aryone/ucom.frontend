@@ -89,15 +89,28 @@ export const compressImageAndRotate = (file, maxWidth, maxHeight, type = 'image/
         img.onload = () => {
           let { width, height } = img;
 
-          while (width > maxWidth || height > maxHeight) {
-            if (width > height && width > maxWidth) {
-              height *= maxWidth / width;
-              width = maxWidth;
-            } else if (height > maxHeight) {
-              width *= maxHeight / height;
-              height = maxHeight;
+          if (srcOrientation > 4 && srcOrientation < 9) {
+            while (height > maxWidth || width > maxHeight) {
+              if (height > width && height > maxWidth) {
+                width *= maxWidth / height;
+                height = maxWidth;
+              } else if (width > maxHeight) {
+                height *= maxHeight / width;
+                width = maxHeight;
+              }
+            }
+          } else {
+            while (width > maxWidth || height > maxHeight) {
+              if (width > height && width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+              } else if (height > maxHeight) {
+                width *= maxHeight / height;
+                height = maxHeight;
+              }
             }
           }
+
 
           const canvasEl = document.createElement('canvas');
           const ctx = canvasEl.getContext('2d');

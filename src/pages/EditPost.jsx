@@ -66,7 +66,7 @@ const EditPost = (props) => {
     try {
       const postData = {
         ...props.post.data,
-        entityImages: JSON.stringify(props.post.data.entityImages),
+        entityImages: JSON.stringify(props.post.data.entityImages || {}),
       };
       const data = await saveFn(postData, props.match.params.id);
       const postId = data.id || data.postId;
