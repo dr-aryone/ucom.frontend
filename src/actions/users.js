@@ -124,7 +124,7 @@ export const fetchUserTrustedBy = ({
 };
 
 export const updateUser = payload => async (dispatch) => {
-  loader.start();
+  // loader.start();
 
   try {
     const data = await api.patchMyself(snakes(payload));
@@ -134,10 +134,11 @@ export const updateUser = payload => async (dispatch) => {
     dispatch(addUsers([data]));
   } catch (e) {
     console.error(e);
-    dispatch(addServerErrorNotification(e));
+    throw e;
+    // dispatch(addServerErrorNotification(e));
   }
 
-  loader.done();
+  // loader.done();
 };
 
 export const followUser = data => async (dispatch) => {
