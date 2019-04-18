@@ -6,33 +6,52 @@ import PropTypes from 'prop-types';
 import { Element } from 'react-scroll';
 import urls from '../utils/urls';
 import { getUserById } from '../store/users';
+import { updateUser } from '../actions/users';
 import { selectUser } from '../store/selectors/user';
 import Popup from '../components/Popup/';
 import Content from '../components/Popup/Content';
 import VerticalMenu from '../components/VerticalMenu';
 import styles from './Profile.css';
 import DropZone from '../components/DropZone';
+import TextInput from '../components/TextInput';
 import Textarea from '../components/Textarea';
-import SocialNetworks from '../components/SN';
+import Button from '../components/Button/index.jsx';
+import Avatar from '../components/EntryHeader/Avatar';
+// import SocialNetworks from '../components/SN';
+import { validateFields } from '../utils/validateFields';
 
 const Profile = (props) => {
   // Object.keys(props.user).length
-  const user = getUserById(props.users, props.user.id);
-  // const [userData, setUserData] = useState(owner);
+  const owner = getUserById(props.users, props.user.id);
+
+  if (!owner) {
+    return null;
+  }
+
+  const [userData, setUserData] = useState(owner);
+  const [errors] = useState({});
+  const [isSubmited, setIsSubmited] = useState(false);
+  const [sites, setSites] = useState(false);
+  // const [socialNetworks, SocialNetworks] = useState([]);
 
   // useEffect(() => [], [user]);
+  // const validateUserData = () => {
+  //   validateFields();
+  // };
 
-  // useEffect(() => {
-    //   setUserData({
-      //     nickname: owner.nickname,
-      //     avatarFilename: owner.avatarFilename,
-      //     about: owner.about,
-      //     personalWebsiteUrl: owner.personalWebsiteUrl,
-      //     usersSources: owner.usersSources,
-      //   });
-      // }, (owner));
+  useEffect(() => {
+    console.log('userData: ', userData);
+    setUserData({
+      ...userData,
+      nickname: owner.nickname,
+      avatarFilename: owner.avatarFilename,
+      about: owner.about,
+      personalWebsiteUrl: owner.personalWebsiteUrl,
+      usersSources: owner.usersSources,
+    });
+  }, (owner));
 
-    console.log(user);
+  console.log(userData || 'false');
 
   // console.log(userData);
 
@@ -56,65 +75,82 @@ const Profile = (props) => {
                 <p>Few words about profile its how it will affect autoupdates and etc. Maybe some tips)</p>
               </div>
 
-              <div className={styles.section}>
-                <Element name="PersonalInfo">
+              <div>
+                <Element name="PersonalInfo" className={styles.section}>
                   <h3 className={styles.title}>Personal Info</h3>
-                  <div className={styles.label}>Avatar</div>
-                  <div className={styles.inputBlock}>
-                    { /* avatarFilename && typeof avatarFilename === 'object' ? (
-                      <AvatarFromFile size="big" file={avatarFilename} />
-                    ) : (
-                      <Avatar size="big" src={urls.getFileUrl(avatarFilename)} />
-                    ) */ }
-                    <DropZone
-                      onDrop={files => this.props.userFormSetForm({ avatarFilename: files[0] })}
-                      text="Add or drag img"
-                    />
-                    <div className="field__section">
-                      <div className="field__hint">
-                        You can upload an image in JPG or PNG format. Size is not more than 1 mb.
+                  <div className={styles.field}>
+                    <div className={styles.label}>Avatar</div>
+                    <div className={styles.avatarBlock}>
+                      <div className={styles.avatar}>
+                        <Avatar
+                          src={urls.getFileUrl(userData.avatarFilename)}
+                          changeEnabled
+                          onChange={async (file) => {
+                            setUserData({ ...userData, avatarFilename: file.preview });
+                            props.updateUser({
+                              avatarFilename: file,
+                            });
+                          }}
+                        />
+                      </div>
+                      {/* <DropZone
+                        onDrop={files => this.props.userFormSetForm({ avatarFilename: files[0] })}
+                        text="Add or drag img"
+                      /> */}
+                      <div>
+                        Drag and drop. We support JPG, PNG or GIF files. Max file size 0,5 Mb.
                       </div>
                     </div>
                   </div>
-
-
                   <div className={styles.field}>
                     <div className={styles.label}>Displayed name</div>
                     <div className={styles.inputBlock}>
-                      <input
+                      <TextInput
                         placeholder="Nickname or name, maybe emoji…"
-                        className={styles.input}
-                        value={user && user.nickname}
-                        // onChange={e => setUser(...{ nickname: e })}
+                        // className={styles.input}
+                        value={userData.nickname}
+                        onChange={value => setUserData({ ...userData, nickname: value })}
                       />
                     </div>
                   </div>
                 </Element>
-                <Element name="AboutMe">
+                <Element name="AboutMe" className={styles.section}>
                   <h3 className={styles.title}>About Me</h3>
                   <div className={styles.textarea}>
                     <Textarea
                       placeholder="Your story, what passions you — something you want others to know about you"
                       rows={6}
-                      // value={user.nickname}
-                      // onChange={about => this.props.userFormSetForm({ about })}
+                      value={userData.about}
+                      onChange={value => setUserData({ ...userData, about: value })}
                       isMentioned
                     />
                   </div>
                 </Element>
-                <Element name="Links">
+                <Element name="Links" className={styles.section}>
                   <h3 className={styles.title}>Links</h3>
                   <div className={styles.field}>
                     <div className={styles.label}>Website</div>
                     <div className={styles.inputBlock}>
-                      <input className={styles.input} />
+                      {sites &&
+                        <TextInput
+                        // className={styles.input}
+                        />
+                      }
+                      <Button
+                        small
+                        grayBorder
+                        onClick={() => setSites([])}
+                      >
+                        Add site
+                      </Button>
                     </div>
                   </div>
                   <div className={styles.field}>
                     <div className={styles.label}>Social Networks</div>
                     <div className={styles.inputBlock}>
-                      <SocialNetworks />
-                      <input className={styles.input} />
+                      <TextInput
+                      // className={styles.input}
+                      />
                     </div>
                   </div>
                 </Element>
@@ -137,5 +173,7 @@ export default connect(
     users: state.users,
     user: selectUser(state),
   }),
-  {},
+  dispatch => bindActionCreators({
+    updateUser,
+  }, dispatch),
 )(Profile);
