@@ -26,7 +26,7 @@
     "production": {
       "httpEndpoint": "https://backend.u.community",
       "socketEndpoint": "https://websocket.u.community:443",
-      "uploaderEndpoint": "https://uploader.u.community/api/v1/images/one-image"
+      "uploaderEndpoint": "https://uploader.u.community"
     }
   },
   "iframely": {
