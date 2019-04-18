@@ -72,7 +72,7 @@ const OrganizationsCreatePage = (props) => {
                       <div className="field__input">
                         <div className="field__section">
                           <DropZone
-                            onDrop={files => props.setOrganizationData({ avatarFilename: files[0] })}
+                            onDrop={file => props.setOrganizationData({ avatarFilename: file })}
                             text="Add or drag img"
                           />
                         </div>

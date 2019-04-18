@@ -24,7 +24,7 @@ const Comment = (props) => {
           />
         </div>
         <div className={styles.content}>
-          {props.images.length > 0 &&
+          {props.images && props.images.length > 0 &&
             <div className={styles.gallery}>
               <Gallery
                 images={props.images}
@@ -71,6 +71,7 @@ const Comment = (props) => {
           id={comment.id}
           depth={comment.depth}
           text={comment.text}
+          images={comment.images}
           date={comment.date}
           userId={comment.userId}
           userAccountName={comment.userAccountName}
@@ -111,6 +112,7 @@ const Comment = (props) => {
           id={comment.id}
           depth={comment.depth}
           text={comment.text}
+          images={comment.images}
           date={comment.date}
           userId={comment.userId}
           userAccountName={comment.userAccountName}
@@ -131,15 +133,13 @@ const Comment = (props) => {
 
       {formVisible && formVisible.visible &&
         <Form
+          {...props}
           depth={props.depth + 1}
-          containerId={props.containerId}
-          postId={props.postId}
           commentId={props.id}
           autoFocus
           userImageUrl={props.ownerImageUrl}
           userPageUrl={props.ownerPageUrl}
           userName={props.ownerName}
-          onSubmit={props.onSubmit}
           onReset={() => setFormVisible({ visible: false, name: '' })}
           message={formVisible.visible && formVisible.name !== '' ? `@${formVisible.name} ` : `@${props.userAccountName} `}
         />
