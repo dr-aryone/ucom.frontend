@@ -16,6 +16,7 @@ import LayoutBase from '../Layout/LayoutBase';
 import { getUosGroupId } from '../../utils/config';
 import GovernanceElection from './GovernanceElection';
 import GovernanceConfirmation from './GovernanceConfirmation';
+import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 
 const Governance = (props) => {
   const organizationId = getUosGroupId();
@@ -32,11 +33,11 @@ const Governance = (props) => {
   const [electionVisibility, setElectionVisibility] = useState(false);
   const [confirmationVisibility, setConfirmationVisibility] = useState(false);
   const [closeVisibility, setCloseVisibility] = useState(false);
-  const setVotes = () => {
+  const setVotes = (activeKey) => {
     setConfirmationVisibility(false);
     setElectionVisibility(false);
     setCloseVisibility(false);
-    props.voteForBlockProducers();
+    props.voteForBlockProducers(activeKey);
   };
 
   const close = () => {
@@ -88,13 +89,17 @@ const Governance = (props) => {
                   />
                 </div>
                 <div className="governance-button">
-                  <Button
-                    isStretched
-                    text="Vote"
-                    size="medium"
-                    theme="red"
-                    onClick={setVotes}
-                  />
+                  <RequestActiveKey onSubmit={setVotes}>
+                    {requestActiveKey => (
+                      <Button
+                        isStretched
+                        text="Vote"
+                        size="medium"
+                        theme="red"
+                        onClick={requestActiveKey}
+                      />
+                    )}
+                  </RequestActiveKey>
                 </div>
               </div>
             </div>

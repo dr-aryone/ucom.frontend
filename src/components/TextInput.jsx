@@ -83,4 +83,22 @@ TextInput.propTypes = {
   isValid: PropTypes.bool,
 };
 
+TextInput.defaultProps = {
+  value: '',
+  label: undefined,
+  type: 'text',
+  name: undefined,
+  className: undefined,
+  placeholder: undefined,
+  subtext: undefined,
+  error: undefined,
+  isSearch: false,
+  isRequired: false,
+  inputWidth: undefined,
+  onChange: undefined,
+  disabled: false,
+  maxLength: undefined,
+  isValid: undefined,
+};
+
 export default TextInput;

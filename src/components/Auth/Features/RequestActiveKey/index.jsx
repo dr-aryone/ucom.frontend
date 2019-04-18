@@ -5,17 +5,18 @@ import PasswordSet from './PasswordSet';
 import ActiveKey from './ActiveKey';
 import Password from './Password';
 import ChangePassword from '../ChangePassword';
-import { activeKeyIsExists, restoreActiveKey } from '../../../../utils/keys';
+import { activeKeyIsExists, restoreEncryptedActiveKey } from '../../../../utils/keys';
 
 const STEP_PASSWORD_SET = 1;
 const STEP_PASSWORD = 2;
 const STEP_ACTIVE_KEY = 3;
 const STEP_PASSWORD_CREATE = 4;
 
-const GetActiveKey = (props) => {
+const RequestActiveKey = (props) => {
   const [currentStep, setCurrentStep] = useState(null);
   const [visible, setVisible] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+  const [submitArgs, setSubmitArgs] = useState([]);
 
   const resetStep = () => {
     if (activeKeyIsExists()) {
@@ -25,7 +26,8 @@ const GetActiveKey = (props) => {
     }
   };
 
-  const show = () => {
+  const show = (...args) => {
+    setSubmitArgs(args);
     resetStep();
     setVisible(true);
   };
@@ -34,9 +36,13 @@ const GetActiveKey = (props) => {
     setVisible(false);
   };
 
+  const submit = (activeKey) => {
+    props.onSubmit.apply(null, [activeKey].concat(submitArgs));
+  };
+
   return (
     <Fragment>
-      {props.children(show)}
+      {(!props.replace || !visible) && props.children(show)}
 
       {visible && (() => {
         switch (currentStep) {
@@ -69,8 +75,8 @@ const GetActiveKey = (props) => {
                             onClickActiveKey={() => setCurrentStep(STEP_ACTIVE_KEY)}
                             onSubmit={(password) => {
                               try {
-                                const activeKey = restoreActiveKey(password);
-                                props.onSubmit(activeKey);
+                                const activeKey = restoreEncryptedActiveKey(password);
+                                submit(activeKey);
                                 hide();
                               } catch (e) {
                                 setPasswordError(e.message);
@@ -83,7 +89,10 @@ const GetActiveKey = (props) => {
                         return (
                           <ActiveKey
                             onClickSetPassword={() => setCurrentStep(STEP_PASSWORD_CREATE)}
-                            onSubmit={props.onSubmit}
+                            onSubmit={(activeKey) => {
+                              submit(activeKey);
+                              hide();
+                            }}
                           />
                         );
 
@@ -111,8 +120,14 @@ const GetActiveKey = (props) => {
   );
 };
 
-GetActiveKey.propTypes = {
+RequestActiveKey.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  replace: PropTypes.bool,
   children: PropTypes.func.isRequired,
 };
 
-export default GetActiveKey;
+RequestActiveKey.defaultProps = {
+  replace: false,
+};
+
+export default RequestActiveKey;

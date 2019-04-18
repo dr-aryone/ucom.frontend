@@ -11,7 +11,8 @@ import {
 } from '../../../actions/walletSimple';
 import loader from '../../../utils/loader';
 import { addErrorNotification, addSuccessNotification } from '../../../actions/notifications';
-import { parseWalletErros } from '../../../utils/errors';
+import { parseResponseError } from '../../../utils/errors';
+import RequestActiveKey from '../../Auth/Features/RequestActiveKey';
 
 const Tokens = (props) => {
   const { tokens } = props.wallet;
@@ -38,24 +39,32 @@ const Tokens = (props) => {
           onClick: () => props.dispatch(walletToggleEditStake(true)),
         }}
       />
-      <Token
-        value={`${tokens.emission}`}
-        label="Emission, UOS"
-        action={{
-          title: 'Get Emission',
-          onClick: async () => {
-            loader.start();
-            try {
-              await props.dispatch(walletGetEmission(props.owner.accountName));
-              props.dispatch(addSuccessNotification('Successfully get emission'));
-            } catch (e) {
-              const errors = parseWalletErros(e);
-              props.dispatch(addErrorNotification(errors[0].message));
-            }
-            loader.done();
-          },
+      <RequestActiveKey
+        onSubmit={async (privateKey) => {
+          loader.start();
+          try {
+            await props.dispatch(walletGetEmission(props.owner.accountName, privateKey));
+            props.dispatch(addSuccessNotification('Successfully get emission'));
+          } catch (e) {
+            const errors = parseResponseError(e);
+            props.dispatch(addErrorNotification(errors[0].message));
+          }
+          loader.done();
         }}
-      />
+      >
+        {requestActiveKey => (
+          <Token
+            value={`${tokens.emission}`}
+            label="Emission, UOS"
+            action={{
+              title: 'Get Emission',
+              onClick: async () => {
+                requestActiveKey();
+              },
+            }}
+          />
+        )}
+      </RequestActiveKey>
 
       {tokens.unstakingRequest && tokens.unstakingRequest.amount > 0 &&
         <div className={styles.unstaking}>

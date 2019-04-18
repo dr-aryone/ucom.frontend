@@ -8,10 +8,10 @@ import TextInput from '../../TextInput';
 import IconInputError from '../../Icons/InputError';
 import Button from '../../Button/index';
 import loader from '../../../utils/loader';
-import { parseWalletErros } from '../../../utils/errors';
+import { parseResponseError } from '../../../utils/errors';
 import api from '../../../api';
 import { addSuccessNotification } from '../../../actions/notifications';
-import GetActiveKey from '../../Auth/Features/GetActiveKey';
+import RequestActiveKey from '../../Auth/Features/RequestActiveKey';
 
 const EditStake = (props) => {
   const [cpu, setCpu] = useState('');
@@ -27,7 +27,7 @@ const EditStake = (props) => {
       setCpu(data.cpu);
       setNet(data.net);
     } catch (e) {
-      const errors = parseWalletErros(e);
+      const errors = parseResponseError(e);
       setFormError(errors[0].message);
     }
     setLoading(false);
@@ -45,19 +45,20 @@ const EditStake = (props) => {
   }
 
   return (
-    <GetActiveKey
-      onSubmit={async () => {
+    <RequestActiveKey
+      replace
+      onSubmit={async (privateKey) => {
         setLoading(true);
         loader.start();
         try {
-          await props.dispatch(walletEditStake(props.owner.accountName, net, cpu));
+          await props.dispatch(walletEditStake(props.owner.accountName, net, cpu, privateKey));
           setFormError(null);
           props.dispatch(addSuccessNotification('Successfully set stake'));
           setTimeout(() => {
             props.dispatch(walletToggleEditStake(false));
           }, 0);
         } catch (e) {
-          const errors = parseWalletErros(e);
+          const errors = parseResponseError(e);
           setFormError(errors[0].message);
         }
         setLoading(false);
@@ -129,7 +130,7 @@ const EditStake = (props) => {
           </Content>
         </Popup>
       )}
-    </GetActiveKey>
+    </RequestActiveKey>
   );
 };
 

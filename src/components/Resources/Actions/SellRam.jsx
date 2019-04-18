@@ -1,35 +1,18 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React from 'react';
-import Popup, { Content } from '../../Popup';
-import TradeRamForm from './TradeRamForm';
+import TradeRam from './TradeRam';
 import { walletToggleSellRam } from '../../../actions/walletSimple';
 
-const BuyRam = (props) => {
-  if (!props.wallet.sellRamVisible) {
-    return null;
-  }
-
-  return (
-    <Popup onClickClose={() => props.dispatch(walletToggleSellRam(false))}>
-      <Content
-        walletAction
-        roundBorders={false}
-        onClickClose={() => props.dispatch(walletToggleSellRam(false))}
-      >
-        <TradeRamForm
-          sell
-          onSubmit={() => props.dispatch(walletToggleSellRam(false))}
-        />
-      </Content>
-    </Popup>
-  );
-};
+const BuyRam = props => props.wallet.sellRamVisible && (
+  <TradeRam
+    sell
+    onClickClose={() => props.dispatch(walletToggleSellRam(false))}
+    onSubmit={() => props.dispatch(walletToggleSellRam(false))}
+  />
+);
 
 BuyRam.propTypes = {
-  owner: PropTypes.shape({
-    accountName: PropTypes.string,
-  }).isRequired,
   dispatch: PropTypes.func.isRequired,
   wallet: PropTypes.shape({
     sellRamVisible: PropTypes.bool.isRequired,
@@ -37,6 +20,5 @@ BuyRam.propTypes = {
 };
 
 export default connect(state => ({
-  owner: state.user.data,
   wallet: state.walletSimple,
 }))(BuyRam);

@@ -1,3 +1,4 @@
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import Popup, { Content } from '../../../Popup';
@@ -5,6 +6,7 @@ import Brainkey from '../../Screens/Brainkey';
 import Key from '../../Screens/Key';
 import Password from './Password';
 import { getActivePrivateKey, saveActiveKey } from '../../../../utils/keys';
+import { addSuccessNotification, addErrorNotification } from '../../../../actions/notifications';
 
 const STEP_BRAINKEY = 1;
 const STEP_ACTIVE_KEY = 2;
@@ -37,17 +39,22 @@ const ChangePassword = (props) => {
               return (
                 <Password
                   onSubmit={(password) => {
-                    let activeKey;
-                    if (brainkey) {
-                      activeKey = getActivePrivateKey(brainkey);
-                    } else if (activeKeyValue) {
-                      activeKey = activeKeyValue;
-                    } else {
-                      setCurrentStep(STEP_BRAINKEY);
-                      return;
+                    try {
+                      let activeKey;
+                      if (brainkey) {
+                        activeKey = getActivePrivateKey(brainkey);
+                      } else if (activeKeyValue) {
+                        activeKey = activeKeyValue;
+                      } else {
+                        setCurrentStep(STEP_BRAINKEY);
+                        return;
+                      }
+                      saveActiveKey(activeKey, password);
+                      props.onSubmit();
+                      props.dispatch(addSuccessNotification('Password for Active Key has changed'));
+                    } catch (e) {
+                      props.dispatch(addErrorNotification(e.message));
                     }
-                    saveActiveKey(activeKey, password);
-                    props.onSubmit();
                   }}
                 />
               );
@@ -83,4 +90,4 @@ ChangePassword.defaultProps = {
   description: Brainkey.defaultProps.description,
 };
 
-export default ChangePassword;
+export default connect()(ChangePassword);

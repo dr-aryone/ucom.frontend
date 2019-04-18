@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Element } from 'react-scroll';
 import PropTypes from 'prop-types';
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import Popup, { Content } from '../Popup';
 import styles from './styles.css';
 import CopyPanel from '../CopyPanel';
@@ -11,10 +11,17 @@ import { settingsHide } from '../../actions/settings';
 import Resources from '../Resources';
 import ChangePassword from '../Auth/Features/ChangePassword';
 import GenerateSocialKey from '../Auth/Features/GenerateSocialKey';
+import { restoreSocialKey, getSocialPublicKey } from '../../utils/keys';
+import OwnerActiveKeys from './OwnerActiveKeys';
 
 const Settings = (props) => {
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
   const [generateSocialKeyVisible, setGenerateSocialKeyVisible] = useState(false);
+  const [socialKey, setSocialKey] = useState(null);
+
+  useEffect(() => {
+    setSocialKey(restoreSocialKey());
+  }, []);
 
   if (!props.settings.visible) {
     return null;
@@ -62,27 +69,32 @@ const Settings = (props) => {
                 <div className={styles.subSection}>
                   <h4 className={styles.title}>Social Keys</h4>
                   <p>The pair of Social Keys is needed to sign your social transactions. After authorization on the platform, it is stored in your browser.</p>
-                  <div className={styles.copy}>
-                    <CopyPanel
-                      label="Private"
-                      value="5JoEYU5adMz2GvfaacAntwPsZbFEzBMZafpTXJG6EkZf6dsKvjy"
-                    />
-                  </div>
-                  <div className={styles.copy}>
-                    <CopyPanel
-                      label="Public"
-                      value="5JoEYU5adMz2GvfaacAntwPsZbFEzBMZafpTXJG6EkZf6dsKvjy"
-                    />
-                  </div>
-                  <div className={styles.action}>
-                    <Button
-                      strech
-                      small
-                      onClick={() => setGenerateSocialKeyVisible(true)}
-                    >
-                      Generate Social Key
-                    </Button>
-                  </div>
+                  {socialKey ? (
+                    <Fragment>
+                      <div className={styles.copy}>
+                        <CopyPanel
+                          label="Private"
+                          value={socialKey}
+                        />
+                      </div>
+                      <div className={styles.copy}>
+                        <CopyPanel
+                          label="Public"
+                          value={getSocialPublicKey(socialKey)}
+                        />
+                      </div>
+                    </Fragment>
+                  ) : (
+                    <div className={styles.action}>
+                      <Button
+                        strech
+                        small
+                        onClick={() => setGenerateSocialKeyVisible(true)}
+                      >
+                        Generate Social Key
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
                 <div className={styles.subSection}>
@@ -100,11 +112,7 @@ const Settings = (props) => {
                 </div>
 
                 <div className={styles.subSection}>
-                  <h4 className={styles.title}>Get Owner and Active key pairs with Brainkey</h4>
-                  <p>Here you can generate your keys from Brainkey.</p>
-                  <div className={styles.action}>
-                    <Button strech small>Show</Button>
-                  </div>
+                  <OwnerActiveKeys />
                 </div>
               </Element>
 
@@ -126,12 +134,17 @@ const Settings = (props) => {
       {changePasswordVisible &&
         <ChangePassword
           onClickClose={() => setChangePasswordVisible(false)}
+          onSubmit={() => setChangePasswordVisible(false)}
         />
       }
 
       {generateSocialKeyVisible &&
         <GenerateSocialKey
           onClickClose={() => setGenerateSocialKeyVisible(false)}
+          onSubmit={(socialKey) => {
+            setSocialKey(socialKey);
+            setGenerateSocialKeyVisible(false);
+          }}
         />
       }
     </Fragment>

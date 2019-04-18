@@ -1,13 +1,16 @@
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import React from 'react';
+import React, { Fragment } from 'react';
 import Button from '../Button';
 import { selectUser } from '../../store/selectors/user';
 import { followUser, unfollowUser } from '../../actions/users';
 import { getUserById } from '../../store/users';
 import { authShowPopup } from '../../actions/auth';
 import IconCheck from '../Icons/Check';
+import RequestActiveKey from '../Auth/Features/RequestActiveKey';
+import loader from '../../utils/loader';
+import { addServerErrorNotification } from '../../actions/notifications';
 
 const UserFollowButton = (props) => {
   if (!props.userId) {
@@ -28,33 +31,56 @@ const UserFollowButton = (props) => {
   const userIsOwner = owner && Number(owner.id) === Number(user.id);
   const text = (userIsFollowing || userIsOwner) ? 'Following' : 'Follow';
 
-  const onClick = () => {
-    if (!props.user.id) {
-      props.authShowPopup();
-      return;
+  const followOrUnfollow = async (activeKey) => {
+    loader.start();
+    try {
+      await (userIsFollowing ? props.unfollowUser : props.followUser)({ user, owner, activeKey });
+    } catch (e) {
+      props.addServerErrorNotification(e);
     }
-
-    (userIsFollowing ? props.unfollowUser : props.followUser)({ user, owner });
+    loader.done();
   };
 
-  return props.asLink ? (
-    <button
-      className="link red-hover"
-      onClick={onClick}
+  return (
+    <RequestActiveKey
+      onSubmit={followOrUnfollow}
     >
-      {text}
-      {(userIsFollowing || userIsOwner) && <IconCheck />}
-    </button>
-  ) : (
-    <Button
-      isStretched
-      isDisabled={userIsOwner}
-      size="medium"
-      theme="transparent"
-      withCheckedIcon={userIsFollowing || userIsOwner}
-      text={text}
-      onClick={onClick}
-    />
+      {requestActiveKey => (
+        <Fragment>
+          {props.asLink ? (
+            <button
+              className="link red-hover"
+              onClick={() => {
+                if (!props.user.id) {
+                  props.authShowPopup();
+                  return;
+                }
+                requestActiveKey();
+              }}
+            >
+              {text}
+              {(userIsFollowing || userIsOwner) && <IconCheck />}
+            </button>
+          ) : (
+            <Button
+              isStretched
+              isDisabled={userIsOwner}
+              size="medium"
+              theme="transparent"
+              withCheckedIcon={userIsFollowing || userIsOwner}
+              text={text}
+              onClick={() => {
+                if (!props.user.id) {
+                  props.authShowPopup();
+                  return;
+                }
+                requestActiveKey();
+              }}
+            />
+          )}
+        </Fragment>
+      )}
+    </RequestActiveKey>
   );
 };
 
@@ -68,6 +94,7 @@ UserFollowButton.propTypes = {
     id: PropTypes.number,
   }).isRequired,
   asLink: PropTypes.bool,
+  addServerErrorNotification: PropTypes.func.isRequired,
 };
 
 UserFollowButton.defaultProps = {
@@ -83,5 +110,6 @@ export default connect(
     followUser,
     unfollowUser,
     authShowPopup,
+    addServerErrorNotification,
   }, dispatch),
 )(UserFollowButton);

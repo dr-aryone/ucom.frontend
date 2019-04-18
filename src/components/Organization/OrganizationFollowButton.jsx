@@ -7,6 +7,7 @@ import { selectUser } from '../../store/selectors/user';
 import { followOrganization, unfollowOrganization } from '../../actions/organizations';
 import { getUserById } from '../../store/users';
 import { authShowPopup } from '../../actions/auth';
+import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 
 const OrganizationFollowButton = (props) => {
   if (!props.organizationId) {
@@ -23,21 +24,28 @@ const OrganizationFollowButton = (props) => {
   const userIsFollow = props.user.id ? (organization.followedBy || []).some(item => owner && +item.id === +owner.id) : false;
 
   return (
-    <Button
-      isStretched
-      size="medium"
-      theme="transparent"
-      withCheckedIcon={userIsFollow}
-      text={userIsFollow ? 'Joined' : 'Join'}
-      onClick={() => {
-        if (!owner) {
-          props.authShowPopup();
-          return;
-        }
-
-        (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner });
+    <RequestActiveKey
+      onSubmit={(activeKey) => {
+        (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner, activeKey });
       }}
-    />
+    >
+      {requestActiveKey => (
+        <Button
+          isStretched
+          size="medium"
+          theme="transparent"
+          withCheckedIcon={userIsFollow}
+          text={userIsFollow ? 'Joined' : 'Join'}
+          onClick={() => {
+            if (!owner) {
+              props.authShowPopup();
+              return;
+            }
+            requestActiveKey();
+          }}
+        />
+      )}
+    </RequestActiveKey>
   );
 };
 
@@ -48,6 +56,9 @@ OrganizationFollowButton.propTypes = {
   organizationId: PropTypes.number.isRequired,
   users: PropTypes.objectOf(PropTypes.object).isRequired,
   organizations: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired,
 };
 
 export default connect(

@@ -1,9 +1,12 @@
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import Popup, { Content } from '../../../Popup';
 import Brainkey from '../../Screens/Brainkey';
 import Key from '../../Screens/Key';
 import SaveKey from '../../Screens/SaveKey';
+import { getSocialPrivateKeyByBrainkey, getSocialPrivateKeyByActiveKey } from '../../../../utils/keys';
+import { addErrorNotification } from '../../../../actions/notifications';
 
 const STEP_BRAINKEY = 1;
 const STEP_ACTIVE_KEY = 2;
@@ -11,6 +14,7 @@ const STEP_SAVE_KEY = 3;
 
 const GenerateSocialKey = (props) => {
   const [currentStep, setCurrentStep] = useState(STEP_BRAINKEY);
+  const [socialKey, setSocailKey] = useState(null);
 
   return (
     <Popup onClickClose={props.onClickClose}>
@@ -21,10 +25,15 @@ const GenerateSocialKey = (props) => {
               return (
                 <Key
                   onSubmit={(activeKey) => {
-                    setCurrentStep(STEP_SAVE_KEY);
-                    console.log(activeKey);
+                    try {
+                      setSocailKey(getSocialPrivateKeyByActiveKey(activeKey));
+                      setCurrentStep(STEP_SAVE_KEY);
+                    } catch (e) {
+                      props.dispatch(addErrorNotification(e.message));
+                    }
                   }}
                   onClickBack={() => {
+                    setSocailKey(null);
                     setCurrentStep(STEP_BRAINKEY);
                   }}
                 />
@@ -34,13 +43,11 @@ const GenerateSocialKey = (props) => {
               return (
                 <SaveKey
                   title="Save your Private Social Key"
-                  copyText="5JoEYU5adMz2GvfaacAntwPsZbFEzBMZafpTXJG6EkZf6dsKvjy"
+                  copyText={socialKey}
                   proceedAsLink={false}
                   proceedText="Finish"
                   onClickProceed={() => {
-                    if (props.onClickClose) {
-                      props.onClickClose();
-                    }
+                    props.onSubmit(socialKey);
                   }}
                 />
               );
@@ -51,10 +58,15 @@ const GenerateSocialKey = (props) => {
                   title="Generate Social Key with Brainkey"
                   backText="I have Private Active key"
                   onSubmit={(brainkey) => {
-                    setCurrentStep(STEP_SAVE_KEY);
-                    console.log(brainkey);
+                    try {
+                      setSocailKey(getSocialPrivateKeyByBrainkey(brainkey));
+                      setCurrentStep(STEP_SAVE_KEY);
+                    } catch (e) {
+                      props.dispatch(addErrorNotification(e.message));
+                    }
                   }}
                   onClickBack={() => {
+                    setSocailKey(null);
                     setCurrentStep(STEP_ACTIVE_KEY);
                   }}
                 />
@@ -70,4 +82,4 @@ GenerateSocialKey.propTypes = {
   onClickClose: PropTypes.func.isRequired,
 };
 
-export default GenerateSocialKey;
+export default connect()(GenerateSocialKey);

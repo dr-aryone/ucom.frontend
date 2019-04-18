@@ -13,7 +13,6 @@ import LogoutIcon from '../Icons/Logout';
 import IconSearch from '../Icons/Search';
 import MenuWallet from '../Wallet/MenuWallet';
 import WalletActivity from '../Wallet/WalletActivity';
-import { removeBrainkey } from '../../utils/brainkey';
 import { removeToken } from '../../utils/token';
 import urls from '../../utils/urls';
 import SearchPopup from '../Search';
@@ -22,7 +21,6 @@ import { settingsShow } from '../../actions/settings';
 const UserMenu = (props) => {
   const logout = () => {
     removeToken();
-    removeBrainkey();
     props.removeUser();
     window.location.reload();
     props.hideMenuPopup();

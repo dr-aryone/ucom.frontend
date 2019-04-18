@@ -1,20 +1,15 @@
 import crypto from 'crypto';
 import wordsDict from './wordsDict';
 
+// Remove all earlier saved brainkey, today we don't save brainkey to localstorage
+try {
+  localStorage.removeItem('brainkey');
+} catch (e) {
+  console.error(e);
+}
+
 export const BRAINKEY_SYMBOLS_REGEXP = /^[a-zA-Z_ ]*$/;
 export const BRAINKEY_LENGTH = 12;
-
-export const saveBrainkey = (token) => {
-  localStorage.setItem('brainkey', token);
-};
-
-export const getBrainkey = () => (
-  localStorage.getItem('brainkey')
-);
-
-export const removeBrainkey = () => (
-  localStorage.removeItem('brainkey')
-);
 
 export const generateBrainkey = () => {
   const words = wordsDict.en.split(',');

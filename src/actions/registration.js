@@ -1,6 +1,6 @@
 import Validator from '../utils/validator';
 import api from '../api';
-import { generateBrainkey, saveBrainkey } from '../utils/brainkey';
+import { generateBrainkey } from '../utils/brainkey';
 import { saveToken } from '../utils/token';
 import urls from '../utils/urls';
 
@@ -59,7 +59,6 @@ export const registrationRegister = () => async (dispatch, getState) => {
       });
 
       saveToken(data.token);
-      saveBrainkey(brainkey);
       window.location.replace(urls.getUserUrl(data.user.id));
     } catch (e) {
       console.error(e);

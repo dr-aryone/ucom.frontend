@@ -1,5 +1,5 @@
 const getInitialState = () => ({
-  visible: false,
+  visible: true,
 });
 
 export default (state = getInitialState(), action) => {

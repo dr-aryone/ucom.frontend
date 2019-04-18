@@ -59,6 +59,33 @@ h4.title {
   grid-auto-columns: minmax(max-content, 152px);
 }
 
+.brainkeyForm {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+}
+
+.brainkeyForm .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.brainkeyForm .button svg {
+  fill: #c4c4c4;
+  transition: fill 0.2s ease;
+}
+
+.brainkeyForm .button:hover svg {
+  fill: #767676;
+}
+
 @media (max-width: 1023px) {
   .settings {
     grid-template-columns: 1fr;

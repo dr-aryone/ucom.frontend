@@ -4,7 +4,6 @@ import param from 'jquery-param';
 import HttpActions from './HttpActions';
 import { getToken } from '../utils/token';
 import { getActivePrivateKey } from '../utils/keys';
-import { getBrainkey } from '../utils/brainkey';
 import { getBackendConfig } from '../utils/config';
 import snakes from '../utils/snakes';
 import { LIST_PER_PAGE } from '../utils/list';
@@ -195,9 +194,7 @@ class Api {
     return humps(response.data);
   }
 
-  async follow(userId, token, senderAccountName, recipientAccountName) {
-    const brainkey = getBrainkey();
-    const senderActivePrivateKey = getActivePrivateKey(brainkey);
+  async follow(userId, token, senderAccountName, recipientAccountName, senderActivePrivateKey) {
     const signedTransaction = await TransactionFactory.getSignedUserFollowsUser(
       senderAccountName,
       senderActivePrivateKey,
@@ -212,9 +209,7 @@ class Api {
     return response;
   }
 
-  async unfollow(userId, token, senderAccountName, recipientAccountName) {
-    const brainkey = getBrainkey();
-    const senderActivePrivateKey = getActivePrivateKey(brainkey);
+  async unfollow(userId, token, senderAccountName, recipientAccountName, senderActivePrivateKey) {
     const signedTransaction = await TransactionFactory.getSignedUserUnfollowsUser(
       senderAccountName,
       senderActivePrivateKey,
@@ -229,9 +224,7 @@ class Api {
     return humps(response.data);
   }
 
-  async trustUser(ownerAccountName, userAccountName, userId) {
-    const ownerBrainkey = getBrainkey();
-    const ownerPrivateKey = getActivePrivateKey(ownerBrainkey);
+  async trustUser(ownerAccountName, userAccountName, userId, ownerPrivateKey) {
     const signedTransaction = await SocialApi.getTrustUserSignedTransactionsAsJson(
       ownerAccountName,
       ownerPrivateKey,
@@ -244,9 +237,7 @@ class Api {
     return humps(response.data);
   }
 
-  async untrustUser(ownerAccountName, userAccountName, userId) {
-    const ownerBrainkey = getBrainkey();
-    const ownerPrivateKey = getActivePrivateKey(ownerBrainkey);
+  async untrustUser(ownerAccountName, userAccountName, userId, ownerPrivateKey) {
     const signedTransaction = await SocialApi.getUnTrustUserSignedTransactionsAsJson(
       ownerAccountName,
       ownerPrivateKey,
@@ -259,9 +250,7 @@ class Api {
     return humps(response.data);
   }
 
-  async followOrganization(id, token, senderAccountName, recipientAccountName) {
-    const brainkey = getBrainkey();
-    const senderActivePrivateKey = getActivePrivateKey(brainkey);
+  async followOrganization(id, token, senderAccountName, recipientAccountName, senderActivePrivateKey) {
     const signedTransaction = await TransactionFactory.getSignedUserFollowsOrg(
       senderAccountName,
       senderActivePrivateKey,
@@ -275,9 +264,7 @@ class Api {
     return humps(response.data);
   }
 
-  async unfollowOrganization(id, token, senderAccountName, recipientAccountName) {
-    const brainkey = getBrainkey();
-    const senderActivePrivateKey = getActivePrivateKey(brainkey);
+  async unfollowOrganization(id, token, senderAccountName, recipientAccountName, senderActivePrivateKey) {
     const signedTransaction = await TransactionFactory.getSignedUserUnfollowsOrg(
       senderAccountName,
       senderActivePrivateKey,
@@ -450,17 +437,13 @@ class Api {
     return humps(response);
   }
 
-  async sendTokens(accountNameFrom, accountNameTo, amount, memo) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async sendTokens(accountNameFrom, accountNameTo, amount, memo, privateKey) {
     const response = await WalletApi.sendTokens(accountNameFrom, privateKey, accountNameTo, amount, memo);
 
     return humps(response);
   }
 
-  async stakeOrUnstakeTokens(accountName, netAmount, cpuAmount) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async stakeOrUnstakeTokens(accountName, netAmount, cpuAmount, privateKey) {
     const response = await WalletApi.stakeOrUnstakeTokens(
       accountName,
       privateKey,
@@ -477,9 +460,7 @@ class Api {
     return humps(response);
   }
 
-  async claimEmission(accountName) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async claimEmission(accountName, privateKey) {
     const response = await WalletApi.claimEmission(accountName, privateKey);
 
     return humps(response);
@@ -491,17 +472,13 @@ class Api {
     return humps(response);
   }
 
-  async buyRam(accountName, bytesAmount) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async buyRam(accountName, bytesAmount, privateKey) {
     const response = await WalletApi.buyRam(accountName, privateKey, bytesAmount);
 
     return humps(response);
   }
 
-  async sellRam(accountName, bytesAmount) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async sellRam(accountName, bytesAmount, privateKey) {
     const response = await WalletApi.sellRam(accountName, privateKey, bytesAmount);
 
     return humps(response);
@@ -513,9 +490,7 @@ class Api {
     return humps(response.data);
   }
 
-  async voteForBlockProducers(accountName, producers) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async voteForBlockProducers(accountName, producers, privateKey) {
     const response = await WalletApi.voteForBlockProducers(accountName, privateKey, producers);
 
     return humps(response);

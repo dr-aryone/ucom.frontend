@@ -36,9 +36,10 @@ export const walletGetAccount = accountName => async (dispatch) => {
 export const walletBuyRam = (
   accountName,
   amount,
+  privateKey,
 ) => async (dispatch) => {
   try {
-    const data = await api.buyRam(accountName, amount);
+    const data = await api.buyRam(accountName, amount, privateKey);
     dispatch(walletGetAccount(accountName));
     return data;
   } catch (e) {
@@ -50,9 +51,10 @@ export const walletBuyRam = (
 export const walletSellRam = (
   accountName,
   amount,
+  privateKey,
 ) => async (dispatch) => {
   try {
-    const data = await api.sellRam(accountName, amount);
+    const data = await api.sellRam(accountName, amount, privateKey);
     dispatch(walletGetAccount(accountName));
     return data;
   } catch (e) {
@@ -65,9 +67,10 @@ export const walletEditStake = (
   accountName,
   netAmount,
   cpuAmount,
+  privateKey,
 ) => async (dispatch) => {
   try {
-    const data = await api.stakeOrUnstakeTokens(accountName, netAmount, cpuAmount);
+    const data = await api.stakeOrUnstakeTokens(accountName, netAmount, cpuAmount, privateKey);
     dispatch(walletGetAccount(accountName));
     return data;
   } catch (e) {
@@ -81,9 +84,10 @@ export const walletSendTokens = (
   accountNameTo,
   amount,
   memo,
+  privateKey,
 ) => async (dispatch) => {
   try {
-    const data = await api.sendTokens(accountNameFrom, accountNameTo, amount, memo);
+    const data = await api.sendTokens(accountNameFrom, accountNameTo, amount, memo, privateKey);
     dispatch(walletGetAccount(accountNameFrom));
     return data;
   } catch (e) {
@@ -92,9 +96,12 @@ export const walletSendTokens = (
   }
 };
 
-export const walletGetEmission = accountName => async (dispatch) => {
+export const walletGetEmission = (
+  accountName,
+  privateKey,
+) => async (dispatch) => {
   try {
-    const data = await api.claimEmission(accountName);
+    const data = await api.claimEmission(accountName, privateKey);
     dispatch(walletGetAccount(accountName));
     return data;
   } catch (e) {

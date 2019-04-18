@@ -26,6 +26,9 @@ import EntryListSection from '../components/EntryListSection';
 import Trust from '../components/Trust';
 import { getUserName, userIsOwner } from '../utils/user';
 import { authShowPopup } from '../actions/auth';
+import RequestActiveKey from '../components/Auth/Features/RequestActiveKey';
+import { addErrorNotification } from '../actions/notifications';
+import { parseResponseError } from '../utils/errors';
 
 const UserPage = (props) => {
   const userIdOrName = props.match.params.userId;
@@ -46,7 +49,8 @@ const UserPage = (props) => {
       setTrustedByUsersIds(data.oneUserTrustedBy.data.map(i => i.id));
       setTrustedByMetadata(data.oneUserTrustedBy.metadata);
     } catch (e) {
-      console.error(e); // TODO: Show error notification for all catch sections
+      const errorMessage = parseResponseError(e)[0].message;
+      props.dispatch(addErrorNotification(errorMessage));
     }
     loader.done();
     setLoaded(true);
@@ -62,7 +66,8 @@ const UserPage = (props) => {
       setTrustedByUsersIds(data.data.map(i => i.id));
       setTrustedByMetadata(data.metadata);
     } catch (e) {
-      console.error(e);
+      const errorMessage = parseResponseError(e)[0].message;
+      props.dispatch(addErrorNotification(errorMessage));
     }
     loader.done();
   };
@@ -75,7 +80,8 @@ const UserPage = (props) => {
     try {
       props.dispatch(fetchPost(postId));
     } catch (e) {
-      console.error(e);
+      const errorMessage = parseResponseError(e)[0].message;
+      props.dispatch(addErrorNotification(errorMessage));
     }
     loader.done();
   };
@@ -134,50 +140,53 @@ const UserPage = (props) => {
           }
 
           <EntryContacts site={user.personalWebsiteUrl} />
-          <EntrySocialNetworks
-            urls={(user.usersSources || []).map(i => i.sourceUrl).filter(i => !!i)}
-          />
+          <EntrySocialNetworks urls={(user.usersSources || []).map(i => i.sourceUrl).filter(i => !!i)} />
           <EntryCreatedAt date={user.createdAt} />
 
           {!userIsOwner(user, props.owner) && !props.ownerIsLoading &&
-            <Trust
-              loading={trustLoading}
-              trusted={user && user.myselfData && user.myselfData.trust}
-              userName={getUserName(user)}
-              userAvtarUrl={urls.getFileUrl(user.avatarFilename)}
-              onClickTrust={async () => {
-                if (!props.owner.id) {
-                  props.dispatch(authShowPopup());
-                  return;
-                }
+            <RequestActiveKey
+              onSubmit={async (activeKey, isTrust) => {
                 loader.start();
                 setTrustLoading(true);
-                await props.dispatch(trustUser({
-                  userId: user.id,
-                  userAccountName: user.accountName,
-                  ownerAccountName: props.owner.accountName,
-                }));
-                await fetchTrustedBy(trustedByMetadata.page);
+                try {
+                  await props.dispatch((isTrust ? trustUser : untrustUser)({
+                    activeKey,
+                    userId: user.id,
+                    userAccountName: user.accountName,
+                    ownerAccountName: props.owner.accountName,
+                  }));
+                  await fetchTrustedBy(trustedByMetadata.page);
+                } catch (e) {
+                  const errorMessage = parseResponseError(e)[0].message;
+                  props.dispatch(addErrorNotification(errorMessage));
+                }
                 loader.done();
                 setTrustLoading(false);
               }}
-              onClickUntrust={async () => {
-                if (!props.owner.id) {
-                  props.dispatch(authShowPopup());
-                  return;
-                }
-                loader.start();
-                setTrustLoading(true);
-                await props.dispatch(untrustUser({
-                  userId: user.id,
-                  userAccountName: user.accountName,
-                  ownerAccountName: props.owner.accountName,
-                }));
-                await fetchTrustedBy(trustedByMetadata.page);
-                loader.done();
-                setTrustLoading(false);
-              }}
-            />
+            >
+              {requestActiveKey => (
+                <Trust
+                  loading={trustLoading}
+                  trusted={user && user.myselfData && user.myselfData.trust}
+                  userName={getUserName(user)}
+                  userAvtarUrl={urls.getFileUrl(user.avatarFilename)}
+                  onClickTrust={async () => {
+                    if (!props.owner.id) {
+                      props.dispatch(authShowPopup());
+                      return;
+                    }
+                    requestActiveKey(true);
+                  }}
+                  onClickUntrust={async () => {
+                    if (!props.owner.id) {
+                      props.dispatch(authShowPopup());
+                      return;
+                    }
+                    requestActiveKey(false);
+                  }}
+                />
+              )}
+            </RequestActiveKey>
           }
         </div>
         <div className="layout__main">

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { memo, Fragment } from 'react';
 import styles from '../styles.css';
 import IconArrowLeft from '../../../Icons/ArrowLeft';
-import { getSocialPrivateKey } from '../../../../utils/keys';
+import { getSocialPrivateKeyByBrainkey } from '../../../../utils/keys';
 import BrainkeyForm from '../../Forms/BrainkeyForm';
 
 const GenerateSocialKey = props => (
@@ -27,7 +27,7 @@ const GenerateSocialKey = props => (
           onChange={props.onChange}
           onSubmit={(brainkey) => {
             if (props.onSubmit) {
-              props.onSubmit(getSocialPrivateKey(brainkey));
+              props.onSubmit(getSocialPrivateKeyByBrainkey(brainkey));
             }
           }}
         />
