@@ -62,6 +62,7 @@ h4.title {
 .brainkeyForm {
   display: grid;
   grid-template-columns: 1fr max-content;
+  grid-row-gap: 8px;
 }
 
 .brainkeyForm .button {
@@ -84,6 +85,20 @@ h4.title {
 
 .brainkeyForm .button:hover svg {
   fill: #767676;
+}
+
+.brainkeyForm .error {
+  grid-row-start: 2;
+}
+
+.brainkeyForm .error svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 8px 0 0;
+}
+
+.brainkeyForm .error .text {
+  vertical-align: middle;
 }
 
 @media (max-width: 1023px) {

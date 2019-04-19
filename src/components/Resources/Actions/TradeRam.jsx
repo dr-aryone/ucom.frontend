@@ -59,6 +59,7 @@ const TradeRamForm = (props) => {
               <div className={styles.field}>
                 <TextInput
                   touched
+                  autoFocus
                   placeholder="6664"
                   label="RAM Amount, Bytes"
                   value={`${ram}`}

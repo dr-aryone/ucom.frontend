@@ -33,6 +33,7 @@ const Password = (props) => {
         </div>
         <div className={styles.field}>
           <input
+            autoFocus
             type="password"
             className={styles.input}
             placeholder="Password"

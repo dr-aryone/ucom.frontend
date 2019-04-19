@@ -5,7 +5,7 @@ import PasswordSet from './PasswordSet';
 import ActiveKey from './ActiveKey';
 import Password from './Password';
 import ChangePassword from '../ChangePassword';
-import { activeKeyIsExists, restoreEncryptedActiveKey } from '../../../../utils/keys';
+import { activeKeyIsExists } from '../../../../utils/keys';
 
 const STEP_PASSWORD_SET = 1;
 const STEP_PASSWORD = 2;
@@ -15,7 +15,6 @@ const STEP_PASSWORD_CREATE = 4;
 const RequestActiveKey = (props) => {
   const [currentStep, setCurrentStep] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [passwordError, setPasswordError] = useState('');
   const [submitArgs, setSubmitArgs] = useState([]);
 
   const resetStep = () => {
@@ -70,18 +69,8 @@ const RequestActiveKey = (props) => {
                       case STEP_PASSWORD:
                         return (
                           <Password
-                            error={passwordError}
-                            onChange={() => setPasswordError('')}
                             onClickActiveKey={() => setCurrentStep(STEP_ACTIVE_KEY)}
-                            onSubmit={(password) => {
-                              try {
-                                const activeKey = restoreEncryptedActiveKey(password);
-                                submit(activeKey);
-                                hide();
-                              } catch (e) {
-                                setPasswordError(e.message);
-                              }
-                            }}
+                            onSubmit={submit}
                           />
                         );
 

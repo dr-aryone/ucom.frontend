@@ -27,6 +27,7 @@ const KeyForm = (props) => {
       <h2 className={styles.title}>{props.title}</h2>
       <div className={styles.field}>
         <input
+          autoFocus
           className={styles.input}
           placeholder={props.placeholder}
           value={value}

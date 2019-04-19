@@ -28,6 +28,7 @@ const ActiveKey = (props) => {
       <h2 className={styles.title}>Sign Transaction</h2>
       <div className={styles.field}>
         <TextInput
+          autoFocus
           touched
           label="Active Private Key"
           value={value}

@@ -11,16 +11,28 @@ import { settingsHide } from '../../actions/settings';
 import Resources from '../Resources';
 import ChangePassword from '../Auth/Features/ChangePassword';
 import GenerateSocialKey from '../Auth/Features/GenerateSocialKey';
-import { restoreSocialKey, getSocialPublicKey } from '../../utils/keys';
+import { restoreSocialKey, socialKeyIsExists, getPublicKeyByPrivateKey } from '../../utils/keys';
 import OwnerActiveKeys from './OwnerActiveKeys';
+import { addErrorNotification } from '../../actions/notifications';
 
 const Settings = (props) => {
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
   const [generateSocialKeyVisible, setGenerateSocialKeyVisible] = useState(false);
-  const [socialKey, setSocialKey] = useState(null);
+  const [keys, setKeys] = useState({});
 
   useEffect(() => {
-    setSocialKey(restoreSocialKey());
+    try {
+      if (socialKeyIsExists()) {
+        const socialKey = restoreSocialKey();
+        setKeys({
+          ...keys,
+          socialKey,
+          socialPublicKey: getPublicKeyByPrivateKey(socialKey),
+        });
+      }
+    } catch (e) {
+      props.dispatch(addErrorNotification(e.message));
+    }
   }, []);
 
   if (!props.settings.visible) {
@@ -42,7 +54,6 @@ const Settings = (props) => {
                 sections={[
                   { title: 'Resourses', name: 'Resourses' },
                   { title: 'Keys', name: 'Keys' },
-                  { title: 'Referral Link', name: 'ReferralLink' },
                 ]}
                 scrollerOptions={{
                   spy: true,
@@ -69,18 +80,18 @@ const Settings = (props) => {
                 <div className={styles.subSection}>
                   <h4 className={styles.title}>Social Keys</h4>
                   <p>The pair of Social Keys is needed to sign your social transactions. After authorization on the platform, it is stored in your browser.</p>
-                  {socialKey ? (
+                  {keys.socialKey ? (
                     <Fragment>
                       <div className={styles.copy}>
                         <CopyPanel
                           label="Private"
-                          value={socialKey}
+                          value={keys.socialKey}
                         />
                       </div>
                       <div className={styles.copy}>
                         <CopyPanel
                           label="Public"
-                          value={getSocialPublicKey(socialKey)}
+                          value={keys.socialPublicKey}
                         />
                       </div>
                     </Fragment>
@@ -115,17 +126,6 @@ const Settings = (props) => {
                   <OwnerActiveKeys />
                 </div>
               </Element>
-
-              <Element name="ReferralLink" className={styles.section}>
-                <h3 className={styles.title}>Referral Link</h3>
-                <p>Provide a referral link to your friend and gain importance from your referrals, registered on the platform. You get half the importance they acquire.</p>
-                <div className={styles.copy}>
-                  <CopyPanel
-                    label="Your referral link"
-                    value="u.community/invite4rom_KR"
-                  />
-                </div>
-              </Element>
             </div>
           </div>
         </Content>
@@ -142,8 +142,16 @@ const Settings = (props) => {
         <GenerateSocialKey
           onClickClose={() => setGenerateSocialKeyVisible(false)}
           onSubmit={(socialKey) => {
-            setSocialKey(socialKey);
             setGenerateSocialKeyVisible(false);
+            try {
+              setKeys({
+                ...keys,
+                socialKey,
+                socialPublicKey: getPublicKeyByPrivateKey(socialKey),
+              });
+            } catch (e) {
+              props.dispatch(addErrorNotification(e.message));
+            }
           }}
         />
       }

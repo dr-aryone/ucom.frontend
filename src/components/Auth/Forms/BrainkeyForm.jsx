@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import styles from '../styles.css';
 import Button from '../../Button/index';
 import IconInputError from '../../Icons/InputError';
-import { BRAINKEY_SYMBOLS_REGEXP, BRAINKEY_LENGTH } from '../../../utils/brainkey';
+import {
+  isBrainkeySymbolsValid,
+  isBrainkeyLengthValid,
+  ERROR_WRONG_BRAINKEY,
+} from '../../../utils/brainkey';
 import { removeMultipleSpaces } from '../../../utils/text';
-
-const ERROR_WRONG_BRAINKEY = 'Wrong brainkey format';
 
 const BrainkeyForm = (props) => {
   const [brainkey, setBrainkey] = useState('');
@@ -18,7 +20,7 @@ const BrainkeyForm = (props) => {
       onSubmit={(e) => {
         e.preventDefault();
         const trimedBrainkey = brainkey.trim();
-        if (!BRAINKEY_SYMBOLS_REGEXP.test(trimedBrainkey) || trimedBrainkey.split(' ').length !== BRAINKEY_LENGTH) {
+        if (!isBrainkeySymbolsValid(trimedBrainkey) || !isBrainkeyLengthValid(trimedBrainkey)) {
           setFormError(ERROR_WRONG_BRAINKEY);
           return;
         }
@@ -34,13 +36,14 @@ const BrainkeyForm = (props) => {
       }
       <div className={styles.field}>
         <input
+          autoFocus
           className={styles.input}
           placeholder="Enter your 12-word Brainkey"
           value={brainkey}
           onChange={(e) => {
             const value = removeMultipleSpaces(e.target.value);
             setBrainkey(value);
-            if (!BRAINKEY_SYMBOLS_REGEXP.test(value)) {
+            if (!isBrainkeySymbolsValid(value)) {
               setFormError(ERROR_WRONG_BRAINKEY);
             } else {
               setFormError('');

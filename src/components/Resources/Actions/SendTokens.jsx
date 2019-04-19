@@ -63,6 +63,7 @@ const SendTokens = (props) => {
               <h2 className={styles.title}>Send Tokens</h2>
               <div className={styles.field}>
                 <TextInput
+                  autoFocus
                   touched
                   placeholder="0"
                   label="UOS Amount"

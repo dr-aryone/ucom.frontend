@@ -10,6 +10,7 @@ try {
 
 export const BRAINKEY_SYMBOLS_REGEXP = /^[a-zA-Z_ ]*$/;
 export const BRAINKEY_LENGTH = 12;
+export const ERROR_WRONG_BRAINKEY = 'Wrong brainkey format';
 
 export const generateBrainkey = () => {
   const words = wordsDict.en.split(',');
@@ -35,3 +36,9 @@ export const generateBrainkey = () => {
 
   return result.join(' ');
 };
+
+export const isBrainkeySymbolsValid = value =>
+  BRAINKEY_SYMBOLS_REGEXP.test(value);
+
+export const isBrainkeyLengthValid = value =>
+  value.split(' ').length === BRAINKEY_LENGTH;

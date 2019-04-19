@@ -4,7 +4,7 @@ import TextInput from '../../../TextInput';
 import IconInputError from '../../../Icons/InputError';
 import Button from '../../../Button/index';
 import styles from '../../../Resources/Actions/styles.css';
-import { passwordIsValid } from '../../../../utils/keys';
+import { passwordIsValid, restoreEncryptedActiveKey } from '../../../../utils/keys';
 
 const PASSWORD_ERROR = 'Wrong password format';
 
@@ -21,8 +21,13 @@ const Password = (props) => {
           setFormError(PASSWORD_ERROR);
           return;
         }
-        setFormError('');
-        props.onSubmit(password);
+        try {
+          const activeKey = restoreEncryptedActiveKey(password);
+          setFormError('');
+          props.onSubmit(activeKey);
+        } catch (e) {
+          setFormError(e.message);
+        }
       }}
     >
       <h2 className={styles.title}>Sign Transaction</h2>
@@ -30,6 +35,7 @@ const Password = (props) => {
       <div className={styles.field}>
         <TextInput
           touched
+          autoFocus
           type="password"
           label="Password"
           value={password}
