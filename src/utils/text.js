@@ -5,6 +5,7 @@ import urls from './urls';
 export const COPY_TO_CLIPBOARD_SUCCESS_MESSAGE = 'Link copyed to clipboard';
 
 const URL_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+export const IMG_URL_REGEXP = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
 
 export const escapeQuotes = memoize((text = '') => text.replace(/&quot;/g, '"'));
 

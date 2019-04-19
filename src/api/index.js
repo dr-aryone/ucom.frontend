@@ -24,6 +24,7 @@ if (process.env.NODE_ENV === 'production') {
 class Api {
   constructor() {
     this.actions = new HttpActions(getBackendConfig().httpEndpoint);
+    this.uploaderActions = new HttpActions(getBackendConfig().uploaderEndpoint);
   }
 
   getPrivateHeaders() {
@@ -503,7 +504,7 @@ class Api {
   }
 
   async uploadPostImage(file) {
-    const response = await this.actions.post('/api/v1/posts/image', { image: file });
+    const response = await this.uploaderActions.post('/api/v1/images/one-image', { one_image: file });
 
     return humps(response.data);
   }

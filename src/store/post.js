@@ -9,7 +9,6 @@ const getInitialState = () => ({
     title: '',
     leadingText: '',
     description: '',
-    mainImageFilename: '',
   },
   errors: {},
   isValid: false,
