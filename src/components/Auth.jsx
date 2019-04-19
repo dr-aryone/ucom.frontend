@@ -17,8 +17,6 @@ const Auth = (props) => {
     return null;
   }
 
-  console.log('location.pathname: ', props.location.pathname);
-
   return (
     <Popup onClickClose={() => props.authSetVisibility(false)}>
       <ModalContent mod="auth" onClickClose={() => props.authSetVisibility(false)}>

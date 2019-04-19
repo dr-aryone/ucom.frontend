@@ -37,7 +37,7 @@ const OrganizationFollowButton = (props) => {
 
   return props.asLink ? (
     <button
-      className="link red"
+      className="link red-hover"
       onClick={onClick}
     >
       {text}
