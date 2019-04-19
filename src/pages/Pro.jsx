@@ -53,7 +53,7 @@ const Profile = (props) => {
 
   console.log(userData || 'false');
 
-  // console.log(userData);
+  console.log('sites: ', sites);
 
   return (
     <div className={styles.page}>
@@ -139,7 +139,7 @@ const Profile = (props) => {
                       <Button
                         small
                         grayBorder
-                        onClick={() => setSites([])}
+                        // onClick={() => sites.length - 1 !== 0 ? setSites({ ...sites, ''}) : setSites([])}
                       >
                         Add site
                       </Button>
