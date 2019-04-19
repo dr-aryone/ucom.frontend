@@ -4,7 +4,8 @@ import React, { Fragment, useState } from 'react';
 import TextareaAutosize from '../TextareaAutosize';
 import Button from '../Button';
 import { setDataToStoreToLS } from '../../actions';
-import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR } from '../../utils/upload';
+import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR, compressUploadedImage } from '../../utils/upload';
+import { changeCoverImageUrl } from '../../utils/entityImages';
 import { addErrorNotification } from '../../actions/notifications';
 import api from '../../api';
 import loader from '../../utils/loader';
@@ -51,9 +52,9 @@ const PostSubmitForm = (props) => {
               setLoading(true);
 
               try {
-                const data = await api.uploadPostImage(file);
-                entityImages.articleTitle = [{ url: data.files[0].url }];
-                props.setDataToStoreToLS({ entityImages });
+                const data = await api.uploadPostImage(await compressUploadedImage(file));
+                const { url } = data.files[0];
+                props.setDataToStoreToLS({ entityImages: changeCoverImageUrl(entityImages, url) });
               } catch (e) {
                 console.error(e);
               }

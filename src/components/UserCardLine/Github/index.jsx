@@ -58,7 +58,7 @@ UserCardLine.propTypes = {
   nameGh: PropTypes.string.isRequired,
   rate: PropTypes.number.isRequired,
   accountName: PropTypes.string.isRequired,
-  order: PropTypes.string.isRequired,
+  order: PropTypes.number.isRequired,
   url: PropTypes.string,
   isOwner: PropTypes.bool,
   sign: PropTypes.string,

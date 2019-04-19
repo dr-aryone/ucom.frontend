@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { formatRate } from '../../../utils/rate';
 import styles from './styles.css';
 import Avatar from '../../Avatar';
@@ -26,6 +26,15 @@ const OfferCard = (props) => {
   const { conditions } = props;
   const month = new Date(props.startedAt).toLocaleString('en-us', { month: 'long' });
   const day = new Date(props.startedAt).getDate();
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
+
+  const callAuthShowPopup = () => {
+    props.authShowPopup();
+  };
 
   // const checkSizeWindow = () => {
   //   if (window.scrollY > 485 && window.innerWidth < 414) {
@@ -112,47 +121,55 @@ const OfferCard = (props) => {
             count={+props.count}
           />
 
-          {}
-
-          {((!props.cookie && !conditions) ||
+          {loaded && (() => {
+            if (((!props.cookie && !conditions) ||
             (conditions && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false) ||
-            ((conditions && conditions.airdropStatus !== AirdropStatuses.RECEIVED && conditions.airdropStatus !== AirdropStatuses.PENDING) && (conditions && conditions.airdropStatus === AirdropStatuses.NEW && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false))) &&
-            <a
-              className={classNames(
-                `${styles.btn}`,
-                {/* { [styles.btnFixed]: btnFixed === true },
-                { [styles.btnFixedActive]: btnFixedActive === true }, */},
-              )}
-              href={config.gitHubAuthLink}
-            >
-              Get your score
-            </a>
-          }
-          {((conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === false) || props.cookie) && !props.token &&
-            <div
-              role="presentation"
-              onClick={() => props.authShowPopup()}
-              className={classNames(
-                `${styles.btn}`,
-                {/* { [styles.btnFixed]: btnFixed === true },
-                { [styles.btnFixedActive]: btnFixedActive === true }, */ },
-              )}
-            >
-              Sign up
-            </div>
-          }
-          {((conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === true) || (props.cookie && props.token)) &&
-            <div
-              role="presentation"
-              className={classNames(
-                `${styles.btn}`,
-                `${styles.result}`,
-              )}
-              onClick={() => setPopupVisible(true)}
-            >
-              See Results
-            </div>
-          }
+            ((conditions && conditions.airdropStatus !== AirdropStatuses.RECEIVED && conditions.airdropStatus !== AirdropStatuses.PENDING) && (conditions && conditions.airdropStatus === AirdropStatuses.NEW && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false)))) {
+              return (
+                <a
+                  className={classNames(
+                    `${styles.btn}`,
+                    { [styles.btnVisible]: loaded === true },
+                    {/* { [styles.btnFixed]: btnFixed === true },
+                    { [styles.btnFixedActive]: btnFixedActive === true }, */},
+                  )}
+                  href={config.gitHubAuthLink}
+                >
+                  Get your score
+                </a>
+              );
+            } else if (((conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === false) || props.cookie) && !props.token) {
+              return (
+                <div
+                  role="presentation"
+                  onClick={() => callAuthShowPopup()}
+                  className={classNames(
+                    `${styles.btn}`,
+                    { [styles.btnVisible]: loaded === true },
+                    {/* { [styles.btnFixed]: btnFixed === true },
+                    { [styles.btnFixedActive]: btnFixedActive === true }, */ },
+                  )}
+                >
+                  Sign up
+                </div>
+              );
+            } else if ((conditions && conditions.conditions.authGithub === true && conditions.conditions.authMyself === true) || (props.cookie && props.token)) {
+              return (
+                <div
+                  role="presentation"
+                  className={classNames(
+                    `${styles.btn}`,
+                    `${styles.result}`,
+                    { [styles.btnVisible]: loaded === true },
+                  )}
+                  onClick={() => setPopupVisible(true)}
+                >
+                  See Results
+                </div>
+              );
+            }
+            return null;
+          })()}
         </div>
       </div>
     </Fragment>

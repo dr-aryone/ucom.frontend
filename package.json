@@ -22,11 +22,13 @@
   "backend": {
     "staging": {
       "httpEndpoint": "https://staging-backend.u.community",
-      "socketEndpoint": "https://websocket-staging.u.community:443"
+      "socketEndpoint": "https://websocket-staging.u.community:443",
+      "uploaderEndpoint": "https://staging-uploader.u.community"
     },
     "production": {
       "httpEndpoint": "https://backend.u.community",
-      "socketEndpoint": "https://websocket.u.community:443"
+      "socketEndpoint": "https://websocket.u.community:443",
+      "uploaderEndpoint": "https://uploader.u.community"
     }
   },
   "iframely": {
@@ -119,10 +121,10 @@
     "socket.io-client": "^2.1.1",
     "textarea-caret": "^3.1.0",
     "tributejs": "git+https://github.com/UOSnetwork/tribute.git",
-    "ucom-libs-graphql-schemas": "^1.11.0",
+    "ucom-libs-graphql-schemas": "^1.12.0",
     "ucom-libs-social-transactions": "^1.1.4",
     "ucom-libs-wallet": "^1.8.3",
-    "ucom.libs.common": "^1.7.0",
+    "ucom.libs.common": "^1.8.0",
     "uuid": "^3.3.2",
     "validatorjs": "^3.14.2"
   }

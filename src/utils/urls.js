@@ -113,7 +113,7 @@ const urls = {
       return null;
     }
 
-    if (filename.indexOf('http://') > -1) {
+    if (filename.indexOf('http://') > -1 || filename.indexOf('https://') > -1) {
       return filename;
     }
 

@@ -25,13 +25,13 @@ const FeedUser = (props) => {
     loader.done();
   };
 
-  const onSubmitPostForm = (description, mainImageFilename) => {
+  const onSubmitPostForm = (description, entityImages) => {
     props.feedCreatePost(props.feedTypeId, {
       organizationId: props.organizationId,
       userId: props.userId,
       data: {
         description,
-        mainImageFilename,
+        entityImages,
         postTypeId: POST_TYPE_DIRECT_ID,
       },
     });

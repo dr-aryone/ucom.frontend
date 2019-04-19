@@ -18,7 +18,7 @@ const UserListAirdrop = (props) => {
         <UserCardLineTitle />
         {props.users && (props.users).map((item, index) => (
           <UserCardLine
-            order={`${props.metadata.page - 1 !== 0 ? props.metadata.page : ''}${index + 1}`}
+            order={props.metadata.page - 1 !== 0 ? (+props.metadata.page * 10) + (index + 1) : index + 1}
             key={item.id}
             url={urls.getUserUrl(item.id)}
             userPickSrc={urls.getFileUrl(item.avatarFilename)}

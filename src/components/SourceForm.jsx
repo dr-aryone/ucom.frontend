@@ -70,7 +70,7 @@ class SourceForm extends PureComponent {
               <div className="field__input">
                 <div className="field__section">
                   <DropZone
-                    onDrop={files => this.setData({ avatarFilename: files[0] })}
+                    onDrop={file => this.setData({ avatarFilename: file })}
                     text="Add or drag img"
                   />
                 </div>
