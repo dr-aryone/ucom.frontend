@@ -13,6 +13,7 @@ import loader from '../../../utils/loader';
 import { addErrorNotification, addSuccessNotification } from '../../../actions/notifications';
 import { parseResponseError } from '../../../utils/errors';
 import RequestActiveKey from '../../Auth/Features/RequestActiveKey';
+import formatNumber from '../../../utils/formatNumber';
 
 const Tokens = (props) => {
   const { tokens } = props.wallet;
@@ -24,7 +25,7 @@ const Tokens = (props) => {
   return (
     <div className={styles.tokens}>
       <Token
-        value={`${tokens.active}`}
+        value={`${formatNumber(tokens.active)}`}
         label="Active, UOS"
         action={{
           title: 'Send',
@@ -32,7 +33,7 @@ const Tokens = (props) => {
         }}
       />
       <Token
-        value={`${tokens.staked}`}
+        value={`${formatNumber(tokens.staked)}`}
         label="Staked, UOS"
         action={{
           title: 'Edit Stake',
@@ -54,7 +55,7 @@ const Tokens = (props) => {
       >
         {requestActiveKey => (
           <Token
-            value={`${tokens.emission}`}
+            value={`${formatNumber(tokens.emission)}`}
             label="Emission, UOS"
             action={{
               title: 'Get Emission',

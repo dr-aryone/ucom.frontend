@@ -8,6 +8,7 @@ import {
   walletToggleSellRam,
   walletToggleEditStake,
 } from '../../actions/walletSimple';
+import formatNumber from '../../utils/formatNumber';
 
 const fixValue = amount => Math.round(amount * 100) / 100;
 const getPercent = (free, total) => (free * 100) / total;
@@ -23,8 +24,8 @@ const Resources = (props) => {
     <div className={styles.resources}>
       {ram &&
         <Resource
-          value={`${fixValue(ram.free)} ${ram.dimension} Free`}
-          total={`${fixValue(ram.total)} ${ram.dimension}`}
+          value={`${formatNumber(fixValue(ram.free))} ${ram.dimension} Free`}
+          total={`${formatNumber(fixValue(ram.total))} ${ram.dimension}`}
           title="RAM"
           progress={getPercent(ram.free, ram.total)}
           actions={[{
@@ -38,8 +39,8 @@ const Resources = (props) => {
       }
       {cpu &&
         <Resource
-          value={`${fixValue(cpu.free)} ${cpu.dimension}`}
-          total={`${fixValue(cpu.total)} ${cpu.dimension}`}
+          value={`${formatNumber(fixValue(cpu.free))} ${cpu.dimension}`}
+          total={`${formatNumber(fixValue(cpu.total))} ${cpu.dimension}`}
           title="CPU Time"
           progress={getPercent(cpu.free, cpu.total)}
           actions={[{
@@ -50,8 +51,8 @@ const Resources = (props) => {
       }
       {net &&
         <Resource
-          value={`${fixValue(net.free)} ${net.dimension}`}
-          total={`${fixValue(net.total)} ${net.dimension}`}
+          value={`${formatNumber(fixValue(net.free))} ${net.dimension}`}
+          total={`${formatNumber(fixValue(net.total))} ${net.dimension}`}
           title="Network BW"
           progress={getPercent(net.free, net.total)}
           actions={[{

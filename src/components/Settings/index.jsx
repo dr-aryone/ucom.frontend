@@ -45,7 +45,10 @@ const Settings = (props) => {
         id="settings-popup"
         onClickClose={() => props.dispatch(settingsHide())}
       >
-        <Content onClickClose={() => props.dispatch(settingsHide())}>
+        <Content
+          fixWidth
+          onClickClose={() => props.dispatch(settingsHide())}
+        >
           <div className={styles.settings}>
             <div className={styles.sidebar}>
               <VerticalMenu
@@ -59,6 +62,7 @@ const Settings = (props) => {
                   spy: true,
                   duration: 500,
                   delay: 100,
+                  offset: -88,
                   smooth: true,
                   containerId: 'settings-popup',
                 }}

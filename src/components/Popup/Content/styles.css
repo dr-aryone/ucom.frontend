@@ -16,6 +16,12 @@
   border-radius: 12px;
 }
 
+.content.fixWidth {
+  min-width: auto;
+  max-width: 1200px;
+  width: 100%;
+}
+
 .content.walletAction {
   min-width: 540px;
   max-width: 540px;
