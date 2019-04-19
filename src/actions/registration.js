@@ -61,7 +61,7 @@ export const registrationRegister = prevPage => async (dispatch, getState) => {
 
       saveToken(data.token);
       saveBrainkey(brainkey);
-      if (prevPage !== undefined && !Number.isNaN(prevPage)) {
+      if (prevPage !== undefined && prevPage !== null && !Number.isNaN(prevPage)) {
         window.location.replace(getPostUrl(prevPage));
       } else {
         window.location.replace(urls.getUserUrl(data.user.id));

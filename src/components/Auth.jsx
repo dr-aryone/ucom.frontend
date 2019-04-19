@@ -17,6 +17,8 @@ const Auth = (props) => {
     return null;
   }
 
+  console.log('location.pathname: ', props.location.pathname);
+
   return (
     <Popup onClickClose={() => props.authSetVisibility(false)}>
       <ModalContent mod="auth" onClickClose={() => props.authSetVisibility(false)}>
@@ -83,7 +85,7 @@ const Auth = (props) => {
               <div className="inline inline_small">
                 <span className="inline__item">No account?</span>
                 <span className="inline__item">
-                  <Link className="auth__link" to={{ pathname: urls.getRegistrationUrl(), state: { prevPath: props.location.pathname } }}>Create one</Link>
+                  <Link className="auth__link" to={{ pathname: urls.getRegistrationUrl(), state: { prevPath: props.location.pathname || null } }}>Create one</Link>
                 </span>
               </div>
             </div>

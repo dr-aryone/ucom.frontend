@@ -122,9 +122,11 @@ const OfferCard = (props) => {
           />
 
           {loaded && (() => {
+            console.log('qqq: ', props.cookie, conditions);
             if (((!props.cookie && !conditions) ||
-            (conditions && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false) ||
-            ((conditions && conditions.airdropStatus !== AirdropStatuses.RECEIVED && conditions.airdropStatus !== AirdropStatuses.PENDING) && (conditions && conditions.airdropStatus === AirdropStatuses.NEW && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false)))) {
+            (conditions && conditions.conditions.authGithub === false && (conditions.conditions.authMyself === false || conditions.conditions.authMyself === true)) ||
+            ((conditions && conditions.airdropStatus !== AirdropStatuses.RECEIVED && conditions.airdropStatus !== AirdropStatuses.PENDING) &&
+            (conditions && conditions.airdropStatus === AirdropStatuses.NEW && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false)))) {
               return (
                 <a
                   className={classNames(

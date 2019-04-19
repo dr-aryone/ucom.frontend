@@ -44,7 +44,7 @@ class Registration extends PureComponent {
                 <RegistrationStepIntro />
                 <RegistrationStepFirst />
                 <RegistrationStepSecond />
-                <RegistrationStepThird />
+                <RegistrationStepThird prevPath={this.props.location && this.props.location.state ? this.props.location.state.prevPath : null} />
               </div>
             </div>
           </div>

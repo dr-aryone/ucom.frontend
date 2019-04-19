@@ -35,8 +35,11 @@ class RegistrationStepThird extends PureComponent {
 
   render() {
     let prevPageId;
-    if (this.props.location.state.prevPath && +this.props.location.state.prevPath.match(/\d+/)[0] === offerId) {
+    const prevPath = this.props.prevPath !== null ? this.props.prevPath.match(/\d+/) : null;
+    if (prevPath !== null && +prevPath[0] === offerId) {
       prevPageId = offerId;
+    } else {
+      prevPageId = null;
     }
 
     return (
@@ -95,7 +98,7 @@ class RegistrationStepThird extends PureComponent {
                 type="submit"
                 text="Finish"
                 isDisabled={this.props.registration.loading || !this.state.brainkeyVerificationIsValid || !this.state.termsAccepted}
-                onClick={() => this.props.registrationRegister(+prevPageId)}
+                onClick={() => this.props.registrationRegister(prevPageId || null)}
               />
             </div>
             {this.state.brainkeyVerificationIsComplete && !this.state.brainkeyVerificationIsValid &&
