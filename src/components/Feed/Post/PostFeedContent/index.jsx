@@ -11,6 +11,7 @@ import DescDirectPost from './DescDirectPost';
 import { checkMentionTag, escapeQuotes } from '../../../../utils/text';
 import styles from './styles.css';
 import urls from '../../../../utils/urls';
+import { getCoverImage } from '../../../../utils/entityImages';
 
 class PostFeedContent extends PureComponent {
   constructor(props) {
@@ -42,14 +43,13 @@ class PostFeedContent extends PureComponent {
           <div className={styles.form}>
             <FeedForm
               message={post.description}
-              postId={post.id}
-              mainImageFilename={post.mainImageFilename}
+              entityImages={post.entityImages}
               onCancel={this.hideForm}
-              onSubmit={(description, mainImageFilename) => {
+              onSubmit={(description, entityImages) => {
                 this.hideForm();
                 this.props.updatePost({
                   postId: post.id,
-                  data: { description, mainImageFilename },
+                  data: { description, entityImages },
                 });
               }}
             />
@@ -58,9 +58,9 @@ class PostFeedContent extends PureComponent {
           <Fragment>
             {(this.props.postTypeId === 10 || post.postTypeId === 10) ? (
               <Fragment>
-                {post.mainImageFilename && !this.state.formIsVisible && (
+                {getCoverImage(post) && !this.state.formIsVisible && (
                   <div className={styles.cover}>
-                    <img src={urls.getFileUrl(post.mainImageFilename)} alt="cover" />
+                    <img src={urls.getFileUrl(getCoverImage(post))} alt="cover" />
                   </div>
                 )}
                 {post.description &&

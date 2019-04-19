@@ -70,14 +70,17 @@ class Medium extends PureComponent {
 
 Medium.propTypes = {
   value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  onUploadStart: PropTypes.func.isRequired,
-  onUploadDone: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+  onUploadStart: PropTypes.func,
+  onUploadDone: PropTypes.func,
   addErrorNotification: PropTypes.func.isRequired,
 };
 
 Medium.defaultProps = {
   value: null,
+  onChange: null,
+  onUploadStart: null,
+  onUploadDone: null,
 };
 
 export default connect(
