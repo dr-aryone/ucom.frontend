@@ -64,15 +64,20 @@ class TributeWrapper extends PureComponent {
           }
         },
         onChange: this.props.enabledImgUrlParse ? (e) => {
-          e.persist();
           this.props.onChange(e.target.value);
-          setTimeout(() => {
+          console.log('test', e.target.value, e.target.value.match(IMG_URL_REGEXP));
+
+          if (e.target.value.match(IMG_URL_REGEXP)) {
             e.persist();
-            this.props.onChange(e.target.value.replace(IMG_URL_REGEXP, (url) => {
-              this.props.onParseImgUrl(url);
-              return '';
-            }));
-          }, VISUAL_DELAY);
+            setTimeout(() => {
+              console.log('test setTimeout');
+
+              this.props.onChange(e.target.value.replace(IMG_URL_REGEXP, (url) => {
+                this.props.onParseImgUrl(url);
+                return '';
+              }));
+            }, VISUAL_DELAY);
+          }
         } : (e) => {
           this.props.onChange(e.target.value);
         },

@@ -9,7 +9,6 @@ import { escapeQuotes } from '../../utils/text';
 import { removeCoverImage, changeCoverImageUrl, getCoverImage } from '../../utils/entityImages';
 import IconClip from '../Icons/Clip';
 import IconClose from '../Icons/Close';
-import DropZone from '../DropZone';
 import TributeWrapper from '../TributeWrapper';
 import urls from '../../utils/urls';
 import api from '../../api';
@@ -81,7 +80,7 @@ const FeedForm = (props) => {
             <IconClip />
           </label>
 
-          {getCoverImage({ entityImages }) ? (
+          {/* {getCoverImage({ entityImages }) ? (
             <div className="cover cover_small">
               <div className="cover__inner">
                 <div className="cover__remove">
@@ -100,11 +99,8 @@ const FeedForm = (props) => {
               </div>
             </div>
           ) : (
-            <DropZone
-              className="drop-zone_clip"
-              onDrop={onImage}
-            />
-          )}
+
+          )} */}
         </div>
       </div>
 
