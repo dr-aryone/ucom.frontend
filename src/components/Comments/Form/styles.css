@@ -38,6 +38,10 @@
   position: relative;
 }
 
+.fieldNotBorder {
+  border: none;
+}
+
 .inputWrapper {
   flex: 1 1 auto;
 }
@@ -96,7 +100,6 @@
   position: relative;
   z-index: 0;
   margin-top: 20px;
-  max-width: 100px;
   margin-left: auto;
 }
 

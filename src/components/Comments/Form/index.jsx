@@ -49,8 +49,9 @@ const Form = (props) => {
     setBase64Cover(base64Cover);
     const data = await api.uploadPostImage(files[0]);
     const { url } = data.files[0];
-    // TODO make multiple upon creating gallery
+    // TODO: make multiple upon creating gallery
     // setEntityImages({ gallery: [...entityImages.gallery, { url }] });
+    setBase64Cover(url);
     setEntityImages({ gallery: [{ url }] });
   };
 
@@ -93,7 +94,6 @@ const Form = (props) => {
                   }
                 }
                 onChange={(message) => {
-                  console.log('message', message);
                   setMessage(message);
                   setTimeout(() => autosize.update(textareaEl.current), 0);
                 }}
@@ -130,7 +130,6 @@ const Form = (props) => {
           }
         </div>
       </div>
-      {/* TODO in Image.jsx */}
       {base64Cover &&
         <Image
           src={base64Cover}
@@ -139,26 +138,6 @@ const Form = (props) => {
             setBase64Cover('');
           }}
         />
-      //  (
-      //   <div className="cover cover_small">
-      //     <div className="cover__inner">
-      //       <div className="cover__remove">
-      //         <button
-      //           type="button"
-      //           className="button-clean button-clean_close"
-      //           onClick={() => {
-      //               setEntityImages('');
-      //               setBase64Cover('');
-      //           }}
-      //         >
-      //           <IconClose />
-      //         </button>
-      //       </div>
-
-      //       <img className="cover__img" src={base64Cover} alt="" />
-      //     </div>
-      //   </div>
-      // )
       }
     </div>
   );

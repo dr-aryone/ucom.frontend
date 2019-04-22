@@ -30,17 +30,19 @@ const EmbedMenu = (props) => {
       {active &&
         <Fragment>
           <div className={styles.item}>
-            <label
-              title="Add iamge"
+            <div
               className={styles.iconImage}
             >
-
               <IconPhoto />
               <DropZone
                 className="drop-zone_clip"
-                onDrop={props.onImage}
+                onDrop={(file) => {
+                  props.onImage(file);
+                  setActive(!active);
+                  }
+                }
               />
-            </label>
+            </div>
           </div>
         </Fragment>
       }

@@ -39,13 +39,41 @@
   background: #fff;
 }
 
+.feed-form__submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  fill: #c4c4c4;
+  outline: none;
+  background: #fff;
+
+  &:not(:disabled):hover {
+    fill: #767676;
+  }
+
+  &:disabled {
+    opacity: 0.2;
+    cursor: default;
+  }
+}
+
 .feed-form__field {
   display: flex;
 }
 
 .feed-form__message {
-  flex: 1 1 auto;
   padding: 12px;
+  flex: 1 1 auto;
+}
+
+.feed-form__container {
+  position: relative;
+  flex: 1 1 auto;
 }
 
 .feed-form__textarea {
@@ -62,6 +90,8 @@
 
 .feed-form__actions {
   text-align: right;
+  display: flex;
+  margin-top: 20px;
 }
 
 .feed-form__clip {

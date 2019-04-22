@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import autosize from 'autosize';
 import React, { useState, useRef, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.css';
@@ -35,7 +34,9 @@ const DragAndDrop = (props) => {
 
   const onDragLeave = (event) => {
     const isFocus = props.textareaEl.current === document.activeElement;
-    const outHtml = event.target === document.documentElement;
+    // const outHtml = event.target === document.documentElement;
+    const outHtml = (event.target === document.documentElement || !event.relatedTarget) && (event.screenX) === 0 && (event.screenY === 0);
+
     const isForm = props.formEl.current === event.target;
     if (isFocus && outHtml) {
       setDropState(notDrop);
@@ -47,8 +48,6 @@ const DragAndDrop = (props) => {
   const onDropEnd = () => setDropState(notDrop);
 
   useEffect(() => {
-    autosize(props.textareaEl.current);
-
     document.addEventListener('dragenter', onDrag);
     document.addEventListener('dragleave', onDragLeave);
     document.addEventListener('drop', onDropEnd);
@@ -59,37 +58,37 @@ const DragAndDrop = (props) => {
       document.removeEventListener('drop', onDropEnd);
     };
   }, []);
-  console.log('render');
+
   const canDrop = dropState === isDrop || dropState === isDropOnForm;
-  const Parrent = canDrop ? Fragment : 'div';
+  const Parent = canDrop ? Fragment : 'div';
+
   return (
-    <Parrent className={canDrop ? undefined : styles.actions}>
-      {!props.base64Cover && (
-        <div
-          className={classNames({
-            [styles.drop]: canDrop,
-            [styles.dropOnForm]: dropState === isDropOnForm,
-            [styles.containerActions]: true,
-          })}
-        >
-          <Fragment>
-            <label name="img" className={styles.clipComments}>
-              <IconClip />
-            </label>
+    <Parent {...canDrop ? {} : { className: styles.actions }}>
+      <div
+        className={classNames({
+          [styles.drop]: canDrop,
+          [styles.dropOnForm]: dropState === isDropOnForm,
+          [styles.containerActions]: true,
+        })}
+      >
+        <Fragment>
+          <label name="img" className={styles.clipComments}>
+            <IconClip />
+          </label>
+          {!props.base64Cover && (
             <DropZone
               className={styles.dropZoneComments}
               multiple
-              nonDefaultclass
               onDrop={async (files) => {
                 setDropState(notDrop);
                 await props.onImage(files);
                 }
               }
             />
-            <div className={styles.dropText}>Drop image here</div>
-          </Fragment>
-        </div>
-      )}
+            )}
+          <div className={styles.dropText}>Drop image here</div>
+        </Fragment>
+      </div>
       <div
         role="presentation"
         className={styles.action}
@@ -97,7 +96,7 @@ const DragAndDrop = (props) => {
       >
         <IconEnter />
       </div>
-    </Parrent>
+    </Parent>
   );
 };
 
