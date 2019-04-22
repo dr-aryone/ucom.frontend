@@ -13,7 +13,7 @@ import { addSuccessNotification } from '../../../actions/notifications';
 import Popup, { Content } from '../../Popup';
 import RequestActiveKey from '../../Auth/Features/RequestActiveKey';
 
-const TradeRamForm = (props) => {
+const TradeRam = (props) => {
   const [ram, setRam] = useState('');
   const [formError, setFormError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -113,7 +113,7 @@ const TradeRamForm = (props) => {
   );
 };
 
-TradeRamForm.propTypes = {
+TradeRam.propTypes = {
   owner: PropTypes.shape({
     accountName: PropTypes.string,
   }).isRequired,
@@ -123,10 +123,10 @@ TradeRamForm.propTypes = {
   onClickClose: PropTypes.func.isRequired,
 };
 
-TradeRamForm.defaultProps = {
+TradeRam.defaultProps = {
   sell: false,
 };
 
 export default connect(state => ({
   owner: state.user.data,
-}))(TradeRamForm);
+}))(TradeRam);
