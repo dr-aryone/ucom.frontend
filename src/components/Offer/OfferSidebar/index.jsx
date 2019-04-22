@@ -15,7 +15,6 @@ import ShareBlock from '../../ShareBlock';
 import styles from './styles.css';
 import { authShowPopup } from '../../../actions/auth';
 import IconTelegram from '../../Icons/Socials/TelegramBlack';
-import config from '../../../../package.json';
 
 const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
@@ -93,9 +92,10 @@ const OfferSidebar = (props) => {
           </div>
           <div className={styles.optionBlock}>
             <a
-              href={config.gitHubAuthLink}
+              href={Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 ? props.gitHubAuthLink : null}
               className={styles.optionTitle}
-            >Authorize GitHub
+            >
+              Authorize GitHub
             </a>
             <div className={styles.optionText}>To get your Score system need acсess to your GitHub account data</div>
           </div>
@@ -164,10 +164,12 @@ OfferSidebar.propTypes = {
   rate: PropTypes.number,
   postId: PropTypes.number.isRequired,
   createdAt: PropTypes.string.isRequired,
+  startedAt: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   repostAvailable: PropTypes.bool,
   postTypeId: PropTypes.number,
   cookie: PropTypes.string,
+  gitHubAuthLink: PropTypes.string,
 };
 
 OfferSidebar.defaultProps = {
@@ -176,6 +178,7 @@ OfferSidebar.defaultProps = {
   cookie: null,
   conditions: null,
   postTypeId: 1,
+  gitHubAuthLink: '',
 };
 
 export default connect(

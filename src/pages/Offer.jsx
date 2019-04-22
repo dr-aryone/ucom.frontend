@@ -22,13 +22,14 @@ import api from '../api';
 import EntrySubHeader from '../components/EntrySubHeader';
 import stylesSubHeader from '../components/EntrySubHeader/styles.css';
 import { getOrganization } from '../actions/organizations';
-import { airdropId, getAirdropOfferId } from '../utils/airdrop';
+import { airdropId, getAirdropOfferId, getGitHubAuthLink } from '../utils/airdrop';
 import { selectUser } from '../store/selectors/user';
 
 const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
 const Offer = (props) => {
   const postId = getAirdropOfferId();
+  const gitHubAuthLink = getGitHubAuthLink();
   const [token, setToken] = useState(null);
   const [cookie, setCookie] = useState(null);
   const [users, setUsers] = useState([]);
@@ -144,6 +145,7 @@ const Offer = (props) => {
             token={token}
             metadata={metadata}
             onChangePage={onChangePage}
+            gitHubAuthLink={gitHubAuthLink}
           />
         </div>
         <div className={styles.content}>
@@ -166,6 +168,8 @@ const Offer = (props) => {
               cookie={cookie}
               token={token}
               postTypeId={post.postTypeId}
+              startedAt={post.startedAt}
+              gitHubAuthLink={gitHubAuthLink}
             />
           </div>
         </div>

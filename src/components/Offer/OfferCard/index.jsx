@@ -14,7 +14,6 @@ import ModalContent from '../../ModalContent';
 import UserListAirdrop from '../../User/UsersListAirdrop';
 import { mapUserDataToFollowersProps } from '../../../utils/user';
 import { authShowPopup } from '../../../actions/auth';
-import config from '../../../../package.json';
 
 const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
@@ -103,25 +102,29 @@ const OfferCard = (props) => {
         }
 
         <div className={styles.infoblockBottom}>
-          <div className={styles.timer}>
-            {Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) > 0 ? (
+          {Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) > 0 ? (
+            <div className={styles.timer}>
               <div className={styles.startedAt}>
                 <div className={styles.startedAtTitle}>Starts</div>
                 <div className={styles.startedAtDate}>{`${month}, ${day}`}</div>
               </div>
-            ) : (
-              <Countdown date={props.finishedAt} />
-            )}
-          </div>
-          <Followers
-            colorLight
-            onClick={() => setPopupVisible(true)}
-            users={(props.users).map(mapUserDataToFollowersProps)}
-            title="Participants"
-            count={+props.count}
-          />
+            </div>
+          ) : (
+            <Fragment>
+              <div className={styles.timer}>
+                <Countdown date={props.finishedAt} />
+              </div>
+              <Followers
+                colorLight
+                onClick={() => setPopupVisible(true)}
+                users={(props.users).map(mapUserDataToFollowersProps)}
+                title="Participants"
+                count={+props.count}
+              />
+            </Fragment>
+          )}
 
-          {loaded && (() => {
+          {loaded && Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 && (() => {
             if (((!props.cookie && !conditions) ||
             (conditions && conditions.conditions.authGithub === false && (conditions.conditions.authMyself === false || conditions.conditions.authMyself === true)) ||
             ((conditions && conditions.airdropStatus !== AirdropStatuses.RECEIVED && conditions.airdropStatus !== AirdropStatuses.PENDING) &&
@@ -134,7 +137,7 @@ const OfferCard = (props) => {
                     {/* { [styles.btnFixed]: btnFixed === true },
                     { [styles.btnFixedActive]: btnFixedActive === true }, */},
                   )}
-                  href={config.gitHubAuthLink}
+                  href={props.gitHubAuthLink}
                 >
                   Get your score
                 </a>
@@ -204,6 +207,7 @@ OfferCard.propTypes = {
   authShowPopup: PropTypes.func.isRequired,
   cookie: PropTypes.string,
   token: PropTypes.string,
+  gitHubAuthLink: PropTypes.string,
 };
 
 OfferCard.defaultProps = {
@@ -214,6 +218,7 @@ OfferCard.defaultProps = {
   cookie: '',
   token: '',
   conditions: null,
+  gitHubAuthLink: '',
 };
 
 export default connect(
