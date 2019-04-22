@@ -5,7 +5,7 @@ import Popup, { Content } from '../../../Popup';
 import Brainkey from '../../Screens/Brainkey';
 import Key from '../../Screens/Key';
 import Password from './Password';
-import { getActivePrivateKey, saveActiveKey } from '../../../../utils/keys';
+import { getActivePrivateKey, saveAndEncryptActiveKey } from '../../../../utils/keys';
 import { addSuccessNotification, addErrorNotification } from '../../../../actions/notifications';
 
 const STEP_BRAINKEY = 1;
@@ -19,7 +19,10 @@ const ChangePassword = (props) => {
 
   return (
     <Popup onClickClose={props.onClickClose}>
-      <Content onClickClose={props.onClickClose}>
+      <Content
+        closeText={props.closeText}
+        onClickClose={props.onClickClose}
+      >
         {(() => {
           switch (currentStep) {
             case STEP_ACTIVE_KEY:
@@ -49,7 +52,7 @@ const ChangePassword = (props) => {
                         setCurrentStep(STEP_BRAINKEY);
                         return;
                       }
-                      saveActiveKey(activeKey, password);
+                      saveAndEncryptActiveKey(activeKey, password);
                       props.onSubmit();
                       props.dispatch(addSuccessNotification('Password for Active Key has changed'));
                     } catch (e) {
@@ -84,10 +87,12 @@ const ChangePassword = (props) => {
 ChangePassword.propTypes = {
   onClickClose: PropTypes.func.isRequired,
   description: Brainkey.propTypes.description,
+  closeText: PropTypes.string,
 };
 
 ChangePassword.defaultProps = {
   description: Brainkey.defaultProps.description,
+  closeText: undefined,
 };
 
 export default connect()(ChangePassword);

@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import React, { Fragment } from 'react';
+import React from 'react';
 import Button from '../Button';
 import { selectUser } from '../../store/selectors/user';
 import { followUser, unfollowUser } from '../../actions/users';
 import { getUserById } from '../../store/users';
 import { authShowPopup } from '../../actions/auth';
 import IconCheck from '../Icons/Check';
-import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 import loader from '../../utils/loader';
 import { addServerErrorNotification } from '../../actions/notifications';
+import { restoreActiveKey } from '../../utils/keys';
 
 const UserFollowButton = (props) => {
   if (!props.userId) {
@@ -31,7 +31,12 @@ const UserFollowButton = (props) => {
   const userIsOwner = owner && Number(owner.id) === Number(user.id);
   const text = (userIsFollowing || userIsOwner) ? 'Following' : 'Follow';
 
-  const followOrUnfollow = async (activeKey) => {
+  const followOrUnfollow = async () => {
+    const activeKey = restoreActiveKey();
+    if (!props.user.id || !activeKey) {
+      props.authShowPopup();
+      return;
+    }
     loader.start();
     try {
       await (userIsFollowing ? props.unfollowUser : props.followUser)({ user, owner, activeKey });
@@ -41,46 +46,24 @@ const UserFollowButton = (props) => {
     loader.done();
   };
 
-  return (
-    <RequestActiveKey
-      onSubmit={followOrUnfollow}
+  return props.asLink ? (
+    <button
+      className="link red-hover"
+      onClick={followOrUnfollow}
     >
-      {requestActiveKey => (
-        <Fragment>
-          {props.asLink ? (
-            <button
-              className="link red-hover"
-              onClick={() => {
-                if (!props.user.id) {
-                  props.authShowPopup();
-                  return;
-                }
-                requestActiveKey();
-              }}
-            >
-              {text}
-              {(userIsFollowing || userIsOwner) && <IconCheck />}
-            </button>
-          ) : (
-            <Button
-              isStretched
-              isDisabled={userIsOwner}
-              size="medium"
-              theme="transparent"
-              withCheckedIcon={userIsFollowing || userIsOwner}
-              text={text}
-              onClick={() => {
-                if (!props.user.id) {
-                  props.authShowPopup();
-                  return;
-                }
-                requestActiveKey();
-              }}
-            />
-          )}
-        </Fragment>
-      )}
-    </RequestActiveKey>
+      {text}
+      {(userIsFollowing || userIsOwner) && <IconCheck />}
+    </button>
+  ) : (
+    <Button
+      isStretched
+      isDisabled={userIsOwner}
+      size="medium"
+      theme="transparent"
+      withCheckedIcon={userIsFollowing || userIsOwner}
+      text={text}
+      onClick={followOrUnfollow}
+    />
   );
 };
 

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Element } from 'react-scroll';
 import PropTypes from 'prop-types';
@@ -11,13 +12,21 @@ import { settingsHide } from '../../actions/settings';
 import Resources from '../Resources';
 import ChangePassword from '../Auth/Features/ChangePassword';
 import GenerateSocialKey from '../Auth/Features/GenerateSocialKey';
-import { restoreSocialKey, socialKeyIsExists, getPublicKeyByPrivateKey } from '../../utils/keys';
+import {
+  restoreSocialKey,
+  socialKeyIsExists,
+  getPublicKeyByPrivateKey,
+  encryptedActiveKeyIsExists,
+} from '../../utils/keys';
 import OwnerActiveKeys from './OwnerActiveKeys';
 import { addErrorNotification } from '../../actions/notifications';
+import IconInputComplete from '../Icons/InputComplete';
+import urls from '../../utils/urls';
 
 const Settings = (props) => {
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
   const [generateSocialKeyVisible, setGenerateSocialKeyVisible] = useState(false);
+  const [passwordIsSet, setPasswordIsSet] = useState(encryptedActiveKeyIsExists());
   const [keys, setKeys] = useState({});
 
   useEffect(() => {
@@ -69,7 +78,7 @@ const Settings = (props) => {
               />
             </div>
             <div className={styles.content}>
-              <div className={styles.header}>
+              <div className={styles.section}>
                 <h2 className={styles.title}>Account Settings</h2>
                 <p>This section contains settings of your blockchain account.</p>
               </div>
@@ -115,15 +124,32 @@ const Settings = (props) => {
                 <div className={styles.subSection}>
                   <h4 className={styles.title}>Password for Active Key</h4>
                   <p>You can set a Password to save a pair of encrypted Active Keys in your browser. This allows you to send the transactions, that require Active Keys, using your Password instead. You will need to enter the Brainkey to unlock your Active Keys.</p>
-                  <div className={styles.action}>
-                    <Button
-                      strech
-                      small
-                      onClick={() => setChangePasswordVisible(true)}
-                    >
-                      Set Password
-                    </Button>
-                  </div>
+                  {!passwordIsSet ? (
+                    <div className={styles.action}>
+                      <Button
+                        strech
+                        small
+                        onClick={() => setChangePasswordVisible(true)}
+                      >
+                        Set Password
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className={`${styles.action} ${styles.withLabel}`}>
+                      <div className={styles.label}>
+                        <IconInputComplete />
+                        <span className={styles.text}>Password set</span>
+                      </div>
+
+                      <Button
+                        strech
+                        small
+                        onClick={() => setChangePasswordVisible(true)}
+                      >
+                        Reset password
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
                 <div className={styles.subSection}>
@@ -131,19 +157,34 @@ const Settings = (props) => {
                 </div>
               </Element>
             </div>
+            <div className={styles.footer}>
+              Go to&nbsp;
+              <Link
+                className="link red"
+                to={urls.getUserUrl(props.owner.id)}
+                onClick={() => props.dispatch(settingsHide())}
+              >
+                Profile Settings
+              </Link>
+            </div>
           </div>
         </Content>
       </Popup>
 
       {changePasswordVisible &&
         <ChangePassword
+          closeText="Cancel"
           onClickClose={() => setChangePasswordVisible(false)}
-          onSubmit={() => setChangePasswordVisible(false)}
+          onSubmit={() => {
+            setPasswordIsSet(encryptedActiveKeyIsExists());
+            setChangePasswordVisible(false);
+          }}
         />
       }
 
       {generateSocialKeyVisible &&
         <GenerateSocialKey
+          closeText="Cancel"
           onClickClose={() => setGenerateSocialKeyVisible(false)}
           onSubmit={(socialKey) => {
             setGenerateSocialKeyVisible(false);
@@ -168,8 +209,12 @@ Settings.propTypes = {
   settings: PropTypes.shape({
     visible: PropTypes.bool.isRequired,
   }).isRequired,
+  owner: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired,
 };
 
 export default connect(state => ({
   settings: state.settings,
+  owner: state.user.data,
 }))(Settings);

@@ -2,6 +2,7 @@
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 200px 1fr;
+  grid-template-rows: 1fr;
   grid-column-gap: 100px;
   width: 100%;
   max-width: 1080px;
@@ -36,12 +37,24 @@ h4.title {
   font-weight: bold;
 }
 
-.header {
-  margin: 0 0 88px;
+.content {
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+
+.footer {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
 }
 
 .section {
-  margin: 0 0 69px;
+  margin: 0 0 88px;
+}
+
+.section:last-child,
+.subSection:last-child {
+  margin-bottom: 0;
 }
 
 .subSection {
@@ -53,10 +66,33 @@ h4.title {
   font-size: 14px;
 }
 
+.copy:last-child {
+  margin-bottom: 0;
+}
+
 .action {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(max-content, 152px);
+  align-items: center;
+}
+
+.action.withLabel {
+  grid-template-columns: 1fr max-content;
+}
+
+.action .label {
+  font-weight: bold;
+}
+
+.action .label svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 8px 0 0;
+}
+
+.action .label .text {
+  vertical-align: middle;
 }
 
 .brainkeyForm {
@@ -76,6 +112,7 @@ h4.title {
   border: none;
   outline: none;
   cursor: pointer;
+  background: transparent;
 }
 
 .brainkeyForm .button svg {
@@ -105,6 +142,17 @@ h4.title {
   .settings {
     grid-template-columns: 1fr;
     grid-row-gap: 86px;
+  }
+
+  .content {
+    grid-row-start: auto;
+    grid-row-end: auto;
+  }
+
+  .footer {
+    grid-column-start: auto;
+    grid-column-end: auto;
+    grid-row-start: auto;
   }
 }
 

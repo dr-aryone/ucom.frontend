@@ -26,9 +26,9 @@ import EntryListSection from '../components/EntryListSection';
 import Trust from '../components/Trust';
 import { getUserName, userIsOwner } from '../utils/user';
 import { authShowPopup } from '../actions/auth';
-import RequestActiveKey from '../components/Auth/Features/RequestActiveKey';
 import { addErrorNotification } from '../actions/notifications';
 import { parseResponseError } from '../utils/errors';
+import { restoreActiveKey } from '../utils/keys';
 
 const UserPage = (props) => {
   const userIdOrName = props.match.params.userId;
@@ -84,6 +84,30 @@ const UserPage = (props) => {
       props.dispatch(addErrorNotification(errorMessage));
     }
     loader.done();
+  };
+
+  const submitTrust = async (isTrust) => {
+    const activeKey = restoreActiveKey();
+    if (!props.owner.id || !activeKey) {
+      props.dispatch(authShowPopup());
+      return;
+    }
+    loader.start();
+    setTrustLoading(true);
+    try {
+      await props.dispatch((isTrust ? trustUser : untrustUser)({
+        activeKey,
+        userId: user.id,
+        userAccountName: user.accountName,
+        ownerAccountName: props.owner.accountName,
+      }));
+      await fetchTrustedBy(trustedByMetadata.page);
+    } catch (e) {
+      const errorMessage = parseResponseError(e)[0].message;
+      props.dispatch(addErrorNotification(errorMessage));
+    }
+    loader.done();
+    setTrustLoading(false);
   };
 
   useEffect(() => {
@@ -144,49 +168,14 @@ const UserPage = (props) => {
           <EntryCreatedAt date={user.createdAt} />
 
           {!userIsOwner(user, props.owner) && !props.ownerIsLoading &&
-            <RequestActiveKey
-              onSubmit={async (activeKey, isTrust) => {
-                loader.start();
-                setTrustLoading(true);
-                try {
-                  await props.dispatch((isTrust ? trustUser : untrustUser)({
-                    activeKey,
-                    userId: user.id,
-                    userAccountName: user.accountName,
-                    ownerAccountName: props.owner.accountName,
-                  }));
-                  await fetchTrustedBy(trustedByMetadata.page);
-                } catch (e) {
-                  const errorMessage = parseResponseError(e)[0].message;
-                  props.dispatch(addErrorNotification(errorMessage));
-                }
-                loader.done();
-                setTrustLoading(false);
-              }}
-            >
-              {requestActiveKey => (
-                <Trust
-                  loading={trustLoading}
-                  trusted={user && user.myselfData && user.myselfData.trust}
-                  userName={getUserName(user)}
-                  userAvtarUrl={urls.getFileUrl(user.avatarFilename)}
-                  onClickTrust={async () => {
-                    if (!props.owner.id) {
-                      props.dispatch(authShowPopup());
-                      return;
-                    }
-                    requestActiveKey(true);
-                  }}
-                  onClickUntrust={async () => {
-                    if (!props.owner.id) {
-                      props.dispatch(authShowPopup());
-                      return;
-                    }
-                    requestActiveKey(false);
-                  }}
-                />
-              )}
-            </RequestActiveKey>
+            <Trust
+              loading={trustLoading}
+              trusted={user && user.myselfData && user.myselfData.trust}
+              userName={getUserName(user)}
+              userAvtarUrl={urls.getFileUrl(user.avatarFilename)}
+              onClickTrust={() => submitTrust(true)}
+              onClickUntrust={() => submitTrust(false)}
+            />
           }
         </div>
         <div className="layout__main">

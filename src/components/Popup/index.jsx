@@ -1,3 +1,4 @@
+import { KEY_ESCAPE } from 'keycode-js';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import React, { useEffect, useRef, memo } from 'react';
@@ -5,6 +6,15 @@ import CloseIcon from '../Icons/Close';
 import styles from './styles.css';
 
 let openedPopupsCount = 0;
+const openedPopupsProps = [];
+
+if (typeof document !== 'undefined') {
+  document.addEventListener('keydown', (e) => {
+    if (e.which === KEY_ESCAPE && openedPopupsProps.length && openedPopupsProps[openedPopupsProps.length - 1].onClickClose) {
+      openedPopupsProps[openedPopupsProps.length - 1].onClickClose();
+    }
+  });
+}
 
 const Popup = (props) => {
   const el = useRef(null);
@@ -12,8 +22,11 @@ const Popup = (props) => {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     openedPopupsCount++;
+    openedPopupsProps.push(props);
 
     return () => {
+      openedPopupsProps.splice(-1, 1);
+
       if (openedPopupsCount > 0) {
         openedPopupsCount--;
       }

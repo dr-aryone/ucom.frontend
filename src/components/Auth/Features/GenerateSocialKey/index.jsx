@@ -18,7 +18,10 @@ const GenerateSocialKey = (props) => {
 
   return (
     <Popup onClickClose={props.onClickClose}>
-      <Content onClickClose={props.onClickClose}>
+      <Content
+        closeText={props.closeText}
+        onClickClose={props.onClickClose}
+      >
         {(() => {
           switch (currentStep) {
             case STEP_ACTIVE_KEY:
@@ -80,6 +83,11 @@ const GenerateSocialKey = (props) => {
 
 GenerateSocialKey.propTypes = {
   onClickClose: PropTypes.func.isRequired,
+  closeText: PropTypes.string,
+};
+
+GenerateSocialKey.defaultProps = {
+  closeText: undefined,
 };
 
 export default connect()(GenerateSocialKey);

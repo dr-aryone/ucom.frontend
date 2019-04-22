@@ -52,16 +52,16 @@ export const getActivePublicKeyByBrainkey = memoize((brainkey) => {
 export const getPublicKeyByPrivateKey = memoize(privateKey =>
   ecc.privateToPublic(privateKey));
 
-export const activeKeyIsExists = () => {
+export const encryptedActiveKeyIsExists = () => {
   try {
-    const activeKey = localStorage.getItem('activeKey');
+    const activeKey = localStorage.getItem('encryptedActiveKey');
     return activeKey && activeKey.length;
   } catch (e) {
     return false;
   }
 };
 
-export const saveActiveKey = (activeKey, password) => {
+export const saveAndEncryptActiveKey = (activeKey, password) => {
   if (!activeKey) {
     throw new Error('Active Key is required');
   }
@@ -80,7 +80,7 @@ export const saveActiveKey = (activeKey, password) => {
 
   try {
     const encryptedActiveKey = CryptoJS.AES.encrypt(activeKey, password).toString();
-    localStorage.setItem('activeKey', encryptedActiveKey);
+    localStorage.setItem('encryptedActiveKey', encryptedActiveKey);
   } catch (e) {
     console.error(e);
     throw new Error('Save Active Key failed');
@@ -97,7 +97,7 @@ export const restoreEncryptedActiveKey = (password) => {
   let activeKey;
 
   try {
-    encryptedActiveKey = localStorage.getItem('activeKey');
+    encryptedActiveKey = localStorage.getItem('encryptedActiveKey');
   } catch (e) {
     throw new Error('Restore Active Key failed');
   }
@@ -117,14 +117,6 @@ export const restoreEncryptedActiveKey = (password) => {
   }
 
   return activeKey;
-};
-
-export const removeActiveKey = () => {
-  try {
-    localStorage.removeItem('activeKey');
-  } catch (e) {
-    throw new Error('Remove Active Key failed');
-  }
 };
 
 export const socialKeyIsExists = () => {
@@ -167,3 +159,32 @@ export const restoreSocialKey = () => {
 
   return socialKey;
 };
+
+// TODO: Remove when develop social key auth feature
+try {
+  const brainkey = localStorage.getItem('brainkey');
+  if (brainkey) {
+    const activeKey = getActivePrivateKey(brainkey);
+    localStorage.setItem('activeKey', activeKey);
+  }
+  localStorage.removeItem('brainkey');
+} catch (e) {
+  console.error(e);
+}
+
+export const saveActiveKey = (activeKey) => {
+  try {
+    localStorage.setItem('activeKey', activeKey);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const restoreActiveKey = () => {
+  try {
+    return localStorage.getItem('activeKey');
+  } catch (e) {
+    return null;
+  }
+};
+// TODO: End
