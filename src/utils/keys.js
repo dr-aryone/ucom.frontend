@@ -163,6 +163,15 @@ export const restoreSocialKey = () => {
 // TODO: Remove when develop social key auth feature
 if (typeof localStorage !== 'undefined') {
   try {
+    const activeKey = localStorage.getItem('activeKey');
+    if (!privateKeyIsValid(activeKey)) {
+      localStorage.removeItem('activeKey');
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  try {
     const brainkey = localStorage.getItem('brainkey');
     if (brainkey) {
       const activeKey = getActivePrivateKey(brainkey);
