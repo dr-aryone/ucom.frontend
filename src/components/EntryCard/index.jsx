@@ -4,6 +4,7 @@ import React from 'react';
 import UserPick from '../UserPick/UserPick';
 import { formatRate } from '../../utils/rate';
 import styles from './styles.css';
+import { filterURL } from '../../utils/url';
 
 // TODO: Remove and replace another cards
 const EntryCard = (props) => {
@@ -15,7 +16,7 @@ const EntryCard = (props) => {
         <LinkTag
           title={props.title}
           to={props.url}
-          href={props.url}
+          href={filterURL(props.url)}
           target={props.isExternal ? '_blank' : undefined}
         >
           <UserPick shadow organization={props.organization} src={props.avatarSrc} />
@@ -25,7 +26,7 @@ const EntryCard = (props) => {
         <LinkTag
           title={props.title}
           to={props.url}
-          href={props.url}
+          href={filterURL(props.url)}
           target={props.isExternal ? '_blank' : undefined}
         >
           {props.title}
@@ -35,7 +36,7 @@ const EntryCard = (props) => {
         <LinkTag
           title={props.title}
           to={props.url}
-          href={props.url}
+          href={filterURL(props.url)}
           target={props.isExternal ? '_blank' : undefined}
         >
           {props.disableSign ? null : props.organization ? '/' : '@'}{props.nickname}

@@ -73,7 +73,7 @@ const PostSubmitForm = (props) => {
           placeholder="Preview title"
           className="post-submit-form__data post-submit-form__data_title"
           value={props.post.data.title}
-          onChange={e => props.setDataToStoreToLS({ title: e.target.value })}
+          onChange={title => props.setDataToStoreToLS({ title })}
         />
       </div>
 
@@ -84,7 +84,7 @@ const PostSubmitForm = (props) => {
           placeholder="Preview description"
           className="post-submit-form__data post-submit-form__data_lead"
           value={props.post.data.leadingText}
-          onChange={e => props.setDataToStoreToLS({ leadingText: e.target.value })}
+          onChange={leadingText => props.setDataToStoreToLS({ leadingText })}
         />
       </div>
 

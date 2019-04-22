@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styles from '../Section/styles.css';
-import { extractHostname } from '../../utils/url';
+import { extractHostname, validURL } from '../../utils/url';
 
 const EntryContacts = (props) => {
-  if (!props.phone && !props.email && !props.site) {
+  if (!props.phone && !props.email && !validURL(props.site)) {
     return null;
   }
 
@@ -18,7 +18,7 @@ const EntryContacts = (props) => {
         {props.email &&
           <p><a className="red-hover" href={`mailto:${props.email}`}>{props.email}</a></p>
         }
-        {props.site &&
+        {validURL(props.site) &&
           <p><a className="red-hover" target="_blank" rel="noopener noreferrer" href={props.site}>{extractHostname(props.site)}</a></p>
         }
       </div>

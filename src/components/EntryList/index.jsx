@@ -5,6 +5,7 @@ import React, { useState, Fragment } from 'react';
 import EntryCard from '../EntryCard';
 import styles from '../List/styles.css';
 import EntryListPopup, { entryListPopupPropTypes } from '../EntryListPopup';
+import { filterURL } from '../../utils/url';
 
 const EntryItem = (props) => {
   const LinkTag = props.isExternal ? 'a' : Link;
@@ -13,7 +14,7 @@ const EntryItem = (props) => {
     <LinkTag
       key={props.id}
       to={props.url}
-      href={props.url}
+      href={filterURL(props.url)}
       className={styles.item}
       target={props.isExternal ? '_blank' : undefined}
     >
