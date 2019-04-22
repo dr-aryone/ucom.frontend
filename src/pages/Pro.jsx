@@ -54,6 +54,7 @@ const Profile = (props) => {
   console.log(userData || 'false');
 
   console.log('sites: ', sites.map((value, index) => console.log(index, value.sourceUrl)));
+  console.log('sss: ', sites);
 
   return (
     <div className={styles.page}>
