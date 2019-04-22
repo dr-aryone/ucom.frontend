@@ -161,15 +161,17 @@ export const restoreSocialKey = () => {
 };
 
 // TODO: Remove when develop social key auth feature
-try {
-  const brainkey = localStorage.getItem('brainkey');
-  if (brainkey) {
-    const activeKey = getActivePrivateKey(brainkey);
-    localStorage.setItem('activeKey', activeKey);
+if (typeof localStorage !== 'undefined') {
+  try {
+    const brainkey = localStorage.getItem('brainkey');
+    if (brainkey) {
+      const activeKey = getActivePrivateKey(brainkey);
+      localStorage.setItem('activeKey', activeKey);
+    }
+    localStorage.removeItem('brainkey');
+  } catch (e) {
+    console.error(e);
   }
-  localStorage.removeItem('brainkey');
-} catch (e) {
-  console.error(e);
 }
 
 export const saveActiveKey = (activeKey) => {
