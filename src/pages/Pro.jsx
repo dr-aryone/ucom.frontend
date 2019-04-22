@@ -31,7 +31,7 @@ const Profile = (props) => {
   const [userData, setUserData] = useState(owner);
   const [errors] = useState({});
   const [isSubmited, setIsSubmited] = useState(false);
-  const [sites, setSites] = useState(false);
+  const [sites, setSites] = useState([]);
   // const [socialNetworks, SocialNetworks] = useState([]);
 
   // useEffect(() => [], [user]);
@@ -53,7 +53,7 @@ const Profile = (props) => {
 
   console.log(userData || 'false');
 
-  console.log('sites: ', sites);
+  console.log('sites: ', sites.map((value, index) => console.log(index, value.sourceUrl)));
 
   return (
     <div className={styles.page}>
@@ -131,15 +131,19 @@ const Profile = (props) => {
                   <div className={styles.field}>
                     <div className={styles.label}>Website</div>
                     <div className={styles.inputBlock}>
-                      {sites &&
+                      {sites.length !== 0 && sites.map((value, index) => (
                         <TextInput
-                        // className={styles.input}
+                          touched
+                          key={index}
+                          value={value.sourceUrl}
+                          onChange={sourceUrl => setSites(Object.assign([], sites, { [index]: { ...sites[index], sourceUrl } }))}
+                          // className={styles.input}
                         />
-                      }
+                      ))}
                       <Button
                         small
                         grayBorder
-                        // onClick={() => sites.length - 1 !== 0 ? setSites({ ...sites, ''}) : setSites([])}
+                        onClick={() => setSites([...sites, { sourceUrl: '' }])}
                       >
                         Add site
                       </Button>
