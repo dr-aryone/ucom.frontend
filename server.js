@@ -4,6 +4,7 @@ require('babel-register')({
 
 const STATIC_VERSION = (new Date()).getTime();
 
+const xss = require('xss');
 const path = require('path');
 const ejs = require('ejs');
 const express = require('express');
@@ -26,7 +27,7 @@ routes.forEach((route) => {
         const data = await route.getData(store, req.params);
 
         if (data && data.contentMetaTags) {
-          ({ contentMetaTags } = data);
+          contentMetaTags = JSON.parse(xss(JSON.stringify(data.contentMetaTags)));
         }
       } catch (e) {
         console.error(e);
@@ -35,7 +36,7 @@ routes.forEach((route) => {
 
     const templateData = {
       contentMetaTags,
-      state: store.getState(),
+      state: xss(JSON.stringify(store.getState())),
       content: renderStatic(store, req.url),
       staticVersion: STATIC_VERSION,
     };
