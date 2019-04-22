@@ -2,18 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import normalizeUrl from 'normalize-url';
 import SocialIcon from '../Icons/Socials/Social';
-import { extractSitename, filterURL } from '../../utils/url';
+import { extractSitename, validURL } from '../../utils/url';
 import styles from './styles.css';
 
 const Links = props => (
   <ul className={styles.links}>
-    {props.urls.map((item, index) => {
+    {props.urls.filter(validURL).map((item, index) => {
       const hostName = extractSitename(item);
 
       return (
         <li key={index} className={styles.item}>
           <SocialIcon sourceUrl={hostName} />
-          <a className="red-hover" href={normalizeUrl(filterURL(item))} rel="noopener noreferrer" target="_blank">{hostName}</a>
+          <a className="red-hover" href={normalizeUrl(item)} rel="noopener noreferrer" target="_blank">{hostName}</a>
         </li>
       );
     })}
