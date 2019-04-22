@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import React, { memo } from 'react';
 import styles from './styles.css';
+import { filterURL } from '../../utils/url';
 
 const Button = (props) => {
   const Tag = props.url ? props.external ? 'a' : Link : 'button';
@@ -10,7 +11,7 @@ const Button = (props) => {
   return (
     <Tag
       to={props.url}
-      href={props.url}
+      href={filterURL(props.url)}
       target={props.external ? '_blank' : undefined}
       onClick={props.onClick}
       disabled={props.disabled}

@@ -8,6 +8,7 @@ import CommunityIcon from '../Icons/Community';
 import { getOrganizationUrl } from '../../utils/organization';
 import { getOrganization } from '../../actions/organizations';
 import urls from '../../utils/urls';
+import { filterURL } from '../../utils/url';
 
 const CommunityCard = (props) => {
   const organization = props.community;
@@ -22,11 +23,11 @@ const CommunityCard = (props) => {
   return (
     <div className="community-item">
       <div className="community-item__header">
-        <Link target="_blank" to={profileLink} href={profileLink} className="community-item__avatar">{avatar}</Link>
+        <Link target="_blank" to={profileLink} href={filterURL(profileLink)} className="community-item__avatar">{avatar}</Link>
         <div className="community-item__content">
           <div className="community-item__toobar">
             <div className="community-item__main">
-              <Link target="_blank" to={profileLink} href={profileLink} className="community-item__title">{organization.title}</Link>
+              <Link target="_blank" to={profileLink} href={filterURL(profileLink)} className="community-item__title">{organization.title}</Link>
               {organization.poweredBy &&
               <div className="community-item__powered">
                 Powered by {organization.poweredBy}

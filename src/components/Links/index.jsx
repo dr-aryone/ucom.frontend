@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import normalizeUrl from 'normalize-url';
 import SocialIcon from '../Icons/Socials/Social';
-import { extractSitename } from '../../utils/url';
+import { extractSitename, filterURL } from '../../utils/url';
 import styles from './styles.css';
 
 const Links = props => (
@@ -13,7 +13,7 @@ const Links = props => (
       return (
         <li key={index} className={styles.item}>
           <SocialIcon sourceUrl={hostName} />
-          <a className="red-hover" href={normalizeUrl(item)} rel="noopener noreferrer" target="_blank">{hostName}</a>
+          <a className="red-hover" href={normalizeUrl(filterURL(item))} rel="noopener noreferrer" target="_blank">{hostName}</a>
         </li>
       );
     })}
