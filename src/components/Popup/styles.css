@@ -49,3 +49,9 @@
   justify-content: center;
   cursor: pointer;
 }
+
+@media (max-width: 1023px) {
+  .popup {
+    padding-bottom: 0 !important;
+  }
+}

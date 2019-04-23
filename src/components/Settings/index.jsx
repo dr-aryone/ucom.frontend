@@ -53,6 +53,7 @@ const Settings = (props) => {
       <Popup
         id="settings-popup"
         onClickClose={() => props.dispatch(settingsHide())}
+        paddingBottom="25vh"
       >
         <Content
           fixWidth
@@ -71,7 +72,7 @@ const Settings = (props) => {
                   spy: true,
                   duration: 500,
                   delay: 100,
-                  offset: -88,
+                  offset: -80,
                   smooth: true,
                   containerId: 'settings-popup',
                 }}
@@ -88,7 +89,10 @@ const Settings = (props) => {
                 <Resources />
               </Element>
 
-              <Element className={styles.section} name="Keys">
+              <Element
+                name="Keys"
+                className={styles.section}
+              >
                 <h3 className={styles.title}>Keys</h3>
                 <div className={styles.subSection}>
                   <h4 className={styles.title}>Social Keys</h4>
@@ -161,7 +165,7 @@ const Settings = (props) => {
               Go to&nbsp;
               <Link
                 className="link red"
-                to={urls.getUserUrl(props.owner.id)}
+                to={urls.getUserEditProfileUrl()}
                 onClick={() => props.dispatch(settingsHide())}
               >
                 Profile Settings

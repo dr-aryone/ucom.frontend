@@ -46,6 +46,9 @@ const Popup = (props) => {
         [styles.popup]: true,
         [props.mod]: !!props.mod,
       })}
+      style={{
+        paddingBottom: props.paddingBottom,
+      }}
       onClick={(e) => {
         if (e.target === el.current && props.onClickClose) {
           props.onClickClose();
@@ -72,6 +75,7 @@ Popup.propTypes = {
   onClickClose: PropTypes.func,
   children: PropTypes.node.isRequired,
   showCloseIcon: PropTypes.bool,
+  paddingBottom: PropTypes.string,
 };
 
 Popup.defaultProps = {
@@ -79,6 +83,7 @@ Popup.defaultProps = {
   mod: null,
   onClickClose: null,
   showCloseIcon: false,
+  paddingBottom: undefined,
 };
 
 export { default as Content } from './Content';
