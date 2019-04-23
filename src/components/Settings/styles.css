@@ -49,16 +49,19 @@ h4.title {
 }
 
 .section {
-  margin: 0 0 88px;
+  padding: 0 0 88px;
 }
 
-.section:last-child,
-.subSection:last-child {
-  margin-bottom: 0;
+.section:last-child {
+  padding-bottom: 0;
 }
 
 .subSection {
   margin: 0 0 63px;
+}
+
+.subSection:last-child {
+  margin-bottom: 0;
 }
 
 .copy {

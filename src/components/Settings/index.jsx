@@ -65,14 +65,14 @@ const Settings = (props) => {
                 sticky
                 stickyTop={86}
                 sections={[
-                  { title: 'Resourses', name: 'Resourses' },
+                  { title: 'Resources', name: 'Resources' },
                   { title: 'Keys', name: 'Keys' },
                 ]}
                 scrollerOptions={{
                   spy: true,
                   duration: 500,
                   delay: 100,
-                  offset: -80,
+                  offset: -73,
                   smooth: true,
                   containerId: 'settings-popup',
                 }}
@@ -84,7 +84,7 @@ const Settings = (props) => {
                 <p>This section contains settings of your blockchain account.</p>
               </div>
 
-              <Element className={styles.section} name="Resourses">
+              <Element className={styles.section} name="Resources">
                 <h3 className={styles.title}>Resources</h3>
                 <Resources />
               </Element>
@@ -168,7 +168,7 @@ const Settings = (props) => {
                 to={urls.getUserEditProfileUrl()}
                 onClick={() => props.dispatch(settingsHide())}
               >
-                Profile Settings
+                Profile Edit
               </Link>
             </div>
           </div>
