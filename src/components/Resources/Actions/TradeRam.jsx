@@ -29,7 +29,7 @@ const TradeRam = (props) => {
           const submitFn = props.sell ? walletSellRam : walletBuyRam;
           await props.dispatch(submitFn(props.owner.accountName, ram, privateKey));
           setFormError(null);
-          props.dispatch(addSuccessNotification(`Successfully ${props.sell ? 'sell' : 'buy'} ram`));
+          props.dispatch(addSuccessNotification(`Successfully ${props.sell ? 'sold' : 'bought'} RAM`));
           setTimeout(() => {
             props.onSubmit();
           }, 0);
