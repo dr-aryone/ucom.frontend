@@ -120,7 +120,7 @@
     "tributejs": "git+https://github.com/UOSnetwork/tribute.git",
     "ucom-libs-graphql-schemas": "^1.12.0",
     "ucom-libs-social-transactions": "^1.1.4",
-    "ucom-libs-wallet": "^2.2.1",
+    "ucom-libs-wallet": "^2.2.2",
     "ucom.libs.common": "^1.5.0",
     "uuid": "^3.3.2",
     "validatorjs": "^3.14.2",
