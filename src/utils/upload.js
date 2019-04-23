@@ -178,4 +178,4 @@ export const getImageFromPasteEvent = async (event) => {
 };
 
 export const VISUAL_DELAY = 1000;
-export const uploadDropState = { notDrop: 0, isDrop: 1, isDropOnForm: 2 };
+export const uploadDropState = { NOT_DROP: 0, IS_DROP: 1, IS_DROP_ON_FORM: 2 };

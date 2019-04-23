@@ -6,8 +6,8 @@ import DropZone from '../../../DropZone';
 import { uploadDropState } from '../../../../utils/upload';
 
 const DragAndDrop = (props) => {
-  const { notDrop, isDrop, isDropOnForm } = uploadDropState;
-  const [dropState, _setDropState] = useState(notDrop);
+  const { NOT_DROP, IS_DROP, IS_DROP_ON_FORM } = uploadDropState;
+  const [dropState, _setDropState] = useState(NOT_DROP);
 
   const tempDropState = useRef(dropState);
 
@@ -20,13 +20,16 @@ const DragAndDrop = (props) => {
   };
 
   const onDrag = (event) => {
+    if (dropState) {
+      console.log(dropState);
+    }
     const isContain = props.fieldEl.current.contains(event.target);
     const isFocus = props.textareaEl.current === document.activeElement;
 
     if (isContain) {
-      setDropState(isDropOnForm);
+      setDropState(IS_DROP_ON_FORM);
     } else if (isFocus || !isContain) {
-      setDropState(isDrop);
+      setDropState(IS_DROP);
     }
   };
 
@@ -35,13 +38,13 @@ const DragAndDrop = (props) => {
     const isForm = props.formEl.current === event.target;
 
     if (outHtml) {
-      setDropState(notDrop);
-    } else if (isForm && (tempDropState.current === isDropOnForm)) {
-      setDropState(notDrop);
+      setDropState(NOT_DROP);
+    } else if (isForm && (tempDropState.current === IS_DROP_ON_FORM)) {
+      setDropState(NOT_DROP);
     }
   };
 
-  const onDropEnd = () => setDropState(notDrop);
+  const onDropEnd = () => setDropState(NOT_DROP);
 
   useEffect(() => {
     document.addEventListener('dragenter', onDrag);
@@ -55,21 +58,21 @@ const DragAndDrop = (props) => {
     };
   }, []);
 
-  const canDrop = dropState === isDrop || dropState === isDropOnForm;
+  const canDrop = dropState === IS_DROP || dropState === IS_DROP_ON_FORM;
 
   return (
     <div
       className={classNames({
       [styles.nonVisible]: true,
       [styles.drop]: canDrop,
-      [styles.dropOnForm]: dropState === isDropOnForm,
+      [styles.dropOnForm]: dropState === IS_DROP_ON_FORM,
     })}
     >
       <DropZone
         className={styles.dropZoneComments}
         multiple
         onDrop={async (files) => {
-          setDropState(notDrop);
+          setDropState(NOT_DROP);
           await props.onImage(files[0]);
           }
         }
