@@ -1,15 +1,16 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Avatar from '../Avatar';
 import IconEnter from '../Icons/Enter';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
 import { escapeQuotes } from '../../utils/text';
+import { initDragAndDropListeners } from '../../utils/dragAndDrop';
 import { removeCoverImage, changeCoverImageUrl, getCoverImage } from '../../utils/entityImages';
 import TributeWrapper from '../TributeWrapper';
 import EmbedMenu from './Post/EmbedMenu';
-import FeedDragAndDrop from './Post/FeedDragAndDrop';
+import DragAndDrop from '../DragAndDrop';
 import Image from '../Comments/Form/Image';
 import urls from '../../utils/urls';
 import api from '../../api';
@@ -18,9 +19,17 @@ const FeedForm = (props) => {
   const initialText = props.initialText ? `#${props.initialText} ` : false;
   const [message, setMessage] = useState(escapeQuotes(props.message) || initialText || '');
   const [entityImages, setEntityImages] = useState(props.entityImages);
-  const textareaEl = useRef(null);
-  const formEl = useRef(null);
+  const [dropOnForm, setDropOnForm] = useState(false);
   const fieldEl = useRef(null);
+
+  useEffect(() => {
+    const removeInitDragAndDropListeners = initDragAndDropListeners(fieldEl.current, () => {
+      setDropOnForm(true);
+    }, () => {
+      setDropOnForm(false);
+    });
+    return removeInitDragAndDropListeners;
+  }, []);
 
   const onImage = async (file) => {
     const data = await api.uploadPostImage(file);
@@ -47,7 +56,6 @@ const FeedForm = (props) => {
         e.preventDefault();
         sumbitForm(message, entityImages);
       }}
-      ref={formEl}
     >
       <div className="feed-form__field">
         <div className="feed-form__avatar">
@@ -68,7 +76,6 @@ const FeedForm = (props) => {
               }}
             >
               <textarea
-                ref={textareaEl}
                 autoFocus
                 rows="4"
                 className="feed-form__textarea"
@@ -83,8 +90,8 @@ const FeedForm = (props) => {
                 }}
               />
             </TributeWrapper>
-            <FeedDragAndDrop {...{
-                onImage, textareaEl, formEl, fieldEl,
+            <DragAndDrop {...{
+                onImage, dropOnForm,
               }}
             />
           </div>

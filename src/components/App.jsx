@@ -12,6 +12,7 @@ import Notifications from './Notifications';
 import socket from '../api/socket';
 import config from '../../package.json';
 import { enableGtm } from '../utils/gtm';
+import { initDragAndDropListeners } from '../utils/dragAndDrop';
 import routes from '../routes';
 
 const App = (props) => {
@@ -23,9 +24,17 @@ const App = (props) => {
     props.fetchMyself();
     props.initNotificationsListeners();
 
+    const removeInitDragAndDropListeners = initDragAndDropListeners(document, () => {
+      document.body.classList.add('dragenter');
+    }, () => {
+      document.body.classList.remove('dragenter');
+    });
+
     if (config.socketEnabled) {
       socket.connect();
     }
+
+    return removeInitDragAndDropListeners;
   }, []);
 
   return (
