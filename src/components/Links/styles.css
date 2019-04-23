@@ -13,7 +13,7 @@
 
 :local(.item) {
   display: grid;
-  grid-template-columns: min-content min-content;
+  grid-template-columns: max-content 1fr;
   grid-column-gap: 16px;
   align-items: center;
   margin: 0 0 16px;
