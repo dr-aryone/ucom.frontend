@@ -6,6 +6,7 @@ import { getToken } from '../utils/token';
 import { COMMENTS_PER_PAGE } from '../utils/comments';
 import { FEED_PER_PAGE, OVERVIEW_SIDE_PER_PAGE } from '../utils/feed';
 import { LIST_ORDER_BY, LIST_PER_PAGE } from '../utils/list';
+import { decodeText } from '../utils/text';
 
 const request = async (data) => {
   const options = {
@@ -21,7 +22,7 @@ const request = async (data) => {
 
   try {
     const resp = await axios.post('/graphql', data, options);
-    return humps(resp.data);
+    return humps(JSON.parse(decodeText(JSON.stringify(resp.data))));
   } catch (e) {
     throw e;
   }

@@ -8,7 +8,7 @@ import { updatePost } from '../../../../actions/posts';
 import { getPostById } from '../../../../store/posts';
 import { postIsEditable } from '../../../../utils/posts';
 import DescDirectPost from './DescDirectPost';
-import { checkMentionTag, escapeQuotes } from '../../../../utils/text';
+import { checkMentionTag } from '../../../../utils/text';
 import styles from './styles.css';
 import urls from '../../../../utils/urls';
 import { getCoverImage } from '../../../../utils/entityImages';
@@ -66,7 +66,7 @@ class PostFeedContent extends PureComponent {
                 {post.description &&
                   <div className={styles.content}>
                     <DescDirectPost
-                      desc={checkMentionTag(escapeQuotes(post.description))}
+                      desc={checkMentionTag(post.description)}
                       limit={100}
                     />
                   </div>
