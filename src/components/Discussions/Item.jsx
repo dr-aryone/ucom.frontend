@@ -6,7 +6,7 @@ import React from 'react';
 import CommentIcon from '../Icons/Comment';
 import styles from './styles.css';
 import DropdownMenu from '../DropdownMenu';
-import { copyToClipboard, sanitizePostTitle } from '../../utils/text';
+import { copyToClipboard, sanitizeText } from '../../utils/text';
 
 const Item = props => (
   <div>
@@ -22,7 +22,7 @@ const Item = props => (
           <Link
             to={props.url}
             className="link red-hover"
-            dangerouslySetInnerHTML={{ __html: sanitizePostTitle(props.title) }}
+            dangerouslySetInnerHTML={{ __html: sanitizeText(props.title) }}
           />
         </div>
         <div className={styles.author}>
