@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React, { useState, Fragment, useEffect } from 'react';
 import Popup, { Content } from '../Popup';
 import styles from './styles.css';
-import CopyPanel from '../CopyPanel';
+// import CopyPanel from '../CopyPanel';
 import Button from '../Button/index';
 import VerticalMenu from '../VerticalMenu/index';
 import { settingsHide } from '../../actions/settings';
@@ -53,7 +53,7 @@ const Settings = (props) => {
       <Popup
         id="settings-popup"
         onClickClose={() => props.dispatch(settingsHide())}
-        paddingBottom="25vh"
+        paddingBottom="50vh" // TODO: Change to 25vh when social keys enabled
       >
         <Content
           fixWidth
@@ -94,7 +94,8 @@ const Settings = (props) => {
                 className={styles.section}
               >
                 <h3 className={styles.title}>Keys</h3>
-                <div className={styles.subSection}>
+                {/* TODO: Enable when auth and registration by social key feature complete */}
+                {/* <div className={styles.subSection}>
                   <h4 className={styles.title}>Social Keys</h4>
                   <p>The pair of Social Keys is needed to sign your social transactions. After authorization on the platform, it is stored in your browser.</p>
                   {keys.socialKey ? (
@@ -123,7 +124,7 @@ const Settings = (props) => {
                       </Button>
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 <div className={styles.subSection}>
                   <h4 className={styles.title}>Password for Active Key</h4>
