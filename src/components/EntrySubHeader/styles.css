@@ -67,11 +67,20 @@
   position: absolute;
   top: 18px;
   left: 85px;
+  right: 50%;
   font-size: 16px;
   font-weight: bold;
   transform: scale(0.8) translate(-15px, 0);
   transform-origin: left top;
   transition: transform 0.2s ease;
+}
+
+:local(.name) :global(a) {
+  display: inline-block;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 :local(.rate) {
