@@ -39,8 +39,7 @@ const EmbedMenu = (props) => {
                 onDrop={(file) => {
                   props.onImage(file);
                   setActive(!active);
-                  }
-                }
+                }}
               />
             </div>
           </div>

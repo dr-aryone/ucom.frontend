@@ -3,7 +3,7 @@ export const initDragAndDropListeners = (targetElement, onDragenter, onDragLeave
   let dragleave = false;
 
   const onDragEnterListener = () => {
-    if (dragenter) {
+    if (dragenter && onDragenter) {
       dragleave = false;
       onDragenter();
     }
@@ -11,7 +11,7 @@ export const initDragAndDropListeners = (targetElement, onDragenter, onDragLeave
   };
 
   const onDragLeaveListener = () => {
-    if (dragleave) {
+    if (dragleave && onDragLeave) {
       dragenter = false;
       onDragLeave();
     }
@@ -28,31 +28,3 @@ export const initDragAndDropListeners = (targetElement, onDragenter, onDragLeave
     targetElement.removeEventListener('drop', onDragLeave);
   };
 };
-
-/* // App.js
-initDragAndDropListeners(document, () => {
-  body.addClass('...');
-}, () => {
-  body.removeClass('...');
-});
-
-// Comment.jsx
-initDragAndDropListeners(textarea, () => {
-  this.setState({ dragenter: true });
-}, () => {
-  this.setState({ dragenter: true });
-});
-
-// CSS comments
-:global(.body.dragenter) .comment.dragenter {
-  // red background
-}
-
-
-// onFocus = active
-// onBlur = !active
-
-:global(.body.dragenter) .comment.active {
-  // red border
-}
-*/

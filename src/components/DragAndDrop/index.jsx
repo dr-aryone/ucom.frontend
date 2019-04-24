@@ -14,10 +14,9 @@ const DragAndDrop = props => (
     <DropzoneWrapper
       className={styles.dropZonePost}
       multiple
-      onChange={async (files) => {
-        await props.onImage(files[0]);
-        }
-      }
+      onChange={(files) => {
+        props.onImage(files[0]);
+      }}
     />
     <div className={styles.dropText}>Drop image here</div>
   </div>
