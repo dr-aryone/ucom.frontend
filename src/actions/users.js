@@ -2,7 +2,6 @@ import api from '../api';
 import snakes from '../utils/snakes';
 import { getToken, removeToken } from '../utils/token';
 import loader from '../utils/loader';
-import graphql from '../api/graphql';
 // import { enableGtm } from '../utils/gtm';
 import { addServerErrorNotification } from './notifications';
 import { setUser, setUserLoading } from './';
