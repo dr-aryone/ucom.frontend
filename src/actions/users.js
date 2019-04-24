@@ -2,6 +2,7 @@ import api from '../api';
 import snakes from '../utils/snakes';
 import { getToken, removeToken } from '../utils/token';
 import loader from '../utils/loader';
+import graphql from '../api/graphql';
 // import { enableGtm } from '../utils/gtm';
 import { addServerErrorNotification } from './notifications';
 import { setUser, setUserLoading } from './';
@@ -176,6 +177,29 @@ export const unfollowUser = ({
       ownerId: Number(user.id),
       userId: owner.id,
     }));
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+export const getManyUsers = ({
+  airdropFilter,
+  orderBy,
+  page,
+  perPage,
+  isMyself,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getManyUsers({
+      airdropFilter,
+      orderBy,
+      page,
+      perPage,
+      isMyself,
+    });
+    dispatch(addUsers([data]));
+    return data;
   } catch (e) {
     console.error(e);
     throw e;

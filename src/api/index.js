@@ -514,6 +514,12 @@ class Api {
 
     return humps(response.data);
   }
+
+  async syncAccountGithub(options) {
+    const response = await this.actions.post('/api/v1/users-external/users/pair', {}, options);
+
+    return humps(response.data);
+  }
 }
 
 export default new Api();

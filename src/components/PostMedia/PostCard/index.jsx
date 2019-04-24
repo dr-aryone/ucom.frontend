@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import React, { Fragment } from 'react';
 import Rate from '../../Rate';
-import styles from './PostCard.css';
+import styles from './styles.css';
 import Avatar from '../../Avatar';
 // import Eye from '../../Icons/Eye';
 import { sanitizePostTitle } from '../../../utils/text';

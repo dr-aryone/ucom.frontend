@@ -15,15 +15,17 @@ const UserCardLine = (props) => {
       </div>
       <div className={styles.nameBlock}>
         <div className={styles.name}>{props.name}</div>
-        {props.accountName && (
+        {props.accountName &&
           <div className={styles.accountName}>
             {props.sign}{props.accountName}
           </div>
-        )}
+        }
       </div>
-      <div className={styles.rate}>
-        {formatRate(props.rate)}°
-      </div>
+      {props.rate &&
+        <div className={styles.rate}>
+          {formatRate(props.rate)}°
+        </div>
+      }
     </LinkTag>
   );
 };

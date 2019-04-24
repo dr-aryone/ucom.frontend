@@ -111,4 +111,8 @@ export const sanitizeCommentText = memoize(html => sanitizeHtml(html, {
 export const sanitizePostTitle = memoize(text => sanitizeHtml(text));
 
 export const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value);
+
+export const getPercent = (left, total) => (
+  Math.floor((left / total) * 100)
+);
 export const removeMultipleSpaces = memoize((str = '') => str.replace(/ +(?= )/g, ''));

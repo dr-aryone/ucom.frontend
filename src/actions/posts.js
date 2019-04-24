@@ -112,3 +112,59 @@ export const postVote = payload => (dispatch) => {
     })
     .then(() => loader.done());
 };
+
+export const getOnePostOffer = ({
+  postId,
+  commentsPage,
+  commentsPerPage,
+}, options) => async (dispatch) => {
+  try {
+    const data = await graphql.getOnePostOffer({
+      postId,
+      commentsPage,
+      commentsPerPage,
+    }, options);
+    dispatch(commentsAddContainerData({
+      containerId: COMMENTS_CONTAINER_ID_POST,
+      entryId: postId,
+      parentId: 0,
+      comments: data.onePostOffer.comments.data,
+      metadata: data.onePostOffer.comments.metadata,
+    }));
+    delete data.onePostOffer.comments;
+    dispatch(addPosts([data.onePostOffer]));
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+export const getOnePostOfferWithUserAirdrop = ({
+  airdropFilter,
+  postId,
+  commentsPage,
+  commentsPerPage,
+}, options) => async (dispatch) => {
+  try {
+    const data = await graphql.getOnePostOfferWithUserAirdrop({
+      airdropFilter,
+      postId,
+      commentsPage,
+      commentsPerPage,
+    }, options);
+    dispatch(commentsAddContainerData({
+      containerId: COMMENTS_CONTAINER_ID_POST,
+      entryId: postId,
+      parentId: 0,
+      comments: data.onePostOffer.comments.data,
+      metadata: data.onePostOffer.comments.metadata,
+    }));
+    delete data.onePostOffer.comments;
+    dispatch(addPosts([data.onePostOffer]));
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};

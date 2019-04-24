@@ -8,6 +8,7 @@ import { followOrganization, unfollowOrganization } from '../../actions/organiza
 import { getUserById } from '../../store/users';
 import { authShowPopup } from '../../actions/auth';
 import { restoreActiveKey } from '../../utils/keys';
+import IconCheck from '../Icons/Check';
 
 const OrganizationFollowButton = (props) => {
   if (!props.organizationId) {
@@ -23,21 +24,34 @@ const OrganizationFollowButton = (props) => {
 
   const userIsFollow = props.user.id ? (organization.followedBy || []).some(item => owner && +item.id === +owner.id) : false;
 
-  return (
+  const text = userIsFollow ? 'Joined' : 'Join';
+
+
+  const onClick = () => {
+    const activeKey = restoreActiveKey();
+    if (!owner || !activeKey) {
+      props.authShowPopup();
+      return;
+    }
+    (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner, activeKey });
+  };
+
+  return props.asLink ? (
+    <button
+      className="link red-hover"
+      onClick={onClick}
+    >
+      {text}
+      {userIsFollow && <IconCheck />}
+    </button>
+  ) : (
     <Button
       isStretched
       size="medium"
       theme="transparent"
       withCheckedIcon={userIsFollow}
       text={userIsFollow ? 'Joined' : 'Join'}
-      onClick={() => {
-        const activeKey = restoreActiveKey();
-        if (!owner || !activeKey) {
-          props.authShowPopup();
-          return;
-        }
-        (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner, activeKey });
-      }}
+      onClick={onClick}
     />
   );
 };
@@ -52,6 +66,11 @@ OrganizationFollowButton.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.number,
   }).isRequired,
+  asLink: PropTypes.bool,
+};
+
+OrganizationFollowButton.defaultProps = {
+  asLink: false,
 };
 
 export default connect(
