@@ -11,6 +11,21 @@
   box-sizing: border-box;
 }
 
+@media(max-width: 1024px) {
+  .profile {
+    grid-template-columns: auto;
+  }
+
+  .profile ul {
+    position: relative;
+    top: 0;
+  }
+
+  .profile ul li {
+    /* padding: 0; */
+  }
+}
+
 .settings p {
   margin: 0 0 35px;
 }
@@ -60,6 +75,10 @@ h4.title {
   }
 }
 
+.fieldSoical {
+  align-items: flex-start;
+}
+
 .label {
   grid-area: a;
   padding: 12px 0;
@@ -67,12 +86,6 @@ h4.title {
 }
 
 .input {
-  display: block;
-  box-sizing: border-box;
-  height: 48px;
-  border-radius: 4px;
-  border: 1px solid #b1b1b1;
-  padding: 15px 16px 17px 16px;
   width: 100%;
 }
 
@@ -89,6 +102,13 @@ h4.title {
   grid-area: b;
   width: 100%;
   height: 100%;
+}
+
+.inputBlockSocial {
+  width: 100%;
+  margin-right: 5px;
+  display: flex;
+  margin-bottom: 32px;
 }
 
 .textarea {
@@ -114,3 +134,29 @@ h4.title {
   line-height: 18px;
   color: #000;
 }
+
+.trashIcon {
+  cursor: pointer;
+  margin: 12px 10px 10px;
+  transition: all 0.2s;
+}
+
+.trashIcon svg {
+  fill: #DADADA;
+  transition: all 0.2s;
+}
+
+.trashIcon:hover svg {
+  transition: all 0.2s;
+  fill: #D8352F;
+}
+
+.btnSave {
+  margin: 40px 0;
+  position: sticky;
+  top: 270px;
+}
+
+/* @media(max-width: 1024px) {
+  position:;
+} */
