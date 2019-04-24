@@ -6,6 +6,10 @@
   position: relative;
 }
 
+.infoBlock {
+  display: flex;
+}
+
 .commentСount {
   font-size: 16px;
   font-weight: 600;
@@ -31,6 +35,5 @@
 }
 
 .comments {
-  border-top: 1px solid #E1E1E1;
-  margin: 0 -20px -24px;
+  margin: 0 -20px -20px;
 }

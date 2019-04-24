@@ -3,6 +3,7 @@ html {
 }
 
 body {
+  line-height: 1.2;
   font-family: 'Montserrat', sans-serif;
   color: @black;
   overflow-y: scroll;
@@ -13,12 +14,40 @@ svg {
   display: block;
 }
 
-a {
+a, .link {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: none;
   text-decoration: none;
+  font-weight: inherit;
   color: inherit;
+  cursor: pointer;
+  background: transparent;
 
   &:hover {
     text-decoration: underline;
+  }
+
+  &.red,
+  &.red-hover {
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover,
+    &.active {
+      color: #D8352F;
+      text-decoration: none;
+    }
+  }
+
+  &.red {
+    color: #D8352F;
+
+    &:hover,
+    &.active {
+      color: #C32924;
+    }
   }
 }
 

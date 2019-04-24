@@ -4,7 +4,8 @@ import React, { Fragment, useState } from 'react';
 import TextareaAutosize from '../TextareaAutosize';
 import Button from '../Button';
 import { setDataToStoreToLS } from '../../actions';
-import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR } from '../../utils/upload';
+import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR, compressUploadedImage } from '../../utils/upload';
+import { changeCoverImageUrl } from '../../utils/entityImages';
 import { addErrorNotification } from '../../actions/notifications';
 import api from '../../api';
 import loader from '../../utils/loader';
@@ -51,9 +52,9 @@ const PostSubmitForm = (props) => {
               setLoading(true);
 
               try {
-                const data = await api.uploadPostImage(file);
-                entityImages.articleTitle = [{ url: data.files[0].url }];
-                props.setDataToStoreToLS({ entityImages });
+                const data = await api.uploadPostImage(await compressUploadedImage(file));
+                const { url } = data.files[0];
+                props.setDataToStoreToLS({ entityImages: changeCoverImageUrl(entityImages, url) });
               } catch (e) {
                 console.error(e);
               }
@@ -72,7 +73,7 @@ const PostSubmitForm = (props) => {
           placeholder="Preview title"
           className="post-submit-form__data post-submit-form__data_title"
           value={props.post.data.title}
-          onChange={e => props.setDataToStoreToLS({ title: e.target.value })}
+          onChange={title => props.setDataToStoreToLS({ title })}
         />
       </div>
 
@@ -83,7 +84,7 @@ const PostSubmitForm = (props) => {
           placeholder="Preview description"
           className="post-submit-form__data post-submit-form__data_lead"
           value={props.post.data.leadingText}
-          onChange={e => props.setDataToStoreToLS({ leadingText: e.target.value })}
+          onChange={leadingText => props.setDataToStoreToLS({ leadingText })}
         />
       </div>
 

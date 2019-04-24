@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import { getOrganizationById } from '../../store/organizations';
-import { getFileUrl } from '../../utils/upload';
 import { getOrganizationUrl } from '../../utils/organization';
 import OrganizationCard from './OrganizationCard';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
 import Rate from '../Rate';
+import urls from '../../utils/urls';
 
 const OrganizationListPopup = (props) => {
   if (!props.organizationsIds || !props.organizationsIds.length) {
@@ -27,7 +27,7 @@ const OrganizationListPopup = (props) => {
               <div className="entry-list__item" key={index}>
                 <div className="entry-list__card">
                   <OrganizationCard
-                    avatarSrc={getFileUrl(item.avatarFilename)}
+                    avatarSrc={urls.getFileUrl(item.avatarFilename)}
                     title={item.title}
                     nickname={item.nickname}
                     url={getOrganizationUrl(item.id)}

@@ -1,7 +1,6 @@
 import MediumEditor from 'medium-editor';
 import { getBlockFromElement } from './utils';
-
-const IMG_URL_REGEXP = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
+import { IMG_URL_REGEXP } from '../../utils/text';
 
 export default class ImageFromLink extends MediumEditor.Extension {
   name = 'ImageFromLink';

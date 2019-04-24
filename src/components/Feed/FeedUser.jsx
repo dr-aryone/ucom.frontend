@@ -20,20 +20,24 @@ const FeedUser = (props) => {
       userId: props.userId,
       organizationId: props.organizationId,
       tagIdentity: props.tagIdentity,
+      userIdentity: props.userId,
     });
     loader.done();
   };
 
-  const onSubmitPostForm = (description, mainImageFilename) => {
+  const onSubmitPostForm = (description, entityImages) => {
     props.feedCreatePost(props.feedTypeId, {
       organizationId: props.organizationId,
       userId: props.userId,
       data: {
         description,
-        mainImageFilename,
+        entityImages,
         postTypeId: POST_TYPE_DIRECT_ID,
       },
     });
+    if (props.callbackOnSubmit) {
+      props.callbackOnSubmit();
+    }
   };
 
   useEffect(() => {
@@ -48,6 +52,7 @@ const FeedUser = (props) => {
       userId: props.userId,
       organizationId: props.organizationId,
       tagIdentity: props.tagIdentity,
+      userIdentity: props.userId,
     });
   }, [props.userId, props.organizationId, props.tagIdentity]);
 
@@ -76,6 +81,7 @@ FeedUser.propTypes = {
   feedCreatePost: PropTypes.func.isRequired,
   feedInputInitialText: PropTypes.string,
   filter: PropTypes.func,
+  callbackOnSubmit: PropTypes.func,
 };
 
 FeedUser.defaultProps = {
@@ -84,6 +90,7 @@ FeedUser.defaultProps = {
   tagIdentity: null,
   feedInputInitialText: null,
   filter: null,
+  callbackOnSubmit: null,
 };
 
 export default connect(

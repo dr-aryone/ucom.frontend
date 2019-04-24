@@ -21,6 +21,8 @@ export const USER_SHARE_YOUR_POST = 73;
 export const USER_SHARE_YOUR_MEDIA_POST = 93;
 export const USER_HAS_MENTIONED_YOU_IN_POST = 120;
 export const USER_HAS_MENTIONED_YOU_IN_COMMENT = 121;
+export const USER_TRUST_YOU = 36;
+
 
 const getInitialState = () => ({
   list: {},

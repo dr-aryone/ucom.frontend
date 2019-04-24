@@ -10,7 +10,7 @@ import styles from './styles.css';
 import { formatRate } from '../../utils/rate';
 
 export const MyUserCard = (props) => {
-  const LinkTag = props.url ? Link : 'div';
+  const LinkTag = props.url ? Link : 'span';
 
   return (
     <div className={styles.userCard}>

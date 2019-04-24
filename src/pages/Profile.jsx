@@ -16,7 +16,7 @@ import AvatarFromFile from '../components/AvatarFromFile';
 import SocialNetworks from '../components/SocialNetworks';
 import LayoutBase from '../components/Layout/LayoutBase';
 import { userFormSetForm, userFormSetData, userFormHandleSubmit } from '../actions/userForm';
-import { getFileUrl } from '../utils/upload';
+import urls from '../utils/urls';
 
 class ProfilePage extends PureComponent {
   componentDidMount() {
@@ -92,14 +92,14 @@ class ProfilePage extends PureComponent {
                                   {avatarFilename && typeof avatarFilename === 'object' ? (
                                     <AvatarFromFile size="big" file={avatarFilename} />
                                   ) : (
-                                    <Avatar size="big" src={getFileUrl(avatarFilename)} />
+                                    <Avatar size="big" src={urls.getFileUrl(avatarFilename)} />
                                   )}
                                 </div>
                               </div>
                               <div className="field__input">
                                 <div className="field__section">
                                   <DropZone
-                                    onDrop={files => this.props.userFormSetForm({ avatarFilename: files[0] })}
+                                    onDrop={file => this.props.userFormSetForm({ avatarFilename: file })}
                                     text="Add or drag img"
                                   />
                                 </div>
@@ -134,6 +134,7 @@ class ProfilePage extends PureComponent {
                                   rows={6}
                                   value={about}
                                   onChange={about => this.props.userFormSetForm({ about })}
+                                  isMentioned
                                 />
                               </div>
                             </div>

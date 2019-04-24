@@ -15,24 +15,8 @@ const Comments = (props) => {
       <div className={styles.list}>
         {comments.map(comment => (
           <Comment
-            containerId={props.containerId}
+            {...{ ...comment, ...props }}
             key={comment.id}
-            postId={props.postId}
-            id={comment.id}
-            depth={comment.depth}
-            text={comment.text}
-            date={comment.date}
-            userId={comment.userId}
-            userAccountName={comment.userAccountName}
-            replys={comment.replys}
-            nextDepthTotalAmount={comment.nextDepthTotalAmount}
-            metadata={props.metadata}
-            ownerId={props.ownerId}
-            ownerImageUrl={props.ownerImageUrl}
-            ownerPageUrl={props.ownerPageUrl}
-            ownerName={props.ownerName}
-            onSubmit={props.onSubmit}
-            onClickShowReplies={props.onClickShowReplies}
           />
         ))}
 
@@ -48,36 +32,19 @@ const Comments = (props) => {
 
         {newComment.map(comment => (
           <Comment
-            containerId={props.containerId}
+            {...{ ...comment, ...props }}
             key={comment.id}
-            postId={props.postId}
-            id={comment.id}
-            depth={comment.depth}
-            text={comment.text}
-            date={comment.date}
-            userId={comment.userId}
-            userAccountName={comment.userAccountName}
-            replys={comment.replys}
-            nextDepthTotalAmount={comment.nextDepthTotalAmount}
-            metadata={props.metadata}
-            ownerId={props.ownerId}
-            ownerImageUrl={props.ownerImageUrl}
-            ownerPageUrl={props.ownerPageUrl}
-            ownerName={props.ownerName}
-            onSubmit={props.onSubmit}
-            onClickShowReplies={props.onClickShowReplies}
           />
         ))}
-
-        <Form
-          containerId={props.containerId}
-          postId={props.postId}
-          userImageUrl={props.ownerImageUrl}
-          userPageUrl={props.ownerPageUrl}
-          userName={props.ownerName}
-          onSubmit={props.onSubmit}
-        />
       </div>
+
+      <Form
+        flat
+        {...{ ...props }}
+        userImageUrl={props.ownerImageUrl}
+        userPageUrl={props.ownerPageUrl}
+        userName={props.ownerName}
+      />
     </div>
   );
 };

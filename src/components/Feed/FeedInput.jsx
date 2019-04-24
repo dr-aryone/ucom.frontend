@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { PureComponent } from 'react';
-import Avatar from '../Avatar';
 import FeedForm from './FeedForm';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
-import { getFileUrl } from '../../utils/upload';
+import urls from '../../utils/urls';
+import UserPick from '../UserPick/UserPick';
 
 class FeedInput extends PureComponent {
   constructor(props) {
@@ -42,10 +42,10 @@ class FeedInput extends PureComponent {
     return (
       <div className="feed-input">
         <div className="feed-input__invite" role="presentation" onClick={this.showForm}>
-          <span className="inline">
+          <span className="inline inline_medium">
             <span className="inline__item">Hey</span>
             <span className="inline__item">
-              <Avatar src={getFileUrl(user.avatarFilename)} />
+              <UserPick src={urls.getFileUrl(user.avatarFilename)} />
             </span>
             <span className="inline__item">what’s new?</span>
           </span>

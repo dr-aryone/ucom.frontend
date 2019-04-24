@@ -9,7 +9,6 @@ import urls from '../../utils/urls';
 import loader from '../../utils/loader';
 import UserCardLine from '../UserCardLine/UserCardLine';
 import { getUserName } from '../../utils/user';
-import { getFileUrl } from '../../utils/upload';
 import Arrow from '../Icons/ArrowLeft';
 import IconSearch from '../Icons/Search';
 import IconClose from '../Icons/Close';
@@ -105,7 +104,7 @@ const SearchPopup = (props) => {
                         <UserCardLine
                           key={item.id}
                           url={urls.getUserUrl(item.id)}
-                          userPickSrc={getFileUrl(item.avatarFilename)}
+                          userPickSrc={urls.getFileUrl(item.avatarFilename)}
                           name={getUserName(item)}
                           accountName={item.accountName}
                           rate={item.currentRate}

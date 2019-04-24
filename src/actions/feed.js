@@ -55,6 +55,7 @@ export const feedGetUserPosts = ({
   userId,
   organizationId,
   tagIdentity,
+  userIdentity,
 }) => async (dispatch) => {
   const getFeedFunctions = {
     [USER_NEWS_FEED_ID]: graphql.getUserNewsFeed,
@@ -72,6 +73,7 @@ export const feedGetUserPosts = ({
       userId,
       organizationId,
       tagIdentity,
+      userIdentity,
       commentsPerPage: COMMENTS_INITIAL_COUNT_USER_WALL_FEED,
     });
     dispatch(parseFeedData({

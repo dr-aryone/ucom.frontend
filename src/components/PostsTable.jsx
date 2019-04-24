@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import UserCard from './UserCard';
 import IconTableTriangle from '../components/Icons/TableTriangle';
-import { getFileUrl } from '../utils/upload';
 import { getPostUrl, getPostTypeById } from '../utils/posts';
 import api from '../api';
 import loader from '../utils/loader';
+import urls from '../utils/urls';
+import { getCoverImage } from '../utils/entityImages';
 
 class PostsTable extends PureComponent {
   constructor(props) {
@@ -132,7 +133,7 @@ class PostsTable extends PureComponent {
                     <UserCard
                       squareAvatar
                       profileLink={getPostUrl(item.id)}
-                      avatarUrl={getFileUrl(item.mainImageFilename)}
+                      avatarUrl={urls.getFileUrl(getCoverImage(item))}
                       userName={item.title}
                       accountName={getPostTypeById(item.postTypeId)}
                       sign="#"

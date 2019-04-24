@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import Avatar from './Avatar';
 import AvatarFromFile from './AvatarFromFile';
 import { escapeQuotes } from '../utils/text';
+import { filterURL } from '../utils/url';
 
 const UserCard = (props) => {
   const avatar = props.avatarUrl && typeof props.avatarUrl === 'object' ?
@@ -27,12 +28,12 @@ const UserCard = (props) => {
     >
       <div className="user-card__inner">
         <div className="user-card__main">
-          <LinkTag to={props.profileLink} href={props.profileLink}>{avatar}</LinkTag>
+          <LinkTag to={props.profileLink} href={filterURL(props.profileLink)}>{avatar}</LinkTag>
         </div>
 
         <div className="user-card__side">
           <div className="user-card__name">
-            <LinkTag to={props.profileLink} href={props.profileLink}>{escapeQuotes(props.userName)}</LinkTag>
+            <LinkTag to={props.profileLink} href={filterURL(props.profileLink)}>{escapeQuotes(props.userName)}</LinkTag>
 
             {props.userPosition && (
               <span className="user-card__position">{props.userPosition}</span>

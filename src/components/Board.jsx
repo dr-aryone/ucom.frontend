@@ -5,7 +5,7 @@ import Popup from './Popup';
 import ModalContent from './ModalContent';
 import UserListPopup from './User/UserListPopup';
 import { getUserName } from '../utils/user';
-import { getFileUrl } from '../utils/upload';
+import urls from '../utils/urls';
 
 class Board extends PureComponent {
   constructor(props) {
@@ -49,7 +49,7 @@ class Board extends PureComponent {
                 list={users.map(user => ({
                   id: user.id,
                   alt: getUserName(user),
-                  avatarUrl: getFileUrl(user.avatarFilename),
+                  avatarUrl: urls.getFileUrl(user.avatarFilename),
                   accountName: user.accountName,
                   rate: user.currentRate,
                   userName: getUserName(user),

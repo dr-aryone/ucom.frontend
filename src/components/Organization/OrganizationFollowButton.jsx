@@ -28,7 +28,7 @@ const OrganizationFollowButton = (props) => {
       size="medium"
       theme="transparent"
       withCheckedIcon={userIsFollow}
-      text={userIsFollow ? 'Following' : 'Follow'}
+      text={userIsFollow ? 'Joined' : 'Join'}
       onClick={() => {
         if (!owner) {
           props.authShowPopup();

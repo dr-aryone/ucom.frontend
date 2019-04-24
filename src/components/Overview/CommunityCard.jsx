@@ -5,16 +5,16 @@ import { Link } from 'react-router-dom';
 import Avatar from '../Avatar';
 import AvatarFromFile from '../AvatarFromFile';
 import CommunityIcon from '../Icons/Community';
-import { getFileUrl } from '../../utils/upload';
 import { getOrganizationUrl } from '../../utils/organization';
 import { getOrganization } from '../../actions/organizations';
-
+import urls from '../../utils/urls';
+import { filterURL } from '../../utils/url';
 
 const CommunityCard = (props) => {
   const organization = props.community;
 
   const profileLink = getOrganizationUrl(organization.id);
-  const avatarUrl = getFileUrl(organization.avatarFilename);
+  const avatarUrl = urls.getFileUrl(organization.avatarFilename);
 
   const avatar = avatarUrl && typeof avatarUrl === 'object' ?
     <AvatarFromFile rounded file={avatarUrl} size="medium" /> :
@@ -23,11 +23,11 @@ const CommunityCard = (props) => {
   return (
     <div className="community-item">
       <div className="community-item__header">
-        <Link target="_blank" to={profileLink} href={profileLink} className="community-item__avatar">{avatar}</Link>
+        <Link target="_blank" to={profileLink} href={filterURL(profileLink)} className="community-item__avatar">{avatar}</Link>
         <div className="community-item__content">
           <div className="community-item__toobar">
             <div className="community-item__main">
-              <Link target="_blank" to={profileLink} href={profileLink} className="community-item__title">{organization.title}</Link>
+              <Link target="_blank" to={profileLink} href={filterURL(profileLink)} className="community-item__title">{organization.title}</Link>
               {organization.poweredBy &&
               <div className="community-item__powered">
                 Powered by {organization.poweredBy}
@@ -52,7 +52,7 @@ const CommunityCard = (props) => {
               organization.followedBy.slice(0, 3)
               .map((item, i) => (
                 <div className="community-item__user-avatar" key={i}>
-                  <Avatar src={getFileUrl(item.avatarFilename)} size="xmsmall" />
+                  <Avatar src={urls.getFileUrl(item.avatarFilename)} size="xmsmall" />
                 </div>))}
             </div> : null
           }

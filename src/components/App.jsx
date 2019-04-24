@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { Route, Switch, withRouter } from 'react-router';
 import React, { useEffect, Fragment } from 'react';
@@ -41,6 +42,11 @@ const App = (props) => {
       <Notifications />
     </Fragment>
   );
+};
+
+App.propTypes = {
+  fetchMyself: PropTypes.func.isRequired,
+  initNotificationsListeners: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(
