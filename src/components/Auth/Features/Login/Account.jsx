@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { memo, Fragment, useState } from 'react';
-import styles from './styles.css';
-import Button from '../Button/index';
-import IconInputError from '../Icons/InputError';
+import styles from '../styles.css';
+import Button from '../../../Button/index';
+import IconInputError from '../../../Icons/InputError';
 import {
   USER_ACCOUNT_NAME_SYMBOLS_REG_EXP,
   USER_ACCOUNT_NAME_REG_EXP,
-} from '../../utils/user';
+} from '../../../../utils/user';
 
 const ERROR_WRONG_ACCOUNT_NAME = 'Wrong Account Name format';
 

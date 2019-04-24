@@ -1,8 +1,10 @@
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import React, { memo } from 'react';
+import React from 'react';
 import styles from './styles.css';
-import { copyToClipboard } from '../../utils/text';
+import { copyToClipboard, COPY_TO_CLIPBOARD_SUCCESS_MESSAGE } from '../../utils/text';
+import { addSuccessNotification } from '../../actions/notifications';
 
 const CopyPanel = props => (
   <div
@@ -24,6 +26,7 @@ const CopyPanel = props => (
       className="link red"
       onClick={() => {
         copyToClipboard(props.value);
+        props.dispatch(addSuccessNotification(COPY_TO_CLIPBOARD_SUCCESS_MESSAGE));
         if (props.onCopy) {
           props.onCopy();
         }
@@ -38,6 +41,7 @@ CopyPanel.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string.isRequired,
   onCopy: PropTypes.func,
+  dispatch: PropTypes.func.isRequired,
 };
 
 CopyPanel.defaultProps = {
@@ -45,4 +49,4 @@ CopyPanel.defaultProps = {
   onCopy: undefined,
 };
 
-export default memo(CopyPanel);
+export default connect()(CopyPanel);

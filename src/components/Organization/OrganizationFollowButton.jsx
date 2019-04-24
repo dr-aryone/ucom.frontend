@@ -7,6 +7,7 @@ import { selectUser } from '../../store/selectors/user';
 import { followOrganization, unfollowOrganization } from '../../actions/organizations';
 import { getUserById } from '../../store/users';
 import { authShowPopup } from '../../actions/auth';
+import { restoreActiveKey } from '../../utils/keys';
 
 const OrganizationFollowButton = (props) => {
   if (!props.organizationId) {
@@ -30,12 +31,12 @@ const OrganizationFollowButton = (props) => {
       withCheckedIcon={userIsFollow}
       text={userIsFollow ? 'Joined' : 'Join'}
       onClick={() => {
-        if (!owner) {
+        const activeKey = restoreActiveKey();
+        if (!owner || !activeKey) {
           props.authShowPopup();
           return;
         }
-
-        (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner });
+        (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner, activeKey });
       }}
     />
   );
@@ -48,6 +49,9 @@ OrganizationFollowButton.propTypes = {
   organizationId: PropTypes.number.isRequired,
   users: PropTypes.objectOf(PropTypes.object).isRequired,
   organizations: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired,
 };
 
 export default connect(

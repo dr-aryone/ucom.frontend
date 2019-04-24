@@ -7,9 +7,32 @@
   min-width: calc(100% - 80px);
   min-height: calc(100% - 80px);
   margin: 40px;
-  border-radius: 12px;
   box-shadow:  0px 0px 20px rgba(184, 184, 184, 0.25);
   background: #fff;
+  border-radius: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.content.active {
+  opacity: 1;
+}
+
+.content.roundBorders {
+  border-radius: 12px;
+}
+
+.content.fixWidth {
+  min-width: auto;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.content.walletAction {
+  min-width: 540px;
+  max-width: 540px;
+  min-height: auto;
+  align-self: auto;
 }
 
 .close {
@@ -17,6 +40,19 @@
   top: 30px;
   right: 30px;
   cursor: pointer;
+}
+
+.close .text {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  color: #505050;
+  transition: color 0.2s ease;
+}
+
+.close .text:hover {
+  color: #000;
 }
 
 .icon {
@@ -32,5 +68,9 @@
     min-width: calc(100% - 8px);
     min-height: calc(100% - 8px);
     margin: 4px;
+  }
+
+  .content.walletAction {
+    min-width: calc(100% - 8px)
   }
 }

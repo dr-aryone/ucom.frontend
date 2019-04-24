@@ -1,4 +1,5 @@
-import { NavLink, Switch, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Switch, Route } from 'react-router-dom';
 import React from 'react';
 import LayoutBase from '../components/Layout/LayoutBase';
 import Footer from '../components/Footer';
@@ -14,7 +15,7 @@ import { communityFeedGet } from '../actions/communityFeed';
 import { tagsFeedGet } from '../actions/tagsFeed';
 import { FEED_PER_PAGE } from '../utils/feed';
 import { POST_TYPE_MEDIA_ID, POST_TYPE_DIRECT_ID } from '../utils/posts';
-
+import Tabs from '../components/Tabs';
 
 const Overview = (props) => {
   const overviewCategoryName = props.match.params.filter;
@@ -43,63 +44,32 @@ const Overview = (props) => {
           <div className="content__inner content__inner_overview">
             <div className="nav-bar">
               <div className="nav-bar__title nav-bar__title_overview">
-                <h1 className="title title_big title_bold only-desktop">Overview</h1>
-                <h2 className="title title_bold else-desktop">Overview</h2>
-                <div className="nav-bar__categories only-desktop">
-                  {overviewUtils.OVERVIEW_CATEGORIES.map(item => (
-                    <div className="menu__item" key={item.id}>
-                      <NavLink
-                        className="overview__link "
-                        activeClassName="overview__link_active"
-                        to={urls.getOverviewCategoryUrl({ filter: item.name, route: overviewRouteName })}
-                        isActive={() => props.location.pathname.indexOf(`filter/${item.name}`) !== -1}
-                      >
-                        {item.name}
-                      </NavLink>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                <h1 className="title title_big title_bold">Overview</h1>
 
+                <Tabs
+                  responsive
+                  capitalize
+                  theme="thinBlack"
+                  items={overviewUtils.OVERVIEW_CATEGORIES.map(item => ({
+                    title: item.name,
+                    url: urls.getOverviewCategoryUrl({ filter: item.name, route: overviewRouteName }),
+                    active: props.location.pathname.indexOf(`filter/${item.name}`) !== -1,
+                  }))}
+                />
+              </div>
             </div>
           </div>
           <div className="content__inner content__inner_overview content__inner_overview_shadow">
-            <div className="nav-bar__categories else-desktop">
-              {overviewUtils.OVERVIEW_CATEGORIES.map(item => (
-                <div key={item.id}>
-                  <NavLink
-                    className="overview__link overview__link-mobile"
-                    activeClassName="overview__link_active"
-                    to={urls.getOverviewCategoryUrl({ filter: item.name, route: overviewRouteName })}
-                    isActive={() => props.location.pathname.indexOf(`filter/${item.name}`) !== -1}
-                    key={item.id}
-                  >
-                    {item.name}
-                  </NavLink>
-                </div>
-              ))}
-            </div>
-            <div className="nav-bar__menu">
-              <div className="toolbar toolbar_responsive">
-                <div className="toolbar__main">
-                  <div className="menu menu_simple-tabs">
-                    {overviewUtils.OVERVIEW_ROUTES.map(item => (
-                      <div className="menu__item" key={item.id}>
-                        <NavLink
-                          className="menu__link"
-                          activeClassName="menu__link_active"
-                          to={urls.getOverviewCategoryUrl({ route: item.name, filter: overviewCategoryName })}
-                          isActive={() => props.location.pathname.indexOf(urls.getOverviewCategoryUrl({ route: item.name, filter: overviewCategoryName })) === 0}
-                        >
-                          {item.name}
-                        </NavLink>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <hr className="content__separator content__separator_overview" />
+            <Tabs
+              responsive
+              withIndent
+              capitalize
+              items={overviewUtils.OVERVIEW_ROUTES.map(item => ({
+                title: item.name,
+                url: urls.getOverviewCategoryUrl({ route: item.name, filter: overviewCategoryName }),
+                active: props.location.pathname.indexOf(urls.getOverviewCategoryUrl({ route: item.name, filter: overviewCategoryName })) === 0,
+              }))}
+            />
             <Switch>
               {overviewRoutes.map(r => <Route path={r.path} component={r.component} key={r.path} />)}
             </Switch>
@@ -114,6 +84,18 @@ const Overview = (props) => {
       </div>
     </LayoutBase>
   );
+};
+
+Overview.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      filter: PropTypes.string,
+      route: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
 };
 
 export const getPageData = (store, {

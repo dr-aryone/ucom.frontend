@@ -5,6 +5,7 @@ import Avatar from '../Avatar';
 import { IconOK, IconNo } from '../Icons/GovernanceIcons';
 import Panel from '../Panel/Panel';
 import urls from '../../utils/urls';
+import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 
 const GovernanceConfirmation = (props) => {
   const [idList, setListId] = useState([]);
@@ -70,14 +71,18 @@ const GovernanceConfirmation = (props) => {
             </Panel>
           </div>
           <div className="governance-button-tall governance-button_center">
-            <Button
-              isUpper
-              isStretched
-              text="Vote"
-              size="big"
-              theme="red"
-              onClick={props.setVotes}
-            />
+            <RequestActiveKey onSubmit={props.setVotes}>
+              {requestActiveKey => (
+                <Button
+                  isUpper
+                  isStretched
+                  text="Vote"
+                  size="big"
+                  theme="red"
+                  onClick={requestActiveKey}
+                />
+              )}
+            </RequestActiveKey>
           </div>
         </div>
       </div>

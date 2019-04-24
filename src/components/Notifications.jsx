@@ -29,8 +29,8 @@ const Notifications = props => (
 
 Notifications.propTypes = {
   notifications: PropTypes.shape({
-    list: PropTypes.arrayOf(PropTypes.object),
-  }),
+    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  }).isRequired,
 };
 
 export default connect(state => ({

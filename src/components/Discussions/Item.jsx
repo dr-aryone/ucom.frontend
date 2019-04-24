@@ -40,7 +40,7 @@ const Item = props => (
               onClick: () => props.onClickRemove(props.id),
             }, {
               title: 'Copy Link',
-              onClick: () => copyToClipboard(`${document.location.origin}${props.url}`),
+              onClick: () => copyToClipboard(`${document.location.origin}${props.url}`), // TODO: Add success notification
             }]}
           />
         </div>

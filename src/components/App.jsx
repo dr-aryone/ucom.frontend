@@ -13,6 +13,11 @@ import socket from '../api/socket';
 import config from '../../package.json';
 import { enableGtm } from '../utils/gtm';
 import routes from '../routes';
+import Settings from '../components/Settings';
+import BuyRam from '../components/Resources/Actions/BuyRam';
+import SellRam from '../components/Resources/Actions/SellRam';
+import EditStake from '../components/Resources/Actions/EditStake';
+import SendTokens from '../components/Resources/Actions/SendTokens';
 
 const App = (props) => {
   useEffect(() => {
@@ -32,13 +37,25 @@ const App = (props) => {
     <Fragment>
       <Page>
         <Switch>
-          {routes.map(r => <Route exact path={r.path} component={r.component} key={r.path} />)}
+          {routes.map(r => (
+            <Route
+              exact={typeof r.exact === 'undefined' ? true : r.exact}
+              key={r.path}
+              path={r.path}
+              component={r.component}
+            />
+          ))}
         </Switch>
 
         <Auth />
         <UserMenu />
       </Page>
 
+      {props.settings.visible && <Settings />}
+      {props.wallet.buyRamVisible && <BuyRam />}
+      {props.wallet.sellRamVisible && <SellRam />}
+      {props.wallet.editStakeVisible && <EditStake />}
+      {props.wallet.sendTokensVisibility && <SendTokens />}
       <Notifications />
     </Fragment>
   );
@@ -47,11 +64,22 @@ const App = (props) => {
 App.propTypes = {
   fetchMyself: PropTypes.func.isRequired,
   initNotificationsListeners: PropTypes.func.isRequired,
+  settings: PropTypes.shape({
+    visible: PropTypes.bool.isRequired,
+  }).isRequired,
+  wallet: PropTypes.shape({
+    buyRamVisible: PropTypes.bool.isRequired,
+    sellRamVisible: PropTypes.bool.isRequired,
+    editStakeVisible: PropTypes.bool.isRequired,
+    sendTokensVisibility: PropTypes.bool.isRequired,
+  }).isRequired,
 };
 
 export default withRouter(connect(
   state => ({
     auth: state.auth,
+    wallet: state.walletSimple,
+    settings: state.settings,
   }),
   dispatch => bindActionCreators({
     fetchMyself,

@@ -9,49 +9,48 @@ import ModalContent from '../ModalContent';
 import OrganizationHead from '../Organization/OrganizationHead';
 import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForBlockProducers } from '../../actions/governance';
 import { getOrganization } from '../../actions/organizations';
-import { getAccountState, setWalletEditStakeVisible } from '../../actions/wallet';
+import { walletToggleEditStake, walletGetAccount } from '../../actions/walletSimple';
 import { getSelectedNodes } from '../../store/governance';
 import { selectUser } from '../../store/selectors/user';
 import LayoutBase from '../Layout/LayoutBase';
 import { getUosGroupId } from '../../utils/config';
-import SetStakePopup from '../Wallet/SetStakePopup';
 import GovernanceElection from './GovernanceElection';
 import GovernanceConfirmation from './GovernanceConfirmation';
+import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 
 const Governance = (props) => {
   const organizationId = getUosGroupId();
 
   useEffect(() => {
-    props.getAccountState();
+    props.walletGetAccount(props.user.accountName);
     props.getOrganization(organizationId);
     props.governanceNodesGet();
   }, [organizationId]);
 
-  const stakedTokens = (props.wallet.state.data.tokens && props.wallet.state.data.tokens.staked) || 0;
+  const stakedTokens = (props.wallet.tokens && props.wallet.tokens.staked) || 0;
   const table = props.governance.nodes.data;
   const { selectedNodes, user } = props;
   const [electionVisibility, setElectionVisibility] = useState(false);
   const [confirmationVisibility, setConfirmationVisibility] = useState(false);
   const [closeVisibility, setCloseVisibility] = useState(false);
-  const setVotes = () => {
+  const setVotes = (activeKey) => {
     setConfirmationVisibility(false);
     setElectionVisibility(false);
     setCloseVisibility(false);
-    props.voteForBlockProducers();
+    props.voteForBlockProducers(activeKey);
   };
 
   const close = () => {
     setConfirmationVisibility(false);
     setElectionVisibility(false);
     setCloseVisibility(false);
-    props.getAccountState();
+    props.walletGetAccount(props.user.accountName);
     props.governanceNodesGet();
     props.getOrganization(organizationId);
   };
 
   return (
     <LayoutBase>
-      <SetStakePopup />
       {electionVisibility && (
         <Popup onClickClose={() => setElectionVisibility(false)}>
           <ModalContent closeText="Close" mod="governance-election" onClickClose={() => setElectionVisibility(false)}>
@@ -90,13 +89,17 @@ const Governance = (props) => {
                   />
                 </div>
                 <div className="governance-button">
-                  <Button
-                    isStretched
-                    text="Vote"
-                    size="medium"
-                    theme="red"
-                    onClick={setVotes}
-                  />
+                  <RequestActiveKey onSubmit={setVotes}>
+                    {requestActiveKey => (
+                      <Button
+                        isStretched
+                        text="Vote"
+                        size="medium"
+                        theme="red"
+                        onClick={requestActiveKey}
+                      />
+                    )}
+                  </RequestActiveKey>
                 </div>
               </div>
             </div>
@@ -128,7 +131,7 @@ const Governance = (props) => {
                   <div
                     className="governance__action"
                     role="presentation"
-                    onClick={() => props.setWalletEditStakeVisible(true)}
+                    onClick={() => props.walletToggleEditStake(true)}
                   >
                     Edit Stake
                   </div>
@@ -210,7 +213,7 @@ export default connect(
   state => ({
     user: selectUser(state),
     governance: state.governance,
-    wallet: state.wallet,
+    wallet: state.walletSimple,
     selectedNodes: getSelectedNodes(state),
   }),
   dispatch => bindActionCreators({
@@ -218,8 +221,8 @@ export default connect(
     governanceHideVotePopup,
     governanceShowVotePopup,
     getOrganization,
-    getAccountState,
+    walletGetAccount,
     voteForBlockProducers,
-    setWalletEditStakeVisible,
+    walletToggleEditStake,
   }, dispatch),
 )(Governance);
