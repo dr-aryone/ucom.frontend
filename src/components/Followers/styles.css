@@ -22,6 +22,14 @@
   color: #000;
 }
 
+:local(.countLighter) {
+  color: #fff;
+}
+
+:local(.followers:hover .countLighter) {
+  color: #C1C1C1;
+}
+
 :local(.title) {
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -32,6 +40,14 @@
 
 :local(.followers:hover .title) {
   color: #000;
+}
+
+:local(.titleLighter) {
+  color: #E1E1E1;
+}
+
+:local(.followers:hover .titleLighter) {
+  color: #ABABAB;
 }
 
 :local(.avatars) {

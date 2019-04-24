@@ -1,5 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import React, { PureComponent } from 'react';
 import RegistrationStepIntro from './RegistrationStepIntro';
@@ -43,7 +44,7 @@ class Registration extends PureComponent {
                 <RegistrationStepIntro />
                 <RegistrationStepFirst />
                 <RegistrationStepSecond />
-                <RegistrationStepThird />
+                <RegistrationStepThird prevPath={this.props.location && this.props.location.state ? this.props.location.state.prevPath : null} />
               </div>
             </div>
           </div>
@@ -53,11 +54,11 @@ class Registration extends PureComponent {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({
     registration: state.registration,
   }),
   dispatch => bindActionCreators({
     registrationReset,
   }, dispatch),
-)(Registration);
+)(Registration));

@@ -1,8 +1,10 @@
 import Validator from '../utils/validator';
 import api from '../api';
-import { generateBrainkey, saveBrainkey } from '../utils/brainkey';
+import { generateBrainkey } from '../utils/brainkey';
 import { saveToken } from '../utils/token';
 import urls from '../utils/urls';
+import { saveActiveKey, getActivePrivateKey } from '../utils/keys';
+import { getPostUrl } from '../utils/posts';
 
 export const registrationReset = payload => ({ type: 'REGISTRATION_RESET', payload });
 export const registrationSetStep = payload => ({ type: 'REGISTRATION_SET_STEP', payload });
@@ -44,7 +46,7 @@ export const registrationGenerateBrainkey = () => (dispatch) => {
   dispatch(registrationSetBrainkey(generateBrainkey()));
 };
 
-export const registrationRegister = () => async (dispatch, getState) => {
+export const registrationRegister = prevPage => async (dispatch, getState) => {
   const state = getState();
   const { brainkey, accountName, isTrackingAllowed } = state.registration;
 
@@ -59,8 +61,13 @@ export const registrationRegister = () => async (dispatch, getState) => {
       });
 
       saveToken(data.token);
-      saveBrainkey(brainkey);
-      window.location.replace(urls.getUserUrl(data.user.id));
+      saveActiveKey(getActivePrivateKey(brainkey));
+
+      if (prevPage !== undefined && prevPage !== null && !Number.isNaN(prevPage)) {
+        window.location.replace(getPostUrl(prevPage));
+      } else {
+        window.location.replace(urls.getUserUrl(data.user.id));
+      }
     } catch (e) {
       console.error(e);
     }

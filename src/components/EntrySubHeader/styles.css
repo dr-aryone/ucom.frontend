@@ -3,6 +3,12 @@
   margin: 49px 0 0;
 }
 
+:local(.wrapperOffer) {
+  position: relative;
+  margin: 100px 0 0;
+  z-index: 9;
+}
+
 :local(.subHeader) {
   position: absolute;
   bottom: 100%;
@@ -40,6 +46,10 @@
 :local(.subHeader:hover .rate) {
   transform: none;
   opacity: 1;
+}
+
+:local(.subHeader.subHeaderSquare) {
+  border-radius: 0;
 }
 
 :local(.userPick) {
@@ -122,5 +132,15 @@
 
   :local(.followLink) {
     right: 20px;
+  }
+}
+
+@media (max-width: 414px) {
+  :local(.subHeaderSquare) {
+    margin: 0 -14px;
+  }
+
+  :local(.wrapperOffer) {
+    margin: 73px 0 0;
   }
 }
