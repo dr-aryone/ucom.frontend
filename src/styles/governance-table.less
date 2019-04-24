@@ -5,10 +5,6 @@
   white-space: nowrap;
   border-spacing: 0;
   table-layout: fixed;
-
-  @media (max-width: 1023px) {
-    display: block;
-  }
 }
 
 .governance-table__percentage {
@@ -46,6 +42,12 @@
     @media (max-width: 767px) {
       justify-content: center;
     }
+
+    &.governance-table__cell_name_flex {
+      @media (max-width: 767px) {
+        justify-content: end;
+      }
+    }
   }  
 }
 
@@ -54,13 +56,6 @@
   height: 80px;
   padding-left: 16px;
   padding-right: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  
-  @media (max-width: 1023px) {
-    display: block;
-    border-bottom: 1px  solid #E8ECEC;
-  }
 }
 
 .governance-table__cell_sortable {
@@ -73,18 +68,10 @@
 
 .governance-table__cell_name_flex {
   flex: 1;
-
-  @media (max-width: 767px) {
-    justify-content: end;
-  }
 }
 
 .governance-table__cell_id {
   width: 65px;
-}
-
-.governance-table__cell_name {
-  width: auto;
 }
 
 .governance-table__votes-block {
@@ -122,6 +109,17 @@
     .governance-table__cell_name {
       font-weight: 700;
     }
+  }
+
+  .governance-table__cell {
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .governance-table__cell_state {
+    overflow: unset;
+
   }
 }
 

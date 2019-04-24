@@ -153,7 +153,7 @@ const Governance = (props) => {
         </div>
       </div>
       <div className="content">
-        <div className="content__inner">
+        <div className="content__inner content__main">
           <div className="sheets">
             <div className="sheets__list">
               <div className="sheets__item sheets__item_governance">
