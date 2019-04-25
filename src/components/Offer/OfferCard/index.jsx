@@ -126,7 +126,7 @@ const OfferCard = (props) => {
 
           {loaded && Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 && (() => {
             if (((!props.cookie && !conditions) ||
-            (conditions && conditions.conditions.authGithub === false && (conditions.conditions.authMyself === false || conditions.conditions.authMyself === true)) ||
+            (conditions && (conditions.conditions.authGithub === false && !props.cookie) && (conditions.conditions.authMyself === false || conditions.conditions.authMyself === true)) ||
             ((conditions && conditions.airdropStatus !== AirdropStatuses.RECEIVED && conditions.airdropStatus !== AirdropStatuses.PENDING) &&
             (conditions && conditions.airdropStatus === AirdropStatuses.NEW && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false)))) {
               return (
