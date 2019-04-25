@@ -1,3 +1,4 @@
+import he from 'he';
 import { memoize } from 'lodash';
 import sanitizeHtml from 'sanitize-html';
 import urls from './urls';
@@ -6,8 +7,6 @@ export const COPY_TO_CLIPBOARD_SUCCESS_MESSAGE = 'Link copied to clipboard';
 
 const URL_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 export const IMG_URL_REGEXP = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
-
-export const escapeQuotes = memoize((text = '') => text.replace(/&quot;/g, '"'));
 
 const makeActiveLink = (trigger, makeRoute, className) => (...args) => {
   let match = args[0];
@@ -105,10 +104,12 @@ export const sanitizeCommentText = memoize(html => sanitizeHtml(html, {
   allowedAttributes: {
     a: ['href', 'target', 'class'],
   },
-  textFilter: text => escapeQuotes(removeMultipleNewLines(makeLink(text))),
+  textFilter: text => removeMultipleNewLines(makeLink(text)),
 }));
 
-export const sanitizePostTitle = memoize(text => sanitizeHtml(text));
+export const sanitizeText = memoize(str => sanitizeHtml(str));
+
+export const decodeText = memoize(str => he.decode(str));
 
 export const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value);
 

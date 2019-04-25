@@ -4,6 +4,7 @@ import cn from 'classnames';
 import IconSearch from '../components/Icons/Search';
 import InputErrorIcon from '../components/Icons/InputError';
 import InputCompleteIcon from '../components/Icons/InputComplete';
+import { decodeText } from '../utils/text';
 
 const TextInput = ({
   value, error, label, topLabel, placeholder, subtext, isSearch, inputWidth, isRequired, type, onChange, disabled, maxLength, isValid, className, ymDisableKeys, touched = false, ...rest
@@ -38,7 +39,7 @@ const TextInput = ({
         <div className="text-input__input-wrapper" style={{ width: inputWidth }}>
           <input
             maxLength={maxLength}
-            value={value === null || value === undefined ? '' : value}
+            value={value === null || value === undefined ? '' : decodeText(value)}
             className={cn('text-input__input', {
               'text-input__input_error': Boolean(error),
               'text-input__input_with-icon': Boolean(isIconExist),
