@@ -26,16 +26,21 @@ import EntryListSection from '../components/EntryListSection';
 import Trust from '../components/Trust';
 import { getUserName, userIsOwner } from '../utils/user';
 import { authShowPopup } from '../actions/auth';
+import { addErrorNotification } from '../actions/notifications';
+import { parseResponseError } from '../utils/errors';
+import { restoreActiveKey } from '../utils/keys';
 
 const UserPage = (props) => {
   const userIdOrName = props.match.params.userId;
-  const postId = Number(props.match.params.postId);
+  const postId = +props.match.params.postId;
   const [loaded, setLoaded] = useState(false);
   const [trustedByUsersIds, setTrustedByUsersIds] = useState([]);
   const [trustedByMetadata, setTrustedByMetadata] = useState({});
   const [trustLoading, setTrustLoading] = useState(false);
+  const user = getUserById(props.users, userIdOrName);
+  const post = getPostById(props.posts, postId);
 
-  const fetchData = async () => {
+  const fetchUserData = async () => {
     loader.start();
     try {
       const data = await props.dispatch(fetchUserPageData({
@@ -44,7 +49,8 @@ const UserPage = (props) => {
       setTrustedByUsersIds(data.oneUserTrustedBy.data.map(i => i.id));
       setTrustedByMetadata(data.oneUserTrustedBy.metadata);
     } catch (e) {
-      console.error(e);
+      const errorMessage = parseResponseError(e)[0].message;
+      props.dispatch(addErrorNotification(errorMessage));
     }
     loader.done();
     setLoaded(true);
@@ -60,25 +66,58 @@ const UserPage = (props) => {
       setTrustedByUsersIds(data.data.map(i => i.id));
       setTrustedByMetadata(data.metadata);
     } catch (e) {
-      console.error(e);
+      const errorMessage = parseResponseError(e)[0].message;
+      props.dispatch(addErrorNotification(errorMessage));
     }
     loader.done();
   };
 
+  const fetchPostData = async () => {
+    if (!postId) {
+      return;
+    }
+    loader.start();
+    try {
+      props.dispatch(fetchPost(postId));
+    } catch (e) {
+      const errorMessage = parseResponseError(e)[0].message;
+      props.dispatch(addErrorNotification(errorMessage));
+    }
+    loader.done();
+  };
+
+  const submitTrust = async (isTrust) => {
+    const activeKey = restoreActiveKey();
+    if (!props.owner.id || !activeKey) {
+      props.dispatch(authShowPopup());
+      return;
+    }
+    loader.start();
+    setTrustLoading(true);
+    try {
+      await props.dispatch((isTrust ? trustUser : untrustUser)({
+        activeKey,
+        userId: user.id,
+        userAccountName: user.accountName,
+        ownerAccountName: props.owner.accountName,
+      }));
+      await fetchTrustedBy(trustedByMetadata.page);
+    } catch (e) {
+      const errorMessage = parseResponseError(e)[0].message;
+      props.dispatch(addErrorNotification(errorMessage));
+    }
+    loader.done();
+    setTrustLoading(false);
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchData();
+    fetchUserData();
   }, [userIdOrName]);
 
   useEffect(() => {
-    if (postId) {
-      loader.start();
-      props.dispatch(fetchPost(postId))
-        .then(loader.done);
-    }
+    fetchPostData();
   }, [postId]);
-
-  const user = getUserById(props.users, userIdOrName);
 
   if (loaded && !user) {
     return <NotFoundPage />;
@@ -86,13 +125,11 @@ const UserPage = (props) => {
     return null;
   }
 
-  const post = getPostById(props.posts, postId);
-  const userId = user.id;
-
   return (
     <LayoutBase gray>
+      {/* TODO: Disable scroll to top */}
       {post &&
-        <Popup onClickClose={() => props.history.push(urls.getUserUrl(userId))}>
+        <Popup onClickClose={() => props.history.push(urls.getUserUrl(user.id))}>
           <ModalContent mod="post">
             <Post id={post.id} postTypeId={post.postTypeId} />
           </ModalContent>
@@ -102,7 +139,7 @@ const UserPage = (props) => {
       <div className="layout layout_profile">
         <div className="layout__header">
           <UserHead
-            userId={userId}
+            userId={user.id}
             trustedByUsersCount={trustedByMetadata.totalAmount}
             trustedByUsersIds={trustedByUsersIds}
             trustedByMetadata={trustedByMetadata}
@@ -127,9 +164,7 @@ const UserPage = (props) => {
           }
 
           <EntryContacts site={user.personalWebsiteUrl} />
-          <EntrySocialNetworks
-            urls={(user.usersSources || []).map(i => i.sourceUrl).filter(i => !!i)}
-          />
+          <EntrySocialNetworks urls={(user.usersSources || []).map(i => i.sourceUrl).filter(i => !!i)} />
           <EntryCreatedAt date={user.createdAt} />
 
           {!userIsOwner(user, props.owner) && !props.ownerIsLoading &&
@@ -138,44 +173,14 @@ const UserPage = (props) => {
               trusted={user && user.myselfData && user.myselfData.trust}
               userName={getUserName(user)}
               userAvtarUrl={urls.getFileUrl(user.avatarFilename)}
-              onClickTrust={async () => {
-                if (!props.owner.id) {
-                  props.dispatch(authShowPopup());
-                  return;
-                }
-                loader.start();
-                setTrustLoading(true);
-                await props.dispatch(trustUser({
-                  userId: user.id,
-                  userAccountName: user.accountName,
-                  ownerAccountName: props.owner.accountName,
-                }));
-                await fetchTrustedBy(trustedByMetadata.page);
-                loader.done();
-                setTrustLoading(false);
-              }}
-              onClickUntrust={async () => {
-                if (!props.owner.id) {
-                  props.dispatch(authShowPopup());
-                  return;
-                }
-                loader.start();
-                setTrustLoading(true);
-                await props.dispatch(untrustUser({
-                  userId: user.id,
-                  userAccountName: user.accountName,
-                  ownerAccountName: props.owner.accountName,
-                }));
-                await fetchTrustedBy(trustedByMetadata.page);
-                loader.done();
-                setTrustLoading(false);
-              }}
+              onClickTrust={() => submitTrust(true)}
+              onClickUntrust={() => submitTrust(false)}
             />
           }
         </div>
         <div className="layout__main">
           <EntryAbout text={user.about} />
-          <Feed userId={userId} feedTypeId={USER_WALL_FEED_ID} />
+          <Feed userId={user.id} feedTypeId={USER_WALL_FEED_ID} />
         </div>
         <div className="layout__footer">
           <Footer />

@@ -1,4 +1,3 @@
-// import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { Fragment, useState } from 'react';
 import { bindActionCreators } from 'redux';
@@ -14,15 +13,14 @@ import LogoutIcon from '../Icons/Logout';
 import IconSearch from '../Icons/Search';
 import MenuWallet from '../Wallet/MenuWallet';
 import WalletActivity from '../Wallet/WalletActivity';
-import { removeBrainkey } from '../../utils/brainkey';
 import { removeToken } from '../../utils/token';
 import urls from '../../utils/urls';
 import SearchPopup from '../Search';
+import { settingsShow } from '../../actions/settings';
 
 const UserMenu = (props) => {
   const logout = () => {
     removeToken();
-    removeBrainkey();
     props.removeUser();
     window.location.reload();
     props.hideMenuPopup();
@@ -94,18 +92,20 @@ const UserMenu = (props) => {
                         </div>
                       }
 
-                      {/* {props.user.id &&
+                      {props.user.id &&
                         <div className="menu__item">
-                          <NavLink
-                            to="/profile/"
+                          <span
+                            role="presentation"
                             className="menu__link menu__link_upper"
-                            activeClassName="menu__link_active"
-                            isActive={() => props.location.pathname === '/profile'}
+                            onClick={() => {
+                              props.hideMenuPopup();
+                              props.settingsShow();
+                            }}
                           >
                             Settings
-                          </NavLink>
+                          </span>
                         </div>
-                      } */}
+                      }
 
                       {props.user.id &&
                         <div className="menu__item">
@@ -148,8 +148,14 @@ const UserMenu = (props) => {
 
 UserMenu.propTypes = {
   menuPopupVisibility: PropTypes.bool,
-  removeUser: PropTypes.func,
-  hideMenuPopup: PropTypes.func,
+  removeUser: PropTypes.func.isRequired,
+  showMenuPopup: PropTypes.func.isRequired,
+  hideMenuPopup: PropTypes.func.isRequired,
+  settingsShow: PropTypes.func.isRequired,
+};
+
+UserMenu.defaultProps = {
+  menuPopupVisibility: false,
 };
 
 export default withRouter(connect(
@@ -162,5 +168,6 @@ export default withRouter(connect(
     showMenuPopup,
     hideMenuPopup,
     removeUser,
+    settingsShow,
   }, dispatch),
 )(UserMenu));

@@ -1,0 +1,29 @@
+.tokens {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  grid-gap: 32px;
+}
+
+.value {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.label {
+  margin: 0 0 27px;
+  font-size: 14px;
+  color: #767676;
+}
+
+.unstaking {
+  grid-row-start: 2;
+  grid-column-start: 1;
+  grid-column-end: 4;
+  padding: 20px 28px;
+  border-left: 4px solid #d8352f;
+  line-height: 28px;
+  font-size: 16px;
+  background: #F8F8F9;
+}

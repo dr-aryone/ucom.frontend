@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router';
-import { NavLink } from 'react-router-dom';
 import React, { Fragment } from 'react';
 import Footer from '../components/Footer';
 import AboutGeneralInfoPage from './About/AboutGeneralInfo';
 import LayoutBase from '../components/Layout/LayoutBase';
+import Tabs from '../components/Tabs';
 
 const AboutPage = props => (
   <LayoutBase>
@@ -14,24 +15,14 @@ const AboutPage = props => (
             <div className="nav-bar__title">
               <h1 className="title">About</h1>
             </div>
-            <div className="nav-bar__menu">
-              <div className="toolbar toolbar_responsive">
-                <div className="toolbar__main">
-                  <div className="menu menu_simple-tabs">
-                    <div className="menu__item">
-                      <NavLink
-                        className="menu__link"
-                        activeClassName="menu__link_active"
-                        to="/about/general-info"
-                        isActive={() => props.location.pathname === '/about/general-info'}
-                      >
-                        General Info
-                      </NavLink>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Tabs
+              noBorder
+              items={[{
+                title: 'General Info',
+                url: '/about/general-info',
+                active: props.location.pathname === '/about/general-info',
+              }]}
+            />
           </div>
         </div>
 
@@ -53,5 +44,11 @@ const AboutPage = props => (
     </div>
   </LayoutBase>
 );
+
+AboutPage.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default AboutPage;

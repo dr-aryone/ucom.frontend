@@ -11,6 +11,8 @@ import IconFacebook from '../Icons/Socials/Share/Facebook';
 import IconTwitter from '../Icons/Socials/Share/Twitter';
 import IconTelegram from '../Icons/Socials/Share/Telegram';
 import { POST_TYPE_MEDIA_ID } from '../../utils/posts';
+import { copyToClipboard, COPY_TO_CLIPBOARD_SUCCESS_MESSAGE } from '../../utils/text';
+import { addSuccessNotification } from '../../actions/notifications';
 
 class ShareBlock extends PureComponent {
   constructor(props) {
@@ -30,15 +32,6 @@ class ShareBlock extends PureComponent {
   componentWillUnmount() {
     document.removeEventListener('click', this.onClick);
   }
-
-  copyToClipboard = () => {
-    const link = document.createElement('textarea');
-    link.innerText = window.location.origin + this.props.link;
-    document.body.appendChild(link);
-    link.select();
-    document.execCommand('copy');
-    link.remove();
-  };
 
   render() {
     return (
@@ -71,7 +64,12 @@ class ShareBlock extends PureComponent {
           <span>Copy link</span>
           <div className={styles.copylink}>
             <a target="_blank" rel="noopener noreferrer" href={this.props.link} className={styles.copylinkTitle}>{window.location.origin + this.props.link}</a>
-            <IconCopyLink onClick={this.copyToClipboard()} />
+            <IconCopyLink
+              onClick={() => {
+                copyToClipboard(window.location.origin + this.props.link);
+                this.props.addSuccessNotification(COPY_TO_CLIPBOARD_SUCCESS_MESSAGE);
+              }}
+            />
           </div>
         </div>
       </div>
@@ -82,12 +80,22 @@ class ShareBlock extends PureComponent {
 ShareBlock.propTypes = {
   link: PropTypes.string,
   linkPost: PropTypes.string,
-  addRepost: PropTypes.func,
-  onClickClose: PropTypes.func,
+  addRepost: PropTypes.func.isRequired,
+  onClickClose: PropTypes.func.isRequired,
   repostAvailable: PropTypes.bool,
   postId: PropTypes.number,
   postTypeId: PropTypes.number,
   postPostTypeId: PropTypes.number,
+  addSuccessNotification: PropTypes.func.isRequired,
+};
+
+ShareBlock.defaultProps = {
+  link: undefined,
+  linkPost: undefined,
+  repostAvailable: false,
+  postId: undefined,
+  postTypeId: undefined,
+  postPostTypeId: undefined,
 };
 
 export default connect(
@@ -97,5 +105,6 @@ export default connect(
   dispatch => bindActionCreators({
     selectUser,
     addRepost,
+    addSuccessNotification,
   }, dispatch),
 )(ShareBlock);

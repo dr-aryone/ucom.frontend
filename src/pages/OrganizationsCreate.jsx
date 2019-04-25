@@ -1,11 +1,11 @@
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
 import React, { PureComponent } from 'react';
 import OrganizationsCreateForm from '../components/OrganizationsCreateForm';
 import { setOrganizationActiveTab, fetchOrganization, resetOrganizationData } from '../actions/organization';
 import { selectUser } from '../store/selectors/user';
 import LayoutBase from '../components/Layout/LayoutBase';
+import Tabs from '../components/Tabs';
 
 class OrganizationsCreatePage extends PureComponent {
   componentDidMount() {
@@ -55,21 +55,14 @@ class OrganizationsCreatePage extends PureComponent {
               <h1 className="title">{this.props.match.params.id ? 'Edit' : 'Create'} Community</h1>
             </div>
 
-            <div className="menu menu_simple-tabs">
-              {this.props.organization.steps.map(item => (
-                <div
-                  key={item.id}
-                  role="presentation"
-                  onClick={() => this.props.setOrganizationActiveTab(item.id)}
-                  className={classNames(
-                    'menu__item',
-                    { 'menu__item_active': item.id === this.props.organization.activeStepId },
-                  )}
-                >
-                  <div className="menu__link">{item.name}</div>
-                </div>
-              ))}
-            </div>
+            <Tabs
+              noBorder
+              items={this.props.organization.steps.map(item => ({
+                title: item.name,
+                active: item.id === this.props.organization.activeStepId,
+                onClick: () => this.props.setOrganizationActiveTab(item.id),
+              }))}
+            />
           </div>
 
           <hr className="content__separator" />

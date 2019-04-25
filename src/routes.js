@@ -4,6 +4,7 @@ import EditPostPage from './pages/EditPost';
 // import ProfilePage from './pages/Profile';
 import PostPage, { getPostPageData } from './pages/Post';
 import OverviewPage, { getPageData } from './pages/Overview';
+import Offer, { getPostOfferData } from './pages/Offer';
 import UsersPage from './pages/Users';
 import AboutPage from './pages/About';
 import OrganizationsPage from './pages/Organizations';
@@ -16,6 +17,9 @@ import GovernancePage from './components/Governance/Governance';
 import Tag from './pages/Tag';
 import Faq from './pages/Faq';
 import Statistics from './pages/Statistics';
+import { getAirdropOfferId } from './utils/airdrop';
+
+const airdropOfferId = getAirdropOfferId();
 
 export default [{
   path: '/',
@@ -43,6 +47,10 @@ export default [{
 }, {
   path: '/posts/:id/edit',
   component: EditPostPage,
+}, {
+  path: `/posts/${airdropOfferId}`,
+  component: Offer,
+  getData: getPostOfferData,
 }, {
   path: '/posts/:postId',
   component: PostPage,

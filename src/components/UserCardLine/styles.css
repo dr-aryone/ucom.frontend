@@ -1,6 +1,6 @@
 .userCard {
   display: grid;
-  grid-template: 'a a a';
+  grid-template: 'a a a a a';
   grid-template-columns: 46px 1fr;
   max-width: 304px;
   width: 304px;

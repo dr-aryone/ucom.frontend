@@ -83,7 +83,7 @@ const Auth = (props) => {
               <div className="inline inline_small">
                 <span className="inline__item">No account?</span>
                 <span className="inline__item">
-                  <Link className="auth__link" to={urls.getRegistrationUrl()}>Create one</Link>
+                  <Link className="auth__link" to={{ pathname: urls.getRegistrationUrl(), state: { prevPath: props.location.pathname || null } }}>Create one</Link>
                 </span>
               </div>
             </div>

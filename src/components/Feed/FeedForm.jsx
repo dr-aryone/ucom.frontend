@@ -5,7 +5,6 @@ import Avatar from '../Avatar';
 import Button from '../Button';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
-import { escapeQuotes } from '../../utils/text';
 import { removeCoverImage, changeCoverImageUrl, getCoverImage } from '../../utils/entityImages';
 import IconClip from '../Icons/Clip';
 import IconClose from '../Icons/Close';
@@ -16,7 +15,7 @@ import api from '../../api';
 
 const FeedForm = (props) => {
   const initialText = props.initialText ? `#${props.initialText} ` : false;
-  const [message, setMessage] = useState(escapeQuotes(props.message) || initialText || '');
+  const [message, setMessage] = useState(props.message || initialText || '');
   const [entityImages, setEntityImages] = useState(props.entityImages);
 
   const onImage = async (file) => {

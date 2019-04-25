@@ -48,11 +48,21 @@ const Followers = (props) => {
         onClick={() => showPopup()}
       >
         <div className={styles.info}>
-          <div className={styles.count}>
+          <div
+            className={classNames(
+              `${styles.count}`,
+              { [styles.countLighter]: props.colorLight },
+            )}
+          >
             {props.count}
           </div>
 
-          <div className={styles.title}>
+          <div
+            className={classNames(
+              `${styles.title}`,
+              { [styles.titleLighter]: props.colorLight },
+            )}
+          >
             {props.title}
           </div>
         </div>
@@ -90,6 +100,7 @@ export const followersPropTypes = {
   metadata: entryListPopupPropTypes.metadata,
   onChangePage: PropTypes.func,
   onClick: PropTypes.func,
+  colorLight: PropTypes.bool,
 };
 
 Followers.propTypes = followersPropTypes;
@@ -101,6 +112,7 @@ Followers.defaultProps = {
   metadata: null,
   onChangePage: null,
   onClick: null,
+  colorLight: false,
 };
 
 export default memo(withRouter(Followers));

@@ -42,8 +42,7 @@ const UserStatusForm = (props) => {
         placeholder={PLACEHOLDER}
         maxLength={STATUS_MAX_LENGTH}
         value={moodMessage}
-        onChange={e => setMoodMessage(e.target.value)}
-        onChangeValue={e => setMoodMessage(e)}
+        onChange={value => setMoodMessage(value)}
         onKeyDown={(e) => {
           if (isEscKey(e)) {
             props.onClickHide();
