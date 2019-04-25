@@ -6,7 +6,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { formatRate } from '../../../utils/rate';
 import styles from './styles.css';
 import Avatar from '../../Avatar';
-import { sanitizePostTitle } from '../../../utils/text';
+import { sanitizeText } from '../../../utils/text';
 import Countdown from '../../Countdown';
 import Followers from '../../Followers';
 import Popup from '../../Popup';
@@ -84,7 +84,7 @@ const OfferCard = (props) => {
 
         {props.title &&
           <h1 className={styles.title}>
-            <div dangerouslySetInnerHTML={{ __html: sanitizePostTitle(props.title) }} />
+            <div dangerouslySetInnerHTML={{ __html: sanitizeText(props.title) }} />
           </h1>
         }
 
