@@ -196,8 +196,8 @@ OfferCard.propTypes = {
   onChangePage: PropTypes.func.isRequired,
   users: PropTypes.arrayOf(PropTypes.any).isRequired,
   userUrl: PropTypes.string.isRequired,
-  finishedAt: PropTypes.string.isRequired,
-  startedAt: PropTypes.string.isRequired,
+  finishedAt: PropTypes.string,
+  startedAt: PropTypes.string,
   coverUrl: PropTypes.string,
   rate: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   title: PropTypes.string.isRequired,
@@ -219,6 +219,8 @@ OfferCard.defaultProps = {
   token: '',
   conditions: null,
   gitHubAuthLink: '',
+  finishedAt: '',
+  startedAt: '',
 };
 
 export default connect(

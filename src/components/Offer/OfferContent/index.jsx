@@ -69,7 +69,7 @@ OfferContent.defaultProps = {
 };
 
 OfferContent.propTypes = {
-  tokens: PropTypes.arrayOf(PropTypes.any).isRequired,
+  tokens: PropTypes.arrayOf(PropTypes.any),
   score: PropTypes.number,
   postId: PropTypes.number.isRequired,
   commentsCount: PropTypes.number,

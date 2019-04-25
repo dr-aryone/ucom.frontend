@@ -24,6 +24,7 @@ import stylesSubHeader from '../components/EntrySubHeader/styles.css';
 import { getOrganization } from '../actions/organizations';
 import { airdropId, getAirdropOfferId, getGitHubAuthLink } from '../utils/airdrop';
 import { selectUser } from '../store/selectors/user';
+import { addErrorNotification } from '../actions/notifications';
 
 const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
@@ -49,6 +50,7 @@ const Offer = (props) => {
         await api.syncAccountGithub(options);
       } catch (e) {
         console.error(e);
+        props.addErrorNotification('Current user or this GitHub identity is already paired with a different user');
       }
     }
   };
@@ -170,6 +172,7 @@ const Offer = (props) => {
               postTypeId={post.postTypeId}
               startedAt={post.startedAt}
               gitHubAuthLink={gitHubAuthLink}
+              organizationId={post.organizationId}
             />
           </div>
         </div>
@@ -186,6 +189,7 @@ Offer.propTypes = {
   getOnePostOfferWithUserAirdrop: PropTypes.func.isRequired,
   getManyUsers: PropTypes.func.isRequired,
   getOrganization: PropTypes.func.isRequired,
+  addErrorNotification: PropTypes.func,
 };
 
 export default connect(
@@ -203,6 +207,7 @@ export default connect(
     getManyUsers,
     getOrganization,
     fetchMyself,
+    addErrorNotification,
   }, dispatch),
 )(Offer);
 

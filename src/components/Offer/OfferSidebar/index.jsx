@@ -116,7 +116,7 @@ const OfferSidebar = (props) => {
         <div className={styles.option}>
           <div className={styles.optionStatus}>{conditions && conditions.conditions.followingDevExchange === true ? <Done /> : <Three />}</div>
           <div className={styles.optionBlock}>
-            <a href="/communities/107" target="_blank" className={styles.optionTitle}>Join DevExchange</a>
+            <a href={`/communities/${props.organizationId}`} target="_blank" rel="noopener noreferrer" className={styles.optionTitle}>Join DevExchange</a>
             <div className={styles.optionText}>to see your Importance in action and talk to community members</div>
           </div>
         </div>
@@ -163,13 +163,14 @@ OfferSidebar.propTypes = {
   authShowPopup: PropTypes.func.isRequired,
   rate: PropTypes.number,
   postId: PropTypes.number.isRequired,
-  createdAt: PropTypes.string.isRequired,
-  startedAt: PropTypes.string.isRequired,
+  createdAt: PropTypes.string,
+  startedAt: PropTypes.string,
   link: PropTypes.string.isRequired,
   repostAvailable: PropTypes.bool,
   postTypeId: PropTypes.number,
   cookie: PropTypes.string,
   gitHubAuthLink: PropTypes.string,
+  organizationId: PropTypes.number,
 };
 
 OfferSidebar.defaultProps = {
@@ -179,6 +180,9 @@ OfferSidebar.defaultProps = {
   conditions: null,
   postTypeId: 1,
   gitHubAuthLink: '',
+  startedAt: '',
+  createdAt: '',
+  organizationId: 101,
 };
 
 export default connect(

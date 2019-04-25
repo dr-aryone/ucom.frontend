@@ -23,7 +23,7 @@
   },
   "gitHubAuthLink": {
     "staging": "https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/posts/14317?mock_external_id=true",
-    "production": "https://github.com/login/oauth/authorize/?client_id=8b4ef608525c8aff2d5e&state=5idkWlsZKzbpcD7u&redirect_uri=https://backend.u.community/api/v1/github/auth_callback?redirect_uri=https://u.community/posts/6137"
+    "production": "https://github.com/login/oauth/authorize/?client_id=8b4ef608525c8aff2d5e&state=5idkWlsZKzbpcD7u&redirect_uri=https://backend.u.community/api/v1/github/auth_callback?redirect_uri=https://u.community/posts/6137?mock_external_id=true"
   },
   "backend": {
     "staging": {
@@ -77,7 +77,6 @@
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
-    "crypto-js": "^3.1.9-1",
     "@tippy.js/react": "^1.0.0",
     "autosize": "^4.0.2",
     "axios": "^0.18.0",
@@ -85,6 +84,7 @@
     "babel-register": "^6.26.0",
     "classnames": "^2.2.6",
     "crypto": "^1.0.1",
+    "crypto-js": "^3.1.9-1",
     "decko": "^1.2.0",
     "ejs": "^2.6.1",
     "eosjs": "^20.0.0-beta2",

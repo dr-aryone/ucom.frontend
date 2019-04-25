@@ -82,8 +82,12 @@ const Countdown = (props) => {
   );
 };
 
+Countdown.defaultProps = {
+  date: '',
+};
+
 Countdown.propTypes = {
-  date: PropTypes.string.isRequired,
+  date: PropTypes.string,
 };
 
 export default Countdown;
