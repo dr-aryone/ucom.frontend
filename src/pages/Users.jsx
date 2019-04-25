@@ -11,7 +11,7 @@ import IconTableTriangle from '../components/Icons/TableTriangle';
 import SearchInput from '../components/SearchInput';
 import loader from '../utils/loader';
 
-const { getPagingLink } = urls;
+const { getUsersPagingUrl } = urls;
 
 const textItemRender = (current, type, element) => {
   if (type === 'prev') {
@@ -36,12 +36,12 @@ const UsersPage = (props) => {
   };
 
   const onChangePage = (current) => {
-    props.history.push(getPagingLink({ ...usersParams, page: current }));
+    props.history.push(getUsersPagingUrl({ ...usersParams, page: current }));
     window.scrollTo(0, 'top');
   };
 
   const onChangeSearch = (userName) => {
-    props.history.push(getPagingLink({
+    props.history.push(getUsersPagingUrl({
       ...usersParams, userName, page: 1, perPage: 20,
     }));
   };
@@ -106,7 +106,7 @@ const UsersPage = (props) => {
                             { 'list-table__cell_sortable': item.sortable },
                           )}
                         >
-                          <Link to={getPagingLink({ ...usersParams, sortBy: `${sortBy === `-${item.name}` ? '' : '-'}${item.name}` })}>
+                          <Link to={getUsersPagingUrl({ ...usersParams, sortBy: `${sortBy === `-${item.name}` ? '' : '-'}${item.name}` })}>
                             <div className="list-table__title">
                               {item.title}
 
@@ -154,7 +154,7 @@ const UsersPage = (props) => {
                 {hasMore && (
                   <div className="table-content__showmore">
                     <div className="button-clean button-clean_link">
-                      <Link to={getPagingLink({ ...usersParams, perPage: +perPage + 20 })}>Show More</Link>
+                      <Link to={getUsersPagingUrl({ ...usersParams, perPage: +perPage + 20 })}>Show More</Link>
                     </div>
                   </div>
                 )}

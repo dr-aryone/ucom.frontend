@@ -3,6 +3,10 @@ import { POST_TYPE_MEDIA_ID } from './posts';
 import { getBackendConfig } from './config';
 
 const urls = {
+  getMainPageUrl() {
+    return '/';
+  },
+
   getNewPostUrl() {
     return '/posts/new';
   },
@@ -120,7 +124,11 @@ const urls = {
     return `${getBackendConfig().httpEndpoint}/upload/${filename}`;
   },
 
-  getPagingLink(params) {
+  getUsersUrl() {
+    return '/users';
+  },
+
+  getUsersPagingUrl(params) {
     return `/users?page=${params.page}&sortBy=${params.sortBy}&perPage=${params.perPage}&userName=${params.userName}`;
   },
 

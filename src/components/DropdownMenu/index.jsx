@@ -6,11 +6,11 @@ import IconDots from '../Icons/Dots';
 import styles from './styles.css';
 
 const DropdownMenu = (props) => {
-  const tooltip = createRef();
+  const tooltipRef = createRef();
 
   return (
     <Tooltip
-      ref={tooltip}
+      ref={tooltipRef}
       arrow
       useContext
       interactive
@@ -30,8 +30,8 @@ const DropdownMenu = (props) => {
                 to={item.url}
                 className={styles.item}
                 onClick={() => {
-                  if (tooltip.current) {
-                    tooltip.current.hideTooltip();
+                  if (tooltipRef.current) {
+                    tooltipRef.current.hideTooltip();
                   }
 
                   if (item.onClick) {
@@ -68,6 +68,7 @@ DropdownMenu.propTypes = {
   trigger: PropTypes.string,
   position: PropTypes.string,
   distance: PropTypes.number,
+  visible: PropTypes.bool,
 };
 
 DropdownMenu.defaultProps = {
@@ -76,6 +77,7 @@ DropdownMenu.defaultProps = {
   trigger: 'click',
   position: 'bottom-center',
   distance: 10,
+  visible: undefined,
 };
 
 export default memo(DropdownMenu);
