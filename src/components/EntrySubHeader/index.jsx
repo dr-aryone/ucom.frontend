@@ -26,7 +26,7 @@ const EntrySubHeader = props => (
       />
     </div>
     <div className={styles.name}>
-      <Link className="red-hover" to={props.userUrl}>{props.userName}</Link>
+      <Link className="link red-hover" to={props.userUrl}>{props.userName}</Link>
     </div>
     <div className={styles.rate}>
       {formatRate(props.userRate)}°

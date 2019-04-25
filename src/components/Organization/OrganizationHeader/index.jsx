@@ -15,6 +15,7 @@ import { formatRate } from '../../../utils/rate';
 import Menu from '../../EntryHeader/Menu';
 import { getUserName, mapUserDataToFollowersProps } from '../../../utils/user';
 import EntrySubHeader from '../../EntrySubHeader';
+import { sanitizeText } from '../../../utils/text';
 
 const OrganizationHeader = (props) => {
   const organization = getOrganizationById(props.organizations, props.organizationId);
@@ -55,7 +56,10 @@ const OrganizationHeader = (props) => {
 
           <div className={styles.info}>
             <div className={styles.accountName}>/{organization.nickname}</div>
-            <div className={styles.userName}>{organization.title}</div>
+            <div
+              className={styles.userName}
+              dangerouslySetInnerHTML={{ __html: sanitizeText(organization.title) }}
+            />
           </div>
 
           <div className={styles.rate}>{formatRate(organization.currentRate)}°</div>

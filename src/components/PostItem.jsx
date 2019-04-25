@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Rate from './Rate';
 import EditIcon from './Icons/Edit';
 import Tags from './Tags';
-import { sanitizePostTitle } from '../utils/text';
+import { sanitizeText } from '../utils/text';
 
 const PostItem = (props) => {
   const LinkTag = props.url ? Link : 'span';
@@ -36,7 +36,7 @@ const PostItem = (props) => {
             </Link>
           )}
 
-          <LinkTag to={props.url} dangerouslySetInnerHTML={{ __html: sanitizePostTitle(props.title) }} />
+          <LinkTag to={props.url} dangerouslySetInnerHTML={{ __html: sanitizeText(props.title) }} />
         </div>
       </div>
 
