@@ -1,102 +1,125 @@
+import classNames from 'classnames';
+import { throttle } from 'lodash';
 import { connect } from 'react-redux';
 import { withRouter, Link, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import styles from './styles.css';
 import Logo from '../Logo/Logo';
 import urls from '../../utils/urls';
 import IconWallet from '../Icons/Wallet';
 import IconBell from '../Icons/Bell';
-import { formatRate } from '../../utils/rate';
-import UserPick from '../UserPick/UserPick';
-import { getUserName } from '../../utils/user';
-import DropdownMenu from '../DropdownMenu';
+import User from './User';
+import { authShowPopup } from '../../actions/auth';
+import EntryListPopup from '../EntryListPopup';
 
-const Header = ({ location, owner }) => (
-  <div className={styles.header}>
-    <div className={styles.section}>
-      <div className={styles.item}>
-        <Link to={urls.getMainPageUrl()}>
-          <Logo />
-        </Link>
-      </div>
+const Header = ({ location, owner, dispatch }) => {
+  const [isScroll, setIsScroll] = useState(false);
+  const [organizationsPopupVisible, setOrganizationsPopupVisible] = useState(false);
 
-      <div className={styles.item}>
-        <NavLink
-          to={urls.getUsersUrl()}
-          isActive={() => location.pathname === urls.getUsersUrl()}
-          className={styles.link}
-          activeClassName={styles.active}
-        >
-          People
-        </NavLink>
-      </div>
+  const checkScroll = throttle(() => {
+    setIsScroll(window.top.scrollY > 0);
+  }, 500);
 
-      <div className={styles.item}>
-        <NavLink
-          to={urls.getOverviewCategoryUrl()}
-          isActive={() => location.pathname.indexOf(urls.getOverviewCategoryUrl()) === 0}
-          className={styles.link}
-          activeClassName={styles.active}
-        >
-          Overview
-        </NavLink>
-      </div>
+  useEffect(() => {
+    window.addEventListener('scroll', checkScroll);
+    return () => window.removeEventListener('scroll', checkScroll);
+  }, []);
 
-      <div className={styles.item}>
-        <NavLink
-          to={urls.getGovernanceUrl()}
-          isActive={() => location.pathname.indexOf(urls.getGovernanceUrl()) === 0}
-          className={styles.link}
-          activeClassName={styles.active}
-        >
-          Governance
-        </NavLink>
-      </div>
-    </div>
+  return (
+    <Fragment>
 
-    <div className={styles.section}>
-      {owner.id ? (
-        <Fragment>
+      <div
+        className={classNames({
+          [styles.header]: true,
+          [styles.isScroll]: isScroll,
+        })}
+      >
+        <div className={styles.section}>
           <div className={styles.item}>
-            <DropdownMenu
-              trigger="mouseenter"
-              position="bottom right"
-              items={[{
-                title: 'Test',
-                onClick: () => console.log('test'),
-              }]}
-            >
-              <div className={styles.user}>
-                <span className={styles.rate}>{formatRate(owner.currentRate, true)}</span>
-                <UserPick
-                  shadow
-                  scaleOnHover
-                  size={32}
-                  src={urls.getFileUrl(owner.avatarFilename)}
-                  alt={getUserName(owner)}
-                  url={urls.getUserUrl(owner.id)}
-                />
-              </div>
-            </DropdownMenu>
+            <Link to={urls.getMainPageUrl()}>
+              <Logo />
+            </Link>
           </div>
 
-          <span className={styles.icon}>
-            <IconBell />
-          </span>
+          <div className={styles.item}>
+            <NavLink
+              to={urls.getUsersUrl()}
+              isActive={() => location.pathname === urls.getUsersUrl()}
+              className={styles.link}
+              activeClassName={styles.active}
+            >
+              People
+            </NavLink>
+          </div>
 
-          <span className={styles.icon}>
-            <IconWallet />
-          </span>
-        </Fragment>
-      ) : (
-        <Fragment>
-          123
-        </Fragment>
-      )}
-    </div>
-  </div>
-);
+          <div className={styles.item}>
+            <NavLink
+              to={urls.getOverviewCategoryUrl()}
+              isActive={() => location.pathname.indexOf(urls.getOverviewCategoryUrl()) === 0}
+              className={styles.link}
+              activeClassName={styles.active}
+            >
+              Overview
+            </NavLink>
+          </div>
+
+          <div className={styles.item}>
+            <NavLink
+              to={urls.getGovernanceUrl()}
+              isActive={() => location.pathname.indexOf(urls.getGovernanceUrl()) === 0}
+              className={styles.link}
+              activeClassName={styles.active}
+            >
+              Governance
+            </NavLink>
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          {owner.id ? (
+            <Fragment>
+              <div className={styles.item}>
+                <User onClickOrganizationsViewAll={() => setOrganizationsPopupVisible(true)} />
+              </div>
+              <span className={styles.icon}>
+                <IconBell />
+              </span>
+              <span className={styles.icon}>
+                <IconWallet />
+              </span>
+            </Fragment>
+          ) : (
+            <span
+              role="presentation"
+              className={styles.link}
+              onClick={() => dispatch(authShowPopup())}
+            >
+              Sign IN
+            </span>
+          )}
+        </div>
+      </div>
+
+      {organizationsPopupVisible &&
+        <EntryListPopup
+          title="My communities"
+          data={owner.organizations.map(item => ({
+            id: item.id,
+            follow: false,
+            organization: true,
+            avatarSrc: urls.getFileUrl(item.avatarFilename),
+            url: urls.getOrganizationUrl(item.id),
+            title: item.title,
+            nickname: item.nickname,
+            currentRate: item.currentRate,
+          }))}
+          onClickClose={() => setOrganizationsPopupVisible(false)}
+        />
+      }
+    </Fragment>
+  );
+};
 
 Header.propTypes = {
   location: PropTypes.shape({
@@ -104,9 +127,8 @@ Header.propTypes = {
   }).isRequired,
   owner: PropTypes.shape({
     id: PropTypes.number,
-    avatarFilename: PropTypes.string,
-    currentRate: PropTypes.number,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(state => ({

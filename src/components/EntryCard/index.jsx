@@ -51,7 +51,7 @@ const EntryCard = (props) => {
   );
 };
 
-export const entryCardPropTypes = {
+EntryCard.propTypes = {
   organization: PropTypes.bool,
   avatarSrc: PropTypes.string,
   url: PropTypes.string.isRequired,
@@ -63,8 +63,6 @@ export const entryCardPropTypes = {
   disableSign: PropTypes.bool,
   isExternal: PropTypes.bool,
 };
-
-EntryCard.propTypes = entryCardPropTypes;
 
 EntryCard.defaultProps = {
   organization: false,

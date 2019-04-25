@@ -16,31 +16,38 @@ const Content = (props) => {
   return (
     <div
       className={classNames({
-        [styles.content]: true,
-        [styles.walletAction]: props.walletAction,
-        [styles.roundBorders]: props.roundBorders,
-        [styles.fixWidth]: props.fixWidth,
-        [styles.active]: active,
+        [styles.wrapper]: true,
+        [styles.fullHeight]: props.fullHeight,
       })}
     >
-      {props.onClickClose &&
-        <div
-          role="presentation"
-          className={styles.close}
-          onClick={props.onClickClose}
-        >
-          {props.closeText ? (
-            <span className={styles.text}>
-              {props.closeText}
-            </span>
-          ) : (
-            <span className={styles.icon}>
-              <IconClose />
-            </span>
-          )}
-        </div>
-      }
-      {props.children}
+      <div
+        className={classNames({
+          [styles.content]: true,
+          [styles.walletAction]: props.walletAction,
+          [styles.roundBorders]: props.roundBorders,
+          [styles.fixWidth]: props.fixWidth,
+          [styles.active]: active,
+        })}
+      >
+        {props.onClickClose &&
+          <div
+            role="presentation"
+            className={styles.close}
+            onClick={props.onClickClose}
+          >
+            {props.closeText ? (
+              <span className={styles.text}>
+                {props.closeText}
+              </span>
+            ) : (
+              <span className={styles.icon}>
+                <IconClose />
+              </span>
+            )}
+          </div>
+        }
+        {props.children}
+      </div>
     </div>
   );
 };
@@ -52,6 +59,7 @@ Content.propTypes = {
   roundBorders: PropTypes.bool,
   fixWidth: PropTypes.bool,
   closeText: PropTypes.string,
+  fullHeight: PropTypes.bool,
 };
 
 Content.defaultProps = {
@@ -60,6 +68,7 @@ Content.defaultProps = {
   roundBorders: true,
   fixWidth: true,
   closeText: undefined,
+  fullHeight: false,
 };
 
 export default memo(Content);

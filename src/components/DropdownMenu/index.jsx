@@ -1,9 +1,14 @@
+import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { Tooltip } from 'react-tippy';
 import PropTypes from 'prop-types';
 import React, { createRef, memo } from 'react';
 import IconDots from '../Icons/Dots';
 import styles from './styles.css';
+
+export const DROPDOWN_MENU_ITEM_TYPE_TITLE = 1;
+export const DROPDOWN_MENU_ITEM_TYPE_ENTRY = 2;
+export const DROPDOWN_MENU_ITEM_TYPE_LOGOUT = 3;
 
 const DropdownMenu = (props) => {
   const tooltipRef = createRef();
@@ -28,7 +33,12 @@ const DropdownMenu = (props) => {
               <LinkTag
                 key={item.title}
                 to={item.url}
-                className={styles.item}
+                className={classNames({
+                  [styles.item]: true,
+                  [styles.title]: item.type === DROPDOWN_MENU_ITEM_TYPE_TITLE,
+                  [styles.entry]: item.type === DROPDOWN_MENU_ITEM_TYPE_ENTRY,
+                  [styles.logout]: item.type === DROPDOWN_MENU_ITEM_TYPE_LOGOUT,
+                })}
                 onClick={() => {
                   if (tooltipRef.current) {
                     tooltipRef.current.hideTooltip();
@@ -39,6 +49,7 @@ const DropdownMenu = (props) => {
                   }
                 }}
               >
+                {item.avatar}
                 {item.title}
               </LinkTag>
             );
@@ -58,17 +69,18 @@ const DropdownMenu = (props) => {
 };
 
 DropdownMenu.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
+  items: PropTypes.arrayOf(PropTypes.objectOf({
     url: PropTypes.string,
     title: PropTypes.string.isRequired,
     onClick: PropTypes.func,
+    type: PropTypes.oneOf([DROPDOWN_MENU_ITEM_TYPE_TITLE, DROPDOWN_MENU_ITEM_TYPE_ENTRY]),
+    avatar: PropTypes.node,
   })).isRequired,
   disabled: PropTypes.bool,
   children: PropTypes.node,
   trigger: PropTypes.string,
   position: PropTypes.string,
   distance: PropTypes.number,
-  visible: PropTypes.bool,
 };
 
 DropdownMenu.defaultProps = {
@@ -77,7 +89,6 @@ DropdownMenu.defaultProps = {
   trigger: 'click',
   position: 'bottom-center',
   distance: 10,
-  visible: undefined,
 };
 
 export default memo(DropdownMenu);

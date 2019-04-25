@@ -19,6 +19,7 @@ const GenerateSocialKey = (props) => {
   return (
     <Popup onClickClose={props.onClickClose}>
       <Content
+        fullHeight
         closeText={props.closeText}
         onClickClose={props.onClickClose}
       >
