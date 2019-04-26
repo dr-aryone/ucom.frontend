@@ -1,4 +1,4 @@
-:local(.item) {
+.item {
   box-sizing: border-box;
   display: block;
   width: 100%;
@@ -14,24 +14,27 @@
   outline: none;
 }
 
-:local(.item:first-child) {
+.item:first-child {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
 
-:local(.item:last-child) {
+.item:last-child {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 }
 
-:local(.item:hover) {
+.item:hover:not(.disabled) {
   text-decoration: none;
   background: #F8F8F9;
   color: #D8352F;
 }
 
+.disabled {
+  cursor: not-allowed;
+}
 
-:local(.icon) {
+.icon {
   display: inline-block;
   width: 24px;
   height: 24px;
@@ -39,7 +42,7 @@
   transition: fill 0.2s ease;
 }
 
-:local(.button) {
+.button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,7 +56,7 @@
   cursor: pointer;
 }
 
-:global(.active) > :local(.icon),
-:local(.icon:hover) {
+:global(.active) > .icon,
+.icon:hover {
   fill: #000;
 }

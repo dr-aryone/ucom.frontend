@@ -1,7 +1,7 @@
 import api from '../api';
 import { selectUser } from '../store/selectors/user';
 import { parseWalletErros } from '../utils/errors';
-import { addSuccessNotification } from './notifications';
+import { addWalletSuccessNotification } from './notifications';
 import loader from '../utils/loader';
 
 export const resetWalletState = payload => ({ type: 'RESET_WALLET_STATE', payload });
@@ -120,7 +120,7 @@ export const sendTokens = () => async (dispatch, getState) => {
     await api.sendTokens(accountNameFrom, accountNameTo, +amount, memo);
     dispatch(setWalletSendTokensVisible(false));
     dispatch(setWalletSendTokensLoading(false));
-    dispatch(addSuccessNotification({ message: 'Successfully sent tokens' }));
+    dispatch(addWalletSuccessNotification({ message: 'Successfully sent tokens' }));
     loader.done();
     dispatch(getAccountState());
   } catch (e) {
@@ -149,7 +149,7 @@ export const stakeOrUnstakeTokens = () => async (dispatch, getState) => {
     await api.stakeOrUnstakeTokens(accountName, +netAmount, +cpuAmount);
     dispatch(setWalletEditStakeVisible(false));
     dispatch(setWalletEditStakeLoading(false));
-    dispatch(addSuccessNotification({ message: 'Successfully set stake' }));
+    dispatch(addWalletSuccessNotification({ message: 'Successfully set stake' }));
     loader.done();
     dispatch(getAccountState());
   } catch (e) {
@@ -172,7 +172,7 @@ export const claimEmission = () => async (dispatch, getState) => {
   try {
     loader.start();
     await api.claimEmission(user.accountName);
-    dispatch(addSuccessNotification({ message: 'Successfully get emission' }));
+    dispatch(addWalletSuccessNotification({ message: 'Successfully get emission' }));
     loader.done();
     dispatch(getAccountState());
   } catch (e) {
@@ -217,7 +217,7 @@ export const tradeRam = isBuy => async (dispatch, getState) => {
     await trade(user.accountName, +state.wallet.tradeRam.data.bytesAmount);
     dispatch(setWalletTradeRamVisible(false));
     dispatch(setWalletTradeRamLoading(false));
-    dispatch(addSuccessNotification({ message: 'Successfully trade ram' }));
+    dispatch(addWalletSuccessNotification({ message: 'Successfully trade ram' }));
     loader.done();
     dispatch(getAccountState());
   } catch (e) {

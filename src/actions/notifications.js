@@ -9,13 +9,21 @@ import {
 export const addNotification = payload => ({ type: 'ADD_NOTIFICATION', payload });
 export const closeNotification = payload => ({ type: 'CLOSE_NOTIFICATION', payload });
 
-export const addSuccessNotification = payload => (dispatch) => {
+export const addWalletSuccessNotification = payload => (dispatch) => {
   dispatch(walletTransactionsReset());
   dispatch(fetchTransactionsList());
   dispatch(addNotification({
     type: NOTIFICATION_TYPE_SUCCESS,
     title: 'Success',
     message: payload.message,
+  }));
+};
+
+export const addSuccessNotification = message => (dispatch) => {
+  dispatch(addNotification({
+    type: NOTIFICATION_TYPE_SUCCESS,
+    title: 'Success',
+    message,
   }));
 };
 

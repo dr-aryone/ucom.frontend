@@ -88,13 +88,14 @@ export const sanitizePostText = memoize(html => sanitizeHtml(html, {
   },
 }));
 
-export const copyToClipboard = (str) => {
+export const copyToClipboard = (str, callback) => {
   const el = document.createElement('textarea');
   el.value = str;
   document.body.appendChild(el);
   el.select();
   document.execCommand('copy');
   document.body.removeChild(el);
+  callback();
 };
 
 export const sanitizeCommentText = memoize(html => sanitizeHtml(html, {

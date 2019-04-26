@@ -72,7 +72,7 @@ export const postIsEditable = (createdAt) => {
     return false;
   }
 
-  return (new Date()).getTime() - (new Date(createdAt)).getTime() < 600000;
+  return (new Date()).getTime() - (new Date(createdAt)).getTime() < (60 * 1000 * 15);
 };
 
 export const getPostBody = (post) => {

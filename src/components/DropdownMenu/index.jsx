@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Tooltip } from 'react-tippy';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import React, { createRef, memo } from 'react';
 import IconDots from '../Icons/Dots';
 import styles from './styles.css';
@@ -21,14 +22,14 @@ const DropdownMenu = (props) => {
       trigger={props.trigger}
       html={(
         <div className={styles.tooltipMenu}>
-          {props.items.map((item) => {
+          {props.items.map((item, id) => {
             const LinkTag = item.url ? Link : 'button';
 
             return (
               <LinkTag
-                key={item.title}
+                key={id}
                 to={item.url}
-                className={styles.item}
+                className={classNames({ [styles.item]: true, [styles.disabled]: item.disabled })}
                 onClick={() => {
                   if (tooltip.current) {
                     tooltip.current.hideTooltip();
@@ -62,6 +63,7 @@ DropdownMenu.propTypes = {
     url: PropTypes.string,
     title: PropTypes.string.isRequired,
     onClick: PropTypes.func,
+    disabled: PropTypes.bool,
   })).isRequired,
   disabled: PropTypes.bool,
   children: PropTypes.node,

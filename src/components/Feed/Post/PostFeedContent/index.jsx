@@ -1,97 +1,71 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import FeedForm from '../../FeedForm';
-import IconEdit from '../../../Icons/Edit';
 import { updatePost } from '../../../../actions/posts';
 import { getPostById } from '../../../../store/posts';
-import { postIsEditable } from '../../../../utils/posts';
 import DescDirectPost from './DescDirectPost';
 import { checkMentionTag, escapeQuotes } from '../../../../utils/text';
 import styles from './styles.css';
 import urls from '../../../../utils/urls';
 import { getCoverImage } from '../../../../utils/entityImages';
 
-class PostFeedContent extends PureComponent {
-  constructor(props) {
-    super(props);
+const PostFeedContent = (props) => {
+  const post = getPostById(props.posts, props.postId);
 
-    this.state = {
-      formIsVisible: false,
-    };
+  if (!post) {
+    return null;
   }
 
-  showForm = () => {
-    this.setState({ formIsVisible: true });
-  }
-
-  hideForm = () => {
-    this.setState({ formIsVisible: false });
-  }
-
-  render() {
-    const post = getPostById(this.props.posts, this.props.postId);
-
-    if (!post) {
-      return null;
-    }
-
-    return (
-      <Fragment>
-        {this.state.formIsVisible ? (
-          <div className={styles.form}>
-            <FeedForm
-              message={post.description}
-              entityImages={post.entityImages}
-              onCancel={this.hideForm}
-              onSubmit={(description, entityImages) => {
-                this.hideForm();
-                this.props.updatePost({
-                  postId: post.id,
-                  data: { description, entityImages },
-                });
-              }}
-            />
-          </div>
-        ) : (
-          <Fragment>
-            {(this.props.postTypeId === 10 || post.postTypeId === 10) ? (
-              <Fragment>
-                {getCoverImage(post) && !this.state.formIsVisible && (
-                  <div className={styles.cover}>
-                    <img src={urls.getFileUrl(getCoverImage(post))} alt="cover" />
-                  </div>
-                )}
-                {post.description &&
-                  <div className={styles.content}>
-                    <DescDirectPost
-                      desc={checkMentionTag(escapeQuotes(post.description))}
-                      limit={100}
-                    />
-                  </div>
-                }
-                {post.userId === this.props.userId && postIsEditable(post.createdAt) && (
-                  <div className="toolbar__side">
-                    <button className="button-icon button-icon_edit button-icon_edit_small" onClick={this.showForm}>
-                      <IconEdit />
-                    </button>
-                  </div>
-                )}
-              </Fragment>
-            ) : (
-              null
-            )}
-          </Fragment>
-        )}
-      </Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      {props.formIsVisible ? (
+        <div className={styles.form}>
+          <FeedForm
+            message={post.description}
+            entityImages={post.entityImages}
+            onCancel={props.hideForm}
+            formIsVisible={props.formIsVisible}
+            onSubmit={(description, entityImages) => {
+              props.hideForm();
+              props.updatePost({
+                postId: post.id,
+                data: { description, entityImages },
+              });
+            }}
+          />
+        </div>
+      ) : (
+        <Fragment>
+          {(props.postTypeId === 10 || post.postTypeId === 10) ? (
+            <Fragment>
+              {getCoverImage(post) && !props.formIsVisible && (
+                <div className={styles.cover}>
+                  <img src={urls.getFileUrl(getCoverImage(post))} alt="cover" />
+                </div>
+              )}
+              {post.description &&
+                <div className={styles.content}>
+                  <DescDirectPost
+                    desc={checkMentionTag(escapeQuotes(post.description))}
+                    limit={100}
+                  />
+                </div>
+              }
+            </Fragment>
+          ) : (
+            null
+          )}
+        </Fragment>
+      )}
+    </Fragment>
+  );
+};
 
 PostFeedContent.propTypes = {
   postId: PropTypes.number.isRequired,
-  userId: PropTypes.number,
+  formIsVisible: PropTypes.bool.isRequired,
   updatePost: PropTypes.func.isRequired,
   postTypeId: PropTypes.number,
   posts: PropTypes.objectOf(PropTypes.object).isRequired,
