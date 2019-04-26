@@ -67,12 +67,12 @@ export const getPostTypeById = (postTypeId) => {
   }
 };
 
-export const postIsEditable = (createdAt) => {
+export const postIsEditable = (createdAt, leftMinutes = 15) => {
   if (!createdAt) {
     return false;
   }
 
-  return (new Date()).getTime() - (new Date(createdAt)).getTime() < (60 * 1000 * 15);
+  return (new Date()).getTime() - (new Date(createdAt)).getTime() < (60 * 1000 * leftMinutes);
 };
 
 export const getPostBody = (post) => {

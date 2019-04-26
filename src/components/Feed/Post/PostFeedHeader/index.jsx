@@ -19,12 +19,13 @@ const PostFeedHeader = (props) => {
     return null;
   }
   const leftTime = 15 - moment().diff(post.createdAt, 'm');
+  const isEditable = postIsEditable(post.createdAt);
   const items = [post.userId === props.userId ? {
-    title: postIsEditable(post.createdAt) ?
+    title: isEditable ?
       <span>Edit <span className={styles.leftTime}>({leftTime} {leftTime <= 1 ? 'minute' : 'minutes'} left)</span></span>
       : <span className={styles.limit}>Can only edit in first 15 min </span>,
-    onClick: postIsEditable(post.createdAt) ? props.showForm : null,
-    disabled: !postIsEditable(post.createdAt),
+    onClick: isEditable ? props.showForm : null,
+    disabled: !isEditable,
   } : null, {
     title: 'Copy Link',
     onClick: () => copyToClipboard(
