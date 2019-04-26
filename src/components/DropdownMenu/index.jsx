@@ -49,7 +49,10 @@ const DropdownMenu = (props) => {
     >
       {props.children ||
         <div className={styles.icon}>
-          <button className={styles.button}>
+          <button
+            onClick={props.onClickButton}
+            className={styles.button}
+          >
             <IconDots />
           </button>
         </div>
@@ -70,11 +73,13 @@ DropdownMenu.propTypes = {
   trigger: PropTypes.string,
   position: PropTypes.string,
   distance: PropTypes.number,
+  onClickButton: PropTypes.func,
 };
 
 DropdownMenu.defaultProps = {
   disabled: false,
   children: null,
+  onClickButton: null,
   trigger: 'click',
   position: 'bottom-center',
   distance: 10,

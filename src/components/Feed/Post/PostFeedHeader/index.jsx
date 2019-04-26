@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import UserCard from '../../../UserCard/UserCard';
@@ -18,8 +18,13 @@ const PostFeedHeader = (props) => {
   if (!post) {
     return null;
   }
-  const leftTime = 15 - moment().diff(post.createdAt, 'm');
+
+  const [leftTime, setLeftTime] = useState(0);
   const isEditable = postIsEditable(post.createdAt);
+  const onClickDots = () => {
+    setLeftTime(15 - moment().diff(post.createdAt, 'm'));
+  };
+
   const items = [post.userId === props.userId ? {
     title: isEditable ?
       <span>Edit <span className={styles.leftTime}>({leftTime} {leftTime <= 1 ? 'minute' : 'minutes'} left)</span></span>
@@ -44,6 +49,7 @@ const PostFeedHeader = (props) => {
         { !props.formIsVisible &&
           <div className={styles.dropdown}>
             <DropdownMenu
+              onClickButton={onClickDots}
               items={items.filter(e => e)}
               position="bottom-end"
             />
