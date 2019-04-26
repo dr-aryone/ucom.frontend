@@ -6,7 +6,6 @@ import Avatar from '../Avatar';
 import IconEnter from '../Icons/Enter';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
-import { escapeQuotes } from '../../utils/text';
 import { initDragAndDropListeners } from '../../utils/dragAndDrop';
 import { removeCoverImage, changeCoverImageUrl, getCoverImage } from '../../utils/entityImages';
 import TributeWrapper from '../TributeWrapper';
@@ -18,7 +17,7 @@ import api from '../../api';
 
 const FeedForm = (props) => {
   const initialText = props.initialText ? `#${props.initialText} ` : false;
-  const [message, setMessage] = useState(escapeQuotes(props.message) || initialText || '');
+  const [message, setMessage] = useState(props.message || initialText || '');
   const [entityImages, setEntityImages] = useState(props.entityImages);
   const [dropOnForm, setDropOnForm] = useState(false);
   const fieldEl = useRef(null);

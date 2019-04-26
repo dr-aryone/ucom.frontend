@@ -16,9 +16,11 @@ const TextareaAutosize = (props) => {
   useEffect(() => {
     autosize.update(textareaEl.current);
   }, [props.value]);
-  const { onChangeValue, ...rest } = props;
+
+  const { onChange, ...rest } = props;
+
   return (
-    <TributeWrapper onChange={e => onChangeValue(e)}>
+    <TributeWrapper onChange={e => onChange(e)}>
       <textarea ref={textareaEl} {...rest} />
     </TributeWrapper>
 

@@ -6,7 +6,8 @@ import FeedForm from '../../FeedForm';
 import { updatePost } from '../../../../actions/posts';
 import { getPostById } from '../../../../store/posts';
 import DescDirectPost from './DescDirectPost';
-import { checkMentionTag, escapeQuotes } from '../../../../utils/text';
+import { checkMentionTag } from '../../../../utils/text';
+import { POST_TYPE_DIRECT_ID } from '../../../../utils/posts';
 import styles from './styles.css';
 import urls from '../../../../utils/urls';
 import { getCoverImage } from '../../../../utils/entityImages';
@@ -38,7 +39,7 @@ const PostFeedContent = (props) => {
         </div>
       ) : (
         <Fragment>
-          {(props.postTypeId === 10 || post.postTypeId === 10) ? (
+          {(props.postTypeId === POST_TYPE_DIRECT_ID || post.postTypeId === POST_TYPE_DIRECT_ID) ? (
             <Fragment>
               {getCoverImage(post) && !props.formIsVisible && (
                 <div className={styles.cover}>
@@ -48,7 +49,7 @@ const PostFeedContent = (props) => {
               {post.description &&
                 <div className={styles.content}>
                   <DescDirectPost
-                    desc={checkMentionTag(escapeQuotes(post.description))}
+                    desc={checkMentionTag(post.description)}
                     limit={100}
                   />
                 </div>

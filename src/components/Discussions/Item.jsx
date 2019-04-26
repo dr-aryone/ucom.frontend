@@ -6,7 +6,7 @@ import React from 'react';
 import CommentIcon from '../Icons/Comment';
 import styles from './styles.css';
 import DropdownMenu from '../DropdownMenu';
-import { copyToClipboard } from '../../utils/text';
+import { copyToClipboard, sanitizeText } from '../../utils/text';
 
 const Item = props => (
   <div>
@@ -19,7 +19,11 @@ const Item = props => (
     >
       <div className={styles.main}>
         <div className={styles.title}>
-          <Link to={props.url} className="link red-hover">{props.title}</Link>
+          <Link
+            to={props.url}
+            className="link red-hover"
+            dangerouslySetInnerHTML={{ __html: sanitizeText(props.title) }}
+          />
         </div>
         <div className={styles.author}>
           by <Link to={props.authorUrl} className="link red-hover">{props.author}</Link>
@@ -36,7 +40,7 @@ const Item = props => (
               onClick: () => props.onClickRemove(props.id),
             }, {
               title: 'Copy Link',
-              onClick: () => copyToClipboard(`${document.location.origin}${props.url}`),
+              onClick: () => copyToClipboard(`${document.location.origin}${props.url}`), // TODO: Add success notification
             }]}
           />
         </div>
@@ -45,7 +49,7 @@ const Item = props => (
   </div>
 );
 
-export const itemPropsTypes = {
+Item.propTypes = {
   id: PropTypes.number.isRequired,
   hidden: PropTypes.bool,
   url: PropTypes.string.isRequired,
@@ -57,12 +61,11 @@ export const itemPropsTypes = {
   editable: PropTypes.bool,
 };
 
-Item.propTypes = itemPropsTypes;
-
 Item.defaultProps = {
   hidden: false,
   commentCount: 0,
   editable: false,
 };
 
+export { Item };
 export default SortableElement(Item);

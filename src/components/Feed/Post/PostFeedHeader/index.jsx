@@ -9,7 +9,7 @@ import urls from '../../../../utils/urls';
 import { getPostById } from '../../../../store/posts';
 import { addSuccessNotification } from '../../../../actions/notifications';
 import styles from './styles.css';
-import { POST_TYPE_MEDIA_ID, postIsEditable } from '../../../../utils/posts';
+import { POST_TYPE_MEDIA_ID, postIsEditable, POST_EDIT_TIME_LIMIT } from '../../../../utils/posts';
 import { copyToClipboard } from '../../../../utils/text';
 
 const PostFeedHeader = (props) => {
@@ -20,23 +20,24 @@ const PostFeedHeader = (props) => {
   }
 
   const [leftTime, setLeftTime] = useState(0);
-  const isEditable = postIsEditable(post.createdAt);
-  const onClickDots = () => {
+  const isEditable = postIsEditable(post.createdAt, POST_EDIT_TIME_LIMIT);
+  const onClickDropdownButton = () => {
     setLeftTime(15 - moment().diff(post.createdAt, 'm'));
   };
 
   const items = [post.userId === props.userId ? {
-    title: isEditable ?
-      <span>Edit <span className={styles.leftTime}>({leftTime} {leftTime <= 1 ? 'minute' : 'minutes'} left)</span></span>
+    title: isEditable
+      ? <span>Edit <span className={styles.leftTime}>({leftTime} {leftTime <= 1 ? 'minute' : 'minutes'} left)</span></span>
       : <span className={styles.limit}>Can only edit in first 15 min </span>,
-    onClick: isEditable ? props.showForm : null,
+    onClick: isEditable ? props.showForm : undefined,
     disabled: !isEditable,
-  } : null, {
+  } : null,
+  {
     title: 'Copy Link',
-    onClick: () => copyToClipboard(
-      `${document.location.origin}${urls.getFeedPostUrl(post)}`,
-      () => props.addSuccessNotification('Link copyed to clipboard'),
-    ),
+    onClick: () => {
+      copyToClipboard(`${document.location.origin}${urls.getFeedPostUrl(post)}`);
+      props.addSuccessNotification('Link copyed to clipboard');
+    },
   }];
 
   return (
@@ -49,7 +50,7 @@ const PostFeedHeader = (props) => {
         { !props.formIsVisible &&
           <div className={styles.dropdown}>
             <DropdownMenu
-              onClickButton={onClickDots}
+              onClickButton={onClickDropdownButton}
               items={items.filter(e => e)}
               position="bottom-end"
             />

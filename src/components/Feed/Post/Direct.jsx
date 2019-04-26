@@ -7,7 +7,6 @@ import { getPostById } from '../../../store/posts';
 import { selectUser } from '../../../store/selectors/user';
 import { createComment } from '../../../actions/comments';
 import { getUserById } from '../../../store/users';
-import { escapeQuotes } from '../../../utils/text';
 import PostFeedHeader from './PostFeedHeader';
 import PostFeedContent from './PostFeedContent';
 import PostFeedFooter from './PostFeedFooter';
@@ -44,7 +43,7 @@ const Direct = (props) => {
                 postId={props.id}
                 userId={props.user.id}
                 postTypeId={post.postTypeId}
-                linkText={escapeQuotes(post.description)}
+                linkText={post.description}
                 formIsVisible={formIsVisible}
                 hideForm={() => setFormIsVisible(false)}
               />
@@ -74,7 +73,7 @@ const Direct = (props) => {
             postId={props.id}
             userId={props.user.id}
             postTypeId={post.postTypeId}
-            linkText={escapeQuotes(post.description)}
+            linkText={post.description}
             formIsVisible={formIsVisible}
             hideForm={() => setFormIsVisible(false)}
           />

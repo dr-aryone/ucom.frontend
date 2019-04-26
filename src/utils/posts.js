@@ -22,6 +22,8 @@ export const POSTS_DRAFT_LOCALSTORAGE_KEY = 'post_data_v_1';
 
 export const POSTS_DESCRIPTION_PREVIEW_LIMIT = 400;
 
+export const POST_EDIT_TIME_LIMIT = 60 * 1000 * 15;
+
 export const POSTS_CATREGORIES = [{
   id: POSTS_CATREGORIES_TRENDING_ID,
   name: 'trending',
@@ -67,12 +69,12 @@ export const getPostTypeById = (postTypeId) => {
   }
 };
 
-export const postIsEditable = (createdAt, leftMinutes = 15) => {
+export const postIsEditable = (createdAt, leftMinutes) => {
   if (!createdAt) {
     return false;
   }
 
-  return (new Date()).getTime() - (new Date(createdAt)).getTime() < (60 * 1000 * leftMinutes);
+  return (new Date()).getTime() - (new Date(createdAt)).getTime() < leftMinutes;
 };
 
 export const getPostBody = (post) => {
