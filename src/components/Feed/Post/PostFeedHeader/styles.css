@@ -24,14 +24,13 @@
 }
 
 .leftTime {
-  color: #000000;
-  opacity: 0.6;
-}
+  color: #C4C4C4;
+} 
 
 .limit {
   font-size: 12px;
   color: #000000;
-  opacity: 0.6;
+  opacity: 0.6; 
 }
 
 .edit {
