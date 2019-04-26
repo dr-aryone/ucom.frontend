@@ -88,7 +88,7 @@ const urls = {
   },
 
   getOrganizationCrerateUrl() {
-    return 'communities/new';
+    return '/communities/new';
   },
 
   getOrganizationEditUrl(id) {

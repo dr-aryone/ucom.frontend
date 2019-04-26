@@ -13,6 +13,8 @@ import {
   fetchNotifications,
 } from '../../actions/siteNotifications';
 
+// TODO: Refactoring
+
 const isRequiredTime = (arr, isEarly = true) => Object.values(arr)
   .some(i => i.finished === isEarly);
 

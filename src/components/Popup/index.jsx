@@ -44,6 +44,7 @@ const Popup = (props) => {
       role="presentation"
       className={classNames({
         [styles.popup]: true,
+        [styles.transparent]: props.transparent,
         [props.mod]: !!props.mod,
       })}
       style={{
@@ -76,14 +77,16 @@ Popup.propTypes = {
   children: PropTypes.node.isRequired,
   showCloseIcon: PropTypes.bool,
   paddingBottom: PropTypes.string,
+  transparent: PropTypes.bool,
 };
 
 Popup.defaultProps = {
   id: undefined,
-  mod: null,
+  mod: undefined,
   onClickClose: null,
   showCloseIcon: false,
   paddingBottom: undefined,
+  transparent: false,
 };
 
 export { default as Content } from './Content';

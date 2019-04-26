@@ -4,18 +4,34 @@
   padding: 40px;
 }
 
+@media (max-width: 767px) {
+  .wrapper {
+    padding: 4px;
+  }
+
+  .wrapper.screen {
+    padding: 0;
+  }
+}
+
 .wrapper.fullHeight {
   height: 100%;
 }
 
 .wrapper.fullHeight .content {
-  height: 100%;
+  min-height: 100%;
 }
 
-@media (max-width: 767px) {
-  .wrapper {
-    padding: 4px;
-  }
+.wrapper.fullWidth {
+  width: 100%;
+}
+
+.wrapper.fullWidth .content {
+  width: 100%;
+}
+
+.wrapper.screen {
+  padding: 0;
 }
 
 .content {

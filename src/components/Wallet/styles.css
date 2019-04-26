@@ -1,0 +1,22 @@
+.wallet {
+  padding: 92px 0 0;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0 0 45px;
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 54px;
+  color: #E4E4E4;
+}
+
+.section {
+  margin: 0 0 69px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}

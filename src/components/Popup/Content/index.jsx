@@ -10,7 +10,7 @@ const Content = (props) => {
   useEffect(() => {
     setTimeout(() => {
       setActive(true);
-    }, 100);
+    }, 0);
   }, []);
 
   return (
@@ -18,6 +18,8 @@ const Content = (props) => {
       className={classNames({
         [styles.wrapper]: true,
         [styles.fullHeight]: props.fullHeight,
+        [styles.fullWidth]: props.fullWidth,
+        [styles.screen]: props.screen,
       })}
     >
       <div
@@ -60,6 +62,8 @@ Content.propTypes = {
   fixWidth: PropTypes.bool,
   closeText: PropTypes.string,
   fullHeight: PropTypes.bool,
+  fullWidth: PropTypes.bool,
+  screen: PropTypes.bool,
 };
 
 Content.defaultProps = {
@@ -69,6 +73,8 @@ Content.defaultProps = {
   fixWidth: true,
   closeText: undefined,
   fullHeight: false,
+  fullWidth: false,
+  screen: false,
 };
 
 export default memo(Content);

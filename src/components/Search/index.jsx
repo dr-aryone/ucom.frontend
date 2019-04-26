@@ -1,3 +1,4 @@
+import { KEY_ESCAPE } from 'keycode-js';
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -72,7 +73,11 @@ const SearchPopup = (props) => {
           placeholder="Search for people in U°OS blockchain…"
           type="text"
           spellCheck="false"
-          onKeyDown={props.onKeyDown}
+          onKeyPress={(e) => {
+            if (props.onClickClose && e.keyCode === KEY_ESCAPE) {
+              props.onClickClose();
+            }
+          }}
         />
         <div
           role="presentation"
@@ -83,13 +88,12 @@ const SearchPopup = (props) => {
         </div>
       </div>
 
-      {props.userMenu && userName === '' && (
-        <div className={styles.notFound} />
-      )}
-
       {userName !== '' && (
         <Fragment>
-          <Popup mod="search">
+          <Popup
+            mod="search"
+            onClickClose={() => props.onClickClose && props.onClickClose()}
+          >
             <div className={styles.popup}>
               {users && users.length > 0 &&
                 <div className={styles.column}>
@@ -143,6 +147,10 @@ const SearchPopup = (props) => {
 
 SearchPopup.propTypes = {
   onClickClose: PropTypes.func,
+};
+
+SearchPopup.defaultProps = {
+  onClickClose: undefined,
 };
 
 export default SearchPopup;

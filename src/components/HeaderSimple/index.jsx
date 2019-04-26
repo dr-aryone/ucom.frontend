@@ -12,8 +12,17 @@ import IconBell from '../Icons/Bell';
 import User from './User';
 import { authShowPopup } from '../../actions/auth';
 import EntryListPopup from '../EntryListPopup';
+import IconSearch from '../Icons/Search';
+import Popup, { Content } from '../Popup';
+import Wallet from '../Wallet';
+import IconClose from '../Icons/Close';
+import SiteNotificationsTooltip from '../SiteNotificationsTooltip';
+import Counter from '../Counter';
+import Search from '../Search';
 
 const Header = ({ location, owner, dispatch }) => {
+  const [walletPopupVisible, setWalletPopupVisible] = useState(false);
+  const [searchVisible, setSearchVisible] = useState(false);
   const [isScroll, setIsScroll] = useState(false);
   const [organizationsPopupVisible, setOrganizationsPopupVisible] = useState(false);
 
@@ -28,7 +37,6 @@ const Header = ({ location, owner, dispatch }) => {
 
   return (
     <Fragment>
-
       <div
         className={classNames({
           [styles.header]: true,
@@ -74,6 +82,14 @@ const Header = ({ location, owner, dispatch }) => {
               Governance
             </NavLink>
           </div>
+
+          <div
+            role="presentation"
+            className={styles.icon}
+            onClick={() => setSearchVisible(true)}
+          >
+            <IconSearch />
+          </div>
         </div>
 
         <div className={styles.section}>
@@ -82,11 +98,37 @@ const Header = ({ location, owner, dispatch }) => {
               <div className={styles.item}>
                 <User onClickOrganizationsViewAll={() => setOrganizationsPopupVisible(true)} />
               </div>
-              <span className={styles.icon}>
-                <IconBell />
-              </span>
-              <span className={styles.icon}>
-                <IconWallet />
+
+              <SiteNotificationsTooltip>
+                {({ toggleTooltip, unreadNotifications, tooltipVisibilty }) => (
+                  <span
+                    role="presentation"
+                    className={classNames({
+                      [styles.icon]: true,
+                      [styles.active]: tooltipVisibilty,
+                    })}
+                    onClick={toggleTooltip}
+                  >
+                    <IconBell />
+                    {unreadNotifications > 0 &&
+                      <div className={styles.counter}>
+                        <Counter>{unreadNotifications}</Counter>
+                      </div>
+                    }
+                  </span>
+                )}
+              </SiteNotificationsTooltip>
+
+              <span
+                role="presentation"
+                className={classNames({
+                  [styles.icon]: true,
+                  [styles.wallet]: true,
+                  [styles.active]: walletPopupVisible,
+                })}
+                onClick={() => setWalletPopupVisible(!walletPopupVisible)}
+              >
+                {walletPopupVisible ? <IconClose /> : <IconWallet />}
               </span>
             </Fragment>
           ) : (
@@ -116,6 +158,27 @@ const Header = ({ location, owner, dispatch }) => {
           }))}
           onClickClose={() => setOrganizationsPopupVisible(false)}
         />
+      }
+
+      {walletPopupVisible &&
+        <Popup
+          transparent
+          mod="wallet"
+          onClickClose={() => setWalletPopupVisible(false)}
+        >
+          <Content
+            screen
+            fullHeight
+            fullWidth
+            roundBorders={false}
+          >
+            <Wallet />
+          </Content>
+        </Popup>
+      }
+
+      {searchVisible &&
+        <Search onClickClose={() => setSearchVisible(false)} />
       }
     </Fragment>
   );
