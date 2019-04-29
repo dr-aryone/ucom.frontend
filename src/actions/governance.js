@@ -22,7 +22,9 @@ export const governanceNodesGet = () => async (dispatch) => {
   dispatch(governanceNodesSetLoading(true));
 
   try {
-    const data = await graphql.getBlockchainNodes();
+    const data = await graphql.getAllNodes();
+
+    console.log(data);
     dispatch(governanceNodesSetData(data));
   } catch (e) {
     console.error(e);

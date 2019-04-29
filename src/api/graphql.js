@@ -8,6 +8,8 @@ import { FEED_PER_PAGE, OVERVIEW_SIDE_PER_PAGE } from '../utils/feed';
 import { NODES_PER_PAGE } from '../utils/governance';
 import { LIST_ORDER_BY, LIST_PER_PAGE } from '../utils/list';
 
+const { Dictionary } = require('ucom-libs-wallet');
+
 const request = async (data) => {
   const options = {
     baseURL: getBackendConfig().httpEndpoint,
@@ -332,20 +334,34 @@ export default {
     }
   },
 
-  async getBlockchainNodes(
-    ordering = '-bp_status',
+  async getAllNodes(
+    order_by = '-bp_status',
     page = 1,
-    perPage = NODES_PER_PAGE,
+    per_page = NODES_PER_PAGE,
   ) {
-    const query = GraphQLSchema.getManyBlockchainNodes(
-      ordering,
-      page,
-      perPage,
-    );
+    const commonParams = { order_by, page, per_page };
+
+    const blockProducers = GraphQLSchema.getManyBlockchainNodesQueryPart({
+      ...commonParams,
+      filters: {
+        myself_votes_only: false,
+        blockchain_nodes_type: Dictionary.BlockchainNodes.typeBlockProducer(),
+      },
+    });
+    const calculators = GraphQLSchema.getManyBlockchainNodesQueryPart({
+      ...commonParams,
+      filters: {
+        myself_votes_only: false,
+        blockchain_nodes_type: Dictionary.BlockchainNodes.typeCalculator(),
+      },
+    });
+
+    const partsWithAliases = { blockProducers, calculators };
+    const query = GraphQLSchema.getQueryMadeFromPartsWithAliases(partsWithAliases);
 
     try {
       const data = await request({ query });
-      return data.data.manyBlockchainNodes;
+      return data.data;
     } catch (e) {
       throw e;
     }
