@@ -1,8 +1,7 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Element } from 'react-scroll';
 import urls from '../utils/urls';
 import { getUserById } from '../store/users';
@@ -10,15 +9,14 @@ import { updateUser } from '../actions/users';
 import { selectUser } from '../store/selectors/user';
 import Popup from '../components/Popup/';
 import Content from '../components/Popup/Content';
-import VerticalMenu from '../components/VerticalMenu';
+import VerticalMenu from '../components/VerticalMenu/index';
 import styles from './Profile.css';
 import TextInput from '../components/TextInput';
 import Textarea from '../components/Textarea';
 import Button from '../components/Button/index.jsx';
 import Avatar from '../components/EntryHeader/Avatar';
-// import SocialNetworks from '../components/SN';
-import { validateFields } from '../utils/validateFields';
-import IconRemove from '../components/Icons/Remove';
+import SocialNetworks from '../components/SN';
+import { validator } from '../utils/validateFields';
 
 const Profile = (props) => {
   // Object.keys(props.user).length
@@ -29,25 +27,8 @@ const Profile = (props) => {
   }
 
   const [userData, setUserData] = useState(owner);
-  // const [usersSources, setUsersSources] = useState(userData.setUsersSources);
-  const [errors] = useState({});
+  // const [errors] = useState({});
   const [isSubmited, setIsSubmited] = useState(false);
-  const [socialNetworks, setSocialNetworks] = useState(userData.usersSources || []);
-
-  // useEffect(() => [], [user]);
-  // const validateUserData = () => {
-  //   validateFields();
-  // };
-  const addSocialInput = (index, value) => {
-    // sourceUrl => setSocialNetworks(Object.assign([], socialNetworks, { [index]: { ...socialNetworks[index], sourceUrl } }))
-
-    // setUserData({ ...userData, usersSources: Object.assign([], userData.usersSources, { [index]: { 'sourceUrl': value } }) });
-    // console.log('data: ', userData);
-
-    // setUserData({ ...userData, socialNetworks: Object.assign([], userData.usersSources, { [index]: { ...socialNetworks[index], value } }) });
-    // console.log('data: ', userData);
-
-  };
 
   useEffect(() => {
     setUserData({
@@ -56,17 +37,34 @@ const Profile = (props) => {
       avatarFilename: owner.avatarFilename,
       about: owner.about,
       personalWebsiteUrl: owner.personalWebsiteUrl,
-      usersSources: owner.usersSources,
+      usersSources: owner.usersSources || [],
     });
   }, (owner));
 
   // useEffect(() => {
-  //   setUserData([...userData.usersSources, socialNetworks]);
-  // }, (socialNetworks));
+  //   try {
+  //     validator(userData);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, (isSubmited));
 
-  // console.log('sites: ', socialNetworks.map((value, index) => console.log(index, value.sourceUrl)));
-  console.log('sss: ', socialNetworks);
-  console.log(userData.usersSources);
+  console.log(userData);
+
+  const onChange = (key, value) => {
+    console.log('key: ', key);
+    console.log('value: ', value);
+    console.log('userData: ', userData);
+    setUserData({ ...userData, key: value });
+    console.log('userData: ', userData);
+    // try {
+    //   validator(userData);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  };
+
+
 
   return (
     <div className={styles.page}>
@@ -124,7 +122,8 @@ const Profile = (props) => {
                         placeholder="Nickname or name, maybe emoji…"
                         // className={styles.input}
                         value={userData.nickname}
-                        onChange={value => setUserData({ ...userData, nickname: value })}
+                        // onChange={value => setUserData({ ...userData, nickname: value })}
+                        onChange={value => onChange('nickname', value)}
                       />
                     </div>
                   </div>
@@ -153,37 +152,11 @@ const Profile = (props) => {
                       />
                     </div>
                   </div>
-                  <div className={classNames(styles.field, styles.fieldSoical)}>
-                    <div className={styles.label}>Social Networks</div>
-                    <div className={styles.inputBlock}>
-                      {socialNetworks.length !== 0 && socialNetworks.map((value, index) => (
-                        <div className={styles.inputBlockSocial} key={index}>
-                          <TextInput
-                            touched
-                            value={value.sourceUrl}
-                            onChange={sourceUrl => setSocialNetworks(Object.assign([], socialNetworks, { [index]: { ...socialNetworks[index], sourceUrl } }))}
-                            // onChange={sourceUrl => setUserData({ ...userData, usersSources: Object.assign([], userData.usersSources, { [index]: { ...userData.usersSources[index], sourceUrl } }) })}
-                            className={styles.input}
-                          />
-                          <div
-                            role="presentation"
-                            className={styles.trashIcon}
-                            // onClick={() => this.removeField(index)}
-                            onClick={() => setSocialNetworks([...socialNetworks.filter((_, i) => index !== i)])}
-                          >
-                            <IconRemove />
-                          </div>
-                        </div>
-                      ))}
-                      <Button
-                        small
-                        grayBorder
-                        onClick={() => setSocialNetworks([...socialNetworks, { sourceUrl: '' }])}
-                      >
-                        Add Another
-                      </Button>
-                    </div>
-                  </div>
+                  <SocialNetworks
+                    fields={userData.usersSources}
+                    onChange={value => setUserData({ ...userData, usersSources: value })}
+                    // errors={errors}
+                  />
                 </Element>
               </div>
             </div>

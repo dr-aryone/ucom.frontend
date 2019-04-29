@@ -16,13 +16,9 @@
     grid-template-columns: auto;
   }
 
-  .profile ul {
-    position: relative;
-    top: 0;
-  }
-
-  .profile ul li {
-    /* padding: 0; */
+  .sidebar nav {
+    position: relative!important;
+    top: 0!important;
   }
 }
 
@@ -156,7 +152,3 @@ h4.title {
   position: sticky;
   top: 270px;
 }
-
-/* @media(max-width: 1024px) {
-  position:;
-} */
