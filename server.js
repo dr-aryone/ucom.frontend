@@ -45,6 +45,8 @@ routes.forEach((route) => {
         description: 'Social platform with a transparent dynamic reputation system',
         url: `${req.protocol}://${req.hostname}${req.originalUrl}`,
         image: `${req.protocol}://${req.hostname}/u.png`,
+        imageWidth: '512',
+        imageHeight: '512',
       };
     }
 
