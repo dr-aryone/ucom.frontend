@@ -53,7 +53,6 @@ export const fetchMyself = () => async (dispatch) => {
 
   try {
     const data = await api.getMyself(token);
-
     dispatch(setUser(data));
     dispatch(addUsers([data]));
     dispatch(siteNotificationsSetUnreadAmount(data.unreadMessagesCount));

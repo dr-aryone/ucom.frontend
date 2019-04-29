@@ -1,4 +1,3 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'react-tippy';
@@ -10,6 +9,7 @@ import ModalContent from '../ModalContent';
 import OrganizationHead from '../Organization/OrganizationHead';
 import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForNodes } from '../../actions/governance';
 import { getOrganization } from '../../actions/organizations';
+import { fetchMyself } from '../../actions/users';
 import { getAccountState, setWalletEditStakeVisible } from '../../actions/wallet';
 import { getSelectedNodes } from '../../store/governance';
 import { selectUser } from '../../store/selectors/user';
@@ -38,17 +38,22 @@ const Governance = (props) => {
   const [nodeVisibility, setNodeVisibility] = useState({ [BLOCK_PRODUCERS]: false, [CALCULATOR_NODES]: false });
   const currentNodeVisibility = findKey(nodeVisibility, i => i);
   const organizationId = getUosGroupId();
+  const { user } = props;
+
+  const fetchMyseldAndNodes = async () => {
+    await props.fetchMyself();
+    await props.governanceNodesGet();
+  };
 
   useEffect(() => {
     props.getAccountState();
     props.getOrganization(organizationId);
-    props.governanceNodesGet();
+    fetchMyseldAndNodes();
   }, [organizationId]);
 
   const tableBP = props.governance.nodes.data[BLOCK_PRODUCERS] && props.governance.nodes.data[BLOCK_PRODUCERS].data;
   const tableCN = props.governance.nodes.data[CALCULATOR_NODES] && props.governance.nodes.data[CALCULATOR_NODES].data;
   const table = props.governance.nodes.data[currentNodeVisibility] && props.governance.nodes.data[currentNodeVisibility].data;
-  const { user } = props;
   const { currentImportance } = user;
   const selectedNodes = props.selectedNodes[currentNodeVisibility];
 
@@ -229,20 +234,18 @@ const Governance = (props) => {
   );
 };
 
-export default connect(
-  state => ({
-    user: selectUser(state),
-    governance: state.governance,
-    wallet: state.wallet,
-    selectedNodes: getSelectedNodes(state),
-  }),
-  dispatch => bindActionCreators({
-    governanceNodesGet,
-    governanceHideVotePopup,
-    governanceShowVotePopup,
-    getOrganization,
-    getAccountState,
-    voteForNodes,
-    setWalletEditStakeVisible,
-  }, dispatch),
-)(Governance);
+export default connect(state => ({
+  user: selectUser(state),
+  governance: state.governance,
+  wallet: state.wallet,
+  selectedNodes: getSelectedNodes(state),
+}), {
+  governanceNodesGet,
+  governanceHideVotePopup,
+  governanceShowVotePopup,
+  getOrganization,
+  getAccountState,
+  voteForNodes,
+  setWalletEditStakeVisible,
+  fetchMyself,
+})(Governance);

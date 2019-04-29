@@ -17,14 +17,14 @@ export const governanceShowVotePopup = () => (dispatch) => {
   dispatch({ type: 'GOVERNANCE_NODES_SET_POPUP_VISIBILE', payload: true });
 };
 
-export const governanceNodesGet = () => async (dispatch) => {
+export const governanceNodesGet = () => async (dispatch, getState) => {
   loader.start();
   dispatch(governanceNodesSetLoading(true));
 
   try {
-    const data = await graphql.getAllNodes();
+    const state = getState();
+    const data = await graphql.getAllNodes(state.user.data.id);
 
-    console.log(data);
     dispatch(governanceNodesSetData(data));
   } catch (e) {
     console.error(e);

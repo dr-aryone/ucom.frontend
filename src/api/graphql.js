@@ -1,6 +1,7 @@
 import { GraphQLSchema } from 'ucom-libs-graphql-schemas';
 import humps from 'lodash-humps';
 import * as axios from 'axios';
+import snakes from '../utils/snakes';
 import { getBackendConfig } from '../utils/config';
 import { getToken } from '../utils/token';
 import { COMMENTS_PER_PAGE } from '../utils/comments';
@@ -335,29 +336,33 @@ export default {
   },
 
   async getAllNodes(
-    order_by = '-bp_status',
+    userId,
+    orderBy = '-bp_status',
     page = 1,
-    per_page = NODES_PER_PAGE,
+    perPage = NODES_PER_PAGE,
   ) {
-    const commonParams = { order_by, page, per_page };
+    const commonParams = { orderBy, page, perPage };
 
-    const blockProducers = GraphQLSchema.getManyBlockchainNodesQueryPart({
+    const blockProducers = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
       ...commonParams,
       filters: {
-        myself_votes_only: false,
-        blockchain_nodes_type: Dictionary.BlockchainNodes.typeBlockProducer(),
+        myselfVotesOnly: false,
+        userId,
+        blockchainNodesType: Dictionary.BlockchainNodes.typeBlockProducer(),
       },
-    });
-    const calculators = GraphQLSchema.getManyBlockchainNodesQueryPart({
+    }));
+
+    const calculators = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
       ...commonParams,
       filters: {
-        myself_votes_only: false,
-        blockchain_nodes_type: Dictionary.BlockchainNodes.typeCalculator(),
+        myselfVotesOnly: false,
+        userId,
+        blockchainNodesType: Dictionary.BlockchainNodes.typeCalculator(),
       },
-    });
+    }));
 
     const partsWithAliases = { blockProducers, calculators };
-    const query = GraphQLSchema.getQueryMadeFromPartsWithAliases(partsWithAliases);
+    const query = GraphQLSchema.makeRequestFromQueryPartsWithAliasesAsMyself(partsWithAliases);
 
     try {
       const data = await request({ query });
