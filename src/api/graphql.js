@@ -9,6 +9,7 @@ import { LIST_ORDER_BY, LIST_PER_PAGE } from '../utils/list';
 
 const request = async (data, extraOptions = {}) => {
   let options = {
+    withCredentials: true,
     baseURL: getBackendConfig().httpEndpoint,
     headers: {},
   };
