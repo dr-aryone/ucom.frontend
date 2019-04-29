@@ -16,8 +16,8 @@
   <title>U°Community</title>
 
   <% if (typeof contentMetaTags === 'object') { %>
-    <% if (typeof contentMetaTags.path === 'string' ) { %>
-      <meta property="og:url" content="https://u.community<%- contentMetaTags.path %>" />
+    <% if (typeof contentMetaTags.url === 'string' ) { %>
+      <meta property="og:url" content="<%- contentMetaTags.url %>" />
     <% } %>
     <% if (typeof contentMetaTags.type === 'string' ) { %>
       <meta property="og:type" content="<%- contentMetaTags.type %>" />

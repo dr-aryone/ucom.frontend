@@ -12,6 +12,7 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       { from: './src/favicon/*', flatten: true },
+      { from: './src/u.png', flatten: true },
     ]),
     {
       apply: (compiler) => {
