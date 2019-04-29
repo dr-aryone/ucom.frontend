@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
@@ -52,10 +52,11 @@ const Profile = (props) => {
   console.log(userData);
 
   const onChange = (key, value) => {
-    console.log('key: ', key);
-    console.log('value: ', value);
+    // console.log('key: ', key);
+    // console.log('value: ', value);
     console.log('userData: ', userData);
-    setUserData({ ...userData, key: value });
+    setUserData({ ...userData, key: { ...value } });
+    // setUserData(data);
     console.log('userData: ', userData);
     // try {
     //   validator(userData);
@@ -81,7 +82,10 @@ const Profile = (props) => {
                 ]}
               />
               {owner ? (
-                <div className={styles.btnSave}><Button>Save Changes</Button></div>
+                <Fragment>
+                  <div className={styles.btnSave}><Button>Save Changes</Button></div>
+                  <div className={styles.link}>Go to <a href="#">Account Settings</a></div>
+                </Fragment>
               ) : (
                 <div className={styles.btnSave}><Button red>Save Changes</Button></div>
               )}
@@ -122,8 +126,9 @@ const Profile = (props) => {
                         placeholder="Nickname or name, maybe emoji…"
                         // className={styles.input}
                         value={userData.nickname}
-                        // onChange={value => setUserData({ ...userData, nickname: value })}
-                        onChange={value => onChange('nickname', value)}
+                        onChange={value => setUserData({ ...userData, nickname: value })}
+                        // onChange={value => onChange('nickname', value)}
+                        // onChange={value => onChange({ ...userData, nickname: value })}
                       />
                     </div>
                   </div>
