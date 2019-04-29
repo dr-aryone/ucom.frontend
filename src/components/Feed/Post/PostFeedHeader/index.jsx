@@ -60,7 +60,7 @@ const PostFeedHeader = (props) => {
 
       {props.userId && POST_TYPE_MEDIA_ID !== props.postTypeId ? (
         <div className={styles.user}>
-          <UserCard userId={props.userId} />
+          <UserCard userId={post.userId} />
         </div>
       ) : null}
     </Fragment>

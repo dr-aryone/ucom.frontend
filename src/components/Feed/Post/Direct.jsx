@@ -33,7 +33,7 @@ const Direct = (props) => {
             <div className={styles.overlay} role="presentation" onClick={() => setFormIsVisible(false)} />
             <div className={styles.post} id={`post-${post.id}`}>
               <PostFeedHeader
-                userId={user.id}
+                userId={props.user.id}
                 createdAt={moment(post.createdAt).fromNow()}
                 postId={post.id}
                 formIsVisible={formIsVisible}
@@ -63,7 +63,7 @@ const Direct = (props) => {
         :
         <div className={styles.post} id={`post-${post.id}`}>
           <PostFeedHeader
-            userId={user.id}
+            userId={props.user.id}
             createdAt={moment(post.createdAt).fromNow()}
             postId={post.id}
             formIsVisible={formIsVisible}
