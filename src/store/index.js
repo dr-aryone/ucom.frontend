@@ -52,7 +52,7 @@ export const createStore = () => {
   const middlewares = [thunk];
   let preloadedState;
 
-  if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && typeof window.APP_STATE !== 'undefined') {
     preloadedState = JSON.parse(window.APP_STATE);
     delete window.APP_STATE;
   }
