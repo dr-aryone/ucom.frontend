@@ -62,6 +62,7 @@
 }
 
 .notification-tooltip__close {
+  z-index: 2;
   position: absolute;
   top: 13px;
   right: 20px;
@@ -84,9 +85,13 @@
 }
 
 .notification-tooltip__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   padding: 20px;
   border-bottom: 1px solid #E8ECEC;
   border-top: 1px solid #E8ECEC;
+  background: #fff;
 
   &:last-child {
     border-bottom: none;
@@ -94,6 +99,7 @@
 
   &:first-child {
     border-top: none;
+    border-radius: 3px 3px 0 0;
   }
 }
 

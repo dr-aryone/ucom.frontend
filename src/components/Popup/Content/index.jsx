@@ -15,6 +15,7 @@ const Content = (props) => {
 
   return (
     <div
+      role="presentation"
       className={classNames({
         [styles.wrapper]: true,
         [styles.fullHeight]: props.fullHeight,

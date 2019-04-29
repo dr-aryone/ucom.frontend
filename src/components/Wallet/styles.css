@@ -1,5 +1,6 @@
 .wallet {
-  padding: 92px 0 0;
+  box-sizing: border-box;
+  padding: 92px 40px 0;
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
@@ -19,4 +20,17 @@
 
 .section:last-child {
   margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .wallet {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .menu {
+    display: none;
+  }
 }

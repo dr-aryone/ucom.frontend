@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { throttle } from 'lodash';
 import { connect } from 'react-redux';
-import { withRouter, Link, NavLink } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { Fragment, useState, useEffect } from 'react';
 import styles from './styles.css';
@@ -13,12 +13,12 @@ import User from './User';
 import { authShowPopup } from '../../actions/auth';
 import EntryListPopup from '../EntryListPopup';
 import IconSearch from '../Icons/Search';
-import Popup, { Content } from '../Popup';
 import Wallet from '../Wallet';
 import IconClose from '../Icons/Close';
 import SiteNotificationsTooltip from '../SiteNotificationsTooltip';
 import Counter from '../Counter';
 import Search from '../Search';
+import Menu from '../Menu';
 
 const Header = ({ location, owner, dispatch }) => {
   const [walletPopupVisible, setWalletPopupVisible] = useState(false);
@@ -44,60 +44,41 @@ const Header = ({ location, owner, dispatch }) => {
         })}
       >
         <div className={styles.section}>
-          <div className={styles.item}>
-            <Link to={urls.getMainPageUrl()}>
-              <Logo />
-            </Link>
-          </div>
+          <Link to={urls.getMainPageUrl()}>
+            <Logo />
+          </Link>
 
-          <div className={styles.item}>
-            <NavLink
-              to={urls.getUsersUrl()}
-              isActive={() => location.pathname === urls.getUsersUrl()}
-              className={styles.link}
-              activeClassName={styles.active}
-            >
-              People
-            </NavLink>
-          </div>
-
-          <div className={styles.item}>
-            <NavLink
-              to={urls.getOverviewCategoryUrl()}
-              isActive={() => location.pathname.indexOf(urls.getOverviewCategoryUrl()) === 0}
-              className={styles.link}
-              activeClassName={styles.active}
-            >
-              Overview
-            </NavLink>
-          </div>
-
-          <div className={styles.item}>
-            <NavLink
-              to={urls.getGovernanceUrl()}
-              isActive={() => location.pathname.indexOf(urls.getGovernanceUrl()) === 0}
-              className={styles.link}
-              activeClassName={styles.active}
-            >
-              Governance
-            </NavLink>
+          <div className={styles.menu}>
+            <Menu
+              items={[{
+                to: urls.getUsersUrl(),
+                isActive: () => location.pathname === urls.getUsersUrl(),
+                title: 'People',
+              }, {
+                to: urls.getOverviewCategoryUrl(),
+                isActive: () => location.pathname.indexOf(urls.getOverviewCategoryUrl()) === 0,
+                title: 'Overview',
+              }, {
+                to: urls.getGovernanceUrl(),
+                isActive: () => location.pathname.indexOf(urls.getGovernanceUrl()) === 0,
+                title: 'Governance',
+              }]}
+            />
           </div>
 
           <div
             role="presentation"
-            className={styles.icon}
+            className={`${styles.icon} ${styles.search}`}
             onClick={() => setSearchVisible(true)}
           >
             <IconSearch />
           </div>
         </div>
 
-        <div className={styles.section}>
+        <div className={`${styles.section} ${styles.flat}`}>
           {owner.id ? (
             <Fragment>
-              <div className={styles.item}>
-                <User onClickOrganizationsViewAll={() => setOrganizationsPopupVisible(true)} />
-              </div>
+              <User onClickOrganizationsViewAll={() => setOrganizationsPopupVisible(true)} />
 
               <SiteNotificationsTooltip>
                 {({ toggleTooltip, unreadNotifications, tooltipVisibilty }) => (
@@ -132,13 +113,12 @@ const Header = ({ location, owner, dispatch }) => {
               </span>
             </Fragment>
           ) : (
-            <span
-              role="presentation"
-              className={styles.link}
-              onClick={() => dispatch(authShowPopup())}
-            >
-              Sign IN
-            </span>
+            <Menu
+              items={[{
+                title: 'Sign IN',
+                onClick: () => dispatch(authShowPopup()),
+              }]}
+            />
           )}
         </div>
       </div>
@@ -161,20 +141,7 @@ const Header = ({ location, owner, dispatch }) => {
       }
 
       {walletPopupVisible &&
-        <Popup
-          transparent
-          mod="wallet"
-          onClickClose={() => setWalletPopupVisible(false)}
-        >
-          <Content
-            screen
-            fullHeight
-            fullWidth
-            roundBorders={false}
-          >
-            <Wallet />
-          </Content>
-        </Popup>
+        <Wallet onClickClose={() => setWalletPopupVisible(false)} />
       }
 
       {searchVisible &&

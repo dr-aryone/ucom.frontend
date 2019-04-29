@@ -1,7 +1,6 @@
 .tokens {
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   grid-column-gap: 102px;
   grid-row-gap: 45px;
 }
@@ -32,4 +31,16 @@
   line-height: 28px;
   font-size: 16px;
   background: #F8F8F9;
+}
+
+@media (max-width: 1023px) {
+  .tokens {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .tokens {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }

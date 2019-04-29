@@ -23,29 +23,11 @@
   grid-auto-flow: column;
   grid-auto-columns: max-content;
   align-items: center;
+  grid-column-gap: 30px;
 }
 
-.item {
-  margin: 0 15px;
-}
-
-.link {
-  font-size: 12px;
-  font-weight: bold;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #505050;
-  transition: color 0.2s ease;
-  cursor: pointer;
-}
-
-.link:hover {
-  color: #000;
-  text-decoration: none;
-}
-
-.link.active {
-  color: #D8352F;
+.section.flat {
+  grid-column-gap: 0;
 }
 
 .icon {
@@ -78,8 +60,10 @@
 .user {
   display: flex;
   align-items: center;
+  justify-content: center;
   position: relative;
   height: 50px;
+  width: 50px;
   color: #505050;
   transition: color 0.2s ease;
   cursor: pointer;
@@ -99,7 +83,6 @@
   top: 0;
   right: 100%;
   line-height: 50px;
-  padding: 0 8px 0 0;
   vertical-align: middle;
   font-size: 14px;
   font-weight: bold;
@@ -109,4 +92,18 @@
 .user img {
   transform: none;
   transition: transform 0.2s ease;
+}
+
+@media (max-width: 767px) {
+  .header {
+    padding: 0 20px;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .search {
+    display: none;
+  }
 }

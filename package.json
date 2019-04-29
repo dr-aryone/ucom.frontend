@@ -110,7 +110,6 @@
     "react-device-detect": "^1.6.2",
     "react-dom": "^16.7.0-alpha.2",
     "react-dropzone": "^5.0.1",
-    "react-perfect-scrollbar": "^1.2.2",
     "react-redux": "^5.1.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
