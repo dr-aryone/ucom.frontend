@@ -71,11 +71,15 @@ const DropdownMenu = (props) => {
 };
 
 DropdownMenu.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.objectOf({
+  items: PropTypes.arrayOf(PropTypes.shape({
     url: PropTypes.string,
     title: PropTypes.string.isRequired,
     onClick: PropTypes.func,
-    type: PropTypes.oneOf([DROPDOWN_MENU_ITEM_TYPE_TITLE, DROPDOWN_MENU_ITEM_TYPE_ENTRY]),
+    type: PropTypes.oneOf([
+      DROPDOWN_MENU_ITEM_TYPE_TITLE,
+      DROPDOWN_MENU_ITEM_TYPE_ENTRY,
+      DROPDOWN_MENU_ITEM_TYPE_LOGOUT,
+    ]),
     avatar: PropTypes.node,
   })).isRequired,
   disabled: PropTypes.bool,
