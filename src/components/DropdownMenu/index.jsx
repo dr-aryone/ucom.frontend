@@ -50,7 +50,9 @@ const DropdownMenu = (props) => {
                 }}
               >
                 {item.avatar}
-                {item.title}
+                <span className={styles.title}>
+                  {item.title}
+                </span>
               </LinkTag>
             );
           })}

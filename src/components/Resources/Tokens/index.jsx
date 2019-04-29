@@ -40,6 +40,15 @@ const Tokens = (props) => {
           onClick: () => props.dispatch(walletToggleEditStake(true)),
         }}
       />
+      {/* TODO: Change token */}
+      <Token
+        value={`${formatNumber(tokens.staked)}`}
+        label="Staked, UOS"
+        action={{
+          title: 'Edit Stake',
+          onClick: () => props.dispatch(walletToggleEditStake(true)),
+        }}
+      />
       <RequestActiveKey
         onSubmit={async (privateKey) => {
           loader.start();
