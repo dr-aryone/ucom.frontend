@@ -78,6 +78,7 @@ h4.title {
   grid-auto-flow: column;
   grid-auto-columns: minmax(max-content, 152px);
   align-items: center;
+  grid-gap: 20px;
 }
 
 .action.withLabel {
@@ -163,5 +164,14 @@ h4.title {
   .settings {
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .action {
+    grid-auto-flow: row;
+    grid-auto-columns: 1fr;
+  }
+
+  .action.withLabel {
+    grid-template-columns: 1fr;
   }
 }

@@ -34,7 +34,10 @@ const Auth = (props) => {
 
   return (
     <Popup onClickClose={() => props.dispatch(authHidePopup())}>
-      <Content onClickClose={() => props.dispatch(authHidePopup())}>
+      <Content
+        fullHeight
+        onClickClose={() => props.dispatch(authHidePopup())}
+      >
         {(() => {
           switch (currentStep) {
             case STEP_SOCIAL_KEY: {

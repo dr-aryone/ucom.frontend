@@ -1,0 +1,32 @@
+.menu {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  grid-column-gap: 30px;
+  grid-row-gap: 20px;
+}
+
+.item {
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #505050;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.item:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+.item.active {
+  color: #D8352F;
+}
+
+@media (max-width: 767px) {
+  .menu {
+    grid-auto-flow: row;
+  }
+}

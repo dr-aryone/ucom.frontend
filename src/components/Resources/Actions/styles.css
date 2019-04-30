@@ -14,7 +14,7 @@
 .fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-column-gap: 20px;
+  grid-gap: 20px;
 }
 
 .field {
@@ -89,5 +89,13 @@
   .action.multiple {
     grid-auto-flow: row;
     justify-items: center;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .fields {
+    grid-template-columns: 1fr;
   }
 }

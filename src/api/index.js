@@ -438,6 +438,12 @@ class Api {
     return humps(response);
   }
 
+  async getAccountBalance(accountName, symbol) {
+    const response = await WalletApi.getAccountBalance(accountName, symbol);
+
+    return humps(response);
+  }
+
   async sendTokens(accountNameFrom, accountNameTo, amount, memo, privateKey) {
     const response = await WalletApi.sendTokens(accountNameFrom, privateKey, accountNameTo, amount, memo);
 

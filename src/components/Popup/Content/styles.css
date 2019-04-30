@@ -1,17 +1,53 @@
+.wrapper {
+  box-sizing: border-box;
+  margin: auto;
+  padding: 40px;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .wrapper {
+    padding: 4px;
+    width: 100%;
+  }
+
+  .wrapper.screen {
+    padding: 0;
+  }
+}
+
+.wrapper.fullHeight {
+  height: 100%;
+}
+
+.wrapper.fullHeight .content {
+  min-height: 100%;
+}
+
+.wrapper.fullWidth {
+  width: 100%;
+}
+
+.wrapper.fullWidth .content {
+  width: 100%;
+}
+
+.wrapper.screen {
+  padding: 0;
+}
+
 .content {
   display: flex;
   flex-direction: column;
   position: relative;
-  align-self: flex-start;
   box-sizing: border-box;
-  min-width: calc(100% - 80px);
-  min-height: calc(100% - 80px);
-  margin: 40px;
+  width: 100%;
   box-shadow:  0px 0px 20px rgba(184, 184, 184, 0.25);
   background: #fff;
   border-radius: 0;
   opacity: 0;
   transition: opacity 0.5s ease;
+  pointer-events: initial;
 }
 
 .content.active {
@@ -23,16 +59,23 @@
 }
 
 .content.fixWidth {
-  min-width: auto;
-  max-width: 1200px;
-  width: 100%;
+  width: 1200px;
+}
+
+@media (max-width: 1279px) {
+  .content.fixWidth {
+    width: 100%;
+  }
 }
 
 .content.walletAction {
-  min-width: 540px;
-  max-width: 540px;
-  min-height: auto;
-  align-self: auto;
+  width: 540px;
+}
+
+@media (max-width: 767px) {
+  .content.walletAction {
+    width: 100%;
+  }
 }
 
 .close {
@@ -61,16 +104,4 @@
   height: 24px;
   align-items: center;
   justify-content: center;
-}
-
-@media (max-width: 767px) {
-  .content {
-    min-width: calc(100% - 8px);
-    min-height: calc(100% - 8px);
-    margin: 4px;
-  }
-
-  .content.walletAction {
-    min-width: calc(100% - 8px)
-  }
 }

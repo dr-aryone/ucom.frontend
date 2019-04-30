@@ -1,14 +1,17 @@
 import React, { Fragment, useState } from 'react';
 import moment from 'moment';
-import Avatar from '../Avatar';
+import Avatar from '../../Avatar';
 import {
   WalletCommentIcon, WalletVoteIcon, WalletNetIcon, WalletCPUIcon, WalletEmissionIcon, WalletCPUNETIcon, WalletFromIcon,
   WalletToIcon, WalletSnowflakeIcon, WalletDropIcon, WalletRAMIcon,
-} from '../Icons/WalletIcons';
-import WalletActivityPopup from './WalletActivityPopup';
-import ModalContent from '../ModalContent';
-import Popup from '../Popup';
-import urls from '../../utils/urls';
+} from '../../Icons/WalletIcons';
+import WalletActivityPopup from './Popup';
+import ModalContent from '../../ModalContent';
+import Popup from '../../Popup';
+import urls from '../../../utils/urls';
+
+// TODO: Less to css modules
+// TODO: PropTypes
 
 const round = amount => Math.round(amount * 100) / 100;
 

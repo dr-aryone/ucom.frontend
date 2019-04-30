@@ -198,4 +198,12 @@ export const restoreActiveKey = () => {
     return null;
   }
 };
+
+export const removeActiveKey = () => {
+  try {
+    localStorage.removeItem('activeKey');
+  } catch (e) {
+    console.error(e);
+  }
+};
 // TODO: End
