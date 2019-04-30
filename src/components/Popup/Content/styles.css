@@ -20,7 +20,7 @@
   height: 100%;
 }
 
-.wrapper.fullHeight .content {
+.wrapper.fullHeight > .content {
   min-height: 100%;
 }
 
@@ -28,7 +28,7 @@
   width: 100%;
 }
 
-.wrapper.fullWidth .content {
+.wrapper.fullWidth > .content {
   width: 100%;
 }
 
