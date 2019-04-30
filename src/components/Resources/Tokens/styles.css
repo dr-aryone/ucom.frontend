@@ -23,7 +23,6 @@
 }
 
 .unstaking {
-  grid-row-start: 2;
   grid-column-start: 1;
   grid-column-end: 4;
   padding: 20px 28px;

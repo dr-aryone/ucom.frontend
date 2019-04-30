@@ -32,6 +32,7 @@ const Tokens = (props) => {
           onClick: () => props.dispatch(walletToggleSendTokens(true)),
         }}
       />
+
       <Token
         value={`${formatNumber(tokens.staked)}`}
         label="Staked, UOS"
@@ -40,15 +41,7 @@ const Tokens = (props) => {
           onClick: () => props.dispatch(walletToggleEditStake(true)),
         }}
       />
-      {/* TODO: Change token */}
-      <Token
-        value={`${formatNumber(tokens.staked)}`}
-        label="Staked, UOS"
-        action={{
-          title: 'Edit Stake',
-          onClick: () => props.dispatch(walletToggleEditStake(true)),
-        }}
-      />
+
       <RequestActiveKey
         onSubmit={async (privateKey) => {
           loader.start();
@@ -75,6 +68,11 @@ const Tokens = (props) => {
           />
         )}
       </RequestActiveKey>
+
+      <Token
+        value={`${formatNumber(tokens.uosFutures)}`}
+        label="Active, UOS Futures"
+      />
 
       {tokens.unstakingRequest && tokens.unstakingRequest.amount > 0 &&
         <div className={styles.unstaking}>
