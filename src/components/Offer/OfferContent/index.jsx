@@ -6,12 +6,25 @@ import Comments from '../../Comments/wrapper';
 import { COMMENTS_CONTAINER_ID_POST } from '../../../utils/comments';
 import styles from './styles.css';
 
+const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
+
 const OfferContent = props => (
   <Fragment>
     <Fragment>
-      {props.score && props.score !== 0 ? (
+      {props.score && props.score !== 0 && AirdropStatuses.NO_PARTICIPATION !== props.status ?
         <div className={styles.score}>Your GitHub score <span>{(props.score).toLocaleString('ru-RU')}</span></div>
-      ) : null}
+      : null}
+      {props.score && AirdropStatuses.NO_PARTICIPATION === props.status ?
+        <div className={styles.score}>
+          Your have zero GitHub score
+          <p className={styles.bannerTitle}>Build Your Reputation</p>
+          <div className={styles.bannerText}>
+            <p>Your GitHub account contributions have scored zero for the network.</p>
+            <p>This is a good moment to start from scratch with your network reputation.</p>
+            <p>You can start by joining <a className={styles.link} href="/communities/101">DevExchange</a> or <a className={styles.link} href="/overview/communities/filter/fresh"> any other community</a> and talking to people.</p>
+          </div>
+        </div>
+      : null}
     </Fragment>
     <div className={styles.section}>
       <div className={styles.title}>GitHub Score</div>
@@ -66,10 +79,12 @@ const OfferContent = props => (
 OfferContent.defaultProps = {
   commentsCount: 0,
   score: 0,
+  status: 1,
 };
 
 OfferContent.propTypes = {
   tokens: PropTypes.arrayOf(PropTypes.any),
+  status: PropTypes.number,
   score: PropTypes.number,
   postId: PropTypes.number.isRequired,
   commentsCount: PropTypes.number,

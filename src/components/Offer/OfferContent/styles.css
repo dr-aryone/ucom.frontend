@@ -86,6 +86,26 @@
   color: #ABABAB;
 }
 
+.bannerTitle {
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 34px;
+  margin: 40px 0 24px;
+  padding-right: 10px;
+}
+
+.bannerText {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 24px;
+  padding-right: 10px;
+}
+
+.bannerText p {
+  padding-bottom: 8px;
+  margin: 0;
+}
+
 @media(max-width: 900px) {
   .section {
     margin-bottom: 50px;
@@ -98,4 +118,8 @@
   .score {
     margin-bottom: 40px;
   }
+}
+
+.link {
+  color: #D8352F;
 }
