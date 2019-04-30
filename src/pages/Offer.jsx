@@ -157,6 +157,7 @@ const Offer = (props) => {
               score={conditions && conditions.score}
               tokens={post.offerData && post.offerData.tokens}
               commentsCount={post.commentsCount}
+              status={conditions && conditions.airdropStatus}
             />
           </div>
           <div className={styles.sidebar}>
@@ -171,6 +172,7 @@ const Offer = (props) => {
               token={token}
               postTypeId={post.postTypeId}
               startedAt={post.startedAt}
+              finishedAt={post.finishedAt}
               gitHubAuthLink={gitHubAuthLink}
               organizationId={post.organizationId}
             />

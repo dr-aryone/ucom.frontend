@@ -105,7 +105,7 @@ const OfferSidebar = (props) => {
           <div className={styles.optionBlock}>
             <div
               role="presentation"
-              onClick={() => props.authShowPopup()}
+              onClick={() => (Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 ? props.authShowPopup() : null)}
               className={styles.optionTitle}
             >
               Register U°OS account
@@ -116,7 +116,7 @@ const OfferSidebar = (props) => {
         <div className={styles.option}>
           <div className={styles.optionStatus}>{conditions && conditions.conditions.followingDevExchange === true ? <Done /> : <Three />}</div>
           <div className={styles.optionBlock}>
-            <a href={`/communities/${props.organizationId}`} target="_blank" rel="noopener noreferrer" className={styles.optionTitle}>Join DevExchange</a>
+            <a href={Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 ? `/communities/${props.organizationId}` : null} target="_blank" rel="noopener noreferrer" className={styles.optionTitle}>Join DevExchange</a>
             <div className={styles.optionText}>to see your Importance in action and talk to community members</div>
           </div>
         </div>
