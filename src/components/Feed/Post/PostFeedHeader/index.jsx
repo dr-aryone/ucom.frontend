@@ -36,7 +36,7 @@ const PostFeedHeader = (props) => {
     title: 'Copy Link',
     onClick: () => {
       copyToClipboard(`${document.location.origin}${urls.getFeedPostUrl(post)}`);
-      props.addSuccessNotification('Link copyed to clipboard');
+      props.addSuccessNotification('Link copied to clipboard');
     },
   }];
 
