@@ -73,7 +73,7 @@ const SearchPopup = (props) => {
           placeholder="Search for people in U°OS blockchain…"
           type="text"
           spellCheck="false"
-          onKeyPress={(e) => {
+          onKeyUp={(e) => {
             if (props.onClickClose && e.keyCode === KEY_ESCAPE) {
               props.onClickClose();
             }
