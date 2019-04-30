@@ -19,7 +19,7 @@ import Avatar from '../components/EntryHeader/Avatar';
 import SocialNetworks from '../components/SN';
 import { validator } from '../utils/validateFields';
 
-const Profile = (props) => {
+const Organization = (props) => {
   // Object.keys(props.user).length
   const owner = getUserById(props.users, props.user.id);
 
@@ -77,36 +77,37 @@ const Profile = (props) => {
               <VerticalMenu
                 sticky
                 sections={[
-                  { name: 'PersonalInfo', title: 'Personal info' },
-                  { name: 'AboutMe', title: 'About Me' },
+                  { name: 'General', title: 'General' },
+                  { name: 'Board', title: 'Board' },
+                  { name: 'About', title: 'About' },
+                  { name: 'Contacts', title: 'Contacts' },
                   { name: 'Links', title: 'Links' },
+                  { name: 'Location', title: 'Location' },
                 ]}
               />
               {owner ? (
-                <Fragment>
-                  <div className={styles.btnSave}><Button>Save Changes</Button></div>
-                  <div className={styles.link}>Go to <a href="#">Account Settings</a></div>
-                </Fragment>
+                <div className={styles.btnSaveOrg}><Button>Save Changes</Button></div>
               ) : (
-                <div className={styles.btnSave}><Button red>Create</Button></div>
+                <div className={styles.btnSaveOrg}><Button red>Create</Button></div>
               )}
             </div>
             <div className={styles.content}>
               <div className={styles.header}>
-                <h2 className={styles.title}>{owner ? 'Edit Your Profile' : 'Your Profile'}</h2>
+                <h2 className={styles.title}>{owner ? 'Edit Community Profile' : 'New Community'}</h2>
                 <p>Few words about profile its how it will affect autoupdates and etc. Maybe some tips)</p>
               </div>
 
               <div>
-                <Element name="PersonalInfo" className={styles.section}>
-                  <h3 className={styles.title}>Personal Info</h3>
+                <Element name="General" className={styles.section}>
+                  <h3 className={styles.title}>General</h3>
                   <div className={styles.field}>
-                    <div className={styles.label}>Avatar</div>
+                    <div className={styles.label}>Emblem</div>
                     <div className={styles.avatarBlock}>
                       <div className={styles.avatar}>
                         <Avatar
-                          src={urls.getFileUrl(userData.avatarFilename)}
+                          organization
                           changeEnabled
+                          src={urls.getFileUrl(userData.avatarFilename)}
                           onChange={async (file) => {
                             setUserData({ ...userData, avatarFilename: file.preview });
                             props.updateUser({
@@ -121,12 +122,12 @@ const Profile = (props) => {
                     </div>
                   </div>
                   <div className={classNames(styles.field, styles.fieldRequired)}>
-                    <div className={styles.label}>Displayed name</div>
+                    <div className={styles.label}>Community Name</div>
                     <div className={styles.inputBlock}>
                       <TextInput
                         topLabel
                         isRequired
-                        placeholder="Nickname or name, maybe emoji…"
+                        placeholder="Choose Nice Name"
                         // className={styles.input}
                         value={userData.nickname}
                         onChange={value => setUserData({ ...userData, nickname: value })}
@@ -136,7 +137,7 @@ const Profile = (props) => {
                     </div>
                   </div>
                 </Element>
-                <Element name="AboutMe" className={styles.section}>
+                <Element name="Board" className={styles.section}>
                   <h3 className={styles.title}>About Me</h3>
                   <div className={styles.textarea}>
                     <Textarea
@@ -148,7 +149,7 @@ const Profile = (props) => {
                     />
                   </div>
                 </Element>
-                <Element name="Links" className={styles.section}>
+                <Element name="About" className={styles.section}>
                   <h3 className={styles.title}>Links</h3>
                   <div className={styles.field}>
                     <div className={styles.label}>My Website</div>
@@ -175,7 +176,7 @@ const Profile = (props) => {
   );
 };
 
-Profile.propTypes = {
+Organization.propTypes = {
   users: PropTypes.objectOf(PropTypes.any).isRequired,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
   updateUser: PropTypes.func.isRequired,
@@ -189,4 +190,4 @@ export default connect(
   dispatch => bindActionCreators({
     updateUser,
   }, dispatch),
-)(Profile);
+)(Organization);
