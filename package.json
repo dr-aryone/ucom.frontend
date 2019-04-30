@@ -23,7 +23,7 @@
   },
   "gitHubAuthLink": {
     "staging": "https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/posts/14317?mock_external_id=true",
-    "production": "https://github.com/login/oauth/authorize/?client_id=8b4ef608525c8aff2d5e&state=5idkWlsZKzbpcD7u&redirect_uri=https://backend.u.community/api/v1/github/auth_callback?redirect_uri=https://u.community/posts/6137?mock_external_id=true"
+    "production": "https://github.com/login/oauth/authorize/?client_id=8b4ef608525c8aff2d5e&state=5idkWlsZKzbpcD7u&redirect_uri=https://backend.u.community/api/v1/github/auth_callback?redirect_uri=https://u.community/posts/6137"
   },
   "backend": {
     "staging": {
