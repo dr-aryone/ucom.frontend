@@ -14,7 +14,7 @@ const OfferContent = props => (
       {props.score && props.score !== 0 && AirdropStatuses.NO_PARTICIPATION !== props.status ?
         <div className={styles.score}>Your GitHub score <span>{(props.score).toLocaleString('ru-RU')}</span></div>
       : null}
-      {props.score && AirdropStatuses.NO_PARTICIPATION === props.status ?
+      {AirdropStatuses.NO_PARTICIPATION === props.status ?
         <div className={styles.score}>
           Your have zero GitHub score
           <p className={styles.bannerTitle}>Build Your Reputation</p>
