@@ -1,7 +1,7 @@
 import * as axios from 'axios';
 import MediumEditor from 'medium-editor';
 import api from '../../../api';
-import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR, getBase64FromFile, compressUploadedImage } from '../../../utils/upload';
+import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR, compressUploadedImage } from '../../../utils/upload';
 import config from '../../../../package.json';
 import './styles.css';
 
@@ -240,12 +240,12 @@ export default class MediumUpload extends MediumEditor.Extension {
     const img = document.createElement('img');
 
     p.appendChild(img);
-
+    let base64;
     try {
-      const base64 = await getBase64FromFile(file);
+      base64 = await compressUploadedImage(file);
       img.src = base64;
     } catch (e) {
-      console.error(e);
+      this.onError(e);
       return;
     }
 
@@ -256,11 +256,11 @@ export default class MediumUpload extends MediumEditor.Extension {
     }
 
     try {
-      const data = await api.uploadPostImage(await compressUploadedImage(file));
+      const data = await api.uploadPostImage(base64);
       img.src = data.files[0].url;
       this.base.checkContentChanged(this.base.origElements);
     } catch (e) {
-      console.error(e);
+      this.onError(e);
     }
 
     if (this.onUploadDone) {
