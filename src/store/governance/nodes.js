@@ -39,15 +39,13 @@ const governanceNodes = (state = getInitialState(), action) => {
         ...state,
         data: {
           ...state.data,
-          [action.payload.nodeType]: {
-            data: [...state.data[action.payload.nodeType].data.map((item) => {
-              if (+item.id === +action.payload.id && item.myselfData) {
-                item.myselfData.bpVote = action.payload.vote;
-              }
+          [action.payload.nodeType]: [...state.data[action.payload.nodeType].map((item) => {
+            if (+item.id === +action.payload.id) {
+              item.isVoted = action.payload.vote;
+            }
+            return item;
+          })],
 
-              return item;
-            })],
-          },
         },
       };
 

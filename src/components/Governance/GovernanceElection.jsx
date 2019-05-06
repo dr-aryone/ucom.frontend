@@ -3,7 +3,10 @@ import GovernanceTable from './GovernanceTable';
 import Button from '../Button';
 import { formatRate } from '../../utils/rate';
 
-const { BLOCK_PRODUCERS, CALCULATOR_NODES } = require('ucom.libs.common').Governance.Dictionary.BlockchainNodesTypes;
+const { Dictionary } = require('ucom-libs-wallet');
+
+const BLOCK_PRODUCERS = Dictionary.BlockchainNodes.typeBlockProducer();
+const CALCULATOR_NODES = Dictionary.BlockchainNodes.typeCalculator();
 
 const nodeTemplates = {
   [BLOCK_PRODUCERS]: {

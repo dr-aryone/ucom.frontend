@@ -21,7 +21,10 @@ import GovernanceElection from './GovernanceElection';
 import GovernanceConfirmation from './GovernanceConfirmation';
 import { formatRate } from '../../utils/rate';
 
-const { BLOCK_PRODUCERS, CALCULATOR_NODES } = require('ucom.libs.common').Governance.Dictionary.BlockchainNodesTypes;
+const { Dictionary } = require('ucom-libs-wallet');
+
+const BLOCK_PRODUCERS = Dictionary.BlockchainNodes.typeBlockProducer();
+const CALCULATOR_NODES = Dictionary.BlockchainNodes.typeCalculator();
 
 const governanceTabs = [
   { name: 'Network', active: true },
@@ -51,9 +54,9 @@ const Governance = (props) => {
     fetchMyseldAndNodes();
   }, [organizationId]);
 
-  const tableBP = props.governance.nodes.data[BLOCK_PRODUCERS] && props.governance.nodes.data[BLOCK_PRODUCERS].data;
-  const tableCN = props.governance.nodes.data[CALCULATOR_NODES] && props.governance.nodes.data[CALCULATOR_NODES].data;
-  const table = props.governance.nodes.data[currentNodeVisibility] && props.governance.nodes.data[currentNodeVisibility].data;
+  const tableBP = props.governance.nodes.data[BLOCK_PRODUCERS];
+  const tableCN = props.governance.nodes.data[CALCULATOR_NODES];
+  const table = props.governance.nodes.data[currentNodeVisibility];
   const { currentImportance } = user;
   const selectedNodes = props.selectedNodes[currentNodeVisibility];
 

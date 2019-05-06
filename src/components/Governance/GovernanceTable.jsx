@@ -33,7 +33,7 @@ const GovernanceTable = props => (
       {props.data.map(item => (
         <tr className="governance-table__row" key={item.id}>
           {(() => {
-            if (props.user.id && props.isPreview && item.myselfData && item.myselfData.bpVote) {
+            if (props.user.id && props.isPreview && item.isVoted) {
               return (
                 <td className="governance-table__cell governance-table__cell_avatar" data-name="">
                   <Avatar src={urls.getFileUrl(props.user.avatarFilename)} size="xysmall" icon={<IconOK />} />
@@ -45,12 +45,10 @@ const GovernanceTable = props => (
                   <div className="governance-table-checkbox">
                     <div className="governance-table-checkbox__input">
                       <Checkbox
-                        isChecked={Boolean(item.myselfData && item.myselfData.bpVote)}
-                        isDisabled={!item.myselfData.bpVote && props.data.filter(i => i.myselfData.bpVote).length >= LIMITER_OF_PRODUCERS}
+                        isChecked={item.isVoted}
+                        isDisabled={!item.isVoted && props.data.filter(i => i.isVoted).length >= LIMITER_OF_PRODUCERS}
                         onChange={() => {
-                          if (item.myselfData) {
-                            props.governanceNodesSetVote({ id: item.id, vote: !item.myselfData.bpVote, nodeType: item.blockchainNodesType });
-                          }
+                          props.governanceNodesSetVote({ id: item.id, vote: !item.isVoted, nodeType: item.blockchainNodesType });
                         }}
                       />
                     </div>

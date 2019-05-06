@@ -24,8 +24,14 @@ export const governanceNodesGet = () => async (dispatch, getState) => {
   try {
     const state = getState();
     const data = await graphql.getAllNodes(state.user.data.id);
-
-    dispatch(governanceNodesSetData(data));
+    const nodes = {};
+    Object.keys(data.nodes).forEach((nodeType) => {
+      nodes[nodeType] = data.nodes[nodeType].data
+        .map(node => (
+          { ...node, isVoted: data.selectedNodes[nodeType].data.some(selectedNode => selectedNode.title === node.title) }
+        ));
+    });
+    dispatch(governanceNodesSetData(nodes));
   } catch (e) {
     console.error(e);
   }

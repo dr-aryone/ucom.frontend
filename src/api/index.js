@@ -9,7 +9,10 @@ import { getBackendConfig } from '../utils/config';
 import snakes from '../utils/snakes';
 import { LIST_PER_PAGE } from '../utils/list';
 
-const { BLOCK_PRODUCERS, CALCULATOR_NODES } = require('ucom.libs.common').Governance.Dictionary.BlockchainNodesTypes;
+const { Dictionary } = require('ucom-libs-wallet');
+
+const BLOCK_PRODUCERS = Dictionary.BlockchainNodes.typeBlockProducer();
+const CALCULATOR_NODES = Dictionary.BlockchainNodes.typeCalculator();
 
 const { WalletApi, SocialApi } = require('ucom-libs-wallet');
 const AppTransaction = require('ucom-libs-social-transactions');
@@ -518,11 +521,15 @@ class Api {
 
   async voteForNodes(accountName, producers, nodeType) {
     const brainkey = getBrainkey();
+    console.log(brainkey);
+
     const privateKey = getActivePrivateKey(brainkey);
+
     const voteFunctions = {
       [BLOCK_PRODUCERS]: WalletApi.voteForBlockProducers,
       [CALCULATOR_NODES]: WalletApi.voteForCalculatorNodes,
     };
+
 
     const response = await voteFunctions[nodeType](accountName, privateKey, producers);
     return humps(response);

@@ -2,12 +2,12 @@ import { combineReducers } from 'redux';
 import nodes from './nodes';
 
 export const getSelectedNodes = (state) => {
-  const obj = {};
-  const myObj = state.governance.nodes.data;
-  Object.keys(myObj).forEach((key) => {
-    obj[key] = myObj[key].data.filter(item => item.myselfData && item.myselfData.bpVote);
+  const selectedNodes = {};
+  const nodes = state.governance.nodes.data;
+  Object.keys(nodes).forEach((nodeType) => {
+    selectedNodes[nodeType] = nodes[nodeType].filter(node => node.isVoted);
   });
-  return obj;
+  return selectedNodes;
 };
 
 
