@@ -52,10 +52,12 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WGSSH3Q" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
   <script>
     window.APP_STATE = <%- JSON.stringify(state) %>;
   </script>
 
-  <script type="text/javascript" src="/app.js?<%- staticVersion %>"></script>
+  <script type="text/javascript" src="/app.js?<%- staticVersion %>" async defer></script>
 </body>
 </html>

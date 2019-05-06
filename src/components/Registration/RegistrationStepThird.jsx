@@ -9,6 +9,7 @@ import RegistrationBrainkeyVerification from './RegistrationBrainkeyVerification
 import { THIRD_STEP_ID } from '../../store/registration';
 import { registrationRegister, registrationSetIsTrackingAllowed } from '../../actions/registration';
 import { getAirdropOfferId } from '../../utils/airdrop';
+import { getGrecaptchaSitekey } from '../../utils/config';
 
 const offerId = getAirdropOfferId();
 
@@ -24,7 +25,21 @@ class RegistrationStepThird extends PureComponent {
       brainkeyVerificationIsComplete: false,
       brainkeyVerificationIsValid: false,
       termsAccepted: false,
+      recaptchaValid: false,
     };
+  }
+
+  componentDidMount() {
+    grecaptcha.ready(() => {
+      grecaptcha.render('recaptcha', {
+        sitekey: getGrecaptchaSitekey(),
+        callback: () => {
+          this.setState({
+            recaptchaValid: true,
+          });
+        },
+      });
+    });
   }
 
   componentWillReceiveProps(props) {
@@ -33,7 +48,7 @@ class RegistrationStepThird extends PureComponent {
     }
   }
 
-  render() {
+  getPrevPageId() {
     let prevPageId;
     const prevPath = this.props.prevPath !== null ? this.props.prevPath.match(/\d+/) : null;
     if (prevPath !== null && +prevPath[0] === offerId) {
@@ -42,6 +57,10 @@ class RegistrationStepThird extends PureComponent {
       prevPageId = null;
     }
 
+    return prevPageId;
+  }
+
+  render() {
     return (
       <div
         className={classNames(
@@ -62,6 +81,8 @@ class RegistrationStepThird extends PureComponent {
             onChange={isValid => this.setState({ brainkeyVerificationIsValid: isValid })}
             onComplete={isComplete => this.setState({ brainkeyVerificationIsComplete: isComplete })}
           />
+
+          <div id="recaptcha" />
 
           <div className="registration-terms">
             <div className="registration-terms__item">
@@ -97,8 +118,8 @@ class RegistrationStepThird extends PureComponent {
                 theme="red"
                 type="submit"
                 text="Finish"
-                isDisabled={this.props.registration.loading || !this.state.brainkeyVerificationIsValid || !this.state.termsAccepted}
-                onClick={() => this.props.registrationRegister(prevPageId || null)}
+                isDisabled={this.props.registration.loading || !this.state.brainkeyVerificationIsValid || !this.state.termsAccepted || !this.state.recaptchaValid}
+                onClick={() => this.props.registrationRegister(this.getPrevPageId() || null)}
               />
             </div>
             {this.state.brainkeyVerificationIsComplete && !this.state.brainkeyVerificationIsValid &&
