@@ -42,14 +42,6 @@ const RegistrationStepFirst = props => (
           <div className="registration-account-info__title">1-5</div>
           <div className="registration-account-info__description">Can only have <strong>numbers 1–5</strong></div>
         </div>
-
-        <div
-          id="recaptcha"
-          className="g-recaptcha"
-          data-sitekey="6LfX76EUAAAAAMhw97a_8NWe-ViseiGipjwH8fQA"
-          data-callback="onSubmit"
-          data-size="invisible"
-        />
       </div>
 
       <form
