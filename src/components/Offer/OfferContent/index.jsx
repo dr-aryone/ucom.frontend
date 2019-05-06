@@ -5,6 +5,7 @@ import { getPercent } from '../../../utils/text';
 import Comments from '../../Comments/wrapper';
 import { COMMENTS_CONTAINER_ID_POST } from '../../../utils/comments';
 import styles from './styles.css';
+import formatNumber from '../../../utils/formatNumber';
 
 const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
@@ -12,7 +13,7 @@ const OfferContent = props => (
   <Fragment>
     <Fragment>
       {props.score && props.score !== 0 && AirdropStatuses.NO_PARTICIPATION !== props.status ?
-        <div className={styles.score}>Your GitHub score <span>{(props.score).toLocaleString('ru-RU')}</span></div>
+        <div className={styles.score}>Your GitHub score <span>{formatNumber(props.score)}</span></div>
       : null}
       {AirdropStatuses.NO_PARTICIPATION === props.status ?
         <div className={styles.score}>

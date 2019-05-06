@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import UserPick from '../../UserPick/UserPick';
 import styles from './styles.css';
-import { formatRate } from '../../../utils/rate';
+import formatNumber from '../../../utils/formatNumber';
 
 const UserCardLineTitle = () => (
   <div className={styles.userCardTitle}>
@@ -44,7 +44,7 @@ const UserCardLine = (props) => {
           <div className={styles.nameGh}><span className={styles.nameGhPlaceholder}>GitHub</span>{props.nameGh}</div>
         </div>
         <div className={styles.blockScore}>
-          <div>{formatRate(props.rate)}</div>
+          <div>{formatNumber(props.rate)}</div>
         </div>
       </LinkTag>
     </Fragment>
