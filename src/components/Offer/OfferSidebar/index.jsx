@@ -37,7 +37,8 @@ const OfferSidebar = (props) => {
         conditions.airdropStatus === AirdropStatuses.RECEIVED) ||
         (conditions.conditions.authGithub === true &&
           conditions.conditions.authMyself === true &&
-          conditions.conditions.followingDevExchange === true)) &&
+          conditions.conditions.followingDevExchange === true &&
+          conditions.airdropStatus !== AirdropStatuses.NO_PARTICIPATION)) &&
           <div className={styles.airdrop}>
             <div className={styles.status}>
               <div>Airdrop Status:</div>

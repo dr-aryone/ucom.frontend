@@ -58,7 +58,7 @@ const Offer = (props) => {
   const getParticipants = (page = 1) => {
     props.getManyUsers({
       airdrops: airdropId,
-      orderBy: 'score',
+      orderBy: '-score',
       page,
       perPage: 20,
     }).then((data) => {
