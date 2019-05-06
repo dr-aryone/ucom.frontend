@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { sanitizeCommentText, checkHashTag, escapeQuotes } from '../../../../utils/text';
+import { sanitizeCommentText, checkHashTag } from '../../../../utils/text';
 import styles from './styles.css';
 import { POSTS_DESCRIPTION_PREVIEW_LIMIT } from '../../../../utils/posts';
 
@@ -27,7 +27,7 @@ class DescDirectPost extends PureComponent {
   }
 
   render() {
-    let text = escapeQuotes(this.props.desc);
+    let text = this.props.desc;
     text = checkHashTag(text);
 
     return (

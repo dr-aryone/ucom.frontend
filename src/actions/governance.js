@@ -3,7 +3,7 @@ import graphql from '../api/graphql';
 import loader from '../utils/loader';
 import { selectUser } from '../store/selectors/user';
 import { getSelectedNodes } from '../store/governance';
-import { parseWalletErros } from '../utils/errors';
+import { parseResponseError } from '../utils/errors';
 
 export const governanceNodesReset = payload => ({ type: 'GOVERNANCE_NODES_RESET', payload });
 export const governanceNodesSetData = payload => ({ type: 'GOVERNANCE_NODES_SET_DATA', payload });
@@ -40,7 +40,7 @@ export const governanceNodesGet = () => async (dispatch, getState) => {
   dispatch(governanceNodesSetLoading(false));
 };
 
-export const voteForNodes = nodeType => async (dispatch, getState) => {
+export const voteForNodes = (privateKey, nodeType) => async (dispatch, getState) => {
   const state = getState();
   const user = selectUser(state);
 
@@ -55,10 +55,10 @@ export const voteForNodes = nodeType => async (dispatch, getState) => {
   dispatch(governanceNodesSetLoading(true));
 
   try {
-    await api.voteForNodes(user.accountName, selectedNodesAccountNames, nodeType);
+    await api.voteForNodes(user.accountName, selectedNodesAccountNames, privateKey, nodeType);
     dispatch(governanceHideVotePopup());
   } catch (e) {
-    const errors = parseWalletErros(e);
+    const errors = parseResponseError(e);
 
     dispatch(governanceNodesSetPopupErrors(errors));
     console.error(e);

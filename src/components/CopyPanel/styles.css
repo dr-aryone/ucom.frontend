@@ -19,3 +19,13 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+@media (max-width: 767px) {
+  .copyPanel {
+    grid-template-columns: max-content 1fr max-content;
+  }
+
+  .copyPanel.noLabel {
+    grid-template-columns: 1fr max-content;
+  }
+}

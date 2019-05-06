@@ -1,11 +1,13 @@
 .settings {
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: 200px 1fr;
+  grid-template-rows: 1fr;
   grid-column-gap: 100px;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 86px 0 128px 0;
+  padding: 86px 40px 59px;
   font-size: 16px;
   line-height: 28px;
 }
@@ -35,12 +37,31 @@ h4.title {
   font-weight: bold;
 }
 
-.header {
-  margin: 0 0 88px;
+.content {
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+
+.footer {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+}
+
+.section {
+  padding: 0 0 88px;
+}
+
+.section:last-child {
+  padding-bottom: 0;
 }
 
 .subSection {
   margin: 0 0 63px;
+}
+
+.subSection:last-child {
+  margin-bottom: 0;
 }
 
 .copy {
@@ -48,6 +69,109 @@ h4.title {
   font-size: 14px;
 }
 
+.copy:last-child {
+  margin-bottom: 0;
+}
+
 .action {
-  width: 152px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(max-content, 152px);
+  align-items: center;
+  grid-gap: 20px;
+}
+
+.action.withLabel {
+  grid-template-columns: 1fr max-content;
+}
+
+.action .label {
+  font-weight: bold;
+}
+
+.action .label svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 8px 0 0;
+}
+
+.action .label .text {
+  vertical-align: middle;
+}
+
+.brainkeyForm {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  grid-row-gap: 8px;
+}
+
+.brainkeyForm .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
+}
+
+.brainkeyForm .button svg {
+  fill: #c4c4c4;
+  transition: fill 0.2s ease;
+}
+
+.brainkeyForm .button:hover svg {
+  fill: #767676;
+}
+
+.brainkeyForm .error {
+  grid-row-start: 2;
+}
+
+.brainkeyForm .error svg {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 8px 0 0;
+}
+
+.brainkeyForm .error .text {
+  vertical-align: middle;
+}
+
+@media (max-width: 1023px) {
+  .settings {
+    grid-template-columns: 1fr;
+    grid-row-gap: 86px;
+  }
+
+  .content {
+    grid-row-start: auto;
+    grid-row-end: auto;
+  }
+
+  .footer {
+    grid-column-start: auto;
+    grid-column-end: auto;
+    grid-row-start: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .settings {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .action {
+    grid-auto-flow: row;
+    grid-auto-columns: 1fr;
+  }
+
+  .action.withLabel {
+    grid-template-columns: 1fr;
+  }
 }

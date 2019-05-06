@@ -1,5 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import React, { PureComponent } from 'react';
 import Button from '../Button';
@@ -7,6 +8,9 @@ import Checkbox from '../Checkbox';
 import RegistrationBrainkeyVerification from './RegistrationBrainkeyVerification';
 import { THIRD_STEP_ID } from '../../store/registration';
 import { registrationRegister, registrationSetIsTrackingAllowed } from '../../actions/registration';
+import { getAirdropOfferId } from '../../utils/airdrop';
+
+const offerId = getAirdropOfferId();
 
 class RegistrationStepThird extends PureComponent {
   constructor(props) {
@@ -30,6 +34,14 @@ class RegistrationStepThird extends PureComponent {
   }
 
   render() {
+    let prevPageId;
+    const prevPath = this.props.prevPath !== null ? this.props.prevPath.match(/\d+/) : null;
+    if (prevPath !== null && +prevPath[0] === offerId) {
+      prevPageId = offerId;
+    } else {
+      prevPageId = null;
+    }
+
     return (
       <div
         className={classNames(
@@ -86,7 +98,7 @@ class RegistrationStepThird extends PureComponent {
                 type="submit"
                 text="Finish"
                 isDisabled={this.props.registration.loading || !this.state.brainkeyVerificationIsValid || !this.state.termsAccepted}
-                onClick={() => this.props.registrationRegister()}
+                onClick={() => this.props.registrationRegister(prevPageId || null)}
               />
             </div>
             {this.state.brainkeyVerificationIsComplete && !this.state.brainkeyVerificationIsValid &&
@@ -101,7 +113,7 @@ class RegistrationStepThird extends PureComponent {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({
     registration: state.registration,
   }),
@@ -109,4 +121,4 @@ export default connect(
     registrationRegister,
     registrationSetIsTrackingAllowed,
   }, dispatch),
-)(RegistrationStepThird);
+)(RegistrationStepThird));

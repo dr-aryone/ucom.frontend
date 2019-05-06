@@ -1,3 +1,4 @@
+// TODO: Remove this and all dependencies
 import React, { PureComponent, Fragment } from 'react';
 import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';
@@ -14,7 +15,6 @@ import LogoutIcon from './Icons/Logout';
 import { selectUser } from '../store/selectors';
 import { getOrganizationUrl } from '../utils/organization';
 import { showMenuPopup, hideMenuPopup } from '../actions/menuPopup';
-import { removeBrainkey } from '../utils/brainkey';
 import { removeToken } from '../utils/token';
 import { removeUser } from '../actions';
 import urls from '../utils/urls';
@@ -50,7 +50,6 @@ class MenuPopup extends PureComponent {
 
   logout = () => {
     removeToken();
-    removeBrainkey();
     this.props.removeUser();
     window.location.reload();
     this.hidePopup();

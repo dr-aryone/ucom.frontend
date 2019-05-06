@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Element } from 'react-scroll';
-import { throttle } from 'lodash';
 import Panel from '../components/Panel/Panel';
-import VerticalMenu from '../components/VerticalMenu';
+import VerticalMenu from '../components/VerticalMenu/index';
 import LayoutBase from '../components/Layout/LayoutBase';
-import { calculateClosestTo0, getKeyByValue } from '../utils/text';
 
 const Faq = () => {
   const [openedQuestions, setOpenedQuestions] = useState([]);
-  const [activeSectionName, setActiveFaqSectionName] = useState('');
 
   const PanelWrapper = (props) => {
     const index = openedQuestions.indexOf(props.title);
@@ -34,25 +31,6 @@ const Faq = () => {
 
   const FAQLink = props => <a className="auth__link" href={`#${props.name.replace(/ /g, '_')}`} onClick={() => setOpenedQuestions([...openedQuestions, props.name])}>{props.children}</a>;
 
-  const onScroll = () => {
-    const UCommunity = (document.querySelector('[name="U°Community"]').offsetTop - window.scrollY) + 150;
-    const UOS = document.querySelector('[name="U°OS"]').offsetTop - window.scrollY - 115;
-    const Glossary = document.querySelector('[name="Glossary"]').offsetTop - window.scrollY - 115;
-    const tabs = { 'U°Community': UCommunity, 'U°OS': UOS, Glossary };
-    const sectionName = getKeyByValue(tabs, 0) ? getKeyByValue(tabs, 0) : getKeyByValue(tabs, calculateClosestTo0([UCommunity, UOS, Glossary]));
-
-    if (sectionName !== activeSectionName) {
-      setActiveFaqSectionName(sectionName);
-    }
-  };
-
-  const throttledOnScroll = throttle(onScroll, 250);
-
-  useEffect(() => {
-    window.addEventListener('scroll', throttledOnScroll);
-    return () => window.removeEventListener('scroll', throttledOnScroll);
-  });
-
   return (
     <LayoutBase>
       <div className="content">
@@ -67,13 +45,12 @@ const Faq = () => {
             <div className="grid grid_settings">
               <div className="grid__item grid__item_side">
                 <VerticalMenu
+                  sticky
                   sections={[
                     { name: 'U°Community', title: 'U°Community' },
                     { name: 'U°OS', title: 'U°OS' },
                     { name: 'Glossary', title: 'Glossary' },
                   ]}
-                  sticky
-                  activeSectionName={activeSectionName}
                 />
               </div>
 

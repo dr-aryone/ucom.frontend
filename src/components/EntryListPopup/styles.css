@@ -1,10 +1,12 @@
-:local(.container) {
+.container {
+  box-sizing: border-box;
   padding: 40px;
-  max-width: 600px;
+  max-width: 680px;
+  width: 100%;
   margin: 0 auto;
 }
 
-:local(.item) {
+.item {
   display: grid;
   grid-template-columns: 1fr max-content;
   grid-column-gap: 40px;
@@ -12,24 +14,24 @@
   margin: 0 0 40px;
 }
 
-:local(.item:last-child) {
+.item:last-child {
   margin-bottom: 0;
 }
 
-:local(.title) {
+.title {
   margin: 0 0 40px;
   font-size: 28px;
   font-weight: 900;
   line-height: 1;
 }
 
-:local(.action) {
+.action {
   width: 160px;
   white-space: nowrap;
 }
 
 @media (max-width: 768px) {
-  :local(.item) {
+  .item {
     grid-template-columns: 1fr;
   }
 }

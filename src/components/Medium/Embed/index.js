@@ -131,6 +131,7 @@ export default class MediumEmbed extends MediumEditor.Extension {
           e.preventDefault();
           e.stopPropagation();
           this.deleteBlock(state.selectedBlock);
+          this.base.checkContentChanged(this.base.origElements);
           return;
         }
 
@@ -180,6 +181,7 @@ export default class MediumEmbed extends MediumEditor.Extension {
           e.preventDefault();
           e.stopPropagation();
           this.deleteBlock(state.selectedBlock);
+          this.base.checkContentChanged(this.base.origElements);
           return;
         }
 
@@ -191,6 +193,7 @@ export default class MediumEmbed extends MediumEditor.Extension {
 
           if (this.blockIsEmpty(state.selectedBlock) && state.selectedBlock.nextSibling) {
             this.removeBlock(state.selectedBlock);
+            this.base.checkContentChanged(this.base.origElements);
           }
         }
 
@@ -203,6 +206,7 @@ export default class MediumEmbed extends MediumEditor.Extension {
           e.preventDefault();
           e.stopPropagation();
           this.addEmptyBlockBefore(state.selectedBlock);
+          this.base.checkContentChanged(this.base.origElements);
         }
 
         break;

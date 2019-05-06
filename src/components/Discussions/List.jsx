@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import styles from './styles.css';
-import Item, { itemPropsTypes } from './Item';
+import SortableItem, { Item } from './Item';
 
 const List = props => (
   <div className={styles.list}>
     {props.items.map((item, index) => (
-      <Item
+      <SortableItem
         key={item.id}
         disabled={props.disabled}
         index={index}
@@ -19,7 +19,7 @@ const List = props => (
 );
 
 List.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape(itemPropsTypes)),
+  items: PropTypes.arrayOf(PropTypes.shape(Item.propTypes)),
   editable: PropTypes.bool,
   disabled: PropTypes.bool,
 };

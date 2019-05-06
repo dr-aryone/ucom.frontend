@@ -10,21 +10,18 @@
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   background: rgba(151, 151, 151, 0.6);
 }
 
-.popup:global(.user-menu) {
-  top: 50px;
-  min-height: calc(100vh - 91px);
-  background: #fff;
+.popup.transparent {
+  background: transparent;
 }
 
-.popup:global(.user-menu):after {
-  display: none;
-}
-
-.popup:global(.user-menu.popup_blocked) {
-  margin-top: 91px;
+.popup:global(.wallet) {
+  z-index: 2;
+  margin-top: 50px;
+  height: calc(100% - 50px);
 }
 
 .popup:global(.dark) {
@@ -47,4 +44,10 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+@media (max-width: 1023px) {
+  .popup {
+    padding-bottom: 0 !important;
+  }
 }

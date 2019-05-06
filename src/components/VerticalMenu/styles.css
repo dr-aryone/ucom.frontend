@@ -1,0 +1,37 @@
+.verticalMenu.sticky {
+  position: sticky;
+}
+
+.verticalMenu {
+  border-left: 1px solid #E8ECEC;
+  font-size: 16px;
+  font-weight: bold;
+  color: #505050;
+  line-height: 1;
+}
+
+.item {
+  display: block;
+  margin: 0 0 30px -1px;
+  padding: 0 0 0 33px;
+  border-left: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.item:global(.active),
+.item:hover {
+  color: #000;
+  border-color: #000;
+  text-decoration: none;
+}
+
+.item:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .item {
+    padding-left: 20px;
+  }
+}

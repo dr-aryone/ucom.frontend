@@ -1,11 +1,35 @@
+import he from 'he';
 import { memoize } from 'lodash';
 import sanitizeHtml from 'sanitize-html';
 import urls from './urls';
 
-const URL_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+export const COPY_TO_CLIPBOARD_SUCCESS_MESSAGE = 'Link copied to clipboard';
+
+export const URL_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+
 export const IMG_URL_REGEXP = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
 
-export const escapeQuotes = memoize((text = '') => text.replace(/&quot;/g, '"'));
+export const sanitizeText = memoize(str => sanitizeHtml(str));
+
+export const decodeText = memoize(str => he.decode(str));
+
+export const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value);
+
+export const getPercent = (left, total) => Math.floor((left / total) * 100);
+
+export const removeMultipleSpaces = memoize((str = '') => str.replace(/ +(?= )/g, ''));
+
+export const removeMultipleLineBreaks = memoize((str = '') => str.replace(/(\r\n|\r|\n){2,}/g, '$1\n'));
+
+export const removeLineBreaks = memoize((str = '') => str.replace(/\r?\n|\r/g, ''));
+
+export const removeLineBreaksMultipleSpacesAndTrim = memoize((str) => {
+  str = removeMultipleSpaces(str);
+  str = removeLineBreaks(str);
+  str = str.trim();
+
+  return str;
+});
 
 const makeActiveLink = (trigger, makeRoute, className) => (...args) => {
   let match = args[0];
@@ -18,6 +42,7 @@ const makeActiveLink = (trigger, makeRoute, className) => (...args) => {
 };
 
 export const makeLinkTag = makeActiveLink('#', urls.getTagUrl, 'tag_link');
+
 export const makeLinkMention = makeActiveLink('@', urls.getUserUrl, 'mention_link');
 
 export const checkHashTag = memoize((text = '') => text.replace(/(^|\s|>)#[a-zA-Z]\w*/gm, makeLinkTag));
@@ -44,8 +69,6 @@ export const existMentionTag = (text, tag) => {
   }
   return false;
 };
-
-export const removeMultipleNewLines = memoize((str = '') => str.replace(/(\r\n|\r|\n){2,}/g, '$1\n'));
 
 export const makeLink = memoize((text = '') => text.replace(URL_REGEX, url => `<a target="_blank" href="${url}">${url}</a>`));
 
@@ -103,7 +126,7 @@ export const sanitizeCommentText = memoize(html => sanitizeHtml(html, {
   allowedAttributes: {
     a: ['href', 'target', 'class'],
   },
-  textFilter: text => escapeQuotes(removeMultipleNewLines(makeLink(text))),
+  textFilter: text => removeMultipleLineBreaks(makeLink(text)),
 }));
 
 export const sanitizePostTitle = memoize(text => sanitizeHtml(text));
@@ -118,7 +141,4 @@ export const calculateClosestTo0 = arr => arr.reduce(
 );
 /* eslint-enable */
 
-export const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value);
-
 export const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
-export const removeMultipleSpaces = memoize((str = '') => str.replace(/ +(?= )/g, ''));

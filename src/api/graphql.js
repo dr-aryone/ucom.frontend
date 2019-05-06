@@ -11,8 +11,9 @@ import { LIST_ORDER_BY, LIST_PER_PAGE } from '../utils/list';
 
 const { Dictionary } = require('ucom-libs-wallet');
 
-const request = async (data) => {
-  const options = {
+const request = async (data, extraOptions = {}) => {
+  let options = {
+    withCredentials: true,
     baseURL: getBackendConfig().httpEndpoint,
     headers: {},
   };
@@ -22,6 +23,15 @@ const request = async (data) => {
   if (token) {
     options.headers.Authorization = `Bearer ${token}`;
   }
+
+  options = {
+    ...options,
+    ...extraOptions,
+    headers: {
+      ...options.headers,
+      ...extraOptions.headers,
+    },
+  };
 
   try {
     const resp = await axios.post('/graphql', data, options);
@@ -400,6 +410,94 @@ export default {
           [CALCULATOR_NODES]: data.data.isVotedCalculatorsNodes,
         },
       };
+    } catch (e) {
+      throw e;
+    }
+  },
+  async getOnePostOffer({
+    postId,
+    commentsQuery = {
+      page: 1,
+      per_page: COMMENTS_PER_PAGE,
+    },
+    usersTeamQuery = {
+      page: 1,
+      per_page: 20,
+      order_by: '-score',
+      filters: {
+        airdrops: {
+          id: 1,
+        },
+      },
+    },
+  }, options = {}) {
+    const query = GraphQLSchema.getOnePostOffer(
+      postId,
+      commentsQuery,
+      usersTeamQuery,
+    );
+
+    try {
+      const data = await request({ query }, options);
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getOnePostOfferWithUserAirdrop({
+    airdropFilter = { airdrop_id: 1 },
+    postId,
+    commentsQuery = {
+      page: 1,
+      per_page: COMMENTS_PER_PAGE,
+    },
+    usersTeamQuery = {
+      page: 1,
+      per_page: 20,
+      order_by: '-score',
+      filters: {
+        airdrops: {
+          id: 1,
+        },
+      },
+    },
+  }, options = {}) {
+    const query = GraphQLSchema.getOnePostOfferWithUserAirdrop(
+      airdropFilter,
+      postId,
+      commentsQuery,
+      usersTeamQuery,
+    );
+
+    try {
+      const data = await request({ query }, options);
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getManyUsers({
+    filter = {
+      airdrops: { id: 1 },
+    },
+    orderBy,
+    page,
+    perPage,
+    isMyself,
+  }) {
+    const query = GraphQLSchema.getManyUsers(
+      filter,
+      orderBy,
+      page,
+      perPage,
+      isMyself,
+    );
+
+    try {
+      const data = await request({ query });
+      return data.data.manyUsers;
     } catch (e) {
       throw e;
     }

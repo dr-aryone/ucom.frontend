@@ -9,16 +9,15 @@ import ModalContent from '../ModalContent';
 import OrganizationHead from '../Organization/OrganizationHead';
 import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForNodes } from '../../actions/governance';
 import { getOrganization } from '../../actions/organizations';
-import { fetchMyself } from '../../actions/users';
-import { getAccountState, setWalletEditStakeVisible } from '../../actions/wallet';
+import { walletToggleEditStake, walletGetAccount } from '../../actions/walletSimple';
 import { getSelectedNodes } from '../../store/governance';
 import { selectUser } from '../../store/selectors/user';
 import LayoutBase from '../Layout/LayoutBase';
 import { getUosGroupId } from '../../utils/config';
-import SetStakePopup from '../Wallet/SetStakePopup';
 import Footer from '../Footer';
 import GovernanceElection from './GovernanceElection';
 import GovernanceConfirmation from './GovernanceConfirmation';
+import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 import { formatRate } from '../../utils/rate';
 
 const { Dictionary } = require('ucom-libs-wallet');
@@ -33,6 +32,7 @@ const governanceTabs = [
   { name: 'Projects', active: false },
   { name: 'Results', active: false },
 ];
+
 
 const Governance = (props) => {
   const [electionVisibility, setElectionVisibility] = useState(false);
@@ -49,7 +49,7 @@ const Governance = (props) => {
   };
 
   useEffect(() => {
-    props.getAccountState();
+    props.walletGetAccount(props.user.accountName);
     props.getOrganization(organizationId);
     fetchMyseldAndNodes();
   }, [organizationId]);
@@ -60,25 +60,24 @@ const Governance = (props) => {
   const { currentImportance } = user;
   const selectedNodes = props.selectedNodes[currentNodeVisibility];
 
-  const setVotes = () => {
+  const setVotes = (activeKey) => {
     setConfirmationVisibility(false);
     setElectionVisibility(false);
     setCloseVisibility(false);
-    props.voteForNodes(currentNodeVisibility);
+    props.voteForNodes(activeKey, currentNodeVisibility);
   };
 
   const close = () => {
     setConfirmationVisibility(false);
     setElectionVisibility(false);
     setCloseVisibility(false);
-    props.getAccountState();
+    props.walletGetAccount(props.user.accountName);
     props.governanceNodesGet();
     props.getOrganization(organizationId);
   };
 
   return (
     <LayoutBase>
-      <SetStakePopup />
       {electionVisibility && (
         <Popup onClickClose={() => setElectionVisibility(false)}>
           <ModalContent closeText="Close" mod="governance-election" onClickClose={() => setElectionVisibility(false)}>
@@ -117,13 +116,17 @@ const Governance = (props) => {
                   />
                 </div>
                 <div className="governance-button">
-                  <Button
-                    isStretched
-                    text="Vote"
-                    size="medium"
-                    theme="red"
-                    onClick={setVotes}
-                  />
+                  <RequestActiveKey onSubmit={setVotes}>
+                    {requestActiveKey => (
+                      <Button
+                        isStretched
+                        text="Vote"
+                        size="medium"
+                        theme="red"
+                        onClick={requestActiveKey}
+                      />
+                    )}
+                  </RequestActiveKey>
                 </div>
               </div>
             </div>
@@ -247,8 +250,7 @@ export default connect(state => ({
   governanceHideVotePopup,
   governanceShowVotePopup,
   getOrganization,
-  getAccountState,
+  walletGetAccount,
   voteForNodes,
-  setWalletEditStakeVisible,
-  fetchMyself,
+  walletToggleEditStake,
 })(Governance);

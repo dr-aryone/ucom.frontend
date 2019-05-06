@@ -1,48 +1,65 @@
 import humps from 'lodash-humps';
 import api from '../api';
-import loader from '../utils/loader';
 import { addUsers } from './users';
-import { addServerErrorNotification } from './notifications';
 import { getToken } from '../utils/token';
 
 export const addOrganizations = payload => ({ type: 'ADD_ORGANIZATIONS', payload });
 export const addOrganizationFollower = payload => ({ type: 'ADD_ORGANIZATION_FOLLOWER', payload });
 export const removeOrganizationFollower = payload => ({ type: 'REMOVE_ORGANIZATION_FOLLOWER', payload });
 
-export const getOrganization = organizationId => (dispatch) => {
-  loader.start();
-  api.getOrganization(organizationId)
-    .then(humps)
-    .then((data) => {
-      dispatch(addUsers([data.data.user].concat(data.data.followedBy, data.data.usersTeam)));
-      dispatch(addOrganizations([data.data]));
-    })
-    .catch(() => loader.done())
-    .then(() => loader.done());
+export const getOrganization = organizationId => async (dispatch) => {
+  try {
+    const data = humps(await api.getOrganization(organizationId));
+    dispatch(addUsers([data.data.user].concat(data.data.followedBy, data.data.usersTeam)));
+    dispatch(addOrganizations([data.data]));
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 };
 
-export const followOrganization = data => (dispatch) => {
-  loader.start();
-  api.followOrganization(data.organization.id, getToken(), data.owner.accountName, data.organization.blockchainId)
-    .then(() => {
-      dispatch(addOrganizationFollower({
-        organizationId: data.organization.id,
-        user: data.owner,
-      }));
-    })
-    .catch(error => dispatch(addServerErrorNotification(error)))
-    .then(() => loader.done());
+export const followOrganization = ({
+  organization,
+  owner,
+  activeKey,
+}) => async (dispatch) => {
+  try {
+    await api.followOrganization(
+      organization.id,
+      getToken(),
+      owner.accountName,
+      organization.blockchainId,
+      activeKey,
+    );
+    dispatch(addOrganizationFollower({
+      organizationId: organization.id,
+      user: owner,
+    }));
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 };
 
-export const unfollowOrganization = data => (dispatch) => {
-  loader.start();
-  api.unfollowOrganization(data.organization.id, getToken(), data.owner.accountName, data.organization.blockchainId)
-    .then(() => {
-      dispatch(removeOrganizationFollower({
-        organizationId: data.organization.id,
-        user: data.owner,
-      }));
-    })
-    .catch(error => dispatch(addServerErrorNotification(error)))
-    .then(() => loader.done());
+export const unfollowOrganization = ({
+  organization,
+  owner,
+  activeKey,
+}) => async (dispatch) => {
+  try {
+    await api.unfollowOrganization(
+      organization.id,
+      getToken(),
+      owner.accountName,
+      organization.blockchainId,
+      activeKey,
+    );
+    dispatch(removeOrganizationFollower({
+      organizationId: organization.id,
+      user: owner,
+    }));
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 };

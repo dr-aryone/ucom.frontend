@@ -12,7 +12,6 @@ import comments from './comments';
 import organizations from './organizations';
 import menuPopup from './menuPopup';
 import userForm from './userForm';
-import wallet from './wallet/index';
 import governance from './governance/index';
 import registration from './registration';
 import mainPostGroup from './mainPostGroup';
@@ -21,9 +20,12 @@ import tags from './tags';
 import communityFeed from './communityFeed';
 import tagsFeed from './tagsFeed';
 import user from './user';
+import settings from './settings';
+import walletSimple from './walletSimple';
 
 export const createStore = () => {
   const reducers = redux.combineReducers({
+    settings,
     user,
     post,
     auth,
@@ -35,7 +37,6 @@ export const createStore = () => {
     comments,
     organizations,
     menuPopup,
-    wallet,
     userForm,
     governance,
     registration,
@@ -44,6 +45,7 @@ export const createStore = () => {
     tags,
     communityFeed,
     tagsFeed,
+    walletSimple,
   });
   const middlewares = [thunk];
   let preloadedState;
