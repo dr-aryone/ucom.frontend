@@ -37,7 +37,7 @@ class SocialNetworks extends PureComponent {
                     <TextInput
                       touched
                       value={value.sourceUrl}
-                      error={myErrors.find(e => e[index]) && myErrors.find(e => e[index])[index]}
+                      // error={myErrors.find(e => e[index]) && myErrors.find(e => e[index])[index]}
                       onChange={sourceUrl => onChange(Object.assign([], fields, { [index]: { ...fields[index], sourceUrl } }))}
                     />
                   </div>

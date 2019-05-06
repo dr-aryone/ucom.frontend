@@ -1,7 +1,7 @@
 import HomePage, { getHomePageData } from './pages/Home';
 import UserPage, { getUserPageData } from './pages/User';
 import EditPostPage from './pages/EditPost';
-// import ProfilePage from './pages/Profile';
+import ProfilePage from './pages/Profile';
 import PostPage, { getPostPageData } from './pages/Post';
 import OverviewPage, { getPageData } from './pages/Overview';
 import Offer, { getPostOfferData } from './pages/Offer';
@@ -61,7 +61,7 @@ export default [{
   component: RegistrationPage,
 }, {
   path: '/profile',
-  component: Profile,
+  component: ProfilePage,
 }, {
   path: '/users',
   component: UsersPage,

@@ -37,6 +37,7 @@ const SocialNetworks = (props) => {
                 touched
                 value={value.sourceUrl}
                 onChange={sourceUrl => onChange(Object.assign([], fields, { [index]: { ...fields[index], sourceUrl } }))}
+                error={myErrors.find(e => e[index]) && myErrors.find(e => e[index])[index]}
                 className={styles.input}
               />
               <div

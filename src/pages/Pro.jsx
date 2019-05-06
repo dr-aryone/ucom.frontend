@@ -17,6 +17,7 @@ import Textarea from '../components/Textarea';
 import Button from '../components/Button/index.jsx';
 import Avatar from '../components/EntryHeader/Avatar';
 import SocialNetworks from '../components/SN';
+import { userFormHandleSubmit } from '../actions/userForm';
 import { validator } from '../utils/validateFields';
 
 const Profile = (props) => {
@@ -66,6 +67,15 @@ const Profile = (props) => {
     // }
   };
 
+//   <form
+//   onSubmit={(e) => {
+//     e.preventDefault();
+//     this.props.userFormHandleSubmit();
+//   }}
+// >
+  const saveProfile = () => {
+    props.userFormHandleSubmit();
+  };
 
 
   return (
@@ -84,7 +94,13 @@ const Profile = (props) => {
               />
               {owner ? (
                 <Fragment>
-                  <div className={styles.btnSave}><Button>Save Changes</Button></div>
+                  <div className={styles.btnSave}>
+                    <Button
+                      onClick={() => saveProfile()}
+                    >
+                      Save Changes
+                    </Button>
+                  </div>
                   <div className={styles.link}>Go to <a href="#">Account Settings</a></div>
                 </Fragment>
               ) : (
@@ -185,8 +201,10 @@ export default connect(
   state => ({
     users: state.users,
     user: selectUser(state),
+    userData: state.userData,
   }),
   dispatch => bindActionCreators({
     updateUser,
+    userFormHandleSubmit,
   }, dispatch),
 )(Profile);

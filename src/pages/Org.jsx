@@ -140,6 +140,12 @@ const Organization = (props) => {
                 <Element name="Board" className={styles.section}>
                   <h3 className={styles.title}>About Me</h3>
                   <div className={styles.textarea}>
+                    <UsersTeamForm
+                      users={props.organization.data.usersTeam}
+                      onChange={(usersTeam) => {
+                        props.setOrganizationData({ usersTeam });
+                      }}
+                    />
                     <Textarea
                       placeholder="Your story, what passions you — something you want others to know about you"
                       rows={6}
