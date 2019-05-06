@@ -10,6 +10,7 @@ import OrganizationHead from '../Organization/OrganizationHead';
 import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForNodes } from '../../actions/governance';
 import { getOrganization } from '../../actions/organizations';
 import { walletToggleEditStake, walletGetAccount } from '../../actions/walletSimple';
+import { fetchMyself } from '../../actions/users';
 import { getSelectedNodes } from '../../store/governance';
 import { selectUser } from '../../store/selectors/user';
 import LayoutBase from '../Layout/LayoutBase';
@@ -43,21 +44,21 @@ const Governance = (props) => {
   const organizationId = getUosGroupId();
   const { user } = props;
 
-  const fetchMyseldAndNodes = async () => {
+  const fetchMyselfNodesAndAccount = async () => {
     await props.fetchMyself();
     await props.governanceNodesGet();
+    await props.walletGetAccount();
   };
 
   useEffect(() => {
-    props.walletGetAccount(props.user.accountName);
     props.getOrganization(organizationId);
-    fetchMyseldAndNodes();
+    fetchMyselfNodesAndAccount();
   }, [organizationId]);
 
   const tableBP = props.governance.nodes.data[BLOCK_PRODUCERS];
   const tableCN = props.governance.nodes.data[CALCULATOR_NODES];
   const table = props.governance.nodes.data[currentNodeVisibility];
-  const { currentImportance } = user;
+  const currentImportance = user.uosAccountsProperties && user.uosAccountsProperties.scaledImportance * 100000;
   const selectedNodes = props.selectedNodes[currentNodeVisibility];
 
   const setVotes = (activeKey) => {
@@ -252,5 +253,6 @@ export default connect(state => ({
   getOrganization,
   walletGetAccount,
   voteForNodes,
+  fetchMyself,
   walletToggleEditStake,
 })(Governance);
