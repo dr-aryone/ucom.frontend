@@ -14,7 +14,7 @@ import { authShowPopup } from '../actions/auth';
 import loader from '../utils/loader';
 import urls from '../utils/urls';
 import Close from '../components/Close';
-import { parseMediumContent, POSTS_DRAFT_LOCALSTORAGE_KEY } from '../utils/posts';
+import { parseMediumContent, mediumHasContent, POSTS_DRAFT_LOCALSTORAGE_KEY } from '../utils/posts';
 import Popup from '../components/Popup';
 import ModalContent from '../components/ModalContent';
 import PostSubmitForm from '../components/Post/PostSubmitForm';
@@ -139,7 +139,14 @@ const EditPost = (props) => {
                 <CreateBy />
               </div>
               <div className="edit-post-toolbar__action">
-                <Button isStretched theme="red" size="small" text="Publish" onClick={() => setSubmitPopupVisible(true)} isDisabled={loading || !props.post.isValid} />
+                <Button
+                  isStretched
+                  theme="red"
+                  size="small"
+                  text="Publish"
+                  onClick={() => setSubmitPopupVisible(true)}
+                  isDisabled={loading || !mediumHasContent(props.post.data.description)}
+                />
               </div>
               <div className="edit-post-toolbar__close">
                 <Close />
@@ -191,7 +198,7 @@ const EditPost = (props) => {
                   size="small"
                   text="Publish"
                   onClick={() => setSubmitPopupVisible(true)}
-                  isDisabled={loading || !props.post.isValid}
+                  isDisabled={loading || !mediumHasContent(props.post.data.description)}
                 />
               </div>
             </div>
