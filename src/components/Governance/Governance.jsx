@@ -20,7 +20,7 @@ import GovernanceElection from './GovernanceElection';
 import GovernanceConfirmation from './GovernanceConfirmation';
 import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 import { formatRate } from '../../utils/rate';
-import loader from '../../utils/loader';
+import withLoader from '../../utils/withLoader';
 
 const { Dictionary } = require('ucom-libs-wallet');
 
@@ -46,24 +46,21 @@ const Governance = ({
   const currentNodeVisibility = findKey(nodeVisibility, i => i);
   const organizationId = getUosGroupId();
 
+
   useEffect(() => {
-    loader.start();
-    governanceNodesAll();
-    loader.done();
+    withLoader(governanceNodesAll);
   }, []);
 
   useEffect(() => {
-    if (user.id) {
-      loader.start();
-      governanceNodesSelected(user.id);
-      loader.done();
-    }
+    withLoader(() => {
+      if (user.id) {
+        governanceNodesSelected(user.id);
+      }
+    });
   }, [user.id]);
 
   useEffect(() => {
-    loader.start();
-    getOrganization(organizationId);
-    loader.done();
+    withLoader(() => getOrganization(organizationId));
   }, [organizationId]);
 
   const tableBP = governance.nodes.data[BLOCK_PRODUCERS];
