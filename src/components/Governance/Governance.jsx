@@ -9,7 +9,7 @@ import ModalContent from '../ModalContent';
 import OrganizationHead from '../Organization/OrganizationHead';
 import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForNodes } from '../../actions/governance';
 import { getOrganization } from '../../actions/organizations';
-import { walletToggleEditStake, walletGetAccount } from '../../actions/walletSimple';
+import { walletToggleEditStake } from '../../actions/walletSimple';
 import { fetchMyself } from '../../actions/users';
 import { getSelectedNodes } from '../../store/governance';
 import { selectUser } from '../../store/selectors/user';
@@ -20,6 +20,7 @@ import GovernanceElection from './GovernanceElection';
 import GovernanceConfirmation from './GovernanceConfirmation';
 import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 import { formatRate } from '../../utils/rate';
+import loader from '../../utils/loader';
 
 const { Dictionary } = require('ucom-libs-wallet');
 
@@ -35,48 +36,49 @@ const governanceTabs = [
 ];
 
 
-const Governance = (props) => {
+const Governance = ({
+  user, fetchMyself, governanceNodesGet, getOrganization, governance, rawSelectedNodes, voteForNodes, walletGetAccount,
+}) => {
   const [electionVisibility, setElectionVisibility] = useState(false);
   const [confirmationVisibility, setConfirmationVisibility] = useState(false);
   const [closeVisibility, setCloseVisibility] = useState(false);
   const [nodeVisibility, setNodeVisibility] = useState({ [BLOCK_PRODUCERS]: false, [CALCULATOR_NODES]: false });
   const currentNodeVisibility = findKey(nodeVisibility, i => i);
   const organizationId = getUosGroupId();
-  const { user } = props;
 
-  const fetchMyselfNodesAndAccount = async () => {
-    await props.fetchMyself();
-    await props.governanceNodesGet();
-    await props.walletGetAccount();
+  const fetchMyselfAndNodes = async () => {
+    const data = await fetchMyself();
+    await governanceNodesGet(data.id);
   };
 
   useEffect(() => {
-    props.getOrganization(organizationId);
-    fetchMyselfNodesAndAccount();
+    loader.start();
+    getOrganization(organizationId);
+    fetchMyselfAndNodes();
+    loader.done();
   }, [organizationId]);
 
-  const tableBP = props.governance.nodes.data[BLOCK_PRODUCERS];
-  const tableCN = props.governance.nodes.data[CALCULATOR_NODES];
-  const table = props.governance.nodes.data[currentNodeVisibility];
+  const tableBP = governance.nodes.data[BLOCK_PRODUCERS];
+  const tableCN = governance.nodes.data[CALCULATOR_NODES];
+  const table = governance.nodes.data[currentNodeVisibility];
   const currentImportance = user.uosAccountsProperties && user.uosAccountsProperties.scaledImportance * 100000;
-  const selectedNodes = props.selectedNodes[currentNodeVisibility];
+  const selectedNodes = rawSelectedNodes[currentNodeVisibility];
 
   const setVotes = (activeKey) => {
     setConfirmationVisibility(false);
     setElectionVisibility(false);
     setCloseVisibility(false);
-    props.voteForNodes(activeKey, currentNodeVisibility);
+    voteForNodes(activeKey, currentNodeVisibility);
   };
 
   const close = () => {
     setConfirmationVisibility(false);
     setElectionVisibility(false);
     setCloseVisibility(false);
-    props.walletGetAccount(props.user.accountName);
-    props.governanceNodesGet();
-    props.getOrganization(organizationId);
+    walletGetAccount(user.accountName);
+    governanceNodesGet(user.id);
+    getOrganization(organizationId);
   };
-
   return (
     <LayoutBase>
       {electionVisibility && (
@@ -140,11 +142,11 @@ const Governance = (props) => {
           <div className="content__inner governance-inner">
             <div className="governance__main-title">
               <h1 className="title title_bold">Governance</h1>
-              {props.user.id &&
+              {user.id &&
                 <div className="governance__status">
                   <span className="governance__status-text">Voting Power:</span>
                   <h3 className="title_small">
-                    {formatRate(currentImportance)}°
+                    {formatRate(currentImportance, true)}
                   </h3>
                 </div>
               }
@@ -174,16 +176,16 @@ const Governance = (props) => {
             </div>
 
             <div className="sheets__content sheets__content_theme_governance">
-              {/* {props.user.id &&
+              {/* {user.id &&
                 <div className="content__section content__section_small">
                   <Panel
-                    title={`Selected (${props.selectedNodes.length})`}
+                    title={`Selected (${selectedNodes.length})`}
                     active={selectedPanelActive}
                     onClickToggler={() => setSelectedPanelActive(!selectedPanelActive)}
                   >
                     <div className="governance-selected">
                       <div className="governance-selected__table">
-                        <GovernanceTable data={props.selectedNodes} />
+                        <GovernanceTable data={selectedNodes} />
                       </div>
                       <div className="governance-selected__actions">
                         <div className="governance-selected__vote">
@@ -192,8 +194,8 @@ const Governance = (props) => {
                             size="small"
                             theme="red"
                             text="Vote"
-                            isDisabled={props.governance.nodes.loading}
-                            onClick={() => props.governanceShowVotePopup()}
+                            isDisabled={governance.nodes.loading}
+                            onClick={() => governanceShowVotePopup()}
                           />
                         </div>
                       </div>
@@ -207,7 +209,7 @@ const Governance = (props) => {
                 {tableBP && tableBP.length > 0 &&
                   <GovernanceBlock
                     onClickVoteButton={() => setElectionVisibility(true)}
-                    myVotes={props.selectedNodes[BLOCK_PRODUCERS].length}
+                    myVotes={rawSelectedNodes[BLOCK_PRODUCERS].length}
                     voters={12345}
                     rate={15000}
                     onClickTick={() => setNodeVisibility({ [CALCULATOR_NODES]: false, [BLOCK_PRODUCERS]: !nodeVisibility[BLOCK_PRODUCERS] })}
@@ -220,7 +222,7 @@ const Governance = (props) => {
                 {tableCN && tableCN.length > 0 &&
                   <GovernanceBlock
                     onClickVoteButton={() => setElectionVisibility(true)}
-                    myVotes={props.selectedNodes[CALCULATOR_NODES].length}
+                    myVotes={rawSelectedNodes[CALCULATOR_NODES].length}
                     voters={12345}
                     rate={15000}
                     onClickTick={() => setNodeVisibility({ [BLOCK_PRODUCERS]: false, [CALCULATOR_NODES]: !nodeVisibility[CALCULATOR_NODES] })}
@@ -245,13 +247,12 @@ export default connect(state => ({
   user: selectUser(state),
   governance: state.governance,
   wallet: state.wallet,
-  selectedNodes: getSelectedNodes(state),
+  rawSelectedNodes: getSelectedNodes(state),
 }), {
   governanceNodesGet,
   governanceHideVotePopup,
   governanceShowVotePopup,
   getOrganization,
-  walletGetAccount,
   voteForNodes,
   fetchMyself,
   walletToggleEditStake,

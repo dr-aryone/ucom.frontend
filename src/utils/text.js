@@ -130,15 +130,4 @@ export const sanitizeCommentText = memoize(html => sanitizeHtml(html, {
 }));
 
 export const sanitizePostTitle = memoize(text => sanitizeHtml(text));
-
-/* eslint-disable */
-export const calculateClosestTo0 = arr => arr.reduce(
-  (acc, x) =>
-    (acc === 0 ? x :
-      x > 0 && x <= Math.abs(acc) ? x :
-        x < 0 && -x < Math.abs(acc) ? x : acc)
-  , 0,
-);
-/* eslint-enable */
-
 export const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);

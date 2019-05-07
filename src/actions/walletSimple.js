@@ -20,11 +20,10 @@ export const walletToggleSendTokens = visible => ({
   payload: visible,
 });
 
-export const walletGetAccount = accountName => async (dispatch, getState) => {
-  const finalAccountName = accountName || getState().user.data.accountName;
+export const walletGetAccount = accountName => async (dispatch) => {
   try {
-    const data = await api.getAccountState(finalAccountName);
-    data.tokens.uosFutures = await api.getAccountBalance(finalAccountName, 'UOSF');
+    const data = await api.getAccountState(accountName);
+    data.tokens.uosFutures = await api.getAccountBalance(accountName, 'UOSF');
     dispatch({
       type: 'WALLET_SET_DATA',
       payload: data,
