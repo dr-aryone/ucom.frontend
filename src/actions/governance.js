@@ -17,7 +17,7 @@ export const governanceShowVotePopup = () => (dispatch) => {
   dispatch({ type: 'GOVERNANCE_NODES_SET_POPUP_VISIBILE', payload: true });
 };
 
-export const governanceNodesGet = () => async (dispatch) => {
+export const governanceNodesAll = () => async (dispatch) => {
   loader.start();
   dispatch(governanceNodesSetLoading(true));
 
@@ -38,16 +38,17 @@ export const governanceNodesGet = () => async (dispatch) => {
   dispatch(governanceNodesSetLoading(false));
 };
 
-export const governanceNodesGetWithSelected = userId => async (dispatch) => {
+export const governanceNodesSelected = userId => async (dispatch, getState) => {
   loader.start();
   dispatch(governanceNodesSetLoading(true));
+  const state = getState();
 
   try {
-    const data = await graphql.getAllNodesWithSelected(userId);
-    const nodes = Object.keys(data.nodes)
+    const data = await graphql.getNodesSelected(userId);
+    const nodes = Object.keys(state.governance.nodes.data)
       .reduce((result, nodeType) => ({
         ...result,
-        [nodeType]: data.nodes[nodeType].data
+        [nodeType]: state.governance.nodes.data[nodeType]
           .map(node => ({
             ...node,
             isVoted: data.selectedNodes[nodeType].data

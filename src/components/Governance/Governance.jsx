@@ -7,7 +7,7 @@ import Button from '../Button';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
 import OrganizationHead from '../Organization/OrganizationHead';
-import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForNodes, governanceNodesGetWithSelected } from '../../actions/governance';
+import { governanceNodesAll, governanceHideVotePopup, governanceShowVotePopup, voteForNodes, governanceNodesSelected } from '../../actions/governance';
 import { getOrganization } from '../../actions/organizations';
 import { walletToggleEditStake, walletGetAccount } from '../../actions/walletSimple';
 import { fetchMyself } from '../../actions/users';
@@ -37,7 +37,7 @@ const governanceTabs = [
 
 
 const Governance = ({
-  user, fetchMyself, governanceNodesGet, getOrganization, governance, rawSelectedNodes, voteForNodes, walletGetAccount, governanceNodesGetWithSelected,
+  user, governanceNodesAll, governanceNodesSelected, getOrganization, governance, rawSelectedNodes, voteForNodes, walletGetAccount,
 }) => {
   const [electionVisibility, setElectionVisibility] = useState(false);
   const [confirmationVisibility, setConfirmationVisibility] = useState(false);
@@ -46,20 +46,23 @@ const Governance = ({
   const currentNodeVisibility = findKey(nodeVisibility, i => i);
   const organizationId = getUosGroupId();
 
-  const fetchMyselfAndNodes = async () => {
-    const user = await fetchMyself();
-    if (user && user.id) {
-      await governanceNodesGetWithSelected(user.id);
-      await walletGetAccount(user.accountName);
-    } else {
-      await governanceNodesGet();
+  useEffect(() => {
+    loader.start();
+    governanceNodesAll();
+    loader.done();
+  }, []);
+
+  useEffect(() => {
+    if (user.id) {
+      loader.start();
+      governanceNodesSelected(user.id);
+      loader.done();
     }
-  };
+  }, [user.id]);
 
   useEffect(() => {
     loader.start();
     getOrganization(organizationId);
-    fetchMyselfAndNodes();
     loader.done();
   }, [organizationId]);
 
@@ -81,7 +84,8 @@ const Governance = ({
     setElectionVisibility(false);
     setCloseVisibility(false);
     walletGetAccount(user.accountName);
-    governanceNodesGet(user.id);
+    governanceNodesAll();
+    governanceNodesSelected(user.id);
     getOrganization(organizationId);
   };
 
@@ -257,7 +261,7 @@ export default connect(state => ({
   wallet: state.wallet,
   rawSelectedNodes: getSelectedNodes(state),
 }), {
-  governanceNodesGet,
+  governanceNodesAll,
   governanceHideVotePopup,
   governanceShowVotePopup,
   getOrganization,
@@ -265,5 +269,5 @@ export default connect(state => ({
   walletGetAccount,
   fetchMyself,
   walletToggleEditStake,
-  governanceNodesGetWithSelected,
+  governanceNodesSelected,
 })(Governance);

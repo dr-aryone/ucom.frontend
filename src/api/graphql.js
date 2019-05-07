@@ -345,7 +345,7 @@ export default {
     }
   },
 
-  async getAllNodesWithSelected(
+  async getNodesSelected(
     userId,
     orderBy = '-bp_status',
     page = 1,
@@ -355,29 +355,12 @@ export default {
     const BLOCK_PRODUCERS = Dictionary.BlockchainNodes.typeBlockProducer();
     const CALCULATOR_NODES = Dictionary.BlockchainNodes.typeCalculator();
 
-    const blockProducers = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
-      ...commonParams,
-      filters: {
-        myselfVotesOnly: false,
-        blockchainNodesType: BLOCK_PRODUCERS,
-      },
-    }));
-
     const isVotedBlockProducers = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
       ...commonParams,
       filters: {
         myselfVotesOnly: true,
         userId,
         blockchainNodesType: BLOCK_PRODUCERS,
-      },
-    }));
-
-
-    const calculatorsNodes = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
-      ...commonParams,
-      filters: {
-        myselfVotesOnly: false,
-        blockchainNodesType: CALCULATOR_NODES,
       },
     }));
 
@@ -391,7 +374,7 @@ export default {
     }));
 
     const partsWithAliases = {
-      blockProducers, isVotedBlockProducers, isVotedCalculatorsNodes, calculatorsNodes,
+      isVotedBlockProducers, isVotedCalculatorsNodes,
     };
 
     const query = GraphQLSchema.getQueryMadeFromPartsWithAliases(partsWithAliases);
@@ -399,10 +382,6 @@ export default {
     try {
       const data = await request({ query });
       return {
-        nodes: {
-          [BLOCK_PRODUCERS]: data.data.blockProducers,
-          [CALCULATOR_NODES]: data.data.calculatorsNodes,
-        },
         selectedNodes: {
           [BLOCK_PRODUCERS]: data.data.isVotedBlockProducers,
           [CALCULATOR_NODES]: data.data.isVotedCalculatorsNodes,
