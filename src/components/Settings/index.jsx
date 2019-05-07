@@ -56,7 +56,8 @@ const Settings = (props) => {
         paddingBottom="50vh" // TODO: Change to 25vh when social keys enabled
       >
         <Content
-          fixWidth
+          // fixWidth
+          fullWidth
           onClickClose={() => props.dispatch(settingsHide())}
         >
           <div className={styles.settings}>

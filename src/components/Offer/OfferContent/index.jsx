@@ -13,7 +13,7 @@ const OfferContent = props => (
   <Fragment>
     <Fragment>
       {props.score && props.score !== 0 && AirdropStatuses.NO_PARTICIPATION !== props.status ?
-        <div className={styles.score}>Your GitHub score <span>{formatNumber(props.score)}</span></div>
+        <div className={styles.score}>Your GitHub score <span>{formatNumber(props.score.toFixed(2))}</span></div>
       : null}
       {AirdropStatuses.NO_PARTICIPATION === props.status ?
         <div className={styles.score}>
@@ -37,8 +37,8 @@ const OfferContent = props => (
       {props.tokens &&
         <Fragment>
           <div className={styles.progress}>
-            <div className={styles.tokenLeft}>UOS Left {(props.tokens[0].amountLeft).toLocaleString('ru-RU')}</div>
-            <div className={styles.tokenTotal}>from {(props.tokens[0].amountClaim).toLocaleString('ru-RU')}</div>
+            <div className={styles.tokenLeft}>UOS Left {formatNumber(props.tokens[0].amountLeft)}</div>
+            <div className={styles.tokenTotal}>from {formatNumber(props.tokens[0].amountClaim)}</div>
           </div>
           <ProgressBar
             className={styles.filler}
@@ -46,8 +46,8 @@ const OfferContent = props => (
           />
 
           <div className={styles.progress}>
-            <div className={styles.tokenLeft}>UOS.Futures Left {(props.tokens[1].amountLeft).toLocaleString('ru-RU')}</div>
-            <div className={styles.tokenTotal}>from {(props.tokens[1].amountClaim).toLocaleString('ru-RU')}</div>
+            <div className={styles.tokenLeft}>UOS.Futures Left {formatNumber(props.tokens[1].amountLeft)}</div>
+            <div className={styles.tokenTotal}>from {formatNumber(props.tokens[1].amountClaim)}</div>
           </div>
           <ProgressBar
             className={styles.filler}

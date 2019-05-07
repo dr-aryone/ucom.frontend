@@ -44,7 +44,7 @@ const UserCardLine = (props) => {
           <div className={styles.nameGh}><span className={styles.nameGhPlaceholder}>GitHub</span>{props.nameGh}</div>
         </div>
         <div className={styles.blockScore}>
-          <div>{formatNumber(props.rate)}</div>
+          <div>{formatNumber(props.rate.toFixed(2))}</div>
         </div>
       </LinkTag>
     </Fragment>

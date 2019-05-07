@@ -9,8 +9,8 @@ import Avatar from '../../Avatar';
 import { sanitizeText } from '../../../utils/text';
 import Countdown from '../../Countdown';
 import Followers from '../../Followers';
-import Popup from '../../Popup';
-import ModalContent from '../../ModalContent';
+import Popup, { Content } from '../../Popup';
+// import ModalContent from '../../ModalContent';
 import UserListAirdrop from '../../User/UsersListAirdrop';
 import { mapUserDataToFollowersProps } from '../../../utils/user';
 import { authShowPopup } from '../../../actions/auth';
@@ -34,6 +34,8 @@ const OfferCard = (props) => {
   const callAuthShowPopup = () => {
     props.authShowPopup();
   };
+
+  console.log('finishedAt: ', props.finishedAt);
 
   // const checkSizeWindow = () => {
   //   if (window.scrollY > 485 && window.innerWidth < 414) {
@@ -59,9 +61,16 @@ const OfferCard = (props) => {
     <Fragment>
       {popupVisible && (
         <Popup onClickClose={() => setPopupVisible(false)}>
-          <ModalContent mod="airdrop" onClickClose={() => setPopupVisible(false)}>
+          <Content
+            mod="airdrop"
+            fixWidth
+            onClickClose={() => {
+              setPopupVisible(false);
+              // props.dispatch(settingsHide());
+            }}
+          >
             <UserListAirdrop users={props.users} title={props.title} metadata={props.metadata} onChangePage={props.onChangePage} />
-          </ModalContent>
+          </Content>
         </Popup>
       )}
       <div
