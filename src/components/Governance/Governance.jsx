@@ -9,7 +9,7 @@ import ModalContent from '../ModalContent';
 import OrganizationHead from '../Organization/OrganizationHead';
 import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForNodes } from '../../actions/governance';
 import { getOrganization } from '../../actions/organizations';
-import { walletToggleEditStake } from '../../actions/walletSimple';
+import { walletToggleEditStake, walletGetAccount } from '../../actions/walletSimple';
 import { fetchMyself } from '../../actions/users';
 import { getSelectedNodes } from '../../store/governance';
 import { selectUser } from '../../store/selectors/user';
@@ -49,6 +49,7 @@ const Governance = ({
   const fetchMyselfAndNodes = async () => {
     const data = await fetchMyself();
     await governanceNodesGet(data.id);
+    await walletGetAccount(data.accountName);
   };
 
   useEffect(() => {
@@ -255,6 +256,7 @@ export default connect(state => ({
   governanceShowVotePopup,
   getOrganization,
   voteForNodes,
+  walletGetAccount,
   fetchMyself,
   walletToggleEditStake,
 })(Governance);
