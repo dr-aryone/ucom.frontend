@@ -48,19 +48,17 @@ const Governance = ({
 
 
   useEffect(() => {
-    withLoader(governanceNodesAll);
+    withLoader(governanceNodesAll());
   }, []);
 
   useEffect(() => {
-    withLoader(() => {
-      if (user.id) {
-        governanceNodesSelected(user.id);
-      }
-    });
+    if (user.id) {
+      withLoader(governanceNodesSelected(user.id));
+    }
   }, [user.id]);
 
   useEffect(() => {
-    withLoader(() => getOrganization(organizationId));
+    withLoader(getOrganization(organizationId));
   }, [organizationId]);
 
   const tableBP = governance.nodes.data[BLOCK_PRODUCERS];

@@ -18,7 +18,6 @@ export const governanceShowVotePopup = () => (dispatch) => {
 };
 
 export const governanceNodesAll = () => async (dispatch) => {
-  loader.start();
   dispatch(governanceNodesSetLoading(true));
 
   try {
@@ -34,12 +33,10 @@ export const governanceNodesAll = () => async (dispatch) => {
     console.error(e);
   }
 
-  loader.done();
   dispatch(governanceNodesSetLoading(false));
 };
 
 export const governanceNodesSelected = userId => async (dispatch, getState) => {
-  loader.start();
   dispatch(governanceNodesSetLoading(true));
   const state = getState();
 
@@ -59,8 +56,6 @@ export const governanceNodesSelected = userId => async (dispatch, getState) => {
   } catch (e) {
     console.error(e);
   }
-
-  loader.done();
   dispatch(governanceNodesSetLoading(false));
 };
 

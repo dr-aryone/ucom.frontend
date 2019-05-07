@@ -1,7 +1,14 @@
 import loader from './loader';
 
-export default async (func) => {
-  await loader.start();
-  await func();
-  await loader.done();
+export default (promise) => {
+  loader.start();
+  promise
+    .then((e) => {
+      loader.done();
+      return e;
+    })
+    .catch((e) => {
+      loader.done();
+      throw e;
+    });
 };
