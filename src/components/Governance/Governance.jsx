@@ -79,6 +79,7 @@ const Governance = ({
     governanceNodesGet(user.id);
     getOrganization(organizationId);
   };
+
   return (
     <LayoutBase>
       {electionVisibility && (
