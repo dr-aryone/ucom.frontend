@@ -7,7 +7,7 @@ import { formatRate } from '../../utils/rate';
 import styles from './GovernanceBlock.css';
 
 const GovernanceBlock = ({
-  title, description, table, visibility, onClickTick, /* rate, voters, */ myVotes, onClickVoteButton,
+  title, description, table, visibility, onClickTick, /* rate, voters, */ myVotes, onClickVoteButton, isAuth,
 }) => (
   <div className={styles.block}>
     <div role="presentation" onClick={() => onClickTick()} className={styles.switch} >
@@ -24,23 +24,28 @@ const GovernanceBlock = ({
       <div className="governance__text governance__text_small governance__text_description">
         {description}
       </div>
-      <div className={`${styles.info} ${styles.votes}`}>
-        {/* <span className={styles.item}>{formatRate(voters)} voters</span> */}
-        {myVotes ? <span className={styles.item}>You casted <span className={styles.accent} >{formatRate(myVotes) } votes</span></span> :
-        <span> You didn’t vote </span>}
-      </div>
+
+      {isAuth &&
+        <div className={`${styles.info} ${styles.votes}`}>
+          {/* <span className={styles.item}>{formatRate(voters)} voters</span> */}
+          {myVotes ? <span className={styles.item}>You casted <span className={styles.accent} >{formatRate(myVotes) } votes</span></span> :
+          <span> You didn’t vote </span>}
+        </div>
+      }
 
       {visibility &&
         <Fragment>
-          <div className={styles.button}>
-            <Button
-              size="small"
-              theme="red"
-              text="Go to Voting"
-              isStretched
-              onClick={onClickVoteButton}
-            />
-          </div>
+          {isAuth &&
+            <div className={styles.button}>
+              <Button
+                size="small"
+                theme="red"
+                text="Go to Voting"
+                isStretched
+                onClick={onClickVoteButton}
+              />
+            </div>
+          }
           <div className="governance-all__table">
             <GovernanceTable
               data={table}

@@ -7,7 +7,7 @@ import Button from '../Button';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
 import OrganizationHead from '../Organization/OrganizationHead';
-import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForNodes } from '../../actions/governance';
+import { governanceNodesGet, governanceHideVotePopup, governanceShowVotePopup, voteForNodes, governanceNodesGetWithSelected } from '../../actions/governance';
 import { getOrganization } from '../../actions/organizations';
 import { walletToggleEditStake, walletGetAccount } from '../../actions/walletSimple';
 import { fetchMyself } from '../../actions/users';
@@ -37,7 +37,7 @@ const governanceTabs = [
 
 
 const Governance = ({
-  user, fetchMyself, governanceNodesGet, getOrganization, governance, rawSelectedNodes, voteForNodes, walletGetAccount,
+  user, fetchMyself, governanceNodesGet, getOrganization, governance, rawSelectedNodes, voteForNodes, walletGetAccount, governanceNodesGetWithSelected,
 }) => {
   const [electionVisibility, setElectionVisibility] = useState(false);
   const [confirmationVisibility, setConfirmationVisibility] = useState(false);
@@ -47,9 +47,13 @@ const Governance = ({
   const organizationId = getUosGroupId();
 
   const fetchMyselfAndNodes = async () => {
-    const data = await fetchMyself();
-    await governanceNodesGet(data.id);
-    await walletGetAccount(data.accountName);
+    const user = await fetchMyself();
+    if (user && user.id) {
+      await governanceNodesGetWithSelected(user.id);
+      await walletGetAccount(user.accountName);
+    } else {
+      await governanceNodesGet();
+    }
   };
 
   useEffect(() => {
@@ -210,8 +214,9 @@ const Governance = ({
               <div>
                 {tableBP && tableBP.length > 0 &&
                   <GovernanceBlock
+                    isAuth={!!user.id}
                     onClickVoteButton={() => setElectionVisibility(true)}
-                    myVotes={rawSelectedNodes[BLOCK_PRODUCERS].length}
+                    myVotes={rawSelectedNodes[BLOCK_PRODUCERS] && rawSelectedNodes[BLOCK_PRODUCERS].length}
                     voters={12345}
                     rate={15000}
                     onClickTick={() => setNodeVisibility({ [CALCULATOR_NODES]: false, [BLOCK_PRODUCERS]: !nodeVisibility[BLOCK_PRODUCERS] })}
@@ -223,8 +228,9 @@ const Governance = ({
                 }
                 {tableCN && tableCN.length > 0 &&
                   <GovernanceBlock
+                    isAuth={!!user.id}
                     onClickVoteButton={() => setElectionVisibility(true)}
-                    myVotes={rawSelectedNodes[CALCULATOR_NODES].length}
+                    myVotes={rawSelectedNodes[CALCULATOR_NODES] && rawSelectedNodes[CALCULATOR_NODES].length}
                     voters={12345}
                     rate={15000}
                     onClickTick={() => setNodeVisibility({ [BLOCK_PRODUCERS]: false, [CALCULATOR_NODES]: !nodeVisibility[CALCULATOR_NODES] })}
@@ -259,4 +265,5 @@ export default connect(state => ({
   walletGetAccount,
   fetchMyself,
   walletToggleEditStake,
+  governanceNodesGetWithSelected,
 })(Governance);

@@ -17,12 +17,33 @@ export const governanceShowVotePopup = () => (dispatch) => {
   dispatch({ type: 'GOVERNANCE_NODES_SET_POPUP_VISIBILE', payload: true });
 };
 
-export const governanceNodesGet = id => async (dispatch) => {
+export const governanceNodesGet = () => async (dispatch) => {
   loader.start();
   dispatch(governanceNodesSetLoading(true));
 
   try {
-    const data = await graphql.getAllNodes(id);
+    const data = await graphql.getAllNodes();
+    const nodes = Object.keys(data.nodes)
+      .reduce((result, nodeType) => ({
+        ...result,
+        [nodeType]: data.nodes[nodeType].data,
+      }), {});
+
+    dispatch(governanceNodesSetData(nodes));
+  } catch (e) {
+    console.error(e);
+  }
+
+  loader.done();
+  dispatch(governanceNodesSetLoading(false));
+};
+
+export const governanceNodesGetWithSelected = userId => async (dispatch) => {
+  loader.start();
+  dispatch(governanceNodesSetLoading(true));
+
+  try {
+    const data = await graphql.getAllNodesWithSelected(userId);
     const nodes = Object.keys(data.nodes)
       .reduce((result, nodeType) => ({
         ...result,
