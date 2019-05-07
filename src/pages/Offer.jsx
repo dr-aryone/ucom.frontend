@@ -218,7 +218,7 @@ export const getPostOfferData = async (store) => {
     const postId = getAirdropOfferId();
     const data = await store.dispatch(getOnePostOfferWithUserAirdrop({ postId }));
     return ({
-      contentMetaTags: getContentMetaTags(data),
+      contentMetaTags: getContentMetaTags(data.onePostOffer),
     });
   } catch (e) {
     throw e;
