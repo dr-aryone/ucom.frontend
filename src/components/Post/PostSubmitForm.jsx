@@ -1,4 +1,3 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { Fragment, useState } from 'react';
 import TextareaAutosize from '../TextareaAutosize';
@@ -15,7 +14,7 @@ import CreateBy from '../CreateBy';
 
 const PostSubmitForm = (props) => {
   const entityImages = props.post.data.entityImages || {};
-  const [loading, setLoading] = useState(false);
+  const [loadingCover, setLoadingCover] = useState(false);
 
   return (
     <div className="post-submit-form">
@@ -49,7 +48,7 @@ const PostSubmitForm = (props) => {
               }
 
               loader.start();
-              setLoading(true);
+              setLoadingCover(true);
 
               try {
                 const data = await api.uploadPostImage(await compressUploadedImage(file));
@@ -60,7 +59,7 @@ const PostSubmitForm = (props) => {
               }
 
               loader.done();
-              setLoading(false);
+              setLoadingCover(false);
             }}
           />
         </label>
@@ -97,7 +96,7 @@ const PostSubmitForm = (props) => {
           theme="red"
           size="small"
           text="Publish"
-          isDisabled={!props.post.isValid || loading}
+          isDisabled={!props.post.isValid || loadingCover || props.loading}
           onClick={() => props.onSubmit && props.onSubmit()}
         />
       </div>
@@ -105,12 +104,9 @@ const PostSubmitForm = (props) => {
   );
 };
 
-export default connect(
-  state => ({
-    post: state.post,
-  }),
-  dispatch => bindActionCreators({
-    setDataToStoreToLS,
-    addErrorNotification,
-  }, dispatch),
-)(PostSubmitForm);
+export default connect(state => ({
+  post: state.post,
+}), {
+  setDataToStoreToLS,
+  addErrorNotification,
+})(PostSubmitForm);
