@@ -15,6 +15,7 @@ import ShareBlock from '../../ShareBlock';
 import styles from './styles.css';
 import { authShowPopup } from '../../../actions/auth';
 import IconTelegram from '../../Icons/Socials/TelegramBlack';
+import formatNumber from '../../../utils/formatNumber';
 
 const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
@@ -37,7 +38,8 @@ const OfferSidebar = (props) => {
         conditions.airdropStatus === AirdropStatuses.RECEIVED) ||
         (conditions.conditions.authGithub === true &&
           conditions.conditions.authMyself === true &&
-          conditions.conditions.followingDevExchange === true)) &&
+          conditions.conditions.followingDevExchange === true &&
+          conditions.airdropStatus !== AirdropStatuses.NO_PARTICIPATION)) &&
           <div className={styles.airdrop}>
             <div className={styles.status}>
               <div>Airdrop Status:</div>
@@ -60,11 +62,11 @@ const OfferSidebar = (props) => {
             </div>
             <div className={styles.tokens}>
               <div className={styles.tokensColumn}>
-                <div className={styles.tokenNumber}>{(conditions.tokens[0].amountClaim).toLocaleString('ru-RU')}</div>
+                <div className={styles.tokenNumber}>{formatNumber(conditions.tokens[0].amountClaim)}</div>
                 <span className={styles.tokenCurr}>UOS</span>
               </div>
               <div className={styles.tokensColumn}>
-                <div className={styles.tokenNumber}>{(conditions.tokens[1].amountClaim).toLocaleString('ru-RU')}</div>
+                <div className={styles.tokenNumber}>{formatNumber(conditions.tokens[1].amountClaim)}</div>
                 <span className={styles.tokenCurr}>UOS.Futures</span>
               </div>
             </div>

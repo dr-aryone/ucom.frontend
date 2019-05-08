@@ -5,7 +5,7 @@
   padding: 12px;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: minmax(max-content, 275px) 1fr 1fr;
+  grid-template-columns: minmax(max-content, 253px) 1fr 1fr;
   grid-row-gap: 20px;
   align-items: center;
 }
@@ -35,7 +35,7 @@
   text-align: left;
   display: flex;
   align-items: center;
-  max-width: 300px;
+  max-width: 253px;
   width: 100%;
 }
 
@@ -55,7 +55,6 @@
 }
 
 .blockScoreTitle {
-  max-width: 103px;
   width: 100%;
   text-align: right;
   color: #1B1E1E;
@@ -78,7 +77,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  max-width: 170px;
+  max-width: 140px;
 }
 
 .nameGh {
@@ -101,7 +100,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  max-width: 170px;
+  max-width: 140px;
 }
 
 .order {
@@ -126,15 +125,17 @@
 }
 
 .userCardTitle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   max-width: 600px;
   width: 100%;
   height: 50px;
   padding: 12px;
   box-sizing: border-box;
   border-bottom: 1px solid #E7ECEC;
+  display: grid;
+  grid-template-columns: minmax(max-content, 253px) 1fr 1fr;
+  grid-row-gap: 20px;
+  align-items: center;
+  min-width: 600px;
 }
 
 @media(max-width: 767px) {
