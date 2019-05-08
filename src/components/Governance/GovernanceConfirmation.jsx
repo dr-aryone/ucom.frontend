@@ -5,21 +5,23 @@ import Avatar from '../Avatar';
 import { IconOK, IconNo } from '../Icons/GovernanceIcons';
 import Panel from '../Panel/Panel';
 import urls from '../../utils/urls';
+import mergeArraysByProperty from '../../utils/mergeArraysByProperty';
 import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 
 const GovernanceConfirmation = (props) => {
   const [idList, setListId] = useState([]);
   const [panelActive, setPanelActive] = useState(false);
 
-  useEffect(() => {
-    setListId(props.selectedNodes.map(e => e.id));
-  }, []);
-
   const list = props.table.filter(i => idList.includes(i.id));
   const currentIdList = props.selectedNodes.map(e => e.id);
   const listToVote = list.filter(i => currentIdList.includes(i.id));
   const listToUnvote = list.filter(i => !currentIdList.includes(i.id));
   const listToText = listToVote.map(e => e.title);
+
+  useEffect(() => {
+    setListId(mergeArraysByProperty(props.oldSelectedNodes, props.selectedNodes, 'id').map(e => e.id));
+  }, []);
+
   return (
     <div className="governance governance-election governance-confirmation">
       <div className="content content_base content_base_low">

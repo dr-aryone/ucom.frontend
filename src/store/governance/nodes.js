@@ -1,5 +1,6 @@
 const getInitialState = () => ({
   data: {},
+  selectedData: {},
   votePopupVisibile: false,
   votePopupErrors: [],
   loading: false,
@@ -14,6 +15,12 @@ const governanceNodes = (state = getInitialState(), action) => {
       return {
         ...state,
         data: action.payload,
+      };
+
+    case 'GOVERNANCE_SELECTED_NODES_SET_DATA':
+      return {
+        ...state,
+        selectedData: action.payload,
       };
 
     case 'GOVERNANCE_NODES_SET_POPUP_VISIBILE':

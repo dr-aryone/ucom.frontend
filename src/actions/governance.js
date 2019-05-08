@@ -7,6 +7,7 @@ import { parseResponseError } from '../utils/errors';
 
 export const governanceNodesReset = payload => ({ type: 'GOVERNANCE_NODES_RESET', payload });
 export const governanceNodesSetData = payload => ({ type: 'GOVERNANCE_NODES_SET_DATA', payload });
+export const governanceSelectedNodesSetData = payload => ({ type: 'GOVERNANCE_SELECTED_NODES_SET_DATA', payload });
 export const governanceNodesSetVote = payload => ({ type: 'GOVERNANCE_NODES_SET_VOTE', payload });
 export const governanceHideVotePopup = () => ({ type: 'GOVERNANCE_NODES_SET_POPUP_VISIBILE', payload: false });
 export const governanceNodesSetLoading = payload => ({ type: 'GOVERNANCE_NODES_SET_LOADING', payload });
@@ -52,7 +53,15 @@ export const governanceNodesSelected = userId => async (dispatch, getState) => {
               .some(selectedNode => selectedNode.title === node.title),
           })),
       }), {});
+
+    const selectedNodes = Object.keys(data.selectedNodes)
+      .reduce((result, nodeType) => ({
+        ...result,
+        [nodeType]: data.selectedNodes[nodeType].data,
+      }), {});
+
     dispatch(governanceNodesSetData(nodes));
+    dispatch(governanceSelectedNodesSetData(selectedNodes));
   } catch (e) {
     console.error(e);
   }

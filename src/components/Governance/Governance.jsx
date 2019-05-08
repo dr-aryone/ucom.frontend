@@ -66,6 +66,7 @@ const Governance = ({
   const table = governance.nodes.data[currentNodeVisibility];
   const currentImportance = user.uosAccountsProperties && Math.ceil(user.uosAccountsProperties.scaledImportance * 10000);
   const selectedNodes = rawSelectedNodes[currentNodeVisibility];
+  const oldSelectedNodes = governance.nodes.selectedData[currentNodeVisibility];
 
   const setVotes = (activeKey) => {
     setConfirmationVisibility(false);
@@ -101,7 +102,7 @@ const Governance = ({
         <Popup onClickClose={() => setCloseVisibility(true)}>
           <ModalContent closeText="Close" mod="governance-election" onClickClose={() => setCloseVisibility(true)}>
             <GovernanceConfirmation {...{
-              selectedNodes, table, user, setVotes,
+              selectedNodes, table, user, setVotes, oldSelectedNodes,
             }}
             />
           </ModalContent>
