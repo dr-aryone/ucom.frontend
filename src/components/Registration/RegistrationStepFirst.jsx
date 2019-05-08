@@ -1,4 +1,3 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import React, { Fragment } from 'react';
@@ -69,11 +68,8 @@ const RegistrationStepFirst = props => (
   </div>
 );
 
-export default connect(
-  state => ({
-    registration: state.registration,
-  }),
-  dispatch => bindActionCreators({
-    registrationSetStep,
-  }, dispatch),
-)(RegistrationStepFirst);
+export default connect(state => ({
+  registration: state.registration,
+}), {
+  registrationSetStep,
+})(RegistrationStepFirst);

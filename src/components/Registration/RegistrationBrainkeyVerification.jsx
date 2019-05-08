@@ -1,4 +1,4 @@
-import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { random } from 'lodash';
 import React, { PureComponent, Fragment } from 'react';
@@ -100,10 +100,15 @@ class RegistrationBrainkeyVerification extends PureComponent {
   }
 }
 
-export default connect(
-  null,
-  dispatch => bindActionCreators({
-    registrationSetStep,
-    registrationSetBrainkeyStep,
-  }, dispatch),
-)(RegistrationBrainkeyVerification);
+RegistrationBrainkeyVerification.propTypes = {
+  registrationSetStep: PropTypes.func.isRequired,
+  registrationSetBrainkeyStep: PropTypes.func.isRequired,
+  brainkey: PropTypes.string.isRequired,
+  onComplete: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+export default connect(null, {
+  registrationSetStep,
+  registrationSetBrainkeyStep,
+})(RegistrationBrainkeyVerification);

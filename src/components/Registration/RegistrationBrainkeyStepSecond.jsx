@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -6,10 +7,6 @@ import { range, throttle } from 'lodash';
 import React, { Fragment, PureComponent } from 'react';
 import { registrationGenerateBrainkey, registrationSetBrainkeyStep } from '../../actions/registration';
 import { THIRD_BRAINKEY_STEP_ID } from '../../store/registration';
-
-if (typeof window !== 'undefined') {
-  window.test = crypto;
-}
 
 class RegistrationBrainkeyStepSecond extends PureComponent {
   constructor(props) {
@@ -92,6 +89,11 @@ class RegistrationBrainkeyStepSecond extends PureComponent {
     );
   }
 }
+
+RegistrationBrainkeyStepSecond.propTypes = {
+  registrationGenerateBrainkey: PropTypes.func.isRequired,
+  registrationSetBrainkeyStep: PropTypes.func.isRequired,
+};
 
 export default connect(
   state => ({

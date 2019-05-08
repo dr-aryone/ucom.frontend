@@ -1,4 +1,4 @@
-import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Fragment } from 'react';
 import Button from '../Button';
@@ -28,11 +28,12 @@ const RegistrationBrainkeyStepFirst = props => (
   </Fragment>
 );
 
-export default connect(
-  state => ({
-    registration: state.registration,
-  }),
-  dispatch => bindActionCreators({
-    registrationSetBrainkeyStep,
-  }, dispatch),
-)(RegistrationBrainkeyStepFirst);
+RegistrationBrainkeyStepFirst.propTypes = {
+  registrationSetBrainkeyStep: PropTypes.func.isRequired,
+};
+
+export default connect(state => ({
+  registration: state.registration,
+}), {
+  registrationSetBrainkeyStep,
+})(RegistrationBrainkeyStepFirst);
