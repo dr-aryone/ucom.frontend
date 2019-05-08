@@ -5,7 +5,7 @@ import Avatar from '../Avatar';
 import IconEnter from '../Icons/Enter';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
-import { removeCoverImage, changeCoverImageUrl, getCoverImage } from '../../utils/entityImages';
+import { removeGalleryImage, getGalleryImages, addGalleryImages } from '../../utils/entityImages';
 import TributeWrapper from '../TributeWrapper';
 import EmbedMenu from './Post/EmbedMenu';
 import FeedDragAndDrop from './Post/FeedDragAndDrop';
@@ -20,15 +20,23 @@ const FeedForm = (props) => {
   const textareaEl = useRef(null);
   const formEl = useRef(null);
   const fieldEl = useRef(null);
+  const galleryImages = getGalleryImages({ entityImages });
+  const isExistGalleryImages = !!galleryImages.length;
 
   const onImage = async (file) => {
     const data = await api.uploadPostImage(file);
-    const { url } = data.files[0];
-    setEntityImages(changeCoverImageUrl(entityImages, url));
+    const image = data.files[0];
+    setEntityImages(addGalleryImages(entityImages, [image]));
+  };
+
+  const onMultipleImages = async (files) => {
+    const data = await Promise.all(files.map(url => api.uploadPostImage(url)));
+    const urls = data.map(item => item.files[0]);
+    setEntityImages(addGalleryImages(entityImages, urls));
   };
 
   const sumbitForm = (message, entityImages) => {
-    if (typeof props.onSubmit === 'function' && (message.trim().length !== 0 || getCoverImage({ entityImages }))) {
+    if (typeof props.onSubmit === 'function' && (message.trim().length !== 0 || isExistGalleryImages)) {
       props.onSubmit(message, JSON.stringify(entityImages));
     }
   };
@@ -38,7 +46,6 @@ const FeedForm = (props) => {
   if (!user) {
     return null;
   }
-
   return (
     <form
       className="feed-form"
@@ -63,7 +70,7 @@ const FeedForm = (props) => {
               onChange={message => setMessage(message)}
               onImage={onImage}
               onParseImgUrl={(url) => {
-                setEntityImages(changeCoverImageUrl(entityImages, url));
+                setEntityImages(addGalleryImages(entityImages, [{ url }]));
               }}
             >
               <textarea
@@ -89,18 +96,27 @@ const FeedForm = (props) => {
           </div>
         </div>
       </div>
-      {getCoverImage({ entityImages }) && <Image
-        src={getCoverImage({ entityImages })}
-        onClickRemove={() => {
-          setEntityImages(removeCoverImage(entityImages));
-        }}
-      />}
+      <div className="feed-form__previews">
+        {isExistGalleryImages &&
+          galleryImages.map((url, index) => (
+            <Image
+              key={index}
+              src={url}
+              isMultiple={galleryImages.length > 1}
+              onClickRemove={() => {
+                setEntityImages(removeGalleryImage(entityImages, index));
+              }}
+            />
+          ))
+        }
+      </div>
+
       <div className="feed-form__actions">
-        <EmbedMenu onImage={onImage} />
+        <EmbedMenu onImage={onMultipleImages} />
         <button
           type="submit"
           className="feed-form__submit"
-          disabled={message.trim().length === 0 && !getCoverImage({ entityImages })}
+          disabled={message.trim().length === 0 && !isExistGalleryImages}
         >
           <IconEnter />
         </button>

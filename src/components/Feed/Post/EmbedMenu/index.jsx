@@ -36,6 +36,7 @@ const EmbedMenu = (props) => {
               <IconPhoto />
               <DropZone
                 className="drop-zone_clip"
+                multiple
                 onDrop={(file) => {
                   props.onImage(file);
                   setActive(!active);

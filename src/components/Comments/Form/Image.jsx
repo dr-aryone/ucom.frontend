@@ -1,9 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import classNames from 'classnames';
 import styles from './styles.css';
 
 const Image = props => (
-  <div className={styles.imageWrapper}>
+  <div
+    className={classNames({
+      [styles.imageWrapper]: true,
+      [styles.isMultiple]: props.isMultiple,
+    })}
+  >
     <span
       title="Remove"
       role="presentation"
@@ -22,11 +28,13 @@ Image.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string,
   onClickRemove: PropTypes.func,
+  isMultiple: PropTypes.bool,
 };
 
 Image.defaultProps = {
   alt: null,
   onClickRemove: null,
+  isMultiple: false,
 };
 
 export default Image;
