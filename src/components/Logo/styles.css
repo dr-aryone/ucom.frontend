@@ -1,0 +1,19 @@
+.logo {
+  position: relative;
+}
+
+.icon {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .mini {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .default {
+    display: block;
+  }
+}

@@ -15,6 +15,7 @@ import ShareBlock from '../../ShareBlock';
 import styles from './styles.css';
 import { authShowPopup } from '../../../actions/auth';
 import IconTelegram from '../../Icons/Socials/TelegramBlack';
+import formatNumber from '../../../utils/formatNumber';
 
 const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
@@ -37,7 +38,8 @@ const OfferSidebar = (props) => {
         conditions.airdropStatus === AirdropStatuses.RECEIVED) ||
         (conditions.conditions.authGithub === true &&
           conditions.conditions.authMyself === true &&
-          conditions.conditions.followingDevExchange === true)) &&
+          conditions.conditions.followingDevExchange === true &&
+          conditions.airdropStatus !== AirdropStatuses.NO_PARTICIPATION)) &&
           <div className={styles.airdrop}>
             <div className={styles.status}>
               <div>Airdrop Status:</div>
@@ -60,11 +62,11 @@ const OfferSidebar = (props) => {
             </div>
             <div className={styles.tokens}>
               <div className={styles.tokensColumn}>
-                <div className={styles.tokenNumber}>{(conditions.tokens[0].amountClaim).toLocaleString('ru-RU')}</div>
+                <div className={styles.tokenNumber}>{formatNumber(conditions.tokens[0].amountClaim)}</div>
                 <span className={styles.tokenCurr}>UOS</span>
               </div>
               <div className={styles.tokensColumn}>
-                <div className={styles.tokenNumber}>{(conditions.tokens[1].amountClaim).toLocaleString('ru-RU')}</div>
+                <div className={styles.tokenNumber}>{formatNumber(conditions.tokens[1].amountClaim)}</div>
                 <span className={styles.tokenCurr}>UOS.Futures</span>
               </div>
             </div>
@@ -105,7 +107,7 @@ const OfferSidebar = (props) => {
           <div className={styles.optionBlock}>
             <div
               role="presentation"
-              onClick={() => props.authShowPopup()}
+              onClick={() => (Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 ? props.authShowPopup() : null)}
               className={styles.optionTitle}
             >
               Register U°OS account
@@ -116,7 +118,7 @@ const OfferSidebar = (props) => {
         <div className={styles.option}>
           <div className={styles.optionStatus}>{conditions && conditions.conditions.followingDevExchange === true ? <Done /> : <Three />}</div>
           <div className={styles.optionBlock}>
-            <a href={`/communities/${props.organizationId}`} target="_blank" rel="noopener noreferrer" className={styles.optionTitle}>Join DevExchange</a>
+            <a href={Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 ? `/communities/${props.organizationId}` : null} target="_blank" rel="noopener noreferrer" className={styles.optionTitle}>Join DevExchange</a>
             <div className={styles.optionText}>to see your Importance in action and talk to community members</div>
           </div>
         </div>

@@ -5,7 +5,7 @@ import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { initNotificationsListeners, siteNotificationsSetUnreadAmount } from '../actions/siteNotifications';
 import { fetchMyself } from '../actions/users';
-import UserMenu from './UserMenu/UserMenu';
+// import UserMenu from './UserMenu/UserMenu';
 import Page from './Page';
 import Auth from './Auth';
 import Notifications from './Notifications';
@@ -57,7 +57,7 @@ const App = (props) => {
         </Switch>
 
         <Auth />
-        <UserMenu />
+        {/* <UserMenu /> */}
       </Page>
 
       {props.settings.visible && <Settings />}

@@ -1,3 +1,4 @@
+// TODO: Remove this and all dependencies
 import React, { PureComponent, Fragment } from 'react';
 import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';

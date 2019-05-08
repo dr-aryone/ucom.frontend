@@ -1,17 +1,21 @@
+import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { Tooltip } from 'react-tippy';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import React, { createRef, memo } from 'react';
 import IconDots from '../Icons/Dots';
 import styles from './styles.css';
 
+export const DROPDOWN_MENU_ITEM_TYPE_TITLE = 1;
+export const DROPDOWN_MENU_ITEM_TYPE_ENTRY = 2;
+export const DROPDOWN_MENU_ITEM_TYPE_LOGOUT = 3;
+
 const DropdownMenu = (props) => {
-  const tooltip = createRef();
+  const tooltipRef = createRef();
 
   return (
     <Tooltip
-      ref={tooltip}
+      ref={tooltipRef}
       arrow
       useContext
       interactive
@@ -29,10 +33,16 @@ const DropdownMenu = (props) => {
               <LinkTag
                 key={id}
                 to={item.url}
-                className={classNames({ [styles.item]: true, [styles.disabled]: item.disabled })}
+                className={classNames({
+                  [styles.item]: true,
+                  [styles.title]: item.type === DROPDOWN_MENU_ITEM_TYPE_TITLE,
+                  [styles.entry]: item.type === DROPDOWN_MENU_ITEM_TYPE_ENTRY,
+                  [styles.logout]: item.type === DROPDOWN_MENU_ITEM_TYPE_LOGOUT,
+                  [styles.disabled]: item.disabled,
+                })}
                 onClick={() => {
-                  if (tooltip.current) {
-                    tooltip.current.hideTooltip();
+                  if (tooltipRef.current) {
+                    tooltipRef.current.hideTooltip();
                   }
 
                   if (item.onClick) {
@@ -40,7 +50,10 @@ const DropdownMenu = (props) => {
                   }
                 }}
               >
-                {item.title}
+                {item.avatar}
+                <span className={styles.title}>
+                  {item.title}
+                </span>
               </LinkTag>
             );
           })}
@@ -67,6 +80,12 @@ DropdownMenu.propTypes = {
     title: PropTypes.string.isRequired,
     onClick: PropTypes.func,
     disabled: PropTypes.bool,
+    type: PropTypes.oneOf([
+      DROPDOWN_MENU_ITEM_TYPE_TITLE,
+      DROPDOWN_MENU_ITEM_TYPE_ENTRY,
+      DROPDOWN_MENU_ITEM_TYPE_LOGOUT,
+    ]),
+    avatar: PropTypes.node,
   })).isRequired,
   disabled: PropTypes.bool,
   children: PropTypes.node,

@@ -1,3 +1,4 @@
+// TODO: Refactoring
 require('babel-register')({
   presets: ['env', 'react', 'stage-2', 'es2015', 'stage-0'],
 });
@@ -28,10 +29,25 @@ routes.forEach((route) => {
 
         if (data && data.contentMetaTags) {
           contentMetaTags = JSON.parse(xss(JSON.stringify(data.contentMetaTags)));
+          if (contentMetaTags.path) {
+            contentMetaTags.url = `${req.protocol}://${req.hostname}${contentMetaTags.path}`;
+          }
         }
       } catch (e) {
         console.error(e);
       }
+    }
+
+    if (!contentMetaTags) {
+      contentMetaTags = {
+        type: 'website',
+        title: 'U°Community',
+        description: 'Social platform with a transparent dynamic reputation system',
+        url: `${req.protocol}://${req.hostname}${req.originalUrl}`,
+        image: `${req.protocol}://${req.hostname}/u.png`,
+        imageWidth: '512',
+        imageHeight: '512',
+      };
     }
 
     const templateData = {

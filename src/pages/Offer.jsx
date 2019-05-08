@@ -7,7 +7,7 @@ import LayoutBase from '../components/Layout/LayoutBase';
 import { fetchPost, postsFetch, getOnePostOffer, getOnePostOfferWithUserAirdrop } from '../actions/posts';
 import { getPostById } from '../store/posts';
 import OfferCard from '../components/Offer/OfferCard';
-import { getPostCover } from '../utils/posts';
+import { getPostCover, getContentMetaTags } from '../utils/posts';
 import { getUserName } from '../utils/user';
 import urls from '../utils/urls';
 import styles from './Offer.css';
@@ -58,7 +58,7 @@ const Offer = (props) => {
   const getParticipants = (page = 1) => {
     props.getManyUsers({
       airdrops: airdropId,
-      orderBy: 'score',
+      orderBy: '-score',
       page,
       perPage: 20,
     }).then((data) => {
@@ -157,6 +157,7 @@ const Offer = (props) => {
               score={conditions && conditions.score}
               tokens={post.offerData && post.offerData.tokens}
               commentsCount={post.commentsCount}
+              status={conditions && conditions.airdropStatus}
             />
           </div>
           <div className={styles.sidebar}>
@@ -171,6 +172,7 @@ const Offer = (props) => {
               token={token}
               postTypeId={post.postTypeId}
               startedAt={post.startedAt}
+              finishedAt={post.finishedAt}
               gitHubAuthLink={gitHubAuthLink}
               organizationId={post.organizationId}
             />
@@ -214,7 +216,10 @@ export default connect(
 export const getPostOfferData = async (store) => {
   try {
     const postId = getAirdropOfferId();
-    await store.dispatch(getOnePostOfferWithUserAirdrop({ postId }));
+    const data = await store.dispatch(getOnePostOfferWithUserAirdrop({ postId }));
+    return ({
+      contentMetaTags: getContentMetaTags(data.onePostOffer),
+    });
   } catch (e) {
     throw e;
   }

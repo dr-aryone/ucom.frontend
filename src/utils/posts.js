@@ -1,4 +1,5 @@
 import { truncate } from 'lodash';
+import { removeLineBreaksMultipleSpacesAndTrim } from '../utils/text';
 import urls from './urls';
 
 export const UPVOTE_STATUS = 'upvote';
@@ -122,8 +123,9 @@ export const parseMediumContent = (html) => {
   let entityImages = null;
 
   for (let i = 0; i < childNodes.length; i++) {
-    if (childNodes[i].textContent) {
-      title = truncate(childNodes[i].textContent, {
+    const textContent = removeLineBreaksMultipleSpacesAndTrim(childNodes[i].textContent);
+    if (textContent) {
+      title = truncate(textContent, {
         length: POSTS_TITLE_MAX_LENGTH,
         separator: ' ',
       });
@@ -133,8 +135,9 @@ export const parseMediumContent = (html) => {
   }
 
   for (let i = 0; i < childNodes.length; i++) {
-    if (childNodes[i].textContent) {
-      leadingText = truncate(childNodes[i].textContent, {
+    const textContent = removeLineBreaksMultipleSpacesAndTrim(childNodes[i].textContent);
+    if (textContent) {
+      leadingText = truncate(textContent, {
         length: POSTS_LEADING_TEXT_MAX_LENGTH,
         separator: ' ',
       });
@@ -157,6 +160,19 @@ export const parseMediumContent = (html) => {
   return ({
     title, leadingText, entityImages, description: html,
   });
+};
+
+export const mediumHasContent = (html = '') => {
+  if (typeof document === 'undefined') {
+    return false;
+  }
+
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  const hasTextContent = removeLineBreaksMultipleSpacesAndTrim(div.textContent).length > 0;
+  const hasImagesOrIframes = div.querySelectorAll('iframe, img').length > 0;
+
+  return hasTextContent || hasImagesOrIframes;
 };
 
 export const getContentMetaTags = (post) => {

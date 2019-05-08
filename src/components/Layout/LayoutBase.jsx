@@ -1,7 +1,8 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Fragment, useEffect } from 'react';
-import Header from '../Header/Header';
+// import Header from '../Header/Header';
+import Header from '../HeaderSimple';
 
 const LayoutBase = (props) => {
   useEffect(() => {

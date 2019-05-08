@@ -9,7 +9,10 @@ class HttpActions {
 
   getOptions(extraOptions = {}) {
     const token = getToken();
-    let options = { headers: {} };
+    let options = {
+      withCredentials: true,
+      headers: {},
+    };
 
     if (token) {
       options.headers.Authorization = `Bearer ${token}`;
