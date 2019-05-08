@@ -51,7 +51,7 @@ const Profile = (props) => {
   //   }
   // }, (isSubmited));
 
-  console.log(userData);
+  // console.log(userData);
 
   const onChange = (key, value) => {
     // console.log('key: ', key);
@@ -74,7 +74,9 @@ const Profile = (props) => {
 //   }}
 // >
   const saveProfile = () => {
-    props.userFormHandleSubmit();
+    // props.userFormHandleSubmit();
+    console.log('USERDATA: ', userData);
+    props.updateUser({ userData });
   };
 
 
