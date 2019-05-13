@@ -9,6 +9,7 @@ import { getUserById } from '../../store/users';
 import { authShowPopup } from '../../actions/auth';
 import { restoreActiveKey } from '../../utils/keys';
 import IconCheck from '../Icons/Check';
+import loader from '../../utils/loader';
 
 const OrganizationFollowButton = (props) => {
   if (!props.organizationId) {
@@ -26,14 +27,16 @@ const OrganizationFollowButton = (props) => {
 
   const text = userIsFollow ? 'Joined' : 'Join';
 
-
-  const onClick = () => {
+  const onClick = async () => {
     const activeKey = restoreActiveKey();
     if (!owner || !activeKey) {
       props.authShowPopup();
       return;
     }
-    (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner, activeKey });
+
+    loader.start();
+    await (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner, activeKey });
+    loader.done();
   };
 
   return props.asLink ? (
