@@ -9,6 +9,7 @@ import { getBpStatusById, BP_STATUS_ACTIVE_ID, LIMITER_OF_PRODUCERS } from '../.
 import { selectUser } from '../../store/selectors/user';
 import { governanceNodesSetVote } from '../../actions/governance';
 import urls from '../../utils/urls';
+import { normalizeAmount } from '../../utils/governance';
 
 const GovernanceTable = props => (
   <table className="governance-table">
@@ -72,7 +73,7 @@ const GovernanceTable = props => (
           <td className="governance-table__cell governance-table__cell_votes" data-name="Votes">
             <div className="governance-table__votes-block">{item.votesCount} <div className="governance-table__percentage">{item.votesPercentage}%</div></div>
           </td>
-          <td className="governance-table__cell governance-table__cell_amount only-pad" data-name="Vote Amount">{Math.ceil((+item.scaledImportanceAmount * 10000)).toLocaleString('ru')}</td>
+          <td className="governance-table__cell governance-table__cell_amount only-pad" data-name="Vote Amount">{Math.ceil(normalizeAmount(item.scaledImportanceAmount)).toLocaleString('ru')}</td>
           <td className="governance-table__cell governance-table__cell_state" data-name="State">
             <span
               className={classNames(

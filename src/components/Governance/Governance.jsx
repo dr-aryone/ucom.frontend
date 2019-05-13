@@ -21,6 +21,7 @@ import GovernanceConfirmation from './GovernanceConfirmation';
 import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 import { formatRate } from '../../utils/rate';
 import withLoader from '../../utils/withLoader';
+import { normalizeAmount } from '../../utils/governance';
 
 const { Dictionary } = require('ucom-libs-wallet');
 
@@ -73,7 +74,7 @@ const Governance = ({
   const tableBP = governance.nodes.data[BLOCK_PRODUCERS];
   const tableCN = governance.nodes.data[CALCULATOR_NODES];
   const table = governance.nodes.data[currentNodeVisibility];
-  const currentImportance = user.uosAccountsProperties && Math.ceil(user.uosAccountsProperties.scaledImportance * 10000);
+  const currentImportance = user.uosAccountsProperties && Math.ceil(normalizeAmount(user.uosAccountsProperties.scaledImportance));
   const selectedNodes = rawSelectedNodes[currentNodeVisibility];
   const oldSelectedNodes = governance.nodes.selectedData[currentNodeVisibility];
 
