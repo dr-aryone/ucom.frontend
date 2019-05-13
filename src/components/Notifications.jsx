@@ -15,10 +15,8 @@ const Notifications = props => (
         >
           <div className="notifications__item" key={item.id}>
             <Notification
+              {...item}
               id={item.id}
-              type={item.type}
-              title={item.title}
-              message={item.message}
             />
           </div>
         </CSSTransition>
