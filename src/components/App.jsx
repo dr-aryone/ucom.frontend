@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { Route, Switch, withRouter } from 'react-router';
 import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { initNotificationsListeners, siteNotificationsSetUnreadAmount } from '../actions/siteNotifications';
 import { fetchMyself } from '../actions/users';
-// import UserMenu from './UserMenu/UserMenu';
 import Page from './Page';
 import Auth from './Auth';
 import Notifications from './Notifications';
@@ -18,6 +16,8 @@ import BuyRam from '../components/Resources/Actions/BuyRam';
 import SellRam from '../components/Resources/Actions/SellRam';
 import EditStake from '../components/Resources/Actions/EditStake';
 import SendTokens from '../components/Resources/Actions/SendTokens';
+import { addNotification } from '../actions/notifications';
+import { NOTIFICATION_TYPE_ERROR } from '../store/notifications';
 
 const App = (props) => {
   useEffect(() => {
@@ -30,6 +30,15 @@ const App = (props) => {
 
     if (config.socketEnabled) {
       socket.connect();
+    }
+
+    if (config.maintenanceMode) {
+      props.addNotification({
+        type: NOTIFICATION_TYPE_ERROR,
+        title: 'Warning',
+        message: 'The platform is on maintenance and in a read-only mode. Please avoid posting content, it will not be published.',
+        autoClose: false,
+      });
     }
   }, []);
 
@@ -73,6 +82,7 @@ App.propTypes = {
     editStakeVisible: PropTypes.bool.isRequired,
     sendTokensVisibility: PropTypes.bool.isRequired,
   }).isRequired,
+  addNotification: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(
@@ -81,9 +91,10 @@ export default withRouter(connect(
     wallet: state.walletSimple,
     settings: state.settings,
   }),
-  dispatch => bindActionCreators({
+  {
     fetchMyself,
     initNotificationsListeners,
     siteNotificationsSetUnreadAmount,
-  }, dispatch),
+    addNotification,
+  },
 )(App));

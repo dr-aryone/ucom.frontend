@@ -41,6 +41,7 @@
   "iframely": {
     "httpEndpoint": "https://iframely.u.community/iframely"
   },
+  "maintenanceMode": true,
   "socketEnabled": true,
   "devDependencies": {
     "autoprefixer": "^8.6.3",

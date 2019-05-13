@@ -10,7 +10,9 @@ import {
 
 const Notification = (props) => {
   useEffect(() => {
-    setTimeout(props.onClose, 5000);
+    if (props.autoClose) {
+      setTimeout(props.onClose, 5000);
+    }
   }, []);
 
   return (
@@ -50,10 +52,12 @@ Notification.propTypes = {
   message: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   typeId: PropTypes.number.isRequired,
+  autoClose: PropTypes.bool,
 };
 
 Notification.defaultProps = {
   title: 'Error',
+  autoClose: true,
 };
 
 export default Notification;
