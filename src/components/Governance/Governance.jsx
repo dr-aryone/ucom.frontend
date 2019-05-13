@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'react-tippy';
-import { findKey } from 'lodash';
+import { findKey, isEmpty } from 'lodash';
 import GovernanceBlock from './GovernanceBlock';
 import Button from '../Button';
 import Popup from '../Popup';
@@ -27,6 +27,8 @@ const { Dictionary } = require('ucom-libs-wallet');
 const BLOCK_PRODUCERS = Dictionary.BlockchainNodes.typeBlockProducer();
 const CALCULATOR_NODES = Dictionary.BlockchainNodes.typeCalculator();
 
+const nodesType = { [CALCULATOR_NODES]: 'Calculator Nodes', [BLOCK_PRODUCERS]: 'Block Producers' };
+
 const governanceTabs = [
   { name: 'Network', active: true },
   { name: 'My Projects', active: false },
@@ -37,7 +39,7 @@ const governanceTabs = [
 
 
 const Governance = ({
-  user, governanceNodesAll, governanceNodesSelected, getOrganization, governance, rawSelectedNodes, voteForNodes, walletGetAccount,
+  user, governanceNodesAll, governanceNodesSelected, getOrganization, governance, rawSelectedNodes, voteForNodes,
 }) => {
   const [electionVisibility, setElectionVisibility] = useState(false);
   const [confirmationVisibility, setConfirmationVisibility] = useState(false);
@@ -46,13 +48,20 @@ const Governance = ({
   const currentNodeVisibility = findKey(nodeVisibility, i => i);
   const organizationId = getUosGroupId();
 
+  const getNodes = async () => {
+    await governanceNodesAll();
+
+    if (user.id && isEmpty(governance.nodes.selectedData)) {
+      await governanceNodesSelected(user.id);
+    }
+  };
 
   useEffect(() => {
-    withLoader(governanceNodesAll());
+    withLoader(getNodes());
   }, []);
 
   useEffect(() => {
-    if (user.id) {
+    if (user.id && !isEmpty(governance.nodes.data)) {
       withLoader(governanceNodesSelected(user.id));
     }
   }, [user.id]);
@@ -77,12 +86,7 @@ const Governance = ({
 
   const close = () => {
     setConfirmationVisibility(false);
-    setElectionVisibility(false);
     setCloseVisibility(false);
-    walletGetAccount(user.accountName);
-    governanceNodesAll();
-    governanceNodesSelected(user.id);
-    getOrganization(organizationId);
   };
 
   return (
@@ -110,10 +114,10 @@ const Governance = ({
       )}
 
       {closeVisibility && (
-        <Popup onClickClose={() => setCloseVisibility(false)}>
-          <ModalContent mod="governance-close" onClickClose={() => setCloseVisibility(false)}>
+        <Popup onClickClose={() => close()}>
+          <ModalContent mod="governance-close" >
             <div className="governance-close">
-              <h3 className="title_small title_bold governance-close__title">You didn&apos;t vote for the 30 selected Block Producers</h3>
+              <h3 className="title_small title_bold governance-close__title">You didn&apos;t vote for the 30 selected {nodesType[currentNodeVisibility]}</h3>
               <div className="governance-buttons">
                 <div className="governance-button">
                   <Button

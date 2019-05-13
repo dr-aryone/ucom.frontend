@@ -15,7 +15,7 @@ const GovernanceTable = props => (
     {!props.withoutTable &&
       <thead className="governance-table__head">
         <tr className="governance-table__row">
-          {props.user.id &&
+          {((props.user.id && props.data.some(i => i.isVoted) && props.isPreview) || (!props.isPreview)) &&
             <td className="governance-table__cell governance-table__cell_id" />
           }
           <td className="governance-table__cell governance-table__cell_name">
@@ -24,12 +24,16 @@ const GovernanceTable = props => (
             </span>
           </td>
           <td className="governance-table__cell governance-table__cell_votes">Votes</td>
-          <td className="governance-table__cell governance-table__cell_amount only-pad">Vote Amount, UOS</td>
+          <td className="governance-table__cell governance-table__cell_amount only-pad">Vote Amount</td>
           <td className="governance-table__cell governance-table__cell_state">State</td>
         </tr>
       </thead>
     }
-    <tbody className="governance-table__body">
+    <tbody className={classNames({
+      'governance-table__body': true,
+      'governance-table__body_auto-width': !props.withoutTable,
+    })}
+    >
       {props.data.map(item => (
         <tr className="governance-table__row" key={item.id}>
           {(() => {
@@ -56,7 +60,7 @@ const GovernanceTable = props => (
                   </div>
                 </td>
               );
-            } else if (props.user.id && props.isPreview) {
+            } else if ((props.user.id && props.isPreview && props.data.some(i => i.isVoted)) || (!props.isPreview)) {
               return (
                 <td className="governance-table__cell governance-table__cell_id" data-name="" />
               );
@@ -68,7 +72,7 @@ const GovernanceTable = props => (
           <td className="governance-table__cell governance-table__cell_votes" data-name="Votes">
             <div className="governance-table__votes-block">{item.votesCount} <div className="governance-table__percentage">{item.votesPercentage}%</div></div>
           </td>
-          <td className="governance-table__cell governance-table__cell_amount only-pad" data-name="Vote Amount">{Math.ceil((+item.scaledImportanceAmount * 10000)).toLocaleString()}</td>
+          <td className="governance-table__cell governance-table__cell_amount only-pad" data-name="Vote Amount">{Math.ceil((+item.scaledImportanceAmount * 10000)).toLocaleString('ru')}</td>
           <td className="governance-table__cell governance-table__cell_state" data-name="State">
             <span
               className={classNames(

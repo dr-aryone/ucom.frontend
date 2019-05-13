@@ -24,11 +24,14 @@
   
   .governance-table__cell {
     border-bottom: 1px solid #E8ECEC;
-    padding: 24px 18px;
   }
 
   @media (max-width: 767px) {
     margin-left: -40px;
+  }
+
+  .governance-table__cell_amount, .governance-table__cell_votes {
+    justify-content: flex-end;
   }
 }
 
@@ -85,15 +88,19 @@
 }
 
 .governance-table__cell_votes {
-  width: 76px;
+  width: 77px;
 }
 
 .governance-table__cell_amount {
   width: 161px;
+  padding-right: 25px;
+
 }
 
 .governance-table__cell_state {
-  width: 86px;
+  width: 100px;
+  text-align: left;
+  padding-left: 25px;
 }
 
 .governance-table__cell_id {
@@ -109,10 +116,13 @@
     .governance-table__cell_name {
       font-weight: 700;
     }
+
+    &:hover {
+      background-color:  #F8F8F9;
+    }
   }
 
   .governance-table__cell {
-    width: auto;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -120,6 +130,12 @@
   .governance-table__cell_state {
     overflow: unset;
 
+  }
+}
+
+.governance-table__body_auto-width {
+  .governance-table__cell {
+    width: auto;
   }
 }
 

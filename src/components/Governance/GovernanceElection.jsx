@@ -121,7 +121,7 @@ const GovernanceElection = (props) => {
                   </span>
                 </div>
                 <div className="governance-table__cell governance-table__cell_votes">Votes</div>
-                <div className="governance-table__cell only-pad governance-table__cell_amount">Vote Amount, UOS</div>
+                <div className="governance-table__cell only-pad governance-table__cell_amount">Vote Amount</div>
                 <div className="governance-table__cell governance-table__cell_state">State</div>
               </div>
             </div>
