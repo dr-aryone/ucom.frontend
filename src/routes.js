@@ -53,6 +53,10 @@ export default [{
   component: Offer,
   getData: getPostOfferData,
 }, {
+  path: '/github',
+  component: Offer,
+  getData: getPostOfferData,
+}, {
   path: '/posts/:postId',
   component: PostPage,
   getData: getPostPageData,
@@ -97,8 +101,7 @@ export default [{
 }, {
   path: '/tags/:title',
   component: Tag,
-},
-{
+}, {
   path: '/faq',
   component: Faq,
 },

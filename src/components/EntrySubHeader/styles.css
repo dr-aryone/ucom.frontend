@@ -6,7 +6,6 @@
 :local(.wrapperOffer) {
   position: relative;
   margin: 100px 0 0;
-  z-index: 9;
 }
 
 :local(.subHeader) {

@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Avatar from '../Avatar';
-import Button from '../Button';
+import IconEnter from '../Icons/Enter';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
 import { removeCoverImage, changeCoverImageUrl, getCoverImage } from '../../utils/entityImages';
-import IconClip from '../Icons/Clip';
-import IconClose from '../Icons/Close';
-import DropZone from '../DropZone';
 import TributeWrapper from '../TributeWrapper';
+import EmbedMenu from './Post/EmbedMenu';
+import FeedDragAndDrop from './Post/FeedDragAndDrop';
+import Image from '../Comments/Form/Image';
 import urls from '../../utils/urls';
 import api from '../../api';
 
@@ -17,6 +17,9 @@ const FeedForm = (props) => {
   const initialText = props.initialText ? `#${props.initialText} ` : false;
   const [message, setMessage] = useState(props.message || initialText || '');
   const [entityImages, setEntityImages] = useState(props.entityImages);
+  const textareaEl = useRef(null);
+  const formEl = useRef(null);
+  const fieldEl = useRef(null);
 
   const onImage = async (file) => {
     const data = await api.uploadPostImage(file);
@@ -43,101 +46,70 @@ const FeedForm = (props) => {
         e.preventDefault();
         sumbitForm(message, entityImages);
       }}
+      ref={formEl}
     >
       <div className="feed-form__field">
         <div className="feed-form__avatar">
           <Avatar src={urls.getFileUrl(user.avatarFilename)} />
         </div>
 
-        <div className="feed-form__message">
-          <TributeWrapper
-            enabledImgUrlParse
-            onChange={message => setMessage(message)}
-            onImage={onImage}
-            onParseImgUrl={(url) => {
-              setEntityImages(changeCoverImageUrl(entityImages, url));
-            }}
-          >
-            <textarea
-              autoFocus
-              rows="4"
-              className="feed-form__textarea"
-              placeholder="Leave a comment"
-              value={message}
-              onChange={e => setMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if ((e.ctrlKey && e.keyCode === 13) || (e.metaKey && e.keyCode === 13)) {
-                  e.preventDefault();
-                  sumbitForm(message, entityImages);
-                }
+        <div
+          className="feed-form__message"
+          ref={fieldEl}
+        >
+          <div className="feed-form__container">
+            <TributeWrapper
+              enabledImgUrlParse
+              onChange={message => setMessage(message)}
+              onImage={onImage}
+              onParseImgUrl={(url) => {
+                setEntityImages(changeCoverImageUrl(entityImages, url));
+              }}
+            >
+              <textarea
+                ref={textareaEl}
+                autoFocus
+                rows="4"
+                className="feed-form__textarea"
+                placeholder="Leave a comment"
+                value={message}
+                onChange={e => setMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if ((e.ctrlKey && e.keyCode === 13) || (e.metaKey && e.keyCode === 13)) {
+                    e.preventDefault();
+                    sumbitForm(message, entityImages);
+                  }
+                }}
+              />
+            </TributeWrapper>
+            <FeedDragAndDrop {...{
+                onImage, textareaEl, formEl, fieldEl,
               }}
             />
-          </TributeWrapper>
-        </div>
-
-        <div>
-          <label name="img" className="feed-form__clip">
-            <IconClip />
-          </label>
-
-          {getCoverImage({ entityImages }) ? (
-            <div className="cover cover_small">
-              <div className="cover__inner">
-                <div className="cover__remove">
-                  <button
-                    type="button"
-                    className="button-clean button-clean_close"
-                    onClick={() => {
-                      setEntityImages(removeCoverImage(entityImages));
-                    }}
-                  >
-                    <IconClose />
-                  </button>
-                </div>
-
-                <img className="cover__img" src={getCoverImage({ entityImages })} alt="" />
-              </div>
-            </div>
-          ) : (
-            <DropZone
-              className="drop-zone_clip"
-              onDrop={onImage}
-            />
-          )}
+          </div>
         </div>
       </div>
-
+      {getCoverImage({ entityImages }) && <Image
+        src={getCoverImage({ entityImages })}
+        onClickRemove={() => {
+          setEntityImages(removeCoverImage(entityImages));
+        }}
+      />}
       <div className="feed-form__actions">
-        <div className="inline">
-          <div className="inline__item">
-            <Button
-              text="Cancel"
-              size="small"
-              theme="light"
-              onClick={() => {
-                if (typeof props.onCancel === 'function') {
-                  props.onCancel();
-                }
-              }}
-            />
-          </div>
-          <div className="inline__item">
-            <Button
-              text={props.message || getCoverImage(props) ? 'Save' : 'Post'}
-              type="submit"
-              size="small"
-              theme="red"
-              isDisabled={message.trim().length === 0 && !getCoverImage({ entityImages })}
-            />
-          </div>
-        </div>
+        <EmbedMenu onImage={onImage} />
+        <button
+          type="submit"
+          className="feed-form__submit"
+          disabled={message.trim().length === 0 && !getCoverImage({ entityImages })}
+        >
+          <IconEnter />
+        </button>
       </div>
     </form>
   );
 };
 
 FeedForm.propTypes = {
-  onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   users: PropTypes.objectOf(PropTypes.object).isRequired,
   message: PropTypes.string,

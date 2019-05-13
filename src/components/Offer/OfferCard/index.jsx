@@ -9,8 +9,7 @@ import Avatar from '../../Avatar';
 import { sanitizeText } from '../../../utils/text';
 import Countdown from '../../Countdown';
 import Followers from '../../Followers';
-import Popup from '../../Popup';
-import ModalContent from '../../ModalContent';
+import Popup, { Content } from '../../Popup';
 import UserListAirdrop from '../../User/UsersListAirdrop';
 import { mapUserDataToFollowersProps } from '../../../utils/user';
 import { authShowPopup } from '../../../actions/auth';
@@ -59,9 +58,15 @@ const OfferCard = (props) => {
     <Fragment>
       {popupVisible && (
         <Popup onClickClose={() => setPopupVisible(false)}>
-          <ModalContent mod="airdrop" onClickClose={() => setPopupVisible(false)}>
+          <Content
+            mod="airdrop"
+            fixWidth
+            onClickClose={() => {
+              setPopupVisible(false);
+            }}
+          >
             <UserListAirdrop users={props.users} title={props.title} metadata={props.metadata} onChangePage={props.onChangePage} />
-          </ModalContent>
+          </Content>
         </Popup>
       )}
       <div
@@ -126,11 +131,12 @@ const OfferCard = (props) => {
 
           {loaded && Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 && (() => {
             if (((!props.cookie && !conditions) ||
-            (conditions && conditions.conditions.authGithub === false && (conditions.conditions.authMyself === false || conditions.conditions.authMyself === true)) ||
+            (conditions && (conditions.conditions.authGithub === false && !props.cookie) && (conditions.conditions.authMyself === false || conditions.conditions.authMyself === true)) ||
             ((conditions && conditions.airdropStatus !== AirdropStatuses.RECEIVED && conditions.airdropStatus !== AirdropStatuses.PENDING) &&
             (conditions && conditions.airdropStatus === AirdropStatuses.NEW && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false)))) {
               return (
                 <a
+                  id="GithubAirdropGetYourScore"
                   className={classNames(
                     `${styles.btn}`,
                     { [styles.btnVisible]: loaded === true },

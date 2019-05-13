@@ -1,3 +1,4 @@
+// TODO: Remove file and all deps
 import PropTypes from 'prop-types';
 import React, { Fragment, useState } from 'react';
 import { bindActionCreators } from 'redux';

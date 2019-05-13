@@ -1,25 +1,25 @@
 import classNames from 'classnames';
 import autosize from 'autosize';
 import PropTypes from 'prop-types';
-import React, { useState, useRef, useEffect, Fragment } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './styles.css';
 import UserPick from '../../UserPick/UserPick';
 import Image from './Image';
+import DragAndDrop from './DragAndDrop';
 import { COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST } from '../../../utils/comments';
 import TributeWrapper from '../../TributeWrapper';
-import IconEnter from '../../Icons/Enter';
 import { isSubmitKey, isEscKey } from '../../../utils/keyboard';
-import DropZone from '../../DropZone';
-import IconClose from '../../Icons/Close';
 import { getBase64FromFile } from '../../../utils/upload';
-import IconClip from '../../Icons/Clip';
 import api from '../../../api';
 
 const Form = (props) => {
   const [message, setMessage] = useState(props.message);
   const [entityImages, setEntityImages] = useState({ gallery: [] });
   const [base64Cover, setBase64Cover] = useState('');
+
   const textareaEl = useRef(null);
+  const formEl = useRef(null);
+  const fieldEl = useRef(null);
 
   const reset = () => {
     setMessage('');
@@ -49,8 +49,9 @@ const Form = (props) => {
     setBase64Cover(base64Cover);
     const data = await api.uploadPostImage(files[0]);
     const { url } = data.files[0];
-    // TODO make multiple upon creating gallery
+    // TODO: make multiple upon creating gallery
     // setEntityImages({ gallery: [...entityImages.gallery, { url }] });
+    setBase64Cover(url);
     setEntityImages({ gallery: [{ url }] });
   };
 
@@ -72,6 +73,7 @@ const Form = (props) => {
         [styles.flat]: props.flat,
       })}
       depth={props.depth}
+      ref={formEl}
     >
       <div className={styles.formMain}>
         <div className={styles.userPick}>
@@ -79,7 +81,10 @@ const Form = (props) => {
         </div>
 
         <div className={styles.content}>
-          <div className={styles.field}>
+          <div
+            ref={fieldEl}
+            className={styles.field}
+          >
             <div className={styles.inputWrapper}>
               <TributeWrapper
                 enabledImgUrlParse
@@ -112,31 +117,10 @@ const Form = (props) => {
                 />
               </TributeWrapper>
             </div>
-
-            <div className={styles.actions}>
-              {!base64Cover && (
-                <div className={styles.containerActions}>
-                  <Fragment>
-                    <label name="img" className={styles.clipComments}>
-                      <IconClip />
-                    </label>
-                    <DropZone
-                      className={styles.dropZoneComments}
-                      multiple
-                      nonDefaultclass
-                      onDrop={onImage}
-                    />
-                  </Fragment>
-                </div>
-              )}
-              <div
-                role="presentation"
-                className={styles.action}
-                onClick={submit}
-              >
-                <IconEnter />
-              </div>
-            </div>
+            <DragAndDrop {...{
+              ...base64Cover, onImage, submit, textareaEl, formEl, fieldEl,
+              }}
+            />
           </div>
 
           {props.uploadEnabled && props.entityImages.gallery.length &&
@@ -146,27 +130,15 @@ const Form = (props) => {
           }
         </div>
       </div>
-      {/* TODO in Image.jsx */}
-      {base64Cover && (
-        <div className="cover cover_small">
-          <div className="cover__inner">
-            <div className="cover__remove">
-              <button
-                type="button"
-                className="button-clean button-clean_close"
-                onClick={() => {
-                    setEntityImages('');
-                    setBase64Cover('');
-                }}
-              >
-                <IconClose />
-              </button>
-            </div>
-
-            <img className="cover__img" src={base64Cover} alt="" />
-          </div>
-        </div>
-      )}
+      {base64Cover &&
+        <Image
+          src={base64Cover}
+          onClickRemove={() => {
+            setEntityImages('');
+            setBase64Cover('');
+          }}
+        />
+      }
     </div>
   );
 };

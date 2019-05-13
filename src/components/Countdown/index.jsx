@@ -56,7 +56,7 @@ const Countdown = (props) => {
     return () => {
       clearInterval(int);
     };
-  }, []);
+  }, [props.date]);
 
   if (!date) {
     return null;

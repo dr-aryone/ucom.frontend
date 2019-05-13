@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styles from './styles.css';
-import EntryCard, { entryCardPropTypes } from '../EntryCard';
-import Popup from '../Popup';
-import ModalContent from '../ModalContent';
+import EntryCard from '../EntryCard';
+import Popup, { Content } from '../Popup';
 import OrganizationFollowButton from '../Organization/OrganizationFollowButton';
 import UserFollowButton from '../User/UserFollowButton';
 import Pagination from '../Pagination/index';
@@ -11,7 +10,7 @@ import Pagination from '../Pagination/index';
 // TODO: Replace and remove another popups
 const EntryListPopup = props => (
   <Popup onClickClose={props.onClickClose}>
-    <ModalContent onClickClose={props.onClickClose}>
+    <Content onClickClose={props.onClickClose}>
       <div className={styles.container}>
         <h2 className={styles.title}>{props.title}</h2>
         <div className={styles.list}>
@@ -43,12 +42,12 @@ const EntryListPopup = props => (
           />
         }
       </div>
-    </ModalContent>
+    </Content>
   </Popup>
 );
 
 export const entryListPopupItemPropTypes = {
-  ...entryCardPropTypes,
+  ...EntryCard.propTypes,
   id: PropTypes.number.isRequired,
   follow: PropTypes.bool,
 };
