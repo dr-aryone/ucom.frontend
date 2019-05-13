@@ -6,6 +6,7 @@ import RegistrationStepIntro from './RegistrationStepIntro';
 import RegistrationStepFirst from './RegistrationStepFirst';
 import RegistrationStepSecond from './RegistrationStepSecond';
 import RegistrationStepThird from './RegistrationStepThird';
+import RegistrationFourStep from './RegistrationFourStep';
 import LayoutClean from '../Layout/LayoutClean';
 import { registrationReset } from '../../actions/registration';
 import Close from '../Close';
@@ -27,7 +28,8 @@ const Registration = ({ location, registrationReset }) => {
               <RegistrationStepIntro />
               <RegistrationStepFirst />
               <RegistrationStepSecond />
-              <RegistrationStepThird prevPath={location && location.state ? location.state.prevPath : null} />
+              <RegistrationStepThird />
+              <RegistrationFourStep prevPath={location && location.state ? location.state.prevPath : null} />
             </div>
           </div>
         </div>

@@ -8,10 +8,7 @@ import Checkbox from '../Checkbox';
 import RegistrationBrainkeyVerification from './RegistrationBrainkeyVerification';
 import { THIRD_STEP_ID } from '../../store/registration';
 import { registrationRegister, registrationSetIsTrackingAllowed } from '../../actions/registration';
-import { getAirdropOfferId } from '../../utils/airdrop';
 import { getGrecaptchaSitekey } from '../../utils/config';
-
-const offerId = getAirdropOfferId();
 
 class RegistrationStepThird extends PureComponent {
   constructor(props) {
@@ -48,18 +45,6 @@ class RegistrationStepThird extends PureComponent {
     }
   }
 
-  getPrevPageId() {
-    let prevPageId;
-    const prevPath = this.props.prevPath !== null ? this.props.prevPath.match(/\d+/) : null;
-    if (prevPath !== null && +prevPath[0] === offerId) {
-      prevPageId = offerId;
-    } else {
-      prevPageId = null;
-    }
-
-    return prevPageId;
-  }
-
   render() {
     return (
       <div
@@ -71,7 +56,7 @@ class RegistrationStepThird extends PureComponent {
       >
 
         <div className="registration__title">
-          <div className="registration__step">3/3</div>
+          <div className="registration__step">3/4</div>
           <h3 className="title title_small">Verification</h3>
         </div>
 
@@ -119,7 +104,7 @@ class RegistrationStepThird extends PureComponent {
                 type="submit"
                 text="Finish"
                 isDisabled={this.props.registration.loading || !this.state.brainkeyVerificationIsValid || !this.state.termsAccepted || !this.state.recaptchaValid}
-                onClick={() => this.props.registrationRegister(this.getPrevPageId() || null)}
+                onClick={() => this.props.registrationRegister()}
               />
             </div>
             {this.state.brainkeyVerificationIsComplete && !this.state.brainkeyVerificationIsValid &&

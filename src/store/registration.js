@@ -1,6 +1,7 @@
 export const FIRST_STEP_ID = 1;
 export const SECOND_STEP_ID = 2;
 export const THIRD_STEP_ID = 3;
+export const FOUR_STEP_ID = 4;
 
 export const FIRST_BRAINKEY_STEP_ID = 1;
 export const SECOND_BRAINKEY_STEP_ID = 2;
@@ -15,6 +16,8 @@ const getInitialState = () => ({
   activeStepId: FIRST_STEP_ID,
   activeBrainkeyStepId: FIRST_BRAINKEY_STEP_ID,
   isTrackingAllowed: true,
+  userId: null,
+  socialKey: null,
 });
 
 const registration = (state = getInitialState(), action) => {
@@ -45,6 +48,12 @@ const registration = (state = getInitialState(), action) => {
 
     case 'REGISTRATION_SET_LOADING':
       return { ...state, loading: action.payload };
+
+    case 'REGISTRATION_SET_USER_ID':
+      return { ...state, userId: action.payload };
+
+    case 'REGISTRATION_SET_SOCIAL_KEY':
+      return { ...state, socialKey: action.payload };
 
     case 'REGISTRATION_SET_IS_TRACKING_ALLOWED':
       return { ...state, isTrackingAllowed: action.payload };

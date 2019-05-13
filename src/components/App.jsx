@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { Route, Switch, withRouter } from 'react-router';
 import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
@@ -18,8 +17,17 @@ import BuyRam from '../components/Resources/Actions/BuyRam';
 import SellRam from '../components/Resources/Actions/SellRam';
 import EditStake from '../components/Resources/Actions/EditStake';
 import SendTokens from '../components/Resources/Actions/SendTokens';
+import { settingsShow } from '../actions/settings';
 
 const App = (props) => {
+  const onChangeHash = () => {
+    const param = window.location.hash.split('#').pop();
+
+    if (param === 'settings') {
+      props.settingsShow();
+    }
+  };
+
   useEffect(() => {
     if (process.env.NODE_ENV === 'production') {
       enableGtm();
@@ -31,6 +39,13 @@ const App = (props) => {
     if (config.socketEnabled) {
       socket.connect();
     }
+
+    window.addEventListener('hashchange', onChangeHash);
+    onChangeHash();
+
+    return () => {
+      window.removeEventListener('hashchange', onChangeHash);
+    };
   }, []);
 
   return (
@@ -73,6 +88,7 @@ App.propTypes = {
     editStakeVisible: PropTypes.bool.isRequired,
     sendTokensVisibility: PropTypes.bool.isRequired,
   }).isRequired,
+  settingsShow: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(
@@ -81,9 +97,10 @@ export default withRouter(connect(
     wallet: state.walletSimple,
     settings: state.settings,
   }),
-  dispatch => bindActionCreators({
+  {
     fetchMyself,
     initNotificationsListeners,
     siteNotificationsSetUnreadAmount,
-  }, dispatch),
+    settingsShow,
+  },
 )(App));

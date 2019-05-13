@@ -15,7 +15,7 @@ const RegistrationStepFirst = props => (
     )}
   >
     <div className="registration__title">
-      <div className="registration__step">1/3</div>
+      <div className="registration__step">1/4</div>
       <h3 className="title title_small">
         {props.registration.activeStepId === FIRST_STEP_ID ? (
           <Fragment>Choose Account Name</Fragment>

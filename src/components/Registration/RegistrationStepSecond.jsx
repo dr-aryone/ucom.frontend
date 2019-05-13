@@ -21,7 +21,7 @@ const RegistrationStepSecond = props => (
     )}
   >
     <div className="registration__title">
-      <div className="registration__step">2/3</div>
+      <div className="registration__step">2/4</div>
       <h3 className="title title_small">Brainkey</h3>
     </div>
 

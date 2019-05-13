@@ -1,3 +1,4 @@
+// TODO: Refactoring registration (css modules, without redux)
 import Validator from '../utils/validator';
 import api from '../api';
 import { generateBrainkey } from '../utils/brainkey';
@@ -5,6 +6,8 @@ import { saveToken } from '../utils/token';
 import urls from '../utils/urls';
 import { saveActiveKey, getActivePrivateKey } from '../utils/keys';
 import { getPostUrl } from '../utils/posts';
+import { FOUR_STEP_ID } from '../store/registration';
+import { getSocialPrivateKeyByBrainkey } from '../utils/keys';
 
 export const registrationReset = payload => ({ type: 'REGISTRATION_RESET', payload });
 export const registrationSetStep = payload => ({ type: 'REGISTRATION_SET_STEP', payload });
@@ -46,7 +49,7 @@ export const registrationGenerateBrainkey = () => (dispatch) => {
   dispatch(registrationSetBrainkey(generateBrainkey()));
 };
 
-export const registrationRegister = prevPage => async (dispatch, getState) => {
+export const registrationRegister = () => async (dispatch, getState) => {
   const state = getState();
   const { brainkey, accountName, isTrackingAllowed } = state.registration;
 
@@ -62,14 +65,25 @@ export const registrationRegister = prevPage => async (dispatch, getState) => {
 
       saveToken(data.token);
       saveActiveKey(getActivePrivateKey(brainkey));
-
-      if (prevPage !== undefined && prevPage !== null && !Number.isNaN(prevPage)) {
-        window.location.replace(getPostUrl(prevPage));
-      } else {
-        window.location.replace(urls.getUserUrl(data.user.id));
-      }
+      dispatch(registrationSetStep(FOUR_STEP_ID));
+      dispatch({
+        type: 'REGISTRATION_SET_USER_ID',
+        payload: data.user.id,
+      });
+      dispatch({
+        type: 'REGISTRATION_SET_SOCIAL_KEY',
+        payload: getSocialPrivateKeyByBrainkey(brainkey),
+      });
     } catch (e) {
       console.error(e);
     }
   }, 10);
+};
+
+export const registrationFinish = (userId, redirectPostId) => {
+  if (redirectPostId !== undefined && redirectPostId !== null && !Number.isNaN(redirectPostId)) {
+    window.location.replace(getPostUrl(redirectPostId));
+  } else {
+    window.location.replace(urls.getUserUrl(userId));
+  }
 };

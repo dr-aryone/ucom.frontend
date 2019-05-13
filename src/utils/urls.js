@@ -31,6 +31,14 @@ const urls = {
     return `/user/${userId}`;
   },
 
+  getUserSettingsUrl(userId) {
+    if (!userId) {
+      return null;
+    }
+
+    return `/user/${userId}/#settings`;
+  },
+
   getUserEditProfileUrl() {
     return '/profile/';
   },
