@@ -1,68 +1,67 @@
-import Validator from './../utils/validator';
+// import Validator from './../utils/validator';
 
-export const validateFields = (
-  data = {}, fields = [], rules = {}, isAll = false,
-  customNames = {},
-) => {
-  const validation = new Validator(data, rules);
+// export const validateFields = (
+//   data = {}, fields = [], rules = {}, isAll = false,
+//   customNames = {},
+// ) => {
+//   const validation = new Validator(data, rules);
 
-  if (customNames.customName) {
-    validation.setAttributeFormatter(() => customNames.customName);
-  }
+//   if (customNames.customName) {
+//     validation.setAttributeFormatter(() => customNames.customName);
+//   }
 
-  const isValid = validation.passes();
-  const errors = isAll ?
-    validation.errors.all() :
-    fields.reduce((value, field) => ({ ...value, [field]: validation.errors.get(field) }), {});
-  return { isValid, errors };
-};
-
-
+//   const isValid = validation.passes();
+//   const errors = isAll ?
+//     validation.errors.all() :
+//     fields.reduce((value, field) => ({ ...value, [field]: validation.errors.get(field) }), {});
+//   return { isValid, errors };
+// };
 
 
 
-let data = {
-  nickname: 'Alex',
-  about: 'asd',
-  personalWebsiteUrl: 'https://ya.ru',
+
+
+// let data = {
+//   firstName: 'Alex',
+//   about: 'asd',
+//   personalWebsiteUrl: 'https://ya.ru',
+//   usersSources: [{
+//     sourceUrl: 'http://ya.ru',
+//   }],
+// };
+
+const rule = {
+  firstName: value => (!value && 'Displayed name is required'),
+
+  personalWebsiteUrl: value =>
+    !value.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/) && 'Not a valid URL format',
+  // (value.match(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/) && 'Not a valid URL format'),
+
   usersSources: [{
-    sourceUrl: 'http://ya.ru',
+    sourceUrl: value =>
+      !value.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm) && 'Not a valid URL format',
+    // (value.match(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/) && 'Not a valid URL format'),
+    // (!URL_REGEXP.test(value) && 'Site is not valid'),
   }],
 };
 
-const rules = {
-  nickname: value =>
-    (!value && 'Nickname is reqired'),
-  // (!NIKNAME_REGEXP.test(value) && 'Nickname is not valid'),
-
-  // sites: [
-  //   value =>
-  //     (!value && 'Site is reqired') ||
-  //     (!URL_REGEXP.test(value) && 'Site is not valid'),
-  // ],
-
-  // usersSources: [{
-  //   sourceUrl: value =>
-  //     // (!value && 'Site is reqired') ||
-  //     (!URL_REGEXP.test(value) && 'Site is not valid'),
+// let errors = {
+  // firstName: 'Displayed name is reqired',
+  // sites: ['Error', '1 Error'],
+  // partners: [{
+  //   url: 'Url error',
+  //   title: 'Title error',
   // }],
-};
+// };
 
-let errors = {
-  nickname: 'Some error',
-  sites: ['Error', '1 Error'],
-  partners: [{
-    url: 'Url error',
-    title: 'Title error',
-  }],
-};
-
-export const validator = (data, rules) => {
+export const validator = (data, rules = rule) => {
   const fields = Object.keys(data);
   const errors = {};
 
   fields.forEach((field) => {
     const rule = rules[field];
+
+    console.log('rule: ', rule);
 
     if (!rule) {
       return;

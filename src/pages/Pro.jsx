@@ -1,12 +1,13 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Element } from 'react-scroll';
 import urls from '../utils/urls';
 import { getUserById } from '../store/users';
-import { updateUser } from '../actions/users';
+import { addUsers, updateUser } from '../actions/users';
 import { selectUser } from '../store/selectors/user';
 import Popup from '../components/Popup/';
 import Content from '../components/Popup/Content';
@@ -21,7 +22,10 @@ import { userFormHandleSubmit } from '../actions/userForm';
 import { validator } from '../utils/validateFields';
 
 const Profile = (props) => {
-  // Object.keys(props.user).length
+  // if (!props.user.id) {
+  //   return <Redirect to="/" />;
+  // }
+
   const owner = getUserById(props.users, props.user.id);
 
   if (!owner) {
@@ -29,13 +33,14 @@ const Profile = (props) => {
   }
 
   const [userData, setUserData] = useState(owner);
-  // const [errors] = useState({});
+  const [errors, setErrors] = useState({});
   const [isSubmited, setIsSubmited] = useState(false);
 
   useEffect(() => {
     setUserData({
       ...userData,
-      nickname: owner.nickname,
+      id: owner.id,
+      firstName: owner.firstName,
       avatarFilename: owner.avatarFilename,
       about: owner.about,
       personalWebsiteUrl: owner.personalWebsiteUrl,
@@ -51,8 +56,6 @@ const Profile = (props) => {
   //   }
   // }, (isSubmited));
 
-  // console.log(userData);
-
   const onChange = (key, value) => {
     // console.log('key: ', key);
     // console.log('value: ', value);
@@ -67,16 +70,18 @@ const Profile = (props) => {
     // }
   };
 
-//   <form
-//   onSubmit={(e) => {
-//     e.preventDefault();
-//     this.props.userFormHandleSubmit();
-//   }}
-// >
   const saveProfile = () => {
     // props.userFormHandleSubmit();
-    console.log('USERDATA: ', userData);
-    props.updateUser({ userData });
+    try {
+      setErrors(validator(userData));
+      console.log('aaa: ', errors);
+    } catch (error) {
+      setErrors({ ...errors, error });
+      console.log(error);
+    }
+    // console.log('id: ', userData.id);
+    // props.updateUser(userData);
+    // return <Redirect to={`/user/${this.props.user.id}`} />;
   };
 
 
@@ -110,81 +115,92 @@ const Profile = (props) => {
               )}
             </div>
             <div className={styles.content}>
-              <div className={styles.header}>
-                <h2 className={styles.title}>{owner ? 'Edit Your Profile' : 'Your Profile'}</h2>
-                <p>Few words about profile its how it will affect autoupdates and etc. Maybe some tips)</p>
-              </div>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  saveProfile();
+                }}
+              >
+                <div className={styles.header}>
+                  <h2 className={styles.title}>{owner ? 'Edit Your Profile' : 'Your Profile'}</h2>
+                  <p>Few words about profile its how it will affect autoupdates and etc. Maybe some tips)</p>
+                </div>
 
-              <div>
-                <Element name="PersonalInfo" className={styles.section}>
-                  <h3 className={styles.title}>Personal Info</h3>
-                  <div className={styles.field}>
-                    <div className={styles.label}>Avatar</div>
-                    <div className={styles.avatarBlock}>
-                      <div className={styles.avatar}>
-                        <Avatar
-                          src={urls.getFileUrl(userData.avatarFilename)}
-                          changeEnabled
-                          onChange={async (file) => {
-                            setUserData({ ...userData, avatarFilename: file.preview });
-                            props.updateUser({
-                              avatarFilename: file,
-                            });
-                          }}
+                <div>
+                  <Element name="PersonalInfo" className={styles.section}>
+                    <h3 className={styles.title}>Personal Info</h3>
+                    <div className={styles.field}>
+                      <div className={styles.label}>Avatar</div>
+                      <div className={styles.avatarBlock}>
+                        <div className={styles.avatar}>
+                          <Avatar
+                            src={urls.getFileUrl(owner.avatarFilename)}
+                            changeEnabled
+                            onChange={async (file) => {
+                              // setUserData({ ...userData, avatarFilename: file.preview });
+                              props.addUsers([{
+                                id: +userData.id,
+                                avatarFilename: file.preview,
+                              }]);
+                              props.updateUser({
+                                avatarFilename: file,
+                              });
+                            }}
+                          />
+                        </div>
+                        <div>
+                          Drag and drop. We support JPG, PNG or GIF files. Max file size 0,5 Mb.
+                        </div>
+                      </div>
+                    </div>
+                    <div className={classNames(styles.field, styles.fieldRequired)}>
+                      <div className={styles.label}>Displayed name</div>
+                      <div className={styles.inputBlock}>
+                        <TextInput
+                          topLabel
+                          isRequired
+                          placeholder="Nickname or name, maybe emoji…"
+                          // className={styles.input}
+                          error={errors.firstName}
+                          value={userData.firstName}
+                          onChange={value => setUserData({ ...userData, firstName: value })}
                         />
                       </div>
-                      <div>
-                        Drag and drop. We support JPG, PNG or GIF files. Max file size 0,5 Mb.
+                    </div>
+                  </Element>
+                  <Element name="AboutMe" className={styles.section}>
+                    <h3 className={styles.title}>About Me</h3>
+                    <div className={styles.textarea}>
+                      <Textarea
+                        placeholder="Your story, what passions you — something you want others to know about you"
+                        rows={6}
+                        value={userData.about}
+                        onChange={value => setUserData({ ...userData, about: value })}
+                        isMentioned
+                      />
+                    </div>
+                  </Element>
+                  <Element name="Links" className={styles.section}>
+                    <h3 className={styles.title}>Links</h3>
+                    <div className={styles.field}>
+                      <div className={styles.label}>My Website</div>
+                      <div className={styles.inputBlock}>
+                        <TextInput
+                        // className={styles.input}
+                          error={errors.personalWebsiteUrl}
+                          value={userData.personalWebsiteUrl}
+                          onChange={value => setUserData({ ...userData, personalWebsiteUrl: value })}
+                        />
                       </div>
                     </div>
-                  </div>
-                  <div className={classNames(styles.field, styles.fieldRequired)}>
-                    <div className={styles.label}>Displayed name</div>
-                    <div className={styles.inputBlock}>
-                      <TextInput
-                        topLabel
-                        isRequired
-                        placeholder="Nickname or name, maybe emoji…"
-                        // className={styles.input}
-                        value={userData.nickname}
-                        onChange={value => setUserData({ ...userData, nickname: value })}
-                        // onChange={value => onChange('nickname', value)}
-                        // onChange={value => onChange({ ...userData, nickname: value })}
-                      />
-                    </div>
-                  </div>
-                </Element>
-                <Element name="AboutMe" className={styles.section}>
-                  <h3 className={styles.title}>About Me</h3>
-                  <div className={styles.textarea}>
-                    <Textarea
-                      placeholder="Your story, what passions you — something you want others to know about you"
-                      rows={6}
-                      value={userData.about}
-                      onChange={value => setUserData({ ...userData, about: value })}
-                      isMentioned
+                    <SocialNetworks
+                      fields={userData.usersSources}
+                      onChange={value => setUserData({ ...userData, usersSources: value })}
+                      errors={errors}
                     />
-                  </div>
-                </Element>
-                <Element name="Links" className={styles.section}>
-                  <h3 className={styles.title}>Links</h3>
-                  <div className={styles.field}>
-                    <div className={styles.label}>My Website</div>
-                    <div className={styles.inputBlock}>
-                      <TextInput
-                      // className={styles.input}
-                        value={userData.personalWebsiteUrl}
-                        onChange={value => setUserData({ ...userData, personalWebsiteUrl: value })}
-                      />
-                    </div>
-                  </div>
-                  <SocialNetworks
-                    fields={userData.usersSources}
-                    onChange={value => setUserData({ ...userData, usersSources: value })}
-                    // errors={errors}
-                  />
-                </Element>
-              </div>
+                  </Element>
+                </div>
+              </form>
             </div>
           </div>
         </Content>
@@ -197,6 +213,7 @@ Profile.propTypes = {
   users: PropTypes.objectOf(PropTypes.any).isRequired,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
   updateUser: PropTypes.func.isRequired,
+  addUsers: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -206,6 +223,7 @@ export default connect(
     userData: state.userData,
   }),
   dispatch => bindActionCreators({
+    addUsers,
     updateUser,
     userFormHandleSubmit,
   }, dispatch),

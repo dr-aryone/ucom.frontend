@@ -65,6 +65,7 @@ h4.title {
 
 .fieldRequired {
   margin-top: 60px;
+  align-items: flex-start;
 }
 
 @media(max-width: 767px) {

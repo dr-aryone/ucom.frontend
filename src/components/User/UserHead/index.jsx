@@ -37,10 +37,11 @@ const UserHead = (props) => {
             src={urls.getFileUrl(user.avatarFilename)}
             changeEnabled={userIsOwner(user, props.owner)}
             onChange={async (file) => {
-              props.dispatch(addUsers([{
-                id: +props.owner.id,
-                avatarFilename: file.preview,
-              }]));
+              console.log('prev: ', file.preview);
+              // props.dispatch(addUsers([{
+              //   id: +props.owner.id,
+              //   avatarFilename: file.preview,
+              // }]));
 
               props.dispatch(updateUser({
                 avatarFilename: file,

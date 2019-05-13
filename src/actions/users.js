@@ -20,7 +20,6 @@ export const addUsers = (data = []) => (dispatch) => {
   let organizations = [];
 
   data.forEach((user) => {
-    console.log('user: ', user);
     if (user.followedBy) {
       users = users.concat(user.followedBy);
       user.followedBy = user.followedBy.map(u => u.id);
@@ -34,7 +33,6 @@ export const addUsers = (data = []) => (dispatch) => {
     if (user.organizations) {
       organizations = organizations.concat(user.organizations);
     }
-    console.log('fulluser: ', user);
 
     users.push(user);
   });
@@ -126,22 +124,20 @@ export const fetchUserTrustedBy = ({
 };
 
 export const updateUser = payload => async (dispatch) => {
-  // loader.start();
+  loader.start();
 
   try {
-    console.log('payload: ', payload);
-    const data = await api.patchMyself(snakes(payload.userData));
-    console.log('daaaata: ', data);
+    const data = await api.patchMyself(snakes(payload));
+
     delete data.currentRate;
 
     dispatch(addUsers([data]));
   } catch (e) {
     console.error(e);
-    throw e;
-    // dispatch(addServerErrorNotification(e));
+    dispatch(addServerErrorNotification(e));
   }
 
-  // loader.done();
+  loader.done();
 };
 
 export const followUser = ({
