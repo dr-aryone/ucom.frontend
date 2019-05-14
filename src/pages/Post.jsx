@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Footer from '../components/Footer';
@@ -21,27 +20,46 @@ import { COMMENTS_CONTAINER_ID_POST } from '../utils/comments';
 import { commentsResetContainerDataByEntryId } from '../actions/comments';
 import ShareButton from '../components/ShareButton';
 import ShareBlock from '../components/ShareBlock';
+import NotFoundPage from '../pages/NotFoundPage';
+import { parseResponseError } from '../utils/errors';
+import { addErrorNotification } from '../actions/notifications';
 
 const PostPage = (props) => {
   const { postId } = props.match.params;
   const [sharePopup, toggleSharePopup] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const toggleShare = () => {
     toggleSharePopup(!sharePopup);
   };
 
-  useEffect(() => {
+  const getData = async () => {
     loader.start();
+    setLoading(true);
     props.commentsResetContainerDataByEntryId({
       entryId: postId,
       containerId: COMMENTS_CONTAINER_ID_POST,
     });
-    props.postsFetch({ postId })
-      .then(loader.done);
+    try {
+      await props.postsFetch({ postId });
+    } catch (e) {
+      const errorMessage = parseResponseError(e)[0].message;
+      props.addErrorNotification(errorMessage);
+    }
+    loader.done();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getData();
   }, [postId]);
 
-  if (!props.post || !props.postAuthor) {
+  if (loading) {
     return null;
+  }
+
+  if (!props.post) {
+    return <NotFoundPage />;
   }
 
   return (
@@ -132,6 +150,7 @@ PostPage.propTypes = {
   postAuthor: PropTypes.objectOf(PropTypes.any),
   postsFetch: PropTypes.func.isRequired,
   commentsResetContainerDataByEntryId: PropTypes.func.isRequired,
+  addErrorNotification: PropTypes.func.isRequired,
 };
 
 PostPage.defaultProps = {
@@ -151,10 +170,11 @@ export default connect(
       postAuthor,
     });
   },
-  dispatch => bindActionCreators({
+  {
     postsFetch,
     commentsResetContainerDataByEntryId,
-  }, dispatch),
+    addErrorNotification,
+  },
 )(PostPage);
 
 export const getPostPageData = async (store, { postId }) => {
