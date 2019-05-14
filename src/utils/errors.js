@@ -42,6 +42,7 @@ export const parseErrors = (error) => {
   return errors;
 };
 
+// TODO: Make one functions for all server errors and remove parseErrors
 export const parseResponseError = (error) => {
   try {
     const { message } = error;

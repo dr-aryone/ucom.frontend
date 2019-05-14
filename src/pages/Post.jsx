@@ -42,9 +42,11 @@ const PostPage = (props) => {
     });
     try {
       await props.postsFetch({ postId });
-    } catch (e) {
-      const errorMessage = parseResponseError(e)[0].message;
-      props.addErrorNotification(errorMessage);
+    } catch (err) {
+      if (err.response.status !== 400) {
+        const errorMessage = parseResponseError(err)[0].message;
+        props.addErrorNotification(errorMessage);
+      }
     }
     loader.done();
     setLoading(false);
