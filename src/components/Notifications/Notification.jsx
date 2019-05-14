@@ -13,9 +13,8 @@ const Notification = (props) => {
     case NOTIFICATION_TYPE_SUCCESS:
       return (
         <DefaultNotification
+          {...props}
           typeId={props.type}
-          title={props.title}
-          message={props.message}
           onClose={() => props.closeNotification(props.id)}
         />
       );

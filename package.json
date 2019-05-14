@@ -41,6 +41,7 @@
   "iframely": {
     "httpEndpoint": "https://iframely.u.community/iframely"
   },
+  "maintenanceMode": false,
   "socketEnabled": true,
   "devDependencies": {
     "autoprefixer": "^8.6.3",
@@ -130,8 +131,8 @@
     "tributejs": "git+https://github.com/UOSnetwork/tribute.git",
     "ucom-libs-graphql-schemas": "^1.13.0",
     "ucom-libs-social-transactions": "^1.1.4",
-    "ucom-libs-wallet": "^2.2.2",
-    "ucom.libs.common": "^1.8.0",
+    "ucom-libs-wallet": "^2.5.1",
+    "ucom.libs.common": "^1.8.2",
     "uuid": "^3.3.2",
     "validatorjs": "^3.14.2",
     "xss": "^1.0.6"

@@ -136,6 +136,7 @@ const OfferCard = (props) => {
             (conditions && conditions.airdropStatus === AirdropStatuses.NEW && conditions.conditions.authGithub === false && conditions.conditions.authMyself === false)))) {
               return (
                 <a
+                  id="GithubAirdropGetYourScore"
                   className={classNames(
                     `${styles.btn}`,
                     { [styles.btnVisible]: loaded === true },

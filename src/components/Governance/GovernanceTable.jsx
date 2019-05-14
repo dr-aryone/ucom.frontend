@@ -24,13 +24,15 @@ const GovernanceTable = props => (
               <span className="inline__item">Organization</span>
             </span>
           </td>
-          <td 
+          <td
             className={classNames({
               'governance-table__cell': true,
               'governance-table__cell_votes': true,
               'only-phone': props.phoneMod,
-            })} data-name="Votes"
-          >Votes</td>
+            })}
+            data-name="Votes"
+          >Votes
+          </td>
           <td className="governance-table__cell governance-table__cell_amount only-pad">Vote Amount</td>
           <td className="governance-table__cell governance-table__cell_state">State</td>
         </tr>
@@ -76,12 +78,13 @@ const GovernanceTable = props => (
           })()}
 
           <td className="governance-table__cell governance-table__cell_name" data-name="Organization">{item.title}</td>
-          <td 
+          <td
             className={classNames({
               'governance-table__cell': true,
               'governance-table__cell_votes': true,
               'only-phone': props.phoneMod,
-            })} data-name="Votes"
+            })}
+            data-name="Votes"
           >
             <div className="governance-table__votes-block">{item.votesCount} <div className="governance-table__percentage">{item.votesPercentage}%</div></div>
           </td>
