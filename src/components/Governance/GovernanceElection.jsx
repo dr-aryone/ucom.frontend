@@ -120,23 +120,25 @@ const GovernanceElection = (props) => {
                     <span className="inline__item">Organization</span>
                   </span>
                 </div>
-                <div className="governance-table__cell governance-table__cell_votes">Votes</div>
+                <div className="governance-table__cell only-phone governance-table__cell_votes">Votes</div>
                 <div className="governance-table__cell only-pad governance-table__cell_amount">Vote Amount</div>
                 <div className="governance-table__cell governance-table__cell_state">State</div>
               </div>
             </div>
           </div>
 
-          <div className="governance-all__table">
+          <div className="governance-all__table governance-all__without-table">
             {route === 1 ?
               <GovernanceTable
                 withoutTable
+                phoneMod
                 data={props.table}
               /> : null
             }
             {route === 2 ?
               <GovernanceTable
                 withoutTable
+                phoneMod
                 data={props.selectedNodes}
               /> : null
             }

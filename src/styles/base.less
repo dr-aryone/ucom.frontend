@@ -97,13 +97,14 @@ h4 {
   }
 }
 
-.else-pad {
-  @media (min-width: 768px) {
-    display: none;
+.only-phone {
+  @media (max-width: 440px) {
+    display: none !important;
   }
 }
 
-.only-phone {
+
+.else-pad {
   @media (min-width: 768px) {
     display: none;
   }

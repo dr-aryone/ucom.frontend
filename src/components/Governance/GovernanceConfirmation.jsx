@@ -38,6 +38,7 @@ const GovernanceConfirmation = (props) => {
           <div className="governance-all__table governance-all__table_margin">
             <GovernanceTable
               data={listToVote}
+              phoneMod
             />
           </div>
 
@@ -50,6 +51,7 @@ const GovernanceConfirmation = (props) => {
           <div className="governance-all__table governance-all__table_margin_low">
             <GovernanceTable
               data={listToUnvote}
+              phoneMod
             />
           </div>
           <div className="governance-vote__panel">

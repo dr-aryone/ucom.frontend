@@ -24,7 +24,13 @@ const GovernanceTable = props => (
               <span className="inline__item">Organization</span>
             </span>
           </td>
-          <td className="governance-table__cell governance-table__cell_votes">Votes</td>
+          <td 
+            className={classNames({
+              'governance-table__cell': true,
+              'governance-table__cell_votes': true,
+              'only-phone': props.phoneMod,
+            })} data-name="Votes"
+          >Votes</td>
           <td className="governance-table__cell governance-table__cell_amount only-pad">Vote Amount</td>
           <td className="governance-table__cell governance-table__cell_state">State</td>
         </tr>
@@ -70,7 +76,13 @@ const GovernanceTable = props => (
           })()}
 
           <td className="governance-table__cell governance-table__cell_name" data-name="Organization">{item.title}</td>
-          <td className="governance-table__cell governance-table__cell_votes" data-name="Votes">
+          <td 
+            className={classNames({
+              'governance-table__cell': true,
+              'governance-table__cell_votes': true,
+              'only-phone': props.phoneMod,
+            })} data-name="Votes"
+          >
             <div className="governance-table__votes-block">{item.votesCount} <div className="governance-table__percentage">{item.votesPercentage}%</div></div>
           </td>
           <td className="governance-table__cell governance-table__cell_amount only-pad" data-name="Vote Amount">{Math.ceil(normalizeAmount(item.scaledImportanceAmount)).toLocaleString('ru')}</td>
