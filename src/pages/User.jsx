@@ -192,6 +192,7 @@ const UserPage = (props) => {
         <div className="layout__sidebar">
           {organizationsIds.length > 0 &&
             <EntryListSection
+              limit={5}
               showViewMore={organizationsMetadata.totalAmount > organizationsIds.length}
               title="Communities"
               count={organizationsMetadata.totalAmount}
