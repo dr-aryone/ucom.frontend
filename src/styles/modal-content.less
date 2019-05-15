@@ -25,6 +25,10 @@
   font-size: 1.142rem;
   background: #fff;
   cursor: pointer;
+
+  @media (max-width: 767px) {
+    top: 50px;
+  }
 }
 
 .modal-content__close_text {
@@ -62,6 +66,16 @@
     min-height: 100%;
     flex: 1 1;
   }
+
+  @media (max-width: 767px) {
+    padding: 0px;
+
+    & .modal-content__close {
+      top: 20px;
+      right: 20px;
+    }
+  }
+  
 }
 
 .modal-content_governance-vote {
