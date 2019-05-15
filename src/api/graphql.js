@@ -13,9 +13,9 @@ const { Dictionary } = require('ucom-libs-wallet');
 
 const request = async (data, extraOptions = {}) => {
   let options = {
+    headers: {},
     withCredentials: true,
     baseURL: getBackendConfig().httpEndpoint,
-    headers: {},
   };
 
   const token = getToken();
@@ -35,6 +35,9 @@ const request = async (data, extraOptions = {}) => {
 
   try {
     const resp = await axios.post('/graphql', data, options);
+    if (resp.data.errors) {
+      throw resp;
+    }
     return humps(resp.data);
   } catch (e) {
     throw e;
