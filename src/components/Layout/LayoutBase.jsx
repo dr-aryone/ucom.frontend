@@ -31,7 +31,7 @@ LayoutBase.propTypes = {
 };
 
 LayoutBase.defaultProps = {
-  gray: false,
+  gray: true,
 };
 
 export default LayoutBase;
