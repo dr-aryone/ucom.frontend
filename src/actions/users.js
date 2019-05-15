@@ -97,8 +97,9 @@ export const fetchUserPageData = ({
       trustedByPerPage,
       trustedByPage,
     });
-    const { oneUser, oneUserTrustedBy } = data;
+    const { oneUser, oneUserTrustedBy, oneUserFollowsOrganizations } = data;
     dispatch(addUsers(oneUserTrustedBy.data.concat([oneUser])));
+    dispatch(addOrganizations(oneUserFollowsOrganizations.data));
     return data;
   } catch (e) {
     throw e;
@@ -119,6 +120,26 @@ export const fetchUserTrustedBy = ({
       page,
     });
     dispatch(addUsers(data.data));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchUserFollowsOrganizations = ({
+  userIdentity,
+  orderBy,
+  perPage,
+  page,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getUserFollowsOrganizations({
+      userIdentity,
+      orderBy,
+      perPage,
+      page,
+    });
+    dispatch(addOrganizations(data.data));
     return data;
   } catch (e) {
     throw e;

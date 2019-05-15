@@ -47,6 +47,9 @@ export default {
     trustedByOrderBy = LIST_ORDER_BY,
     trustedByPerPage = LIST_PER_PAGE,
     trustedByPage = 1,
+    followsOrganizationsOrderBy = LIST_ORDER_BY,
+    followsOrganizationsPerPage = LIST_PER_PAGE,
+    followsOrganizationsPage = 1,
   }) {
     const query = GraphQLSchema.getQueryMadeFromParts([
       GraphQLSchema.getOneUserQueryPart({
@@ -62,11 +65,44 @@ export default {
         per_page: trustedByPerPage,
         page: trustedByPage,
       }),
+      GraphQLSchema.getOneUserFollowsOrganizationsQueryPart({
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+        order_by: followsOrganizationsOrderBy,
+        per_page: followsOrganizationsPerPage,
+        page: followsOrganizationsPage,
+      }),
     ]);
 
     try {
       const data = await request({ query });
       return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getUserFollowsOrganizations({
+    userIdentity,
+    orderBy = LIST_ORDER_BY,
+    perPage = LIST_PER_PAGE,
+    page = 1,
+  }) {
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getOneUserFollowsOrganizationsQueryPart({
+        page,
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+        order_by: orderBy,
+        per_page: perPage,
+      }),
+    ]);
+
+    try {
+      const data = await request({ query });
+      return data.data.oneUserFollowsOrganizations;
     } catch (e) {
       throw e;
     }
