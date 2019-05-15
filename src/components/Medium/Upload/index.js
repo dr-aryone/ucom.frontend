@@ -1,9 +1,12 @@
+import xss from 'xss';
+import humps from 'lodash-humps';
 import * as axios from 'axios';
 import MediumEditor from 'medium-editor';
 import api from '../../../api';
-import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR, compressUploadedImage } from '../../../utils/upload';
+import { compressUploadedImage } from '../../../utils/upload';
 import config from '../../../../package.json';
-import './styles.css';
+import { validUrl } from '../../../utils/url';
+import './styles.css'; // TODO: Refactoring global class names
 
 class UploadButtons {
   constructor({ onImageSelect, onVideoEmbedSelect, onSurveyEmbedSelect }) {
@@ -142,8 +145,7 @@ export default class MediumUpload extends MediumEditor.Extension {
     this.onError = params.onError;
     this.uploadButtons = new UploadButtons({
       onImageSelect: this.uplaodAndAppendImage,
-      onVideoEmbedSelect: this.appendVideoEmbed,
-      onSurveyEmbedSelect: this.appendSurveyEmbed,
+      onVideoEmbedSelect: this.appendEmbed,
     });
   }
 
@@ -195,7 +197,6 @@ export default class MediumUpload extends MediumEditor.Extension {
   insertEl = (el) => {
     const parentEl = this.currentEl.parentNode;
     const newLine = document.createElement('p');
-
     newLine.innerHTML = '<br>';
     parentEl.replaceChild(el, this.currentEl);
     parentEl.insertBefore(newLine, el.nextSibling);
@@ -217,38 +218,25 @@ export default class MediumUpload extends MediumEditor.Extension {
     return true;
   }
 
-  fileIsAllowedSize(file) {
-    if (file.size > UPLOAD_SIZE_LIMIT) {
-      return false;
-    }
-
-    return true;
-  }
-
   uplaodAndAppendImage = async (file) => {
     if (!this.fileIsImage(file)) {
       return;
     }
 
-    if (!this.fileIsAllowedSize(file) && this.onError) {
-      this.onError(UPLOAD_SIZE_LIMIT_ERROR);
+    let compressedImage;
+
+    try {
+      compressedImage = await compressUploadedImage(file);
+    } catch (e) {
+      this.onError(e);
       return;
     }
 
     const p = document.createElement('p');
     p.contentEditable = false;
     const img = document.createElement('img');
-
+    img.src = URL.createObjectURL(file);
     p.appendChild(img);
-    let base64;
-    try {
-      base64 = await compressUploadedImage(file);
-      img.src = base64;
-    } catch (e) {
-      this.onError(e);
-      return;
-    }
-
     this.insertEl(p);
 
     if (this.onUploadStart) {
@@ -256,7 +244,7 @@ export default class MediumUpload extends MediumEditor.Extension {
     }
 
     try {
-      const data = await api.uploadPostImage(base64);
+      const data = await api.uploadPostImage(compressedImage);
       img.src = data.files[0].url;
       this.base.checkContentChanged(this.base.origElements);
     } catch (e) {
@@ -268,38 +256,109 @@ export default class MediumUpload extends MediumEditor.Extension {
     }
   }
 
-  appendVideoEmbed = async (url) => {
+  appendEmbed = async (url) => {
     if (!url) {
       return;
     }
 
+    this.onUploadStart();
     try {
-      const data = await axios.get(config.iframely.httpEndpoint, { params: { url } });
-      const embedUrl = data.data.links.player.find(i => i.rel.some(j => ['oembed', 'html5'].indexOf(j) > 0)).href;
+      // const data = await axios.get(config.iframely.httpEndpoint, { params: { url } });
+      // console.log(data);
+
+      // const embedUrl = data.data.links.player.find(i => i.rel.some(j => ['oembed', 'html5'].indexOf(j) > 0)).href;
+      // const p = document.createElement('p');
+      // p.contentEditable = false;
+      // p.innerHTML = `
+      //   <iframe
+      //     class="iframe-video"
+      //     src="${embedUrl}"
+      //     allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+      //     allowfullscreen
+      //   ></iframe>
+      // `;
+      // this.insertEl(p);
+
+      const data = await this.getEmbedData(url);
       const p = document.createElement('p');
       p.contentEditable = false;
-      p.innerHTML = `
-        <iframe
-          class="iframe-video"
-          src="${embedUrl}"
-          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      `;
+      p.innerHTML = validUrl(data.videoUrl) ?
+        this.renderVideo(data.videoUrl) :
+        this.renderEmbed(data);
       this.insertEl(p);
     } catch (e) {
-      if (this.onError) {
-        this.onError('No supported video found');
-      }
       console.error(e);
+      this.onError('No supported embed found');
     }
+    this.onUploadDone();
   }
 
-  appendSurveyEmbed = () => {
-    const surveyEl = document.createElement('div');
-    surveyEl.setAttribute('data-survey', '');
-    surveyEl.contentEditable = false;
+  renderVideo = videoUrl => `
+    <iframe
+      class="iframe-video-v2"
+      src="${videoUrl}"
+      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  `;
 
-    this.insertEl(surveyEl);
+  renderEmbed = ({
+    title,
+    description,
+    url,
+    imageUrl,
+  }) => xss(`
+    <div class="medium-embed">
+      ${imageUrl && `<img src="${imageUrl}" alt="" />`}
+      <div class="medium-embed-title">${title}</div>
+      <div class="medium-embed-description">${description}</div>
+      <div class="medium-embed-link"><a href="${url}">${url}</a></div>
+    </div>
+  `);
+
+  getEmbedData = async (url) => {
+    try {
+      let videoUrl;
+      let imageUrl;
+      const response = humps(await axios.get(config.iframely.httpEndpoint, { params: { url } }));
+      const { data: { links: { player, thumbnail }, meta } } = response;
+
+      if (player) {
+        for (let i = 0; i < player.length; i++) {
+          const { rel, href } = player[i];
+          if (
+            rel.includes('oembed') &&
+            rel.includes('html5')
+          ) {
+            videoUrl = href;
+            break;
+          }
+        }
+      }
+
+      if (thumbnail) {
+        for (let i = 0; i < thumbnail.length; i++) {
+          const { rel, href } = thumbnail[i];
+          if (
+            rel.includes('twitter') ||
+            rel.includes('image') ||
+            rel.includes('thumbnail')
+          ) {
+            imageUrl = href;
+            break;
+          }
+        }
+      }
+
+      return {
+        videoUrl,
+        imageUrl,
+        title: meta.title,
+        url: meta.canonical,
+        description: meta.description,
+      };
+    } catch (err) {
+      throw err;
+    }
   }
 }

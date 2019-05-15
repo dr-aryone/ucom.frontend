@@ -13,8 +13,7 @@ class Medium extends PureComponent {
     const MediumEditor = require('medium-editor');
     const MediumUpload = require('./Upload/index');
     const MediumPost = require('./Post/index');
-    const MediumSurvey = require('./Survey/index');
-    const MediumEmbed = require('./Embed/index');
+    const MediumNav = require('./Nav/index');
     const FileDragging = require('./FileDragging');
     const ImageFromLink = require('./ImageFromLink');
 
@@ -25,8 +24,7 @@ class Medium extends PureComponent {
       placeholder: false,
       autoLink: true,
       extensions: {
-        mediumEmbed: new MediumEmbed.default(),
-        mediumSurvey: new MediumSurvey.default(),
+        mediumNav: new MediumNav.default(),
         imageFromLink: new ImageFromLink.default(),
         fileDragging: new FileDragging.default({
           onError: message => this.props.addErrorNotification(message),
