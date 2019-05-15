@@ -45,14 +45,14 @@ export const fetchMyself = () => async (dispatch) => {
   const token = getToken();
 
   if (!token) {
-    return;
+    return undefined;
   }
-
+  let data;
   dispatch(setUserLoading(true));
   loader.start();
 
   try {
-    const data = await api.getMyself(token);
+    data = await api.getMyself(token);
 
     dispatch(setUser(data));
     dispatch(addUsers([data]));
@@ -70,6 +70,8 @@ export const fetchMyself = () => async (dispatch) => {
 
   dispatch(setUserLoading(false));
   loader.done();
+
+  return data;
 };
 
 export const fetchUser = userIdentity => async (dispatch) => {

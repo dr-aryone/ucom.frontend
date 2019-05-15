@@ -123,7 +123,10 @@ const EditPost = (props) => {
             mod={['post-submit', 'small-close']}
             onClickClose={() => setSubmitPopupVisible(false)}
           >
-            <PostSubmitForm onSubmit={() => savePost()} />
+            <PostSubmitForm
+              loading={loading}
+              onSubmit={() => savePost()}
+            />
           </ModalContent>
         </Popup>
       }

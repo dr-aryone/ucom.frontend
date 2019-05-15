@@ -2,6 +2,10 @@
   padding: 60px 20px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 767px) {
+    padding-right: 0;
+  }
 }
 
 .governance-confirmation {
@@ -29,9 +33,14 @@
   background: #fff;
   z-index: 99;
   
+  @media (max-width: 767px) {
+    margin-left: -40px;
+    padding-left: 40px;
+  }
+
   .menu__link {
     opacity: 0.2;
-
+    padding: 6px 0;
     &:hover {
       border-bottom-color: #000 !important;
     }
@@ -43,6 +52,20 @@
   }
 }
 
+.governance-all__table {
+  @media (max-width: 767px) {
+    margin-left: -40px;
+  }
+}
+
+.governance-all__without-table {
+  @media (max-width: 767px) {
+    margin-left: -22px;
+  }
+  .governance-table__cell_name {
+    padding-left: 0px;
+  }
+}
 .governance-vote-title {
   margin-bottom: 25px;
   display: flex;
