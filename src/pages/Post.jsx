@@ -21,7 +21,6 @@ import { commentsResetContainerDataByEntryId } from '../actions/comments';
 import ShareButton from '../components/ShareButton';
 import ShareBlock from '../components/ShareBlock';
 import NotFoundPage from '../pages/NotFoundPage';
-import { parseResponseError } from '../utils/errors';
 import { addErrorNotification } from '../actions/notifications';
 
 const PostPage = (props) => {
@@ -43,10 +42,7 @@ const PostPage = (props) => {
     try {
       await props.postsFetch({ postId });
     } catch (err) {
-      if (err.response.status !== 400) {
-        const errorMessage = parseResponseError(err)[0].message;
-        props.addErrorNotification(errorMessage);
-      }
+      console.error(err);
     }
     loader.done();
     setLoading(false);
@@ -152,7 +148,6 @@ PostPage.propTypes = {
   postAuthor: PropTypes.objectOf(PropTypes.any),
   postsFetch: PropTypes.func.isRequired,
   commentsResetContainerDataByEntryId: PropTypes.func.isRequired,
-  addErrorNotification: PropTypes.func.isRequired,
 };
 
 PostPage.defaultProps = {
