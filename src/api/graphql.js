@@ -386,7 +386,7 @@ export default {
 
   async getNodesSelected(
     userId,
-    orderBy = '-bp_status',
+    orderBy = 'bp_status',
     page = 1,
     perPage = NODES_PER_PAGE,
   ) {
@@ -431,7 +431,7 @@ export default {
     }
   },
   async getAllNodes(
-    orderBy = '-bp_status',
+    orderBy = 'bp_status',
     page = 1,
     perPage = NODES_PER_PAGE,
   ) {
