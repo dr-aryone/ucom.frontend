@@ -5,8 +5,8 @@ import MediumEditor from 'medium-editor';
 import api from '../../../api';
 import { compressUploadedImage } from '../../../utils/upload';
 import config from '../../../../package.json';
-import { validUrl } from '../../../utils/url';
-import './styles.css'; // TODO: Refactoring global class names
+import { extractHostname } from '../../../utils/url';
+import './styles.css';
 
 class UploadButtons {
   constructor({ onImageSelect, onVideoEmbedSelect, onSurveyEmbedSelect }) {
@@ -38,6 +38,7 @@ class UploadButtons {
     });
 
     document.body.appendChild(this.el);
+    window.xss =xss;
   }
 
   render() {
@@ -261,60 +262,57 @@ export default class MediumUpload extends MediumEditor.Extension {
       return;
     }
 
-    this.onUploadStart();
     try {
-      // const data = await axios.get(config.iframely.httpEndpoint, { params: { url } });
-      // console.log(data);
-
-      // const embedUrl = data.data.links.player.find(i => i.rel.some(j => ['oembed', 'html5'].indexOf(j) > 0)).href;
-      // const p = document.createElement('p');
-      // p.contentEditable = false;
-      // p.innerHTML = `
-      //   <iframe
-      //     class="iframe-video"
-      //     src="${embedUrl}"
-      //     allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-      //     allowfullscreen
-      //   ></iframe>
-      // `;
-      // this.insertEl(p);
-
       const data = await this.getEmbedData(url);
-      const p = document.createElement('p');
-      p.contentEditable = false;
-      p.innerHTML = validUrl(data.videoUrl) ?
+      const div = document.createElement('div');
+      div.contentEditable = false;
+      div.innerHTML = data.videoUrl ?
         this.renderVideo(data.videoUrl) :
         this.renderEmbed(data);
-      this.insertEl(p);
+      this.insertEl(div);
     } catch (e) {
       console.error(e);
       this.onError('No supported embed found');
     }
-    this.onUploadDone();
   }
 
-  renderVideo = videoUrl => `
-    <iframe
-      class="iframe-video-v2"
-      src="${videoUrl}"
-      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    ></iframe>
-  `;
+  renderVideo = (videoUrl) => {
+    const xssOptions = {
+      whiteList: {
+        iframe: ['src'],
+      },
+    };
+
+    return `
+      <div class="iframe-video-v2">
+        ${xss(`
+          <iframe
+            src="${videoUrl}"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        `, xssOptions)}
+      </div>
+    `;
+  }
 
   renderEmbed = ({
     title,
     description,
     url,
     imageUrl,
-  }) => xss(`
+  }) => `
     <div class="medium-embed">
-      ${imageUrl && `<img src="${imageUrl}" alt="" />`}
-      <div class="medium-embed-title">${title}</div>
-      <div class="medium-embed-description">${description}</div>
-      <div class="medium-embed-link"><a href="${url}">${url}</a></div>
+      ${imageUrl && xss(`<img src="${imageUrl}" alt="" />`)}
+      <div class="medium-embed-content">
+        ${title && xss(`<h2>${title}</h2>`)}
+        ${description && xss(`<p>${description}</p>`)}
+        ${url && `<p class="medium-embed-link">${xss(`
+          <a href="${url}" target="_blank" rel="noopener noreferrer">${extractHostname(url)}</a>
+        `)}</p>`}
+      </div>
     </div>
-  `);
+  `;
 
   getEmbedData = async (url) => {
     try {

@@ -97,6 +97,13 @@ export const sanitizePostText = memoize(html => sanitizeHtml(html, {
       'medium-insert-embeds-wide',
       'medium-insert-embed',
       'medium-upload-iframe-wrapper',
+      'medium-embed',
+      'medium-embed-content',
+      'medium-embed-link',
+      'iframe-video-v2',
+    ],
+    p: [
+      'medium-embed-link',
     ],
     a: [
       'tag_link',
