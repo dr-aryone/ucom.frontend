@@ -4,7 +4,13 @@ import { connect } from 'react-redux';
 import UserHead from '../components/User/UserHead/index';
 import LayoutBase from '../components/Layout/LayoutBase';
 import { selectUser } from '../store/selectors/user';
-import { fetchUserPageData, trustUser, untrustUser, fetchUserTrustedBy } from '../actions/users';
+import {
+  fetchUserPageData,
+  trustUser,
+  untrustUser,
+  fetchUserTrustedBy,
+  fetchUserFollowsOrganizations,
+} from '../actions/users';
 import { fetchPost } from '../actions/posts';
 import { getUserById } from '../store/users';
 import { getPostById } from '../store/posts';
@@ -30,6 +36,7 @@ import { addErrorNotification } from '../actions/notifications';
 import { parseResponseError } from '../utils/errors';
 import { restoreActiveKey } from '../utils/keys';
 import Profile from './Profile';
+import { getOrganizationByIds } from '../store/organizations';
 
 const UserPage = (props) => {
   const userIdOrName = props.match.params.userId;
@@ -39,6 +46,9 @@ const UserPage = (props) => {
   const [trustedByMetadata, setTrustedByMetadata] = useState({});
   const [trustLoading, setTrustLoading] = useState(false);
   const [profileEditVisible, setProfileEditVisible] = useState(false);
+  const [organizationsIds, setOrganizationsIds] = useState([]);
+  const [organizationsPopupIds, setOrganizationsPopupIds] = useState([]);
+  const [organizationsMetadata, setOrganizationsMetadata] = useState({});
   const user = getUserById(props.users, userIdOrName);
   const post = getPostById(props.posts, postId);
 
@@ -48,8 +58,13 @@ const UserPage = (props) => {
       const data = await props.dispatch(fetchUserPageData({
         userIdentity: userIdOrName,
       }));
+      const organizationsIds = data.oneUserFollowsOrganizations.data.map(i => i.id);
+
       setTrustedByUsersIds(data.oneUserTrustedBy.data.map(i => i.id));
       setTrustedByMetadata(data.oneUserTrustedBy.metadata);
+      setOrganizationsIds(organizationsIds);
+      setOrganizationsPopupIds(organizationsIds);
+      setOrganizationsMetadata(data.oneUserFollowsOrganizations.metadata);
     } catch (e) {
       const errorMessage = parseResponseError(e)[0].message;
       props.dispatch(addErrorNotification(errorMessage));
@@ -112,6 +127,34 @@ const UserPage = (props) => {
     setTrustLoading(false);
   };
 
+  const fetchOrganizations = async (page = 1) => {
+    loader.start();
+    try {
+      const data = await props.dispatch(fetchUserFollowsOrganizations({
+        userIdentity: userIdOrName,
+        page,
+      }));
+      setOrganizationsPopupIds(data.data.map(i => i.id));
+      setOrganizationsMetadata(data.metadata);
+    } catch (e) {
+      const errorMessage = parseResponseError(e)[0].message;
+      props.dispatch(addErrorNotification(errorMessage));
+    }
+    loader.done();
+  };
+
+  const mapOrganizationProps = ids =>
+    getOrganizationByIds(props.organizations, ids)
+      .map(item => ({
+        id: item.id,
+        organization: true,
+        title: item.title,
+        avatarSrc: urls.getFileUrl(item.avatarFilename),
+        url: urls.getOrganizationUrl(item.id),
+        nickname: item.nickname,
+        currentRate: item.currentRate,
+      }));
+
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchUserData();
@@ -158,19 +201,16 @@ const UserPage = (props) => {
           />
         </div>
         <div className="layout__sidebar">
-          {user.organizations &&
+          {organizationsIds.length > 0 &&
             <EntryListSection
+              limit={5}
+              showViewMore={organizationsMetadata.totalAmount > organizationsIds.length}
               title="Communities"
-              count={user.organizations.length}
-              data={user.organizations.map(item => ({
-                id: item.id,
-                organization: true,
-                title: item.title,
-                avatarSrc: urls.getFileUrl(item.avatarFilename),
-                url: urls.getOrganizationUrl(item.id),
-                nickname: item.nickname,
-                currentRate: item.currentRate,
-              }))}
+              count={organizationsMetadata.totalAmount}
+              data={mapOrganizationProps(organizationsIds)}
+              popupData={mapOrganizationProps(organizationsPopupIds)}
+              popupMetadata={organizationsMetadata}
+              onChangePage={fetchOrganizations}
             />
           }
 
@@ -222,6 +262,7 @@ UserPage.propTypes = {
     }),
   }).isRequired,
   ownerIsLoading: PropTypes.bool,
+  organizations: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 UserPage.defaultProps = {
@@ -247,6 +288,7 @@ export const getUserPageData = (store, params) => {
 export default connect(state => ({
   users: state.users,
   posts: state.posts,
+  organizations: state.organizations,
   owner: selectUser(state),
   ownerIsLoading: state.user.loading,
 }))(UserPage);

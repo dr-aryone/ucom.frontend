@@ -26,18 +26,19 @@ const DropdownMenu = (props) => {
       trigger={props.trigger}
       html={(
         <div className={styles.tooltipMenu}>
-          {props.items.map((item) => {
+          {props.items.map((item, id) => {
             const LinkTag = item.url ? Link : 'button';
 
             return (
               <LinkTag
-                key={item.title}
+                key={id}
                 to={item.url}
                 className={classNames({
                   [styles.item]: true,
                   [styles.title]: item.type === DROPDOWN_MENU_ITEM_TYPE_TITLE,
                   [styles.entry]: item.type === DROPDOWN_MENU_ITEM_TYPE_ENTRY,
                   [styles.logout]: item.type === DROPDOWN_MENU_ITEM_TYPE_LOGOUT,
+                  [styles.disabled]: item.disabled,
                 })}
                 onClick={() => {
                   if (tooltipRef.current) {
@@ -61,7 +62,10 @@ const DropdownMenu = (props) => {
     >
       {props.children ||
         <div className={styles.icon}>
-          <button className={styles.button}>
+          <button
+            onClick={props.onClickButton}
+            className={styles.button}
+          >
             <IconDots />
           </button>
         </div>
@@ -75,6 +79,7 @@ DropdownMenu.propTypes = {
     url: PropTypes.string,
     title: PropTypes.string.isRequired,
     onClick: PropTypes.func,
+    disabled: PropTypes.bool,
     type: PropTypes.oneOf([
       DROPDOWN_MENU_ITEM_TYPE_TITLE,
       DROPDOWN_MENU_ITEM_TYPE_ENTRY,
@@ -87,11 +92,13 @@ DropdownMenu.propTypes = {
   trigger: PropTypes.string,
   position: PropTypes.string,
   distance: PropTypes.number,
+  onClickButton: PropTypes.func,
 };
 
 DropdownMenu.defaultProps = {
   disabled: false,
   children: null,
+  onClickButton: null,
   trigger: 'click',
   position: 'bottom-center',
   distance: 10,

@@ -1,17 +1,21 @@
 import { GraphQLSchema } from 'ucom-libs-graphql-schemas';
 import humps from 'lodash-humps';
 import * as axios from 'axios';
+import snakes from '../utils/snakes';
 import { getBackendConfig } from '../utils/config';
 import { getToken } from '../utils/token';
 import { COMMENTS_PER_PAGE } from '../utils/comments';
 import { FEED_PER_PAGE, OVERVIEW_SIDE_PER_PAGE } from '../utils/feed';
+import { NODES_PER_PAGE } from '../utils/governance';
 import { LIST_ORDER_BY, LIST_PER_PAGE } from '../utils/list';
+
+const { Dictionary } = require('ucom-libs-wallet');
 
 const request = async (data, extraOptions = {}) => {
   let options = {
+    headers: {},
     withCredentials: true,
     baseURL: getBackendConfig().httpEndpoint,
-    headers: {},
   };
 
   const token = getToken();
@@ -31,6 +35,9 @@ const request = async (data, extraOptions = {}) => {
 
   try {
     const resp = await axios.post('/graphql', data, options);
+    if (resp.data.errors) {
+      throw resp;
+    }
     return humps(resp.data);
   } catch (e) {
     throw e;
@@ -43,6 +50,9 @@ export default {
     trustedByOrderBy = LIST_ORDER_BY,
     trustedByPerPage = LIST_PER_PAGE,
     trustedByPage = 1,
+    followsOrganizationsOrderBy = LIST_ORDER_BY,
+    followsOrganizationsPerPage = LIST_PER_PAGE,
+    followsOrganizationsPage = 1,
   }) {
     const query = GraphQLSchema.getQueryMadeFromParts([
       GraphQLSchema.getOneUserQueryPart({
@@ -58,11 +68,44 @@ export default {
         per_page: trustedByPerPage,
         page: trustedByPage,
       }),
+      GraphQLSchema.getOneUserFollowsOrganizationsQueryPart({
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+        order_by: followsOrganizationsOrderBy,
+        per_page: followsOrganizationsPerPage,
+        page: followsOrganizationsPage,
+      }),
     ]);
 
     try {
       const data = await request({ query });
       return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getUserFollowsOrganizations({
+    userIdentity,
+    orderBy = LIST_ORDER_BY,
+    perPage = LIST_PER_PAGE,
+    page = 1,
+  }) {
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getOneUserFollowsOrganizationsQueryPart({
+        page,
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+        order_by: orderBy,
+        per_page: perPage,
+      }),
+    ]);
+
+    try {
+      const data = await request({ query });
+      return data.data.oneUserFollowsOrganizations;
     } catch (e) {
       throw e;
     }
@@ -341,6 +384,96 @@ export default {
     }
   },
 
+  async getNodesSelected(
+    userId,
+    orderBy = '-bp_status',
+    page = 1,
+    perPage = NODES_PER_PAGE,
+  ) {
+    const commonParams = { orderBy, page, perPage };
+    const BLOCK_PRODUCERS = Dictionary.BlockchainNodes.typeBlockProducer();
+    const CALCULATOR_NODES = Dictionary.BlockchainNodes.typeCalculator();
+
+    const isVotedBlockProducers = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
+      ...commonParams,
+      filters: {
+        myselfVotesOnly: true,
+        userId,
+        blockchainNodesType: BLOCK_PRODUCERS,
+      },
+    }));
+
+    const isVotedCalculatorsNodes = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
+      ...commonParams,
+      filters: {
+        myselfVotesOnly: true,
+        userId,
+        blockchainNodesType: CALCULATOR_NODES,
+      },
+    }));
+
+    const partsWithAliases = {
+      isVotedBlockProducers, isVotedCalculatorsNodes,
+    };
+
+    const query = GraphQLSchema.getQueryMadeFromPartsWithAliases(partsWithAliases);
+
+    try {
+      const data = await request({ query });
+      return {
+        selectedNodes: {
+          [BLOCK_PRODUCERS]: data.data.isVotedBlockProducers,
+          [CALCULATOR_NODES]: data.data.isVotedCalculatorsNodes,
+        },
+      };
+    } catch (e) {
+      throw e;
+    }
+  },
+  async getAllNodes(
+    orderBy = '-bp_status',
+    page = 1,
+    perPage = NODES_PER_PAGE,
+  ) {
+    const commonParams = { orderBy, page, perPage };
+    const BLOCK_PRODUCERS = Dictionary.BlockchainNodes.typeBlockProducer();
+    const CALCULATOR_NODES = Dictionary.BlockchainNodes.typeCalculator();
+
+    const blockProducers = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
+      ...commonParams,
+      filters: {
+        myselfVotesOnly: false,
+        blockchainNodesType: BLOCK_PRODUCERS,
+      },
+    }));
+
+    const calculatorsNodes = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
+      ...commonParams,
+      filters: {
+        myselfVotesOnly: false,
+        blockchainNodesType: CALCULATOR_NODES,
+      },
+    }));
+
+
+    const partsWithAliases = {
+      blockProducers, calculatorsNodes,
+    };
+
+    const query = GraphQLSchema.getQueryMadeFromPartsWithAliases(partsWithAliases);
+
+    try {
+      const data = await request({ query });
+      return {
+        nodes: {
+          [BLOCK_PRODUCERS]: data.data.blockProducers,
+          [CALCULATOR_NODES]: data.data.calculatorsNodes,
+        },
+      };
+    } catch (e) {
+      throw e;
+    }
+  },
   async getOnePostOffer({
     postId,
     commentsQuery = {

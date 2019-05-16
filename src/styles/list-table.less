@@ -54,6 +54,7 @@
     padding: 32px;
     border: 1px solid #E8ECEC;
     border-width: 1px 0 0;
+    background: #fff;
 
     &:first-child {
       border-radius: 16px 0 0;
@@ -72,9 +73,10 @@
         position: absolute;
         left: -1px;
         top: 100%;
-        width: 1px;
+        width: 16px;
         height: 16px;
-        background: #E8ECEC;
+        background: #fff;
+        border-left: 1px solid #E8ECEC;
       }
     }
 
@@ -82,6 +84,8 @@
       &:after {
         left: auto;
         right: -1px;
+        border-left: none;
+        border-right: 1px solid #E8ECEC;
       }
     }
   }

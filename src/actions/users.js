@@ -45,14 +45,14 @@ export const fetchMyself = () => async (dispatch) => {
   const token = getToken();
 
   if (!token) {
-    return;
+    return undefined;
   }
-
+  let data;
   dispatch(setUserLoading(true));
   loader.start();
 
   try {
-    const data = await api.getMyself(token);
+    data = await api.getMyself(token);
 
     dispatch(setUser(data));
     dispatch(addUsers([data]));
@@ -70,6 +70,8 @@ export const fetchMyself = () => async (dispatch) => {
 
   dispatch(setUserLoading(false));
   loader.done();
+
+  return data;
 };
 
 export const fetchUser = userIdentity => async (dispatch) => {
@@ -95,8 +97,9 @@ export const fetchUserPageData = ({
       trustedByPerPage,
       trustedByPage,
     });
-    const { oneUser, oneUserTrustedBy } = data;
+    const { oneUser, oneUserTrustedBy, oneUserFollowsOrganizations } = data;
     dispatch(addUsers(oneUserTrustedBy.data.concat([oneUser])));
+    dispatch(addOrganizations(oneUserFollowsOrganizations.data));
     return data;
   } catch (e) {
     throw e;
@@ -117,6 +120,26 @@ export const fetchUserTrustedBy = ({
       page,
     });
     dispatch(addUsers(data.data));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchUserFollowsOrganizations = ({
+  userIdentity,
+  orderBy,
+  perPage,
+  page,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getUserFollowsOrganizations({
+      userIdentity,
+      orderBy,
+      perPage,
+      page,
+    });
+    dispatch(addOrganizations(data.data));
     return data;
   } catch (e) {
     throw e;

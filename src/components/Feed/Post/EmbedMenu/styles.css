@@ -1,11 +1,11 @@
-:local(.embedMenu) {
+.embedMenu {
   position: relative;
   z-index: 0;
   display: inline-block;
   margin-right: auto;
 }
 
-:local(.buttonIcon) {
+.buttonIcon {
   box-sizing: border-box;
   display: flex;
   align-content: center;
@@ -18,58 +18,81 @@
   outline: none;
   cursor: pointer;
   fill: #c4c4c4;
-  transition: all 0.2s ease;
+  transition: transform 0.3s ease;
 }
 
-:local(.buttonIcon svg) {
+.buttonIcon svg {
   align-self: center;
   justify-self: center;
 }
 
-:local(.buttonIcon:hover) {
+.buttonIcon:hover {
   fill: #767676;
 }
 
-:local(.trigger) {
+.trigger {
   composes: buttonIcon;
   border: 2px solid #E8ECEC;
   border-radius: 50%;
-  transition: all 0.2s ease;
+  transition: transform 0.3s ease;
   background: white;
 }
 
-:local(.trigger svg) {
+.trigger svg {
   width: 10px;
   height: 10px;
 }
 
-:local(.triggerActive) {
+.triggerActive {
   transform: rotate(45deg);
 }
 
-:local(.icon) {
+.icon {
   composes: buttonIcon;
 }
 
-:local(.iconImage) {
+.iconImage {
   composes: buttonIcon;
+  transition: transform 0.3s ease;
+
 }
 
-:local(.iconImage circle) {
+.iconImage circle {
   stroke: #c4c4c4;
-  transition: stroke 0.2s ease;
+  transition: stroke 0.3s ease;
 }
 
-:local(.iconImage:hover circle) {
+.iconImage:hover circle {
   stroke: #767676;
 }
 
-:local(.iconImage input) {
+.iconImage input {
   display: none;
 }
 
-:local(.item) {
+.mainItem {
   display: inline-block;
   vertical-align: middle;
   margin: 0 16px 0 0;
+  position: relative;
+  z-index: 9;
+}
+
+.item {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 16px 0 0;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;  
+  position: relative;
+  left: -40px;
+  opacity: 0;
+}
+
+.active {
+  transform: translateX(40px);
+  opacity: 1;
+}
+
+.item :global(.drop-zone_clip){
+  right: 0;
 }

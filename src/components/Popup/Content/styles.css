@@ -36,6 +36,12 @@
   padding: 0;
 }
 
+@media (max-width: 1279px) {
+  .wrapper.fixWidth {
+    width: 100%;
+  }
+}
+
 .content {
   display: flex;
   flex-direction: column;

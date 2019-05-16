@@ -25,13 +25,14 @@
   font-weight: bold;
   letter-spacing: 0.1em;
   color: #505050;
-  
+
   &:hover,
-  &_active, {
+  &_active {
     color: @red;
     text-decoration: none;
   }
 }
+
 .menu_normal {
   font-weight: normal;
 }
@@ -195,6 +196,13 @@
     margin: 0 12px;
   }
 
+  .menu__item_left {
+    margin-top: 20px;
+    @media (min-width: 1023px) {
+      margin-left: auto;
+    }
+  }
+
   .menu__link {
     padding: 24px 0;
     display: block;
@@ -205,6 +213,10 @@
     @media (max-width: 1023px) {
       padding: 12px 0;
       border: none;
+    }
+
+    @media (max-width: 500px) {
+      font-size: 20px;
     }
   }
 
@@ -303,7 +315,7 @@
     font-weight: bold;
     letter-spacing: 0.1em;
     color: #505050;
-    
+
     &:hover,
     &_active, {
       color: @red;
@@ -339,8 +351,4 @@
   @media (min-width: 835px) {
     display: none;
   }
-}
-
-.menu__item_left {
-  margin-left: auto !important;
 }

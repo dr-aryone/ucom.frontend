@@ -35,10 +35,14 @@
   border-bottom-right-radius: 4px;
 }
 
-.item:hover:not(.title) {
+.item:not(.disabled):not(.title):hover {
   text-decoration: none;
   background: #F8F8F9;
   color: #D8352F;
+}
+
+.disabled {
+  cursor: not-allowed;
 }
 
 .item.title {

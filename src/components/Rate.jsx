@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
+import { formatRate } from '../utils/rate';
 
 const Rate = (props) => {
   if (props.value === undefined) {
@@ -10,7 +11,7 @@ const Rate = (props) => {
   return (
     <div className={classNames('rate', props.className)}>
       <div className="rate__value">
-        {(+props.value).toLocaleString()}
+        {formatRate(+props.value)}
         <span className="rate__degree">{props.dimension}</span>
       </div>
       <div className="rate__label">{props.label}</div>
