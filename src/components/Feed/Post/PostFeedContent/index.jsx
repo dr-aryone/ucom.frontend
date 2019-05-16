@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import FeedForm from '../../FeedForm';
@@ -11,7 +12,7 @@ import { checkMentionTag } from '../../../../utils/text';
 import { POST_TYPE_DIRECT_ID } from '../../../../utils/posts';
 import styles from './styles.css';
 import urls from '../../../../utils/urls';
-import { getCoverImage, getGalleryImages } from '../../../../utils/entityImages';
+import { getCoverImage } from '../../../../utils/entityImages';
 
 const PostFeedContent = (props) => {
   const post = getPostById(props.posts, props.postId);
@@ -51,7 +52,7 @@ const PostFeedContent = (props) => {
                   <Gallery
                     images={post.entityImages.gallery}
                     userId={props.userId}
-                    date={props.date}
+                    date={moment(post.createdAt).fromNow()}
                   />
                 </div>
               }

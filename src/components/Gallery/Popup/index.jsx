@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import React, { useState } from 'react';
 import styles from './styles.css';
 import Popup from '../../Popup';
 import IconClose from '../../Icons/Close';
+import ArrowRight from '../../Icons/GalleryArrowRight';
 import UserCard from '../../UserCard/UserCard';
 
 const GalleryPopup = (props) => {
@@ -26,9 +28,49 @@ const GalleryPopup = (props) => {
       </div>
 
       <div className={styles.popup}>
-        <div className={styles.viewport}>
-          <img className={styles.image} src={props.images[activeIndex].url} alt={props.images[activeIndex].alt} />
+        <div className={styles.container}>
+          <div
+            role="presentation"
+            onClick={() => {
+              if (activeIndex - 1 >= 0) {
+                setActiveIndex(activeIndex - 1);
+               }
+              }
+            }
+            className={classNames({
+              [styles.arrow]: true,
+              [styles.leftArrow]: true,
+              [styles.active]: activeIndex - 1 >= 0,
+            })}
+          >
+            <div className={styles.arrowBlock}>
+              <div className={styles.rotate}>
+                <ArrowRight />
+              </div>
+            </div>
+          </div>
+          <div className={styles.viewport}>
+            <img className={styles.image} src={props.images[activeIndex].url} alt={props.images[activeIndex].alt} />
+          </div>
+          <div
+            role="presentation"
+            onClick={() => {
+                if (activeIndex + 1 < props.images.length) {
+                  setActiveIndex(activeIndex + 1);
+                 }
+              }
+            }
+            className={classNames({
+              [styles.arrow]: true,
+              [styles.active]: activeIndex + 1 < props.images.length,
+            })}
+          >
+            <div className={styles.arrowBlock}>
+              <ArrowRight />
+            </div>
+          </div>
         </div>
+
 
         <div className={styles.toolbar}>
           <div className={styles.userCard}>

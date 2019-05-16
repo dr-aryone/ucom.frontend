@@ -33,8 +33,12 @@ const Form = (props) => {
       props.onReset();
     }
   };
-
+  // addGalleryImages = compose(addGalleryImages, addErrorNotification)
   const submit = () => {
+    if (galleryImages.length >= 10) {
+      return props.addErrorNotification('Error: more than 10 images');
+    }
+
     if (message.trim().length || isExistGalleryImages) {
       props.onSubmit({
         containerId: props.containerId,
@@ -45,6 +49,7 @@ const Form = (props) => {
       });
       reset();
     }
+    return undefined;
   };
 
   const onImage = async (file) => {
