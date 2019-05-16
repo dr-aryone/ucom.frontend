@@ -27,7 +27,6 @@ const UserHead = (props) => {
         <div className={styles.edit}>
           <ButtonEdit
             strech
-            // url={urls.getUserEditProfileUrl()}
             onClick={props.onClickEdit}
           />
         </div>
