@@ -29,6 +29,7 @@ import { authShowPopup } from '../actions/auth';
 import { addErrorNotification } from '../actions/notifications';
 import { parseResponseError } from '../utils/errors';
 import { restoreActiveKey } from '../utils/keys';
+import Profile from './Profile';
 
 const UserPage = (props) => {
   const userIdOrName = props.match.params.userId;
@@ -37,6 +38,7 @@ const UserPage = (props) => {
   const [trustedByUsersIds, setTrustedByUsersIds] = useState([]);
   const [trustedByMetadata, setTrustedByMetadata] = useState({});
   const [trustLoading, setTrustLoading] = useState(false);
+  const [profileEditVisible, setProfileEditVisible] = useState(false);
   const user = getUserById(props.users, userIdOrName);
   const post = getPostById(props.posts, postId);
 
@@ -136,6 +138,14 @@ const UserPage = (props) => {
         </Popup>
       }
 
+      {profileEditVisible &&
+        <Profile
+          onClickClose={() => {
+            setProfileEditVisible(false);
+          }}
+        />
+      }
+
       <div className="layout layout_profile">
         <div className="layout__header">
           <UserHead
@@ -144,6 +154,7 @@ const UserPage = (props) => {
             trustedByUsersIds={trustedByUsersIds}
             trustedByMetadata={trustedByMetadata}
             trustedByOnChangePage={fetchTrustedBy}
+            onClickEdit={() => setProfileEditVisible(true)}
           />
         </div>
         <div className="layout__sidebar">

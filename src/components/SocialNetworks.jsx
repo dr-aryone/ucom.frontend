@@ -1,79 +1,79 @@
-import React, { PureComponent, Fragment } from 'react';
-import _ from 'lodash';
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import TextInput from './TextInput';
-import Button from './Button';
+import Button from './Button/index';
 import IconRemove from './Icons/Remove';
+import styles from '../pages/Profile.css';
 
-class SocialNetworks extends PureComponent {
-  removeField = (index) => {
-    const { fields, onChange } = this.props;
+const SocialNetworks = (props) => {
+  const removeField = (index) => {
+    const { fields, onChange } = props;
     onChange([...fields.filter((_, i) => index !== i)]);
-  }
+  };
 
-  addField = () => {
-    const { fields, onChange } = this.props;
+  const addField = () => {
+    const { fields, onChange } = props;
     onChange([...fields, { sourceUrl: '' }]);
-  }
+  };
 
-  render() {
-    const { fields, onChange, errors } = this.props;
+  const { fields, onChange, errors } = props;
 
-    if (!fields) return null;
+  if (!fields) return null;
 
-    const myErrors = _.isEmpty(errors) ? [] :
-      Object.entries(errors)
-        .filter(e => e[0].indexOf('usersSources') + 1)
-        .map(e => ({ [e[0].replace('usersSources.', '').replace('.sourceUrl', '')]: e[1] }));
-
-    return (
-      <Fragment>
-        {fields.map((value, index) => (
-          <div className="fields__item fields__item_short" key={index}>
-            <div className="field">
-              <div className="field__label">Your website</div>
-              <div className="field__input">
-                <div className="toolbar">
-                  <div className="toolbar__main">
-                    <TextInput
-                      touched
-                      value={value.sourceUrl}
-                      // error={myErrors.find(e => e[index]) && myErrors.find(e => e[index])[index]}
-                      onChange={sourceUrl => onChange(Object.assign([], fields, { [index]: { ...fields[index], sourceUrl } }))}
-                    />
-                  </div>
-
-                  {fields.length > 1 &&
-                  <div className="toolbar__side toolbar__side_remove-field">
-                    <div
-                      role="presentation"
-                      className="communitie-list__remove"
-                      onClick={() => this.removeField(index)}
-                    >
-                      <IconRemove />
-                    </div>
-                  </div>}
+  return (
+    <Fragment>
+      <div className={classNames(styles.field, styles.fieldSoical)}>
+        <div className={styles.label}>Social Networks</div>
+        <div className={styles.inputBlock}>
+          {fields.length !== 0 ? fields.map((value, index) => (
+            <Fragment key={index}>
+              <div className={styles.inputBlockSocial}>
+                <TextInput
+                  touched
+                  value={value.sourceUrl}
+                  onChange={sourceUrl => onChange(Object.assign([], fields, { [index]: { ...fields[index], sourceUrl } }))}
+                  error={errors && errors[index] && errors[index].sourceUrl}
+                  className={styles.input}
+                  placeholder="https://site.com"
+                />
+                <div
+                  role="presentation"
+                  className={styles.trashIcon}
+                  onClick={() => removeField(index)}
+                >
+                  <IconRemove />
                 </div>
               </div>
-            </div>
-          </div>
-        ))}
-
-        <div className="fields__item">
-          <div className="field">
-            <div className="field__label" />
-            <div className="field__input">
-              <Button
-                size="small"
-                theme="transparent"
-                text="Add another"
-                onClick={this.addField}
-              />
-            </div>
-          </div>
+            </Fragment>
+          )) : (
+            <Button
+              small
+              grayBorder
+              onClick={addField}
+            >
+              Add profile
+            </Button>
+          )}
+          {fields.length !== 0 &&
+            <Button
+              small
+              grayBorder
+              onClick={addField}
+            >
+              Add Another
+            </Button>
+          }
         </div>
-      </Fragment>
-    );
-  }
-}
+      </div>
+    </Fragment>
+  );
+};
+
+SocialNetworks.propTypes = {
+  fields: PropTypes.arrayOf(PropTypes.any),
+  errors: PropTypes.arrayOf(PropTypes.any),
+  onChange: PropTypes.func,
+};
 
 export default SocialNetworks;

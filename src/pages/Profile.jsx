@@ -1,206 +1,221 @@
+import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { Element } from 'react-scroll';
-import React, { PureComponent, Fragment } from 'react';
+import urls from '../utils/urls';
+import { getUserById } from '../store/users';
+import { addUsers, updateUser } from '../actions/users';
 import { selectUser } from '../store/selectors/user';
-import VerticalMenu from '../components/VerticalMenu';
+import Popup from '../components/Popup';
+import Content from '../components/Popup/Content';
+import VerticalMenu from '../components/VerticalMenu/index';
+import styles from './Profile.css';
 import TextInput from '../components/TextInput';
 import Textarea from '../components/Textarea';
-import Footer from '../components/Footer';
-import Button from '../components/Button';
-import DropZone from '../components/DropZone';
-import Avatar from '../components/Avatar';
-import AvatarFromFile from '../components/AvatarFromFile';
+import Button from '../components/Button/index.jsx';
+import Avatar from '../components/EntryHeader/Avatar';
 import SocialNetworks from '../components/SocialNetworks';
-import LayoutBase from '../components/Layout/LayoutBase';
-import { userFormSetForm, userFormSetData, userFormHandleSubmit } from '../actions/userForm';
-import urls from '../utils/urls';
+import { userFormHandleSubmit } from '../actions/userForm';
+import { validator } from '../utils/validateFields';
+import { settingsShow } from '../actions/settings';
 
-class ProfilePage extends PureComponent {
-  componentDidMount() {
-    const {
-      firstName, about, usersSources, personalWebsiteUrl, avatarFilename,
-    } = this.props.user;
+const Profile = (props) => {
+  const owner = getUserById(props.users, props.user.id);
 
-    this.props.userFormSetData({
-      form: {
-        firstName, about, usersSources, personalWebsiteUrl, avatarFilename,
-      },
-    });
+  if (!owner) {
+    return null;
   }
 
-  render() {
-    const {
-      firstName, about, usersSources, personalWebsiteUrl, avatarFilename,
-    } = this.props.userForm.form;
-    const {
-      errors, isValid, loading, saved,
-    } = this.props.userForm;
+  const [userData, setUserData] = useState(owner);
+  const [errors, setErrors] = useState({});
 
-    if (saved) {
-      return <Redirect to={`/user/${this.props.user.id}`} />;
+  useEffect(() => {
+    setUserData({
+      ...userData,
+      id: owner.id,
+      firstName: owner.firstName,
+      avatarFilename: owner.avatarFilename,
+      about: owner.about,
+      personalWebsiteUrl: owner.personalWebsiteUrl,
+      usersSources: owner.usersSources || [],
+    });
+  }, (owner));
+
+  const saveProfile = () => {
+    userData.usersSources = userData.usersSources.filter(e => (e.sourceUrl));
+    const checkError = validator(userData);
+    setErrors(checkError);
+
+    const list = Object.values(checkError).flat();
+    const listError = [];
+    list.map((el) => {
+      if (el !== false) {
+        listError.push(el.sourceUrl);
+      }
+      return listError;
+    });
+    listError.push(checkError.firstName, checkError.personalWebsiteUrl);
+
+    if (listError.every(el => el === false)) {
+      props.updateUser(userData);
+      props.onClickClose();
     }
+  };
 
-    if (!this.props.user.id) {
-      return <Redirect to="/" />;
-    }
-
-    return (
-      <LayoutBase>
-        <div className="content">
-          <div className="content__inner content__inner_medium">
-            <div className="content__title content__title_between">
-              <h1 className="title">Edit Profile</h1>
-              <Link to={`/user/${this.props.user.id}`} className="button button_theme_transparent button_size_small">
-                Back to Profile
-              </Link>
-            </div>
-          </div>
-
-          <div className="content">
-            <div className="content__inner">
-              <Fragment>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    this.props.userFormHandleSubmit();
-                  }}
-                >
-                  <div className="grid grid_settings">
-                    <div className="grid__item grid__item_side">
-                      <VerticalMenu
-                        sections={[
-                          { name: 'PersonalInfo', title: 'Personal info' },
-                          { name: 'SocialNetworks', title: 'Social networks' },
-                        ]}
-                      />
+  return (
+    <div className={styles.page}>
+      <Popup id="profile-popup" onClickClose={props.onClickClose}>
+        <Content onClickClose={props.onClickClose}>
+          <div className={styles.profile}>
+            <div className={styles.sidebar}>
+              <VerticalMenu
+                sticky
+                sections={[
+                  { name: 'PersonalInfo', title: 'Personal info' },
+                  { name: 'AboutMe', title: 'About Me' },
+                  { name: 'Links', title: 'Links' },
+                ]}
+                scrollerOptions={{
+                  spy: true,
+                  duration: 500,
+                  delay: 100,
+                  offset: 0,
+                  smooth: true,
+                  containerId: 'profile-popup',
+                }}
+              />
+              {owner ? (
+                <Fragment>
+                  <div className={styles.btnSave}>
+                    <Button
+                      onClick={() => saveProfile()}
+                    >
+                      Save Changes
+                    </Button>
+                  </div>
+                  <div className={styles.link}>Go to
+                    <div
+                      className="link red"
+                      role="presentation"
+                      onClick={() => {
+                      props.onClickClose();
+                      props.settingsShow();
+                    }}
+                    > Account Settings
                     </div>
-                    <div className="grid__item grid__item_main">
-                      <div className="fields">
-                        <Element name="PersonalInfo">
-                          <div className="fields__title">
-                            <h1 className="title title_small">Personal info</h1>
-                          </div>
+                  </div>
+                </Fragment>
+              ) : (
+                <div className={styles.btnSave}><Button red>Create</Button></div>
+              )}
+            </div>
+            <div className={styles.content}>
+              <div className={styles.header}>
+                <h2 className={styles.title}>{owner ? 'Edit Your Profile' : 'Your Profile'}</h2>
+                <p>Few words about profile its how it will affect autoupdates and etc. Maybe some tips)</p>
+              </div>
 
-                          <div className="fields__item">
-                            <div className="field field_avatar">
-                              <div className="field__label">
-                                <div className="field__section">Avatar</div>
-                                <div className="field__section">
-                                  {avatarFilename && typeof avatarFilename === 'object' ? (
-                                    <AvatarFromFile size="big" file={avatarFilename} />
-                                  ) : (
-                                    <Avatar size="big" src={urls.getFileUrl(avatarFilename)} />
-                                  )}
-                                </div>
-                              </div>
-                              <div className="field__input">
-                                <div className="field__section">
-                                  <DropZone
-                                    onDrop={file => this.props.userFormSetForm({ avatarFilename: file })}
-                                    text="Add or drag img"
-                                  />
-                                </div>
-                                <div className="field__section">
-                                  <div className="field__hint">
-                                    You can upload an image in JPG or PNG format. Size is not more than 1 mb.
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="fields__item">
-                            <div className="field">
-                              <div className="field__label">Displayed name</div>
-                              <div className="field__input">
-                                <TextInput
-                                  touched
-                                  error={errors.firstName && errors.firstName[0]}
-                                  value={firstName}
-                                  onChange={firstName => this.props.userFormSetForm({ firstName })}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="fields__item">
-                            <div className="field">
-                              <div className="field__label">About me</div>
-                              <div className="field__input">
-                                <Textarea
-                                  placeholder="Type something..."
-                                  rows={6}
-                                  value={about}
-                                  onChange={about => this.props.userFormSetForm({ about })}
-                                  isMentioned
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="fields__item">
-                            <div className="field">
-                              <div className="field__label">Your website</div>
-                              <div className="field__input">
-                                <TextInput
-                                  touched
-                                  value={personalWebsiteUrl}
-                                  onChange={personalWebsiteUrl => this.props.userFormSetForm({ personalWebsiteUrl })}
-                                  error={errors.personalWebsiteUrl && errors.personalWebsiteUrl[0]}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </Element>
-                        <Element name="SocialNetworks">
-                          <div className="fields__title">
-                            <h1 className="title title_small">Social networks</h1>
-                          </div>
-                          <SocialNetworks
-                            fields={usersSources}
-                            onChange={usersSources => this.props.userFormSetForm({ usersSources })}
-                            errors={errors}
-                          />
-                          <div className="fields__item">
-                            <div className="field">
-                              <div className="field__input">
-                                <Button
-                                  isStretched
-                                  isUpper
-                                  type="submit"
-                                  text="submit"
-                                  theme="red"
-                                  size="big"
-                                  isDisabled={!isValid || loading}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </Element>
+              <div>
+                <Element name="PersonalInfo" className={styles.section}>
+                  <h3 className={styles.title}>Personal Info</h3>
+                  <div className={styles.field}>
+                    <div className={styles.label}>Avatar</div>
+                    <div className={styles.avatarBlock}>
+                      <div className={styles.avatar}>
+                        <Avatar
+                          src={urls.getFileUrl(owner.avatarFilename)}
+                          changeEnabled
+                          onChange={async (file) => {
+                            props.addUsers([{
+                              id: +userData.id,
+                              avatarFilename: file.preview,
+                            }]);
+                            props.updateUser({
+                              avatarFilename: file,
+                            });
+                          }}
+                        />
+                      </div>
+                      <div>
+                        Drag and drop. We support JPG, PNG or GIF files. Max file size 0,5 Mb.
                       </div>
                     </div>
                   </div>
-                </form>
-              </Fragment>
-
-              <Footer />
+                  <div className={classNames(styles.field, styles.fieldRequired)}>
+                    <div className={styles.label}>Displayed name</div>
+                    <div className={styles.inputBlock}>
+                      <TextInput
+                        topLabel
+                        isRequired
+                        placeholder="Nickname or name, maybe emoji…"
+                        error={errors.firstName}
+                        value={userData.firstName}
+                        onChange={value => setUserData({ ...userData, firstName: value })}
+                      />
+                    </div>
+                  </div>
+                </Element>
+                <Element name="AboutMe" className={styles.section}>
+                  <h3 className={styles.title}>About Me</h3>
+                  <div className={styles.textarea}>
+                    <Textarea
+                      placeholder="Your story, what passions you — something you want others to know about you"
+                      rows={6}
+                      value={userData.about}
+                      onChange={value => setUserData({ ...userData, about: value })}
+                      isMentioned
+                    />
+                  </div>
+                </Element>
+                <Element name="Links" className={styles.section}>
+                  <h3 className={styles.title}>Links</h3>
+                  <div className={classNames(styles.field, styles.fieldRequired)}>
+                    <div className={styles.label}>My Website</div>
+                    <div className={styles.inputBlock}>
+                      <TextInput
+                        error={errors.personalWebsiteUrl}
+                        value={userData.personalWebsiteUrl}
+                        onChange={value => setUserData({ ...userData, personalWebsiteUrl: value })}
+                        placeholder="https://site.com"
+                      />
+                    </div>
+                  </div>
+                  <SocialNetworks
+                    fields={userData.usersSources}
+                    onChange={value => setUserData({ ...userData, usersSources: value })}
+                    errors={errors && errors.usersSources}
+                  />
+                </Element>
+              </div>
             </div>
           </div>
-        </div>
-      </LayoutBase>
-    );
-  }
-}
+        </Content>
+      </Popup>
+    </div>
+  );
+};
+
+Profile.propTypes = {
+  users: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  updateUser: PropTypes.func.isRequired,
+  addUsers: PropTypes.func.isRequired,
+  onClickClose: PropTypes.func,
+  settingsShow: PropTypes.func,
+};
 
 export default connect(
   state => ({
+    users: state.users,
     user: selectUser(state),
-    userForm: state.userForm,
+    userData: state.userData,
   }),
   dispatch => bindActionCreators({
-    userFormSetForm,
-    userFormSetData,
+    addUsers,
+    updateUser,
     userFormHandleSubmit,
+    settingsShow,
   }, dispatch),
-)(ProfilePage);
+)(Profile);

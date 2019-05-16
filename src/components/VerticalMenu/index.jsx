@@ -6,13 +6,13 @@ import styles from './styles.css';
 
 const VerticalMenu = props => (
   <nav
-  className={classNames({
-    [styles.verticalMenu]: true,
-    [styles.sticky]: props.sticky,
-  })}
-  style={{
-    top: props.sticky ? `${props.stickyTop}px` : undefined,
-  }}
+    className={classNames({
+      [styles.verticalMenu]: true,
+      [styles.sticky]: props.sticky,
+    })}
+    style={{
+      top: props.sticky ? `${props.stickyTop}px` : undefined,
+    }}
   >
     {props.sections.map((section, index) => (
       <Link

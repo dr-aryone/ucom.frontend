@@ -11,8 +11,6 @@ import OrganizationsPage from './pages/Organizations';
 import OrganizationsCreatePage from './pages/OrganizationsCreate';
 import OrganizationPage from './pages/Organization';
 import NotFoundPage from './pages/NotFoundPage';
-import Profile from './pages/Pro';
-import Organization from './pages/Org';
 import RegistrationPage from './components/Registration/Registration';
 import GovernancePage from './components/Governance/Governance';
 import Tag from './pages/Tag';
@@ -64,9 +62,6 @@ export default [{
   path: '/registration',
   component: RegistrationPage,
 }, {
-  path: '/profile',
-  component: Profile,
-}, {
   path: '/users',
   component: UsersPage,
 }, {
@@ -80,15 +75,13 @@ export default [{
   component: OrganizationsPage,
 }, {
   path: '/communities/new',
-  // component: OrganizationsCreatePage,
-  component: Organization,
+  component: OrganizationsCreatePage,
 }, {
   path: '/communities/:id',
   component: OrganizationPage,
 }, {
   path: '/communities/:id/edit',
-  // component: OrganizationsCreatePage,
-  component: Organization,
+  component: OrganizationsCreatePage,
 }, {
   path: '/communities/:id/:postId',
   component: OrganizationPage,

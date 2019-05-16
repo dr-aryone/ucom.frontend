@@ -1,58 +1,38 @@
-// import Validator from './../utils/validator';
+import Validator from './../utils/validator';
+import { validURL } from '../utils/url';
 
-// export const validateFields = (
-//   data = {}, fields = [], rules = {}, isAll = false,
-//   customNames = {},
-// ) => {
-//   const validation = new Validator(data, rules);
+export const validateFields = (
+  data = {}, fields = [], rules = {}, isAll = false,
+  customNames = {},
+) => {
+  const validation = new Validator(data, rules);
 
-//   if (customNames.customName) {
-//     validation.setAttributeFormatter(() => customNames.customName);
-//   }
+  if (customNames.customName) {
+    validation.setAttributeFormatter(() => customNames.customName);
+  }
 
-//   const isValid = validation.passes();
-//   const errors = isAll ?
-//     validation.errors.all() :
-//     fields.reduce((value, field) => ({ ...value, [field]: validation.errors.get(field) }), {});
-//   return { isValid, errors };
-// };
-
-
-
-
-
-// let data = {
-//   firstName: 'Alex',
-//   about: 'asd',
-//   personalWebsiteUrl: 'https://ya.ru',
-//   usersSources: [{
-//     sourceUrl: 'http://ya.ru',
-//   }],
-// };
+  const isValid = validation.passes();
+  const errors = isAll ?
+    validation.errors.all() :
+    fields.reduce((value, field) => ({ ...value, [field]: validation.errors.get(field) }), {});
+  return { isValid, errors };
+};
 
 const rule = {
   firstName: value => (!value && 'Displayed name is required'),
 
-  personalWebsiteUrl: value =>
-    !value.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/) && 'Not a valid URL format',
-  // (value.match(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/) && 'Not a valid URL format'),
+  personalWebsiteUrl: (value) => {
+    const error = !value ? false : !validURL(value) && 'Not a valid URL format';
+    return error;
+  },
 
   usersSources: [{
-    sourceUrl: value =>
-      !value.match(/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm) && 'Not a valid URL format',
-    // (value.match(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/) && 'Not a valid URL format'),
-    // (!URL_REGEXP.test(value) && 'Site is not valid'),
+    sourceUrl: (value) => {
+      const error = !value ? false : !validURL(value) && 'Not a valid URL format';
+      return error;
+    },
   }],
 };
-
-// let errors = {
-  // firstName: 'Displayed name is reqired',
-  // sites: ['Error', '1 Error'],
-  // partners: [{
-  //   url: 'Url error',
-  //   title: 'Title error',
-  // }],
-// };
 
 export const validator = (data, rules = rule) => {
   const fields = Object.keys(data);
@@ -60,8 +40,6 @@ export const validator = (data, rules = rule) => {
 
   fields.forEach((field) => {
     const rule = rules[field];
-
-    console.log('rule: ', rule);
 
     if (!rule) {
       return;

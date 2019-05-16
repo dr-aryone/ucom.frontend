@@ -127,11 +127,8 @@ export const updateUser = payload => async (dispatch) => {
   loader.start();
 
   try {
-    const data = await api.patchMyself(snakes(payload));
-
-    delete data.currentRate;
-
-    dispatch(addUsers([data]));
+    await api.patchMyself(snakes(payload));
+    await dispatch(fetchUser(payload.id));
   } catch (e) {
     console.error(e);
     dispatch(addServerErrorNotification(e));

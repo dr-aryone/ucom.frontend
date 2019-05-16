@@ -25,7 +25,11 @@ const UserHead = (props) => {
     <div className={styles.entryHead}>
       {userIsOwner(user, props.owner) &&
         <div className={styles.edit}>
-          <ButtonEdit strech url={urls.getUserEditProfileUrl()} />
+          <ButtonEdit
+            strech
+            // url={urls.getUserEditProfileUrl()}
+            onClick={props.onClickEdit}
+          />
         </div>
       }
 
@@ -37,11 +41,10 @@ const UserHead = (props) => {
             src={urls.getFileUrl(user.avatarFilename)}
             changeEnabled={userIsOwner(user, props.owner)}
             onChange={async (file) => {
-              console.log('prev: ', file.preview);
-              // props.dispatch(addUsers([{
-              //   id: +props.owner.id,
-              //   avatarFilename: file.preview,
-              // }]));
+              props.dispatch(addUsers([{
+                id: +props.owner.id,
+                avatarFilename: file.preview,
+              }]));
 
               props.dispatch(updateUser({
                 avatarFilename: file,
@@ -117,6 +120,7 @@ UserHead.propTypes = {
   trustedByUsersIds: PropTypes.arrayOf(PropTypes.number),
   trustedByMetadata: followersPropTypes.metadata,
   trustedByOnChangePage: PropTypes.func,
+  onClickEdit: PropTypes.func.isRequired,
 };
 
 UserHead.defaultProps = {
