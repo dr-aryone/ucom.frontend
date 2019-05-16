@@ -5,25 +5,28 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './styles.css';
 import UserPick from '../../UserPick/UserPick';
 import Image from './Image';
-import DragAndDrop from './DragAndDrop';
+import DragAndDrop from '../../DragAndDrop';
 import { COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST } from '../../../utils/comments';
 import TributeWrapper from '../../TributeWrapper';
 import { isSubmitKey, isEscKey } from '../../../utils/keyboard';
-import { getBase64FromFile } from '../../../utils/upload';
+import { getGalleryImages, removeGalleryImage, addGalleryImages } from '../../../utils/entityImages';
+import { initDragAndDropListeners } from '../../../utils/dragAndDrop';
 import api from '../../../api';
+import DropZone from '../../DropZone';
+import IconClip from '../../Icons/Clip';
+import IconEnter from '../../Icons/Enter';
 
 const Form = (props) => {
   const [message, setMessage] = useState(props.message);
   const [entityImages, setEntityImages] = useState({ gallery: [] });
-  const [base64Cover, setBase64Cover] = useState('');
-
-  const textareaEl = useRef(null);
-  const formEl = useRef(null);
+  const [dropOnForm, setDropOnForm] = useState(false);
   const fieldEl = useRef(null);
+  const textareaEl = useRef(null);
+  const galleryImages = getGalleryImages({ entityImages });
+  const isExistGalleryImages = !!galleryImages.length;
 
   const reset = () => {
     setMessage('');
-    setBase64Cover('');
     setEntityImages({ gallery: [] });
 
     if (props.onReset) {
@@ -32,7 +35,7 @@ const Form = (props) => {
   };
 
   const submit = () => {
-    if (message.trim().length || (entityImages.gallery[0] && entityImages.gallery[0].url)) {
+    if (message.trim().length || isExistGalleryImages) {
       props.onSubmit({
         containerId: props.containerId,
         postId: props.postId,
@@ -44,21 +47,30 @@ const Form = (props) => {
     }
   };
 
-  const onImage = async (files) => {
-    const base64Cover = await getBase64FromFile(files[0]);
-    setBase64Cover(base64Cover);
-    const data = await api.uploadPostImage(files[0]);
-    const { url } = data.files[0];
-    // TODO: make multiple upon creating gallery
-    // setEntityImages({ gallery: [...entityImages.gallery, { url }] });
-    setBase64Cover(url);
-    setEntityImages({ gallery: [{ url }] });
+  const onImage = async (file) => {
+    const data = await api.uploadPostImage(file);
+    const image = data.files[0];
+    setEntityImages(addGalleryImages(entityImages, [image]));
+  };
+
+  const onMultipleImages = async (files) => {
+    const data = await Promise.all(files.map(url => api.uploadPostImage(url)));
+    const urls = data.map(item => item.files[0]);
+    setEntityImages(addGalleryImages(entityImages, urls));
   };
 
   useEffect(() => {
     autosize(textareaEl.current);
+
+    const removeInitDragAndDropListeners = initDragAndDropListeners(fieldEl.current, () => {
+      setDropOnForm(true);
+    }, () => {
+      setDropOnForm(false);
+    });
+
     return () => {
       autosize.destroy(textareaEl);
+      removeInitDragAndDropListeners();
     };
   }, []);
 
@@ -73,7 +85,6 @@ const Form = (props) => {
         [styles.flat]: props.flat,
       })}
       depth={props.depth}
-      ref={formEl}
     >
       <div className={styles.formMain}>
         <div className={styles.userPick}>
@@ -89,8 +100,7 @@ const Form = (props) => {
               <TributeWrapper
                 enabledImgUrlParse
                 onParseImgUrl={(url) => {
-                    setBase64Cover(url);
-                    setEntityImages({ gallery: [{ url }] });
+                    setEntityImages(addGalleryImages(entityImages, [{ url }]));
                   }
                 }
                 onChange={(message) => {
@@ -117,28 +127,51 @@ const Form = (props) => {
                 />
               </TributeWrapper>
             </div>
+            <div
+              className={styles.containerActions}
+            >
+              <label name="img" className={styles.label}>
+                <IconClip />
+                <DropZone
+                  className={styles.labelFile}
+                  multiple
+                  onDrop={async (files) => {
+                    await onMultipleImages(files);
+                  }
+                }
+                />
+              </label>
+
+              <div
+                role="presentation"
+                className={styles.action}
+                onClick={submit}
+              >
+                <IconEnter />
+              </div>
+            </div>
             <DragAndDrop {...{
-              ...base64Cover, onImage, submit, textareaEl, formEl, fieldEl,
+                onImage, dropOnForm,
               }}
             />
           </div>
-
-          {props.uploadEnabled && props.entityImages.gallery.length &&
-            <div className={styles.images}>
-              {props.entityImages.gallery.map(image => <Image key={image.url} src={image.url} />)}
-            </div>
-          }
         </div>
       </div>
-      {base64Cover &&
-        <Image
-          src={base64Cover}
-          onClickRemove={() => {
-            setEntityImages('');
-            setBase64Cover('');
-          }}
-        />
-      }
+
+      <div className="feed-form__previews">
+        {isExistGalleryImages &&
+          galleryImages.map((url, index) => (
+            <Image
+              key={index}
+              src={url}
+              isMultiple={galleryImages.length > 1}
+              onClickRemove={() => {
+                setEntityImages(removeGalleryImage(entityImages, index));
+              }}
+            />
+          ))
+        }
+      </div>
     </div>
   );
 };
@@ -151,7 +184,6 @@ Form.propTypes = {
   commentId: PropTypes.number,
   depth: PropTypes.number,
   autoFocus: PropTypes.bool,
-  uploadEnabled: PropTypes.bool,
   userImageUrl: PropTypes.string,
   userPageUrl: PropTypes.string,
   userName: PropTypes.string,
@@ -170,7 +202,6 @@ Form.defaultProps = {
   commentId: null,
   depth: 0,
   autoFocus: false,
-  uploadEnabled: false,
   userImageUrl: null,
   userPageUrl: null,
   userName: null,

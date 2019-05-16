@@ -39,7 +39,7 @@
   position: relative;
 }
 
-.fieldNotBorder {
+:global(body.dragenter) .field {
   border: none;
 }
 
@@ -64,13 +64,6 @@
 .input::placeholder {
   opacity: 1;
   color: #C1C1C1;
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  height: 46px;
-  justify-content: space-between;
 }
 
 .action {
@@ -101,14 +94,20 @@
   position: relative;
   z-index: 0;
   margin-top: 20px;
-  margin-left: auto;
+  margin-right: 10px;
+  width: auto;
+}
+
+.imageWrapper:last-child {
+  margin-right: 0px;
 }
 
 .image {
   display: block;
-  height: 100%;
   width: 100%;
+  margin-left: auto;
   object-fit: cover;
+  height: 77px;
 }
 
 .imageRemove {
@@ -152,96 +151,24 @@
 
 .containerActions {
   position: relative;
-  width: 15px;
-}
-
-.dropText {
-  font-weight: bold;
-  font-size: 14px;
-  text-transform: uppercase;
-  width: 146px;
-}
-
-.drop {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  z-index: 99;
-  background: white;
-  border: 1px dashed #D8352F;
-  border-radius: 4px;
-}
-
-.dropOnForm {
-  background: #D8352F;
-  border-radius: 4px;
-}
-
-.drop .clipComments {
-  display: none;
-}
-
-.drop .dropZoneComments {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-}
-
-.drop .dropZoneComments :global(.drop-zone__input){
-  width: 100%;
-  height: 100%;
-}
-
-.drop .dropText {
-  display: block;
-  color: #D8352F;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.drop.dropOnForm .dropText {
-  color: white;
-}
-
-.dropText {
-  display: none;
-}
-
-.dropZoneComments {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  top: -14px;
-  left: -20px;
-  cursor: pointer;
-}
-
-.dropZoneComments :global(.drop-zone__input){
-  width: 30px;
-  height: 30px;
-  border: none;
-  z-index: 2;
-}
-
-.dropZoneComments :global(.drop-zone__input):hover{
-  border: none;
-}
-
-.clipComments {
-  fill: #c4c4c4;
-  width: 30px;
-  height: 30px;
   display: flex;
-  position: absolute;
-  top: -14px;
-  left: -20px;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  top: -9px;
+}
+
+.label {
+  fill: #c4c4c4;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 4px;
+}
+
+.labelFile {
+  display: none;
 }
 
 .dragNdrop {
@@ -249,7 +176,6 @@
   align-items: flex-end;
 }
 
-.isMultiple {
-  border: 1px black solid;
-  width: 23%;
+.label:hover {
+  fill: #767676;
 }

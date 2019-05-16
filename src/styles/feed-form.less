@@ -40,8 +40,8 @@
 }
 
 .feed-form__previews {
-  flex-wrap: wrap;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
 }
 
 .feed-form__submit {
@@ -71,9 +71,13 @@
   display: flex;
 }
 
-.feed-form__message {
+.feed-form-message {
   padding: 12px;
   flex: 1 1 auto;
+}
+
+.feed-form-message__edit {
+  padding: 0px;
 }
 
 .feed-form__container {

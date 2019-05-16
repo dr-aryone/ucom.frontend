@@ -18,3 +18,25 @@
 .avatarSmall {
   margin-right: 5px;
 }
+
+.dropdown {
+  margin-left: auto;
+}
+
+.leftTime {
+  color: #C4C4C4;
+} 
+
+.limit {
+  font-size: 12px;
+  color: #000000;
+  opacity: 0.6; 
+}
+
+.edit {
+  color: #000000;
+  opacity: 0.6;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 15px;
+}

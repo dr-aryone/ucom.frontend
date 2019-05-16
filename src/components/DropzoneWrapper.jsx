@@ -42,11 +42,13 @@ export default connect(
 
 DropzoneWrapper.propTypes = {
   addErrorNotification: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   onChange: PropTypes.func.isRequired,
   multiple: PropTypes.bool,
 };
 
 DropzoneWrapper.defaultProps = {
   multiple: false,
+  children: null,
+
 };
