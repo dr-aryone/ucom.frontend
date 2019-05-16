@@ -17,8 +17,7 @@ import Textarea from '../components/Textarea';
 import Button from '../components/Button/index.jsx';
 import Avatar from '../components/EntryHeader/Avatar';
 import SocialNetworks from '../components/SocialNetworks';
-import { userFormHandleSubmit } from '../actions/userForm';
-import { validator } from '../utils/validateFields';
+import { validator, isValid } from '../utils/validateFields';
 import { settingsShow } from '../actions/settings';
 
 const Profile = (props) => {
@@ -48,17 +47,7 @@ const Profile = (props) => {
     const checkError = validator(userData);
     setErrors(checkError);
 
-    const list = Object.values(checkError).flat();
-    const listError = [];
-    list.map((el) => {
-      if (el !== false) {
-        listError.push(el.sourceUrl);
-      }
-      return listError;
-    });
-    listError.push(checkError.firstName, checkError.personalWebsiteUrl);
-
-    if (listError.every(el => el === false)) {
+    if (isValid(checkError)) {
       props.updateUser(userData);
       props.onClickClose();
     }
@@ -215,7 +204,6 @@ export default connect(
   dispatch => bindActionCreators({
     addUsers,
     updateUser,
-    userFormHandleSubmit,
     settingsShow,
   }, dispatch),
 )(Profile);

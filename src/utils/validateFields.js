@@ -63,3 +63,25 @@ export const validator = (data, rules = rule) => {
 
   return errors;
 };
+
+export const isValid = (errors) => {
+  const fields = Object.values(errors);
+
+  for (let i = 0; i < fields.length; i++) {
+    if (Array.isArray(fields[i]) && typeof fields[i][0] === 'object') {
+      for (let j = 0; j < fields[i].length; j++) {
+        if ((Object.values(fields[i][j])).filter(d => !!d).length) {
+          return false;
+        }
+      }
+    } else if (Array.isArray(fields[i])) {
+      if (fields[i].filter(d => !!d).length) {
+        return false;
+      }
+    } else if (fields[i]) {
+      return false;
+    }
+  }
+
+  return true;
+};
