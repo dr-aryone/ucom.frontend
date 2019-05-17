@@ -24,3 +24,6 @@ export const changeCoverImageUrl = (entry, url) => {
 export const getCoverImage = entry =>
   getEntryImageAttr(entry, 'articleTitle', 'url', 0);
 
+export const getGalleryImage = entry =>
+  getEntryImageAttr(entry, 'gallery', 'url', 0);
+

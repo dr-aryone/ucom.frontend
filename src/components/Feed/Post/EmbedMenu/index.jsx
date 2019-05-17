@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import styles from './styles.css';
 import IconPhoto from '../../../Icons/Photo';
 import IconPlus from '../../../Icons/Plus';
@@ -11,7 +11,7 @@ const EmbedMenu = (props) => {
 
   return (
     <div className={styles.embedMenu}>
-      <div className={styles.item}>
+      <div className={styles.mainItem}>
         <button
           title="Toggle menu"
           type="button"
@@ -26,26 +26,25 @@ const EmbedMenu = (props) => {
           <IconPlus />
         </button>
       </div>
-
-      {active &&
-        <Fragment>
-          <div className={styles.item}>
-            <div
-              className={styles.iconImage}
-            >
-              <IconPhoto />
-              <DropZone
-                className="drop-zone_clip"
-                onDrop={(file) => {
-                  props.onImage(file);
-                  setActive(!active);
-                  }
-                }
-              />
-            </div>
-          </div>
-        </Fragment>
-      }
+      <div
+        className={classNames({
+            [styles.item]: true,
+            [styles.active]: active,
+          })}
+      >
+        <div
+          className={styles.iconImage}
+        >
+          <IconPhoto />
+          <DropZone
+            className="drop-zone_clip"
+            onDrop={(file) => {
+              props.onImage(file);
+              setActive(!active);
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

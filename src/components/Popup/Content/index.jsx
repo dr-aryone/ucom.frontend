@@ -20,6 +20,7 @@ const Content = (props) => {
         [styles.wrapper]: true,
         [styles.fullHeight]: props.fullHeight,
         [styles.fullWidth]: props.fullWidth,
+        [styles.fixWidth]: props.fixWidth,
         [styles.screen]: props.screen,
       })}
     >

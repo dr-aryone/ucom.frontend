@@ -1,14 +1,16 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import React, { useState, useRef } from 'react';
+import classNames from 'classnames';
+import React, { useState, useRef, useEffect, Fragment } from 'react';
 import Avatar from '../Avatar';
 import IconEnter from '../Icons/Enter';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
+import { initDragAndDropListeners } from '../../utils/dragAndDrop';
 import { removeCoverImage, changeCoverImageUrl, getCoverImage } from '../../utils/entityImages';
 import TributeWrapper from '../TributeWrapper';
 import EmbedMenu from './Post/EmbedMenu';
-import FeedDragAndDrop from './Post/FeedDragAndDrop';
+import DragAndDrop from '../DragAndDrop';
 import Image from '../Comments/Form/Image';
 import urls from '../../utils/urls';
 import api from '../../api';
@@ -17,9 +19,17 @@ const FeedForm = (props) => {
   const initialText = props.initialText ? `#${props.initialText} ` : false;
   const [message, setMessage] = useState(props.message || initialText || '');
   const [entityImages, setEntityImages] = useState(props.entityImages);
-  const textareaEl = useRef(null);
-  const formEl = useRef(null);
+  const [dropOnForm, setDropOnForm] = useState(false);
   const fieldEl = useRef(null);
+
+  useEffect(() => {
+    const removeInitDragAndDropListeners = initDragAndDropListeners(fieldEl.current, () => {
+      setDropOnForm(true);
+    }, () => {
+      setDropOnForm(false);
+    });
+    return removeInitDragAndDropListeners;
+  }, []);
 
   const onImage = async (file) => {
     const data = await api.uploadPostImage(file);
@@ -27,7 +37,7 @@ const FeedForm = (props) => {
     setEntityImages(changeCoverImageUrl(entityImages, url));
   };
 
-  const sumbitForm = (message, entityImages) => {
+  const sumbitForm = () => {
     if (typeof props.onSubmit === 'function' && (message.trim().length !== 0 || getCoverImage({ entityImages }))) {
       props.onSubmit(message, JSON.stringify(entityImages));
     }
@@ -41,20 +51,27 @@ const FeedForm = (props) => {
 
   return (
     <form
-      className="feed-form"
+      className={classNames(
+      'feed-form',
+      { 'feed-form__edit': props.formIsVisible },
+      )}
       onSubmit={(e) => {
         e.preventDefault();
-        sumbitForm(message, entityImages);
+        sumbitForm();
       }}
-      ref={formEl}
     >
       <div className="feed-form__field">
+        {!props.formIsVisible &&
         <div className="feed-form__avatar">
           <Avatar src={urls.getFileUrl(user.avatarFilename)} />
         </div>
+        }
 
         <div
-          className="feed-form__message"
+          className={classNames(
+            'feed-form-message',
+            { 'feed-form-message__edit': props.formIsVisible },
+            )}
           ref={fieldEl}
         >
           <div className="feed-form__container">
@@ -67,7 +84,6 @@ const FeedForm = (props) => {
               }}
             >
               <textarea
-                ref={textareaEl}
                 autoFocus
                 rows="4"
                 className="feed-form__textarea"
@@ -77,13 +93,18 @@ const FeedForm = (props) => {
                 onKeyDown={(e) => {
                   if ((e.ctrlKey && e.keyCode === 13) || (e.metaKey && e.keyCode === 13)) {
                     e.preventDefault();
-                    sumbitForm(message, entityImages);
+                    sumbitForm();
+                  }
+
+                  if (e.keyCode === 27) {
+                    e.preventDefault();
+                    props.onCancel();
                   }
                 }}
               />
             </TributeWrapper>
-            <FeedDragAndDrop {...{
-                onImage, textareaEl, formEl, fieldEl,
+            <DragAndDrop {...{
+                onImage, dropOnForm,
               }}
             />
           </div>
@@ -97,30 +118,53 @@ const FeedForm = (props) => {
       />}
       <div className="feed-form__actions">
         <EmbedMenu onImage={onImage} />
-        <button
-          type="submit"
-          className="feed-form__submit"
-          disabled={message.trim().length === 0 && !getCoverImage({ entityImages })}
-        >
-          <IconEnter />
-        </button>
+        {props.formIsVisible ?
+          <Fragment>
+            <div
+              className="feed-form-button"
+              onClick={props.onCancel}
+              role="presentation"
+            >
+              Cancel
+            </div>
+            <div
+              className="feed-form-button feed-form-button__save"
+              disabled={message.trim().length === 0 && !getCoverImage({ entityImages })}
+              role="presentation"
+              onClick={sumbitForm}
+            >
+              Save
+            </div>
+          </Fragment> :
+          <button
+            type="submit"
+            className="feed-form__submit"
+            disabled={message.trim().length === 0 && !getCoverImage({ entityImages })}
+          >
+            <IconEnter />
+          </button>
+          }
+
       </div>
     </form>
   );
 };
 
 FeedForm.propTypes = {
+  onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   users: PropTypes.objectOf(PropTypes.object).isRequired,
   message: PropTypes.string,
   entityImages: PropTypes.objectOf(PropTypes.array),
   initialText: PropTypes.string,
+  formIsVisible: PropTypes.bool,
 };
 
 FeedForm.defaultProps = {
   message: '',
   initialText: '',
   entityImages: {},
+  formIsVisible: false,
 };
 
 export default connect(state => ({

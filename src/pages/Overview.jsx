@@ -44,7 +44,7 @@ const Overview = (props) => {
           <div className="content__inner content__inner_overview">
             <div className="nav-bar">
               <div className="nav-bar__title nav-bar__title_overview">
-                <h1 className="title title_big title_bold">Overview</h1>
+                <h1 className="title title_bold">Overview</h1>
 
                 <Tabs
                   responsive

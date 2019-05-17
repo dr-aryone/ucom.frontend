@@ -135,3 +135,6 @@ export const sanitizeCommentText = memoize(html => sanitizeHtml(html, {
   },
   textFilter: text => removeMultipleLineBreaks(makeLink(text)),
 }));
+
+export const sanitizePostTitle = memoize(text => sanitizeHtml(text));
+export const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);

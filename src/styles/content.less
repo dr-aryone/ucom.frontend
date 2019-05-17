@@ -2,12 +2,15 @@
   padding: 40px 40px 0;
 
   @media (max-width: 414px) {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 20px;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-top: 20px !important;
   }
 }
 
+.content__main {
+  margin-bottom: 40px;
+}
 .content-wrapper {
   flex: 1 1 auto;
 }
@@ -42,7 +45,7 @@
 
 .content__inner_overview {
   padding: 0 100px;
-  
+
   @media (max-width: 1199px) {
     padding: 0;
   }
@@ -50,9 +53,13 @@
 
 .content__inner_overview_shadow {
   box-shadow: 0px 0px 20px rgba(184, 184, 184, 0.25);
-  
+  background: #fff;
+
   @media (max-width: 1199px) {
-    box-shadow: none;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
@@ -105,6 +112,7 @@
 
 .content__section_medium {
   max-width: 1000px;
+  margin-left: 40px;
 }
 
 .content__title_between {

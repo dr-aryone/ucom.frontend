@@ -10,6 +10,7 @@ import Notifications from './Notifications';
 import socket from '../api/socket';
 import config from '../../package.json';
 import { enableGtm } from '../utils/gtm';
+import { initDragAndDropListeners } from '../utils/dragAndDrop';
 import routes from '../routes';
 import Settings from '../components/Settings';
 import BuyRam from '../components/Resources/Actions/BuyRam';
@@ -28,6 +29,12 @@ const App = (props) => {
     props.fetchMyself();
     props.initNotificationsListeners();
 
+    const removeInitDragAndDropListeners = initDragAndDropListeners(document, () => {
+      document.body.classList.add('dragenter');
+    }, () => {
+      document.body.classList.remove('dragenter');
+    });
+
     if (config.socketEnabled) {
       socket.connect();
     }
@@ -40,6 +47,8 @@ const App = (props) => {
         autoClose: false,
       });
     }
+
+    return removeInitDragAndDropListeners;
   }, []);
 
   return (

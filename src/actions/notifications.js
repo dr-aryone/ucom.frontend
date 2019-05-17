@@ -8,19 +8,19 @@ import {
 export const addNotification = payload => ({ type: 'ADD_NOTIFICATION', payload });
 export const closeNotification = payload => ({ type: 'CLOSE_NOTIFICATION', payload });
 
-export const addSuccessNotification = message => (dispatch) => {
-  dispatch(addNotification({
-    type: NOTIFICATION_TYPE_SUCCESS,
-    title: 'Success',
-    message,
-  }));
-};
-
 export const addErrorNotification = message => (dispatch) => {
   dispatch(addNotification({
     message,
     title: 'Error',
     type: NOTIFICATION_TYPE_ERROR,
+  }));
+};
+
+export const addSuccessNotification = message => (dispatch) => {
+  dispatch(addNotification({
+    type: NOTIFICATION_TYPE_SUCCESS,
+    title: 'Success',
+    message,
   }));
 };
 

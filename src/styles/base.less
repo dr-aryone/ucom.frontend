@@ -93,17 +93,18 @@ h4 {
 
 .only-pad {
   @media (max-width: 767px) {
-    display: none;
-  }
-}
-
-.else-pad {
-  @media (min-width: 768px) {
-    display: none;
+    display: none !important;
   }
 }
 
 .only-phone {
+  @media (max-width: 440px) {
+    display: none !important;
+  }
+}
+
+
+.else-pad {
   @media (min-width: 768px) {
     display: none;
   }

@@ -1,5 +1,6 @@
 const getInitialState = () => ({
-  data: [],
+  data: {},
+  selectedData: {},
   votePopupVisibile: false,
   votePopupErrors: [],
   loading: false,
@@ -14,6 +15,12 @@ const governanceNodes = (state = getInitialState(), action) => {
       return {
         ...state,
         data: action.payload,
+      };
+
+    case 'GOVERNANCE_SELECTED_NODES_SET_DATA':
+      return {
+        ...state,
+        selectedData: action.payload,
       };
 
     case 'GOVERNANCE_NODES_SET_POPUP_VISIBILE':
@@ -37,13 +44,16 @@ const governanceNodes = (state = getInitialState(), action) => {
     case 'GOVERNANCE_NODES_SET_VOTE':
       return {
         ...state,
-        data: state.data.map((item) => {
-          if (+item.id === +action.payload.id && item.myselfData) {
-            item.myselfData.bpVote = action.payload.vote;
-          }
+        data: {
+          ...state.data,
+          [action.payload.nodeType]: [...state.data[action.payload.nodeType].map((item) => {
+            if (+item.id === +action.payload.id) {
+              item.isVoted = action.payload.vote;
+            }
+            return item;
+          })],
 
-          return item;
-        }),
+        },
       };
 
     default:
