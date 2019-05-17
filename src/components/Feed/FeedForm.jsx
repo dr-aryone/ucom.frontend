@@ -6,7 +6,8 @@ import Avatar from '../Avatar';
 import IconEnter from '../Icons/Enter';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
-import { removeGalleryImage, getGalleryImages, addGalleryImages } from '../../utils/entityImages';
+import { removeGalleryImage, getGalleryImages, addGalleryImagesWithCatch } from '../../utils/entityImages';
+import { addErrorNotification } from '../../actions/notifications';
 import { initDragAndDropListeners } from '../../utils/dragAndDrop';
 import TributeWrapper from '../TributeWrapper';
 import EmbedMenu from './Post/EmbedMenu';
@@ -23,6 +24,7 @@ const FeedForm = (props) => {
   const fieldEl = useRef(null);
   const galleryImages = getGalleryImages({ entityImages });
   const isExistGalleryImages = !!galleryImages.length;
+  const addGalleryImages = addGalleryImagesWithCatch(props.addErrorNotification);
 
   useEffect(() => {
     const removeInitDragAndDropListeners = initDragAndDropListeners(fieldEl.current, () => {
@@ -166,4 +168,6 @@ FeedForm.defaultProps = {
 export default connect(state => ({
   users: state.users,
   user: selectUser(state),
-}))(FeedForm);
+}), {
+  addErrorNotification,
+})(FeedForm);

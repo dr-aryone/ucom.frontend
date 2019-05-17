@@ -94,12 +94,8 @@
   position: relative;
   z-index: 0;
   margin-top: 20px;
-  margin-right: 10px;
+  padding-right: 10px;
   width: auto;
-}
-
-.imageWrapper:last-child {
-  margin-right: 0px;
 }
 
 .image {
@@ -114,7 +110,7 @@
   position: absolute;
   z-index: 1;
   top: 4px;
-  right: 4px;
+  right: 14px;
   display: flex;
   align-items: center;
   justify-content: center;

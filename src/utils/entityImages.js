@@ -22,20 +22,32 @@ export const changeCoverImageUrl = (entry, url) => {
   };
 };
 
-export const addGalleryImages = (entry, gallery) => {
+export const addGalleryImages = (entry, newGallery) => {
   if (_.isString(entry)) {
     entry = JSON.parse(entry);
   }
 
-  return entry.gallery ? {
-    ...entry,
-    gallery: [...entry.gallery, ...gallery],
-  } : {
+  const gallery = entry && entry.gallery ? [...entry.gallery, ...newGallery] : newGallery;
+  const err = 'Error: more than 10 images';
+
+  if (gallery.length > 10) {
+    throw err;
+  }
+
+  return {
     ...entry,
     gallery,
   };
 };
 
+export const addGalleryImagesWithCatch = callback => (entry, gallery) => {
+  try {
+    return addGalleryImages(entry, gallery);
+  } catch (e) {
+    callback(e);
+    return entry;
+  }
+};
 
 export const getCoverImage = entry =>
   getEntryImageAttr(entry, 'articleTitle', 'url', 0);

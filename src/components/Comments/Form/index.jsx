@@ -9,7 +9,7 @@ import DragAndDrop from '../../DragAndDrop';
 import { COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST } from '../../../utils/comments';
 import TributeWrapper from '../../TributeWrapper';
 import { isSubmitKey, isEscKey } from '../../../utils/keyboard';
-import { getGalleryImages, removeGalleryImage, addGalleryImages } from '../../../utils/entityImages';
+import { getGalleryImages, removeGalleryImage, addGalleryImagesWithCatch } from '../../../utils/entityImages';
 import { initDragAndDropListeners } from '../../../utils/dragAndDrop';
 import api from '../../../api';
 import DropZone from '../../DropZone';
@@ -24,6 +24,7 @@ const Form = (props) => {
   const textareaEl = useRef(null);
   const galleryImages = getGalleryImages({ entityImages });
   const isExistGalleryImages = !!galleryImages.length;
+  const addGalleryImages = addGalleryImagesWithCatch(props.addErrorNotification);
 
   const reset = () => {
     setMessage('');
@@ -33,12 +34,8 @@ const Form = (props) => {
       props.onReset();
     }
   };
-  // addGalleryImages = compose(addGalleryImages, addErrorNotification)
-  const submit = () => {
-    if (galleryImages.length >= 10) {
-      return props.addErrorNotification('Error: more than 10 images');
-    }
 
+  const submit = () => {
     if (message.trim().length || isExistGalleryImages) {
       props.onSubmit({
         containerId: props.containerId,
