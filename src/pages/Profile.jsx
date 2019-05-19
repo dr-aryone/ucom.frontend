@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
@@ -55,28 +55,33 @@ const Profile = (props) => {
 
   return (
     <div className={styles.page}>
-      <Popup id="profile-popup" onClickClose={props.onClickClose}>
+      <Popup
+        id="profile-popup"
+        onClickClose={props.onClickClose}
+        paddingBottom="50vh"
+      >
         <Content onClickClose={props.onClickClose}>
           <div className={styles.profile}>
-            <div className={styles.sidebar}>
-              <VerticalMenu
-                sticky
-                sections={[
-                  { name: 'PersonalInfo', title: 'Personal info' },
-                  { name: 'AboutMe', title: 'About Me' },
-                  { name: 'Links', title: 'Links' },
-                ]}
-                scrollerOptions={{
-                  spy: true,
-                  duration: 500,
-                  delay: 100,
-                  offset: 0,
-                  smooth: true,
-                  containerId: 'profile-popup',
-                }}
-              />
-              {owner ? (
-                <Fragment>
+            <div>
+              <div className={styles.sidebar}>
+                <VerticalMenu
+                  // sticky
+                  // stickyTop={120}
+                  sections={[
+                    { name: 'PersonalInfo', title: 'Personal info' },
+                    { name: 'AboutMe', title: 'About Me' },
+                    { name: 'Links', title: 'Links' },
+                  ]}
+                  scrollerOptions={{
+                    spy: true,
+                    duration: 500,
+                    delay: 100,
+                    offset: -110,
+                    smooth: true,
+                    containerId: 'profile-popup',
+                  }}
+                />
+                {owner ? (
                   <div className={styles.btnSave}>
                     <Button
                       onClick={() => saveProfile()}
@@ -84,26 +89,15 @@ const Profile = (props) => {
                       Save Changes
                     </Button>
                   </div>
-                  <div className={styles.link}>Go to
-                    <div
-                      className="link red"
-                      role="presentation"
-                      onClick={() => {
-                      props.onClickClose();
-                      props.settingsShow();
-                    }}
-                    > Account Settings
-                    </div>
-                  </div>
-                </Fragment>
-              ) : (
-                <div className={styles.btnSave}><Button red>Create</Button></div>
-              )}
+                ) : (
+                  <div className={styles.btnSave}><Button red>Create</Button></div>
+                )}
+              </div>
             </div>
             <div className={styles.content}>
               <div className={styles.header}>
                 <h2 className={styles.title}>{owner ? 'Edit Your Profile' : 'Your Profile'}</h2>
-                <p>Few words about profile its how it will affect autoupdates and etc. Maybe some tips)</p>
+                {/* <p>Few words about profile its how it will affect autoupdates and etc. Maybe some tips)</p> */}
               </div>
 
               <div>
@@ -122,13 +116,14 @@ const Profile = (props) => {
                               avatarFilename: file.preview,
                             }]);
                             props.updateUser({
+                              id: +userData.id,
                               avatarFilename: file,
                             });
                           }}
                         />
                       </div>
                       <div>
-                        Drag and drop. We support JPG, PNG or GIF files. Max file size 0,5 Mb.
+                        Drag and drop. We support JPG, PNG or GIF files. Max file size 5 Mb.
                       </div>
                     </div>
                   </div>
@@ -177,6 +172,19 @@ const Profile = (props) => {
                     errors={errors && errors.usersSources}
                   />
                 </Element>
+              </div>
+            </div>
+          </div>
+          <div className={styles.footer}>
+            <div className={styles.link}>Go to
+              <div
+                className="link red"
+                role="presentation"
+                onClick={() => {
+                props.onClickClose();
+                props.settingsShow();
+              }}
+              > Account Settings
               </div>
             </div>
           </div>

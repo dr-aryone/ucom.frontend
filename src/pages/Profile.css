@@ -3,7 +3,7 @@
   grid-template-columns: 200px 1fr;
   grid-column-gap: 100px;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 86px 40px 128px;
   font-size: 16px;
@@ -20,6 +20,12 @@
     position: relative!important;
     top: 0!important;
   }
+}
+
+.sidebar {
+  position: sticky;
+  top: 120px;
+  margin-bottom: 40px;
 }
 
 .settings p {
@@ -155,8 +161,8 @@ h4.title {
 
 .btnSave {
   margin: 40px 0;
-  position: sticky;
-  top: 270px;
+  /* position: sticky;
+  top: 270px; */
 }
 
 .btnSaveOrg {
@@ -175,4 +181,18 @@ h4.title {
 
 .link a {
   color: #D8352F;
+}
+
+.footer {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  margin: 0 auto;
+  text-align: left;
+  width: 100%;
+  max-width: 1080px;
+}
+
+.footer .link {
+  padding-left: 40px;
 }
