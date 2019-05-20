@@ -2,6 +2,7 @@ import he from 'he';
 import { memoize } from 'lodash';
 import sanitizeHtml from 'sanitize-html';
 import urls from './urls';
+import { allowedVideoHosts } from '../../package.json';
 
 export const COPY_TO_CLIPBOARD_SUCCESS_MESSAGE = 'Link copied to clipboard';
 
@@ -81,12 +82,13 @@ export const getTextContent = memoize((content) => {
 
 export const sanitizePostText = memoize(html => sanitizeHtml(html, {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'figure', 'h2', 'h1']),
-  allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com'],
+  allowedIframeHostnames: allowedVideoHosts,
   allowedSchemes: ['http', 'https'],
   allowedAttributes: {
     iframe: ['src', 'allowfullscreen', 'allow'],
     a: ['href', 'name', 'target', 'class'],
     img: ['src'],
+    div: ['style'],
   },
   allowedClasses: {
     div: [
@@ -112,6 +114,11 @@ export const sanitizePostText = memoize(html => sanitizeHtml(html, {
     iframe: [
       'iframe-video',
     ],
+  },
+  allowedStyles: {
+    div: {
+      'padding-bottom': [/([0-9]*[.])?[0-9]+%$/],
+    },
   },
   transformTags: {
     'a': sanitizeHtml.simpleTransform('a', { target: '_blank' }),

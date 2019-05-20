@@ -5,7 +5,7 @@ import MediumEditor from 'medium-editor';
 import api from '../../../api';
 import { compressUploadedImage } from '../../../utils/upload';
 import config from '../../../../package.json';
-import { extractHostname } from '../../../utils/url';
+import { extractHostname } from '../../../utils/url';
 import './styles.css';
 
 class UploadButtons {
@@ -38,7 +38,6 @@ class UploadButtons {
     });
 
     document.body.appendChild(this.el);
-    window.xss =xss;
   }
 
   render() {
@@ -267,7 +266,7 @@ export default class MediumUpload extends MediumEditor.Extension {
       const div = document.createElement('div');
       div.contentEditable = false;
       div.innerHTML = data.videoUrl ?
-        this.renderVideo(data.videoUrl) :
+        this.renderVideo(data) :
         this.renderEmbed(data);
       this.insertEl(div);
     } catch (e) {
@@ -276,7 +275,8 @@ export default class MediumUpload extends MediumEditor.Extension {
     }
   }
 
-  renderVideo = (videoUrl) => {
+  renderVideo = ({ videoUrl, videoAspectRatio }) => {
+    const paddingBottom = 100 / videoAspectRatio;
     const xssOptions = {
       whiteList: {
         iframe: ['src'],
@@ -284,7 +284,7 @@ export default class MediumUpload extends MediumEditor.Extension {
     };
 
     return `
-      <div class="iframe-video-v2">
+      <div class="iframe-video-v2" ${paddingBottom ? `style="padding-bottom: ${paddingBottom}%"` : ''}>
         ${xss(`
           <iframe
             src="${videoUrl}"
@@ -301,34 +301,43 @@ export default class MediumUpload extends MediumEditor.Extension {
     description,
     url,
     imageUrl,
-  }) => `
+  }) => {
+    const replaceSymbols = (str) => {
+      return str.replace(/@/g, '@&zwnj;');
+    };
+
+    return `
     <div class="medium-embed">
-      ${imageUrl && xss(`<img src="${imageUrl}" alt="" />`)}
+      ${imageUrl ? xss(`<img src="${imageUrl}" alt="" />`) : ''}
       <div class="medium-embed-content">
-        ${title && xss(`<h2>${title}</h2>`)}
-        ${description && xss(`<p>${description}</p>`)}
-        ${url && `<p class="medium-embed-link">${xss(`
-          <a href="${url}" target="_blank" rel="noopener noreferrer">${extractHostname(url)}</a>
-        `)}</p>`}
+        ${title ? xss(`<h2>${replaceSymbols(title)}</h2>`) : ''}
+        ${description ? xss(`<p>${replaceSymbols(description)}</p>`) : ''}
+        ${url ? `<p class="medium-embed-link">${xss(`
+          <a href="${url}" target="_blank" rel="noopener noreferrer">${replaceSymbols(extractHostname(url))}</a>
+        `)}</p>` : ''}
       </div>
     </div>
   `;
+  }
 
   getEmbedData = async (url) => {
     try {
       let videoUrl;
+      let videoAspectRatio;
       let imageUrl;
       const response = humps(await axios.get(config.iframely.httpEndpoint, { params: { url } }));
       const { data: { links: { player, thumbnail }, meta } } = response;
 
       if (player) {
         for (let i = 0; i < player.length; i++) {
-          const { rel, href } = player[i];
+          const { rel, href, media: { aspectRatio } } = player[i];
+
           if (
-            rel.includes('oembed') &&
-            rel.includes('html5')
+            config.allowedVideoHosts.includes(extractHostname(href)) &&
+            (rel.includes('oembed') || rel.includes('html5'))
           ) {
             videoUrl = href;
+            videoAspectRatio = aspectRatio;
             break;
           }
         }
@@ -350,6 +359,7 @@ export default class MediumUpload extends MediumEditor.Extension {
 
       return {
         videoUrl,
+        videoAspectRatio,
         imageUrl,
         title: meta.title,
         url: meta.canonical,
