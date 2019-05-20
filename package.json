@@ -42,7 +42,7 @@
     "httpEndpoint": "https://iframely.u.community/iframely"
   },
   "allowedVideoHosts": [
-    "www.youtube.com",
+    "youtube.com",
     "player.vimeo.com",
     "coub.com"
   ],
