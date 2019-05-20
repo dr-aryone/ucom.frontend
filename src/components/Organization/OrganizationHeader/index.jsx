@@ -40,7 +40,11 @@ const OrganizationHeader = (props) => {
       <div className={`${styles.entryHead} ${styles.organization}`}>
         {userIsAdmin(props.user, organization) &&
           <div className={styles.edit}>
-            <ButtonEdit strech url={urls.getOrganizationEditUrl(organization.id)} />
+            <ButtonEdit
+              strech
+              // url={urls.getOrganizationEditUrl(organization.id)}
+              onClick={props.onClickEdit}
+            />
           </div>
         }
 
@@ -93,6 +97,7 @@ OrganizationHeader.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.number,
   }).isRequired,
+  onClickEdit: PropTypes.func,
 };
 
 export default connect(state => ({

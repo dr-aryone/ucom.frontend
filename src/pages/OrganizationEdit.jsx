@@ -1,0 +1,267 @@
+import React, { useState, useEffect, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import classNames from 'classnames';
+import { Element } from 'react-scroll';
+import urls from '../utils/urls';
+import { getUserById } from '../store/users';
+import { saveOrganization } from '../actions/organization';
+import { selectUser } from '../store/selectors/user';
+import Popup from '../components/Popup';
+import Content from '../components/Popup/Content';
+import VerticalMenu from '../components/VerticalMenu/index';
+import styles from './Profile.css';
+import TextInput from '../components/TextInput';
+import Textarea from '../components/Textarea';
+import Button from '../components/Button/index.jsx';
+import Avatar from '../components/EntryHeader/Avatar';
+import SocialNetworks from '../components/SocialNetworks';
+import UsersTeamForm from '../components/UsersTeamForm';
+import { getOrganizationById } from '../store/organizations';
+import { validator } from '../utils/validateFields';
+import EntryCard from '../components/EntryCard/index';
+
+const Organization = (props) => {
+  const owner = getUserById(props.users, props.user.id);
+  const organization = getOrganizationById(props.organizations, props.organizationId);
+  const [orgData, setOrgData] = useState(owner);
+  const [errors, setErrors] = useState({});
+  const [teamFormVisible, setTeamFormVisible] = useState(false);
+
+  console.log(organization);
+
+  if (!organization) {
+    return null;
+  }
+
+  useEffect(() => {
+    setOrgData({
+      ...orgData,
+      id: organization.id,
+      title: organization.title,
+      nickname: organization.nickname,
+      avatarFilename: organization.avatarFilename,
+      about: organization.about,
+      usersTeam: organization.usersTeam,
+      personalWebsiteUrl: organization.personalWebsiteUrl,
+      socialNetworks: organization.socialNetworks || [],
+      communitySources: organization.communitySources,
+      partnershipSources: organization.partnershipSources,
+    });
+  }, (organization));
+
+  const saveProfile = () => {
+  //   orgData.usersSources = orgData.usersSources.filter(e => (e.sourceUrl));
+  //   const checkError = validator(orgData);
+  //   setErrors(checkError);
+
+  //   if (isValid(checkError)) {
+  //     props.updateUser(orgData);
+  //     props.onClickClose();
+  //   }
+    console.log('orgData: ', orgData);
+    props.saveOrganization(orgData);
+  };
+
+  return (
+    <div className={styles.page}>
+      <Popup
+        onClickClose={props.onClickClose}
+        paddingBottom="50vh"
+        id="org-popup"
+      >
+        <Content onClickClose={props.onClickClose}>
+          <div className={styles.profile}>
+            <div>
+              <div className={styles.sidebar}>
+                <VerticalMenu
+                  sticky
+                  sections={[
+                    { name: 'General', title: 'General' },
+                    { name: 'Board', title: 'Board' },
+                    { name: 'About', title: 'About' },
+                    { name: 'Contacts', title: 'Contacts' },
+                    { name: 'Links', title: 'Links' },
+                    { name: 'Location', title: 'Location' },
+                  ]}
+                  scrollerOptions={{
+                    spy: true,
+                    duration: 500,
+                    delay: 100,
+                    offset: -110,
+                    smooth: true,
+                    containerId: 'org-popup',
+                  }}
+                />
+                {owner &&
+                  <div className={styles.btnSaveOrg}>
+                    <Button
+                      onClick={() => saveProfile()}
+                    >
+                      Save Changes
+                    </Button>
+                  </div>
+                }
+              </div>
+            </div>
+            <div className={styles.content}>
+              <div className={styles.header}>
+                <h2 className={styles.title}>{owner ? 'Edit Community Profile' : 'New Community'}</h2>
+                {/* <p>Few words about profile its how it will affect autoupdates and etc. Maybe some tips)</p> */}
+              </div>
+
+              <div>
+                <Element name="General" className={styles.section}>
+                  <h3 className={styles.title}>General</h3>
+                  <div className={styles.field}>
+                    <div className={styles.label}>Emblem</div>
+                    <div className={styles.avatarBlock}>
+                      <div className={styles.avatar}>
+                        <Avatar
+                          organization
+                          changeEnabled
+                          src={urls.getFileUrl(orgData.avatarFilename)}
+                          onChange={async (file) => {
+                            setOrgData({ ...orgData, avatarFilename: file.preview });
+                            props.saveOrganization({
+                              avatarFilename: file,
+                              nickname: orgData.nickname,
+                              title: orgData.title,
+                            });
+                          }}
+                        />
+                      </div>
+                      <div>
+                        Drag and drop. We support JPG, PNG or GIF files. Max file size 5 Mb.
+                      </div>
+                    </div>
+                  </div>
+                  <div className={classNames(styles.field, styles.fieldRequired)}>
+                    <div className={styles.label}>Community Name</div>
+                    <div className={styles.inputBlock}>
+                      <TextInput
+                        topLabel
+                        isRequired
+                        placeholder="Choose Nice Name"
+                        // className={styles.input}
+                        value={orgData.title}
+                        onChange={value => setOrgData({ ...orgData, title: value })}
+                      />
+                    </div>
+                  </div>
+                  <div className={classNames(styles.field, styles.fieldRequired)}>
+                    <div className={styles.label}>Community Link</div>
+                    <div className={styles.inputBlock}>
+                      <TextInput
+                        topLabel
+                        isRequired
+                        placeholder="uosnetwork"
+                        // className={styles.input}
+                        value={orgData.nickname}
+                        onChange={value => setOrgData({ ...orgData, nickname: value })}
+                      />
+                    </div>
+                  </div>
+                </Element>
+                <Element name="Board" className={styles.section}>
+                  <h3 className={styles.title}>Board</h3>
+                  <div className={classNames(styles.field, styles.fieldRequired)}>
+                    <div className={styles.label}>Owner</div>
+                    <div className={styles.inputBlock}>
+                      <Link to={urls.getUserUrl(organization.user.id)}>
+                        <EntryCard
+                          disableRate
+                          id={organization.user.id}
+                          title={organization.user.firstName}
+                          nickname={organization.user.accountName}
+                          url={urls.getUserUrl(organization.user.id)}
+                          avatarSrc={urls.getFileUrl(organization.user.avatarFilename)}
+                        />
+                      </Link>
+                    </div>
+                  </div>
+                  <div className={classNames(styles.field, styles.fieldRequired)}>
+                    <div className={styles.label}>Administrators</div>
+                    <div className={styles.inputBlock}>
+                      {teamFormVisible &&
+                        <UsersTeamForm
+                          users={orgData.usersTeam}
+                          onChange={(usersTeam) => {
+                            setOrgData({ ...orgData, usersTeam });
+                          }}
+                        />
+                      }
+                      <Button
+                        small
+                        grayBorder
+                        onClick={() => setTeamFormVisible(true)}
+                      >
+                        Add Admin
+                      </Button>
+                    </div>
+                  </div>
+                </Element>
+                <Element name="Contacts" className={styles.section}>
+                  <h3 className={styles.title}>About Me</h3>
+                  <div className={styles.textarea}>
+                    <Textarea
+                      placeholder="Your story, what passions you — something you want others to know about you"
+                      rows={6}
+                      value={orgData.about}
+                      onChange={value => setOrgData({ ...orgData, about: value })}
+                      isMentioned
+                    />
+                  </div>
+                </Element>
+                <Element name="Links" className={styles.section}>
+                  <h3 className={styles.title}>Links</h3>
+                  <div className={styles.field}>
+                    <div className={styles.label}>My Website</div>
+                    <div className={styles.inputBlock}>
+                      <TextInput
+                      // className={styles.input}
+                        value={orgData.personalWebsiteUrl}
+                        onChange={value => setOrgData({ ...orgData, personalWebsiteUrl: value })}
+                      />
+                    </div>
+                  </div>
+                  <SocialNetworks
+                    fields={orgData.socialNetworks}
+                    onChange={value => setOrgData({ ...orgData, socialNetworks: value })}
+                    // errors={errors}
+                  />
+                </Element>
+              </div>
+            </div>
+          </div>
+        </Content>
+      </Popup>
+    </div>
+  );
+};
+
+Organization.propTypes = {
+  users: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  saveOrganization: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      postId: PropTypes.string,
+      id: PropTypes.string,
+    }),
+  }),
+};
+
+export default connect(
+  state => ({
+    users: state.users,
+    user: selectUser(state),
+    organizations: state.organizations,
+    organization: state.organization,
+  }),
+  dispatch => bindActionCreators({
+    saveOrganization,
+  }, dispatch),
+)(Organization);

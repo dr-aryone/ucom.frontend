@@ -1,6 +1,6 @@
 import { arrayMove } from 'react-sortable-hoc';
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Footer from '../components/Footer';
 import OrganizationHeader from '../components/Organization/OrganizationHeader';
@@ -29,11 +29,13 @@ import { getUserName } from '../utils/user';
 import { validateDiscationPostUrl, userIsTeam } from '../utils/organization';
 import { setDiscussions } from '../actions/organization';
 import loader from '../utils/loader';
+import OrganizationEdit from './OrganizationEdit';
 
 const OrganizationPage = (props) => {
   const organizationId = +props.match.params.id;
   const postId = +props.match.params.postId;
   const isExternalSource = source => source.sourceType === 'external';
+  const [orgEditVisible, setOrgEditVisible] = useState(false);
 
   useEffect(() => {
     props.dispatch(getOrganization(organizationId));
@@ -74,9 +76,21 @@ const OrganizationPage = (props) => {
         </Popup>
       }
 
+      {orgEditVisible &&
+        <OrganizationEdit
+          organizationId={organizationId}
+          onClickClose={() => {
+            setOrgEditVisible(false);
+          }}
+        />
+      }
+
       <div className="layout layout_profile">
         <div className="layout__header">
-          <OrganizationHeader organizationId={organizationId} />
+          <OrganizationHeader
+            organizationId={organizationId}
+            onClickEdit={() => setOrgEditVisible(true)}
+          />
         </div>
         <div className="layout__sidebar">
           <OrganizationAdmins organizationId={organizationId} />

@@ -6,7 +6,7 @@ import { formatRate } from '../../utils/rate';
 import styles from './styles.css';
 import { filterURL } from '../../utils/url';
 
-// TODO: Remove and replace another cards
+// TODO: Use this card for all userCards and remove other cards
 const EntryCard = (props) => {
   const LinkTag = props.disabledLink ? 'span' : props.isExternal ? 'a' : Link;
 

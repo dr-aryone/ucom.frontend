@@ -65,8 +65,6 @@ const Profile = (props) => {
             <div>
               <div className={styles.sidebar}>
                 <VerticalMenu
-                  // sticky
-                  // stickyTop={120}
                   sections={[
                     { name: 'PersonalInfo', title: 'Personal info' },
                     { name: 'AboutMe', title: 'About Me' },
