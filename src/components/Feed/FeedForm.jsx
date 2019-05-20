@@ -35,12 +35,6 @@ const FeedForm = (props) => {
     return removeInitDragAndDropListeners;
   }, []);
 
-  const onImage = async (file) => {
-    const data = await api.uploadPostImage(file);
-    const image = data.files[0];
-    setEntityImages(addGalleryImages(entityImages, [image]));
-  };
-
   const onMultipleImages = async (files) => {
     const data = await Promise.all(files.map(url => api.uploadPostImage(url)));
     const urls = data.map(item => item.files[0]);
@@ -87,7 +81,7 @@ const FeedForm = (props) => {
             <TributeWrapper
               enabledImgUrlParse
               onChange={message => setMessage(message)}
-              onImage={onImage}
+              onImage={url => onMultipleImages([url])}
               onParseImgUrl={(url) => {
                 setEntityImages(addGalleryImages(entityImages, [{ url }]));
               }}

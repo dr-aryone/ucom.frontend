@@ -49,16 +49,12 @@ const Form = (props) => {
     return undefined;
   };
 
-  const onImage = async (file) => {
-    const data = await api.uploadPostImage(file);
-    const image = data.files[0];
-    setEntityImages(addGalleryImages(entityImages, [image]));
-  };
-
   const onMultipleImages = async (files) => {
+    const savedEntityImages = entityImages;
+    setEntityImages(addGalleryImages(entityImages, Array(files.length + 1).fill({ url: 'loading' })));
     const data = await Promise.all(files.map(url => api.uploadPostImage(url)));
     const urls = data.map(item => item.files[0]);
-    setEntityImages(addGalleryImages(entityImages, urls));
+    setEntityImages(addGalleryImages(savedEntityImages, urls));
   };
 
   useEffect(() => {
@@ -109,7 +105,7 @@ const Form = (props) => {
                   setMessage(message);
                   setTimeout(() => autosize.update(textareaEl.current), 0);
                 }}
-                onImage={e => onImage([e])}
+                onImage={url => onMultipleImages([url])}
               >
                 <textarea
                   ref={textareaEl}

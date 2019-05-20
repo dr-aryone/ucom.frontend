@@ -97,6 +97,8 @@ const GalleryPopup = (props) => {
             <UserCard userId={props.userId} />
           </div>
           <div className={styles.thumbs}>
+            {// empty blocks
+           }
             {props.images.map((image, index) => (
               <div
                 key={image.url}
