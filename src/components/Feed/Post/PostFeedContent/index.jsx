@@ -41,13 +41,13 @@ const PostFeedContent = (props) => {
         </div>
       ) : (
         <Fragment>
-          {(props.postTypeId === POST_TYPE_DIRECT_ID || post.postTypeId === POST_TYPE_DIRECT_ID) ? (
+          {(props.postTypeId === POST_TYPE_DIRECT_ID || post.postTypeId === POST_TYPE_DIRECT_ID) && !props.formIsVisible ? (
             <Fragment>
-              {getCoverImage(post) && !props.formIsVisible ? (
+              {getCoverImage(post) ? (
                 <div className={styles.cover}>
                   <img src={urls.getFileUrl(getCoverImage(post))} alt="cover" />
                 </div>
-                ) : post.entityImages.gallery && post.entityImages.gallery.length > 0 && !props.formIsVisible &&
+                ) : post.entityImages.gallery && post.entityImages.gallery.length > 0 &&
                 <div className={styles.gallery}>
                   <Gallery
                     images={post.entityImages.gallery}

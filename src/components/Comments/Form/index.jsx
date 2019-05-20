@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './styles.css';
 import UserPick from '../../UserPick/UserPick';
-import Image from './Image';
 import DragAndDrop from '../../DragAndDrop';
 import { COMMENTS_CONTAINER_ID_POST, COMMENTS_CONTAINER_ID_FEED_POST } from '../../../utils/comments';
 import TributeWrapper from '../../TributeWrapper';
 import { isSubmitKey, isEscKey } from '../../../utils/keyboard';
-import { getGalleryImages, removeGalleryImage, addGalleryImagesWithCatch } from '../../../utils/entityImages';
+import { getGalleryImages, addGalleryImagesWithCatch } from '../../../utils/entityImages';
 import { initDragAndDropListeners } from '../../../utils/dragAndDrop';
 import api from '../../../api';
 import DropZone from '../../DropZone';
+import PreviewImagesGrid from '../../PreviewImagesGrid';
 import IconClip from '../../Icons/Clip';
 import IconEnter from '../../Icons/Enter';
 
@@ -153,27 +153,17 @@ const Form = (props) => {
               </div>
             </div>
             <DragAndDrop {...{
-                onImage, dropOnForm,
+                onMultipleImages, dropOnForm,
               }}
             />
           </div>
         </div>
       </div>
 
-      <div className="feed-form__previews">
-        {isExistGalleryImages &&
-          galleryImages.map((url, index) => (
-            <Image
-              key={index}
-              src={url}
-              isMultiple={galleryImages.length > 1}
-              onClickRemove={() => {
-                setEntityImages(removeGalleryImage(entityImages, index));
-              }}
-            />
-          ))
-        }
-      </div>
+      <PreviewImagesGrid {...{
+          isExistGalleryImages, setEntityImages, entityImages, galleryImages,
+        }}
+      />
     </div>
   );
 };

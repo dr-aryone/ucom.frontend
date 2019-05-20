@@ -1,18 +1,41 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styles from './styles.css';
 import Popup from '../../Popup';
 import IconClose from '../../Icons/Close';
 import ArrowRight from '../../Icons/GalleryArrowRight';
 import UserCard from '../../UserCard/UserCard';
+import { isRightArrowKey, isLeftArrowKey } from '../../../utils/keyboard';
 
 const GalleryPopup = (props) => {
   if (!props.images.length) {
     return null;
   }
 
-  const [activeIndex, setActiveIndex] = useState(0);
+  const { activeIndex, setActiveIndex } = props;
+
+  const canMoveLeft = activeIndex - 1 >= 0;
+  const canMoveRight = activeIndex + 1 < props.images.length;
+
+  const moveLeft = () =>
+    (canMoveLeft ? setActiveIndex(activeIndex - 1) : null);
+
+  const moveRight = () =>
+    (canMoveRight ? setActiveIndex(activeIndex + 1) : null);
+
+  const onKeyDown = (event) => {
+    if (isLeftArrowKey(event)) {
+      moveLeft();
+    } else if (isRightArrowKey(event)) {
+      moveRight();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  });
 
   return (
     <Popup
@@ -31,16 +54,11 @@ const GalleryPopup = (props) => {
         <div className={styles.container}>
           <div
             role="presentation"
-            onClick={() => {
-              if (activeIndex - 1 >= 0) {
-                setActiveIndex(activeIndex - 1);
-               }
-              }
-            }
+            onClick={moveLeft}
             className={classNames({
               [styles.arrow]: true,
               [styles.leftArrow]: true,
-              [styles.active]: activeIndex - 1 >= 0,
+              [styles.active]: canMoveLeft,
             })}
           >
             <div className={styles.arrowBlock}>
@@ -50,19 +68,18 @@ const GalleryPopup = (props) => {
             </div>
           </div>
           <div className={styles.viewport}>
-            <img className={styles.image} src={props.images[activeIndex].url} alt={props.images[activeIndex].alt} />
+            <img
+              className={styles.image}
+              src={props.images[activeIndex].url}
+              alt={props.images[activeIndex].alt}
+            />
           </div>
           <div
             role="presentation"
-            onClick={() => {
-                if (activeIndex + 1 < props.images.length) {
-                  setActiveIndex(activeIndex + 1);
-                 }
-              }
-            }
+            onClick={moveRight}
             className={classNames({
               [styles.arrow]: true,
-              [styles.active]: activeIndex + 1 < props.images.length,
+              [styles.active]: canMoveRight,
             })}
           >
             <div className={styles.arrowBlock}>

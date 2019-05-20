@@ -55,11 +55,12 @@
 }
 
 .arrowBlock {
-  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .arrow.active:hover .arrowBlock {
-  visibility: visible;
+  opacity: 1;
 }
 
 .leftArrow {

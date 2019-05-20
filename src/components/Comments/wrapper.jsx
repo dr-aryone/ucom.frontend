@@ -92,6 +92,8 @@ export default connect(
         perPage,
       }));
     },
-    addErrorNotification: (e) => { dispatch(addErrorNotification(e)); },
+    addErrorNotification: (e) => {
+      dispatch(addErrorNotification(e));
+    },
   }),
 )(Comments);

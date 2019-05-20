@@ -6,13 +6,13 @@ import Avatar from '../Avatar';
 import IconEnter from '../Icons/Enter';
 import { selectUser } from '../../store/selectors/user';
 import { getUserById } from '../../store/users';
-import { removeGalleryImage, getGalleryImages, addGalleryImagesWithCatch } from '../../utils/entityImages';
+import { getGalleryImages, addGalleryImagesWithCatch } from '../../utils/entityImages';
 import { addErrorNotification } from '../../actions/notifications';
 import { initDragAndDropListeners } from '../../utils/dragAndDrop';
 import TributeWrapper from '../TributeWrapper';
 import EmbedMenu from './Post/EmbedMenu';
 import DragAndDrop from '../DragAndDrop';
-import Image from '../Comments/Form/Image';
+import PreviewImagesGrid from '../PreviewImagesGrid';
 import urls from '../../utils/urls';
 import api from '../../api';
 
@@ -113,26 +113,16 @@ const FeedForm = (props) => {
               />
             </TributeWrapper>
             <DragAndDrop {...{
-                onImage, dropOnForm,
+                onMultipleImages, dropOnForm,
               }}
             />
           </div>
         </div>
       </div>
-      <div className="feed-form__previews">
-        {isExistGalleryImages &&
-          galleryImages.map((url, index) => (
-            <Image
-              key={index}
-              src={url}
-              isMultiple={galleryImages.length > 1}
-              onClickRemove={() => {
-                setEntityImages(removeGalleryImage(entityImages, index));
-              }}
-            />
-          ))
-        }
-      </div>
+      <PreviewImagesGrid {...{
+          isExistGalleryImages, setEntityImages, entityImages, galleryImages,
+        }}
+      />
 
       <div className="feed-form__actions">
         <EmbedMenu onImage={onMultipleImages} />
