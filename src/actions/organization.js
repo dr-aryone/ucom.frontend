@@ -59,7 +59,7 @@ export const setDiscussions = ({
     if (discussions.length) {
       await api.setDiscussions(organizationId, snakes({ discussions }));
     } else {
-      await api.deleteAllDiscussions(organizationId);
+      await api.deleteAllDiscussions(organizationId).bind(api);
     }
   } catch (e) {
     console.error(e);
