@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { formatRate } from '../../../utils/rate';
@@ -24,10 +24,19 @@ const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
 const OfferSidebar = (props) => {
   const [sharePopupVisibility, setSharePopupVisibility] = useState(false);
+  const [shareStatus, setShareStatus] = useState(localStorage.setItem('ShareAirdrop', false));
 
   const toggleShare = () => {
     setSharePopupVisibility(!sharePopupVisibility);
   };
+
+  const saveShare = (data) => {
+    localStorage.setItem('ShareAirdrop', data);
+  };
+
+  useEffect(() => {
+    // localStorage.getItem('ShareAirdrop') === true ? setShareStatus(true) : false;
+  }, [shareStatus]);
 
   const { conditions } = props;
 
@@ -120,20 +129,47 @@ const OfferSidebar = (props) => {
         </div>
 
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{conditions && conditions.conditions.authMyself === true ? <Done /> : <Two />}</div>
+          <div className={styles.optionStatus}>{shareStatus === true ? <Done /> : <Two />}</div>
           <div className={styles.optionBlock}>
             <div
               role="presentation"
-              onClick={() => (Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 ? props.authShowPopup() : null)}
               className={styles.optionTitle}
             >
               Share to
             </div>
             <div className={styles.optionText}>Let others check their score (and it will help us a lot)</div>
             <div className={styles.socialIcons}>
-              <a href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}github}`} target="_blank" rel="noopener noreferrer" className={styles.icon}><IconFacebook /></a>
-              <a href={`https://twitter.com/intent/tweet?url=${window.location.origin + (this.props.linkPost || this.props.link)}`} target="_blank" rel="noopener noreferrer" className={styles.icon}><IconTwitter /></a>
-              <a href={`https://telegram.me/share/url?url=${window.location.origin + (this.props.linkPost || this.props.link)}`} target="_blank" rel="noopener noreferrer" className={styles.icon}><IconTelegram /></a>
+              {typeof window !== 'undefined' &&
+                <Fragment>
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/github`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.icon}
+                    onClick={() => saveShare(true)}
+                  >
+                    <IconFacebook />
+                  </a>
+                  <a
+                    href={`https://twitter.com/intent/tweet?url=${window.location.origin}/github`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.icon}
+                    onClick={() => saveShare(true)}
+                  >
+                    <IconTwitter />
+                  </a>
+                  <a
+                    href={`https://telegram.me/share/url?url=${window.location.origin}/github`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.icon}
+                    onClick={() => saveShare(true)}
+                  >
+                    <IconTelegram />
+                  </a>
+                </Fragment>
+              }
             </div>
           </div>
         </div>
