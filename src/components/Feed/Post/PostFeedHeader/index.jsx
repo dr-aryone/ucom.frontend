@@ -6,7 +6,6 @@ import moment from 'moment';
 import UserCard from '../../../UserCard/UserCard';
 import DropdownMenu from '../../../DropdownMenu';
 import urls from '../../../../utils/urls';
-// import { getFileUrl } from '../../../../utils/urls';
 import { getPostById } from '../../../../store/posts';
 import { selectUser } from '../../../../store/selectors/user';
 import { addSuccessNotification } from '../../../../actions/notifications';
@@ -99,6 +98,7 @@ const PostFeedHeader = (props) => {
           <UserCard
             userId={post.userId}
           />
+          {/* TODO: Enable then #27 is done */}
           {/* (entityForOrg !== '' && post.entityNameFor.trim() === 'org' && props.user.organizations.find(x => x.title === post.entityForCard.title) !== undefined) ? (
             <Fragment>
               {post.entityForCard && post.entityForCard.avatarFilename !== null ? (
