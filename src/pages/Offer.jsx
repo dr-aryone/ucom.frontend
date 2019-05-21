@@ -57,6 +57,7 @@ const Offer = (props) => {
 
   const getParticipants = (page = 1) => {
     props.getManyUsers({
+      filter: { airdrops: { airdropId_1 } },
       airdrops: airdropId_1,
       orderBy: '-score',
       page,
@@ -88,6 +89,16 @@ const Offer = (props) => {
       props.getOnePostOfferWithUserAirdrop({
         postId,
         airdropFilter: { airdrop_id: airdropId_1.id },
+        usersTeamQuery: {
+          page: 1,
+          per_page: 20,
+          order_by: '-score',
+          filters: {
+            airdrops: {
+              id: airdropId_1.id,
+            },
+          },
+        },
       }, options).then((data) => {
         props.getOrganization(data.onePostOffer.organization.id);
         setConditions(data.oneUserAirdrop);
@@ -96,6 +107,16 @@ const Offer = (props) => {
       props.getOnePostOffer({
         postId,
         airdropFilter: { airdrop_id: airdropId_1.id },
+        usersTeamQuery: {
+          page: 1,
+          per_page: 20,
+          order_by: '-score',
+          filters: {
+            airdrops: {
+              id: airdropId_1.id,
+            },
+          },
+        },
       }, options).then((data) => {
         props.getOrganization(data.onePostOffer.organization.id);
       });
@@ -223,6 +244,16 @@ export const getPostOfferData = async (store) => {
     const data = await store.dispatch(getOnePostOfferWithUserAirdrop({
       postId,
       airdropFilter: { airdrop_id: airdropId_1.id },
+      usersTeamQuery: {
+        page: 1,
+        per_page: 20,
+        order_by: '-score',
+        filters: {
+          airdrops: {
+            id: airdropId_1.id,
+          },
+        },
+      },
     }));
     return ({
       contentMetaTags: getContentMetaTags(data.onePostOffer),
