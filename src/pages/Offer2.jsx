@@ -22,14 +22,14 @@ import api from '../api';
 import EntrySubHeader from '../components/EntrySubHeader';
 import stylesSubHeader from '../components/EntrySubHeader/styles.css';
 import { getOrganization } from '../actions/organizations';
-import { airdropId_1, getAirdropOfferId_1, getGitHubAuthLink } from '../utils/airdrop';
+import { airdropId_2, getAirdropOfferId_2, getGitHubAuthLink } from '../utils/airdrop';
 import { selectUser } from '../store/selectors/user';
 import { addErrorNotification } from '../actions/notifications';
 
 const { CommonHeaders } = require('ucom.libs.common').Common.Dictionary;
 
 const Offer = (props) => {
-  const postId = getAirdropOfferId_1();
+  const postId = getAirdropOfferId_2();
   const gitHubAuthLink = getGitHubAuthLink();
   const [token, setToken] = useState(null);
   const [cookie, setCookie] = useState(null);
@@ -57,7 +57,7 @@ const Offer = (props) => {
 
   const getParticipants = (page = 1) => {
     props.getManyUsers({
-      airdrops: airdropId_1,
+      airdrops: airdropId_2,
       orderBy: '-score',
       page,
       perPage: 20,
@@ -87,7 +87,8 @@ const Offer = (props) => {
     if (Object.keys(props.user).length) {
       props.getOnePostOfferWithUserAirdrop({
         postId,
-        airdropFilter: { airdrop_id: airdropId_1.id },
+        airdropFilter: { airdrop_id: airdropId_2.id },
+        usersTeamQuery: { filters: { airdrops: { id: airdropId_2.id } } },
       }, options).then((data) => {
         props.getOrganization(data.onePostOffer.organization.id);
         setConditions(data.oneUserAirdrop);
@@ -95,7 +96,8 @@ const Offer = (props) => {
     } else {
       props.getOnePostOffer({
         postId,
-        airdropFilter: { airdrop_id: airdropId_1.id },
+        airdropFilter: { airdrop_id: airdropId_2.id },
+        usersTeamQuery: { filters: { airdrops: { id: airdropId_2.id } } },
       }, options).then((data) => {
         props.getOrganization(data.onePostOffer.organization.id);
       });
@@ -217,12 +219,13 @@ export default connect(
   }, dispatch),
 )(Offer);
 
-export const getPostOfferData = async (store) => {
+export const getPostOfferData_2 = async (store) => {
   try {
-    const postId = getAirdropOfferId_1();
+    const postId = getAirdropOfferId_2();
     const data = await store.dispatch(getOnePostOfferWithUserAirdrop({
       postId,
-      airdropFilter: { airdrop_id: airdropId_1.id },
+      airdropFilter: { airdrop_id: airdropId_2.id },
+      usersTeamQuery: { filters: { airdrops: { id: airdropId_2.id } } },
     }));
     return ({
       contentMetaTags: getContentMetaTags(data.onePostOffer),

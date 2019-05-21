@@ -506,7 +506,7 @@ export default {
   },
 
   async getOnePostOfferWithUserAirdrop({
-    airdropFilter = { airdrop_id: 1 },
+    airdropFilter,
     postId,
     commentsQuery = {
       page: 1,
