@@ -51,11 +51,7 @@ export const createStore = () => {
   let preloadedState;
 
   if (typeof window !== 'undefined' && window.APP_STATE !== undefined) {
-    try {
-      preloadedState = JSON.parse(window.APP_STATE);
-    } catch (err) {
-      console.error(err);
-    }
+    preloadedState = window.APP_STATE;
     delete window.APP_STATE;
   }
 
