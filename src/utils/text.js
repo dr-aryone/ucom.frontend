@@ -81,7 +81,7 @@ export const getTextContent = memoize((content) => {
 });
 
 export const sanitizePostText = memoize(html => sanitizeHtml(html, {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'figure', 'h2', 'h1']),
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'figure', 'h2', 'h1', 'span']),
   allowedIframeHostnames: allowedVideoHosts,
   allowedSchemes: ['http', 'https'],
   allowedAttributes: {
@@ -100,9 +100,14 @@ export const sanitizePostText = memoize(html => sanitizeHtml(html, {
       'medium-insert-embed',
       'medium-upload-iframe-wrapper',
       'medium-embed',
-      'medium-embed-content',
-      'medium-embed-link',
       'iframe-video-v2',
+    ],
+    span: [
+      'medium-embed-content',
+      'medium-embed-img',
+      'medium-embed-title',
+      'medium-embed-text',
+      'medium-embed-link',
     ],
     p: [
       'medium-embed-link',
@@ -142,6 +147,15 @@ export const sanitizeCommentText = memoize(html => sanitizeHtml(html, {
   },
   textFilter: text => removeMultipleLineBreaks(makeLink(text)),
 }));
+
+export const sanitizeEmbedContent = memoize(html => sanitizeHtml(html, {
+  allowedTags: [],
+  allowedAttributes: {},
+}));
+
+if (typeof window !== 'undefined') {
+  window.sanitizeEmbedContent = sanitizeEmbedContent;
+}
 
 export const sanitizePostTitle = memoize(text => sanitizeHtml(text));
 export const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);

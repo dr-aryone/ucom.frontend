@@ -1,3 +1,4 @@
+import { truncate } from 'lodash';
 import xss from 'xss';
 import humps from 'lodash-humps';
 import * as axios from 'axios';
@@ -6,6 +7,7 @@ import api from '../../../api';
 import { compressUploadedImage } from '../../../utils/upload';
 import config from '../../../../package.json';
 import { extractHostname } from '../../../utils/url';
+import { sanitizeEmbedContent } from '../../../utils/text';
 import './styles.css';
 
 class UploadButtons {
@@ -297,27 +299,51 @@ export default class MediumUpload extends MediumEditor.Extension {
   }
 
   renderEmbed = ({
+    url,
     title,
     description,
-    url,
     imageUrl,
   }) => {
     const replaceSymbols = (str) => {
-      return str.replace(/@/g, '@&zwnj;');
+      let result = str.replace(/@/g, '@&zwnj;');
+      result = result.replace(/#/g, '#&zwnj;');
+      return result;
     };
 
+    const truncateContent = str => truncate(str, {
+      length: 140,
+      separator: ' ',
+    });
+
     return `
-    <div class="medium-embed">
-      ${imageUrl ? xss(`<img src="${imageUrl}" alt="" />`) : ''}
-      <div class="medium-embed-content">
-        ${title ? xss(`<h2>${replaceSymbols(title)}</h2>`) : ''}
-        ${description ? xss(`<p>${replaceSymbols(description)}</p>`) : ''}
-        ${url ? `<p class="medium-embed-link">${xss(`
-          <a href="${url}" target="_blank" rel="noopener noreferrer">${replaceSymbols(extractHostname(url))}</a>
-        `)}</p>` : ''}
+      <div class="medium-embed">
+        ${xss(`<a href="${url}" target="_blank">`)}
+          ${imageUrl ? `
+            <span class="medium-embed-img">
+              ${xss(`<img src="${imageUrl}" alt="" />`)}
+            </span>
+          ` : ''}
+
+          <span class="medium-embed-content">
+            ${title ? `
+              <span class="medium-embed-title">
+                ${xss(truncateContent(replaceSymbols(sanitizeEmbedContent(title))))}
+              </span>
+            ` : ''}
+
+            ${description ? `
+              <span class="medium-embed-text">
+                ${xss(truncateContent(replaceSymbols(sanitizeEmbedContent(description))))}
+              </span>
+            ` : ''}
+
+            <span class="medium-embed-link">
+              ${xss(replaceSymbols(extractHostname(url)))}
+            </span>
+          </span>
+        </a>
       </div>
-    </div>
-  `;
+    `;
   }
 
   getEmbedData = async (url) => {

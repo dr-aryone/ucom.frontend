@@ -112,7 +112,7 @@ export const getPostCover = (post) => {
 export const parseMediumContent = memoize((html) => {
   let entityImages;
 
-  const sentences = html.split(/<.*?>(.*?)<\/.*?>/)
+  const sentences = html.split(/<[^]+?>/g)
     .map(s => s.replace(/<\/?[^>]+(>|$)/g, ''))
     .map(s => s.trim())
     .filter(s => !!s);
