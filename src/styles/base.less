@@ -3,9 +3,13 @@ html {
 }
 
 body {
+  line-height: 1.2;
   font-family: 'Montserrat', sans-serif;
-  color: @black;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
   overflow-y: scroll;
+  color: @black;
 }
 
 svg {
@@ -13,12 +17,40 @@ svg {
   display: block;
 }
 
-a {
+a, .link {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: none;
   text-decoration: none;
+  font-weight: inherit;
   color: inherit;
+  cursor: pointer;
+  background: transparent;
 
   &:hover {
     text-decoration: underline;
+  }
+
+  &.red,
+  &.red-hover {
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover,
+    &.active {
+      color: #D8352F;
+      text-decoration: none;
+    }
+  }
+
+  &.red {
+    color: #D8352F;
+
+    &:hover,
+    &.active {
+      color: #C32924;
+    }
   }
 }
 
@@ -49,7 +81,7 @@ h4 {
 
 .only-desktop {
   @media (max-width: 1023px) {
-    display: none;
+    display: none !important;
   }
 }
 
@@ -61,17 +93,18 @@ h4 {
 
 .only-pad {
   @media (max-width: 767px) {
-    display: none;
-  }
-}
-
-.else-pad {
-  @media (min-width: 768px) {
-    display: none;
+    display: none !important;
   }
 }
 
 .only-phone {
+  @media (max-width: 440px) {
+    display: none !important;
+  }
+}
+
+
+.else-pad {
   @media (min-width: 768px) {
     display: none;
   }

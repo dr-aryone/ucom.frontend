@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import { getOrganizationById } from '../../store/organizations';
-import { getFileUrl } from '../../utils/upload';
 import { getOrganizationUrl } from '../../utils/organization';
 import OrganizationCard from './OrganizationCard';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
 import Rate from '../Rate';
+import urls from '../../utils/urls';
 
 const OrganizationListPopup = (props) => {
   if (!props.organizationsIds || !props.organizationsIds.length) {
@@ -14,9 +14,8 @@ const OrganizationListPopup = (props) => {
   }
 
   const organizations = props.organizationsIds
-    .sort()
-    .map(id => getOrganizationById(props.organizations, id));
-
+    .map(id => getOrganizationById(props.organizations, id))
+    .filter(e => e);
   return (
     <Popup onClickClose={props.onClickClose}>
       <ModalContent onClickClose={props.onClickClose}>
@@ -24,11 +23,11 @@ const OrganizationListPopup = (props) => {
           <div className="entry-list__title">Organizations</div>
 
           <div className="entry-list__list">
-            {organizations.map(item => (
-              <div className="entry-list__item" key={item.id}>
+            {organizations.map((item, index) => (
+              <div className="entry-list__item" key={index}>
                 <div className="entry-list__card">
                   <OrganizationCard
-                    avatarSrc={getFileUrl(item.avatarFilename)}
+                    avatarSrc={urls.getFileUrl(item.avatarFilename)}
                     title={item.title}
                     nickname={item.nickname}
                     url={getOrganizationUrl(item.id)}

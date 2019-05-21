@@ -1,36 +1,64 @@
+import he from 'he';
 import { memoize } from 'lodash';
 import sanitizeHtml from 'sanitize-html';
 import urls from './urls';
 
-const URL_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+export const COPY_TO_CLIPBOARD_SUCCESS_MESSAGE = 'Link copied to clipboard';
 
-export const escapeQuotes = memoize((text = '') => text.replace(/&quot;/g, '"'));
+export const URL_REGEX = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
-const makeLinkTag = (match) => {
+export const IMG_URL_REGEXP = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
+
+export const sanitizeText = memoize(str => sanitizeHtml(str));
+
+export const decodeText = memoize(str => he.decode(str));
+
+export const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value);
+
+export const getPercent = (left, total) => Math.floor((left / total) * 100);
+
+export const removeMultipleSpaces = memoize((str = '') => str.replace(/ +(?= )/g, ''));
+
+export const removeMultipleLineBreaks = memoize((str = '') => str.replace(/(\r\n|\r|\n){2,}/g, '$1\n'));
+
+export const removeLineBreaks = memoize((str = '') => str.replace(/\r?\n|\r/g, ''));
+
+export const removeLineBreaksMultipleSpacesAndTrim = memoize((str) => {
+  str = removeMultipleSpaces(str);
+  str = removeLineBreaks(str);
+  str = str.trim();
+
+  return str;
+});
+
+const makeActiveLink = (trigger, makeRoute, className) => (...args) => {
+  let match = args[0];
+  const isFirst = !args[2];
   match = match.toLowerCase();
-  const link = match.slice(0, 1) === '>' ? match.slice(1).replace('#', '').trim() : match.replace('#', '').trim();
-  const result = match.slice(0, 1) === '>' ? `><a href='/tags/${link}' class='tag_link' target='_blank'>${match.slice(1)}</a>` :
-    `<a href='/tags/${link}' class='tag_link' target='_blank'>${match}</a>`;
+  const link = match.slice(0, 1) === '>' ? match.slice(1).replace(trigger, '').trim() : match.replace(trigger, '').trim();
+  const result = match.slice(0, 1) === '>' ? `> <a href='${makeRoute(link)}' class='${className}' target='_blank'>${match.slice(1)}</a>` :
+    `${isFirst ? '' : ' '}<a href='${makeRoute(link)}' class='${className}' target='_blank'>${match[0] === ' ' ? match.slice(1) : match}</a>`;
   return result;
 };
+
+export const makeLinkTag = makeActiveLink('#', urls.getTagUrl, 'tag_link');
+
+export const makeLinkMention = makeActiveLink('@', urls.getUserUrl, 'mention_link');
 
 export const checkHashTag = memoize((text = '') => text.replace(/(^|\s|>)#[a-zA-Z]\w*/gm, makeLinkTag));
 
-export const existHashTag = (text, tag) => {
-  const result = text.match(/#[a-zA-Z]\w*/gm);
+export const existHashTag = memoize((text, tag) => {
+  if (!text || !tag) {
+    return false;
+  }
+  const textLowerCase = text.toLowerCase();
+  const tagLowerCase = tag.toLowerCase();
+  const result = textLowerCase.match(/#[a-zA-Z]\w*/gm);
   if (result) {
-    return result.some(item => item === `#${tag}`);
+    return result.some(i => i === `#${tagLowerCase}`);
   }
   return false;
-};
-
-const makeLinkMention = (match) => {
-  match = match.toLowerCase();
-  const accountName = match.slice(0, 1) === '>' ? match.slice(1).replace('@', '').trim() : match.replace('@', '').trim();
-  const result = match.slice(0, 1) === '>' ? `><a href=${urls.getUserUrl(accountName)} class='mention_link' target='_blank'>${match.slice(1)}</a>` :
-    `<a href=${urls.getUserUrl(accountName)} class='mention_link' target='_blank'>${match}</a>`;
-  return result;
-};
+});
 
 export const checkMentionTag = memoize((text = '') => text.replace(/(^|\s|>)@[a-zA-Z0-9]\w*/gm, makeLinkMention));
 
@@ -41,8 +69,6 @@ export const existMentionTag = (text, tag) => {
   }
   return false;
 };
-
-export const removeMultipleNewLines = memoize((str = '') => str.replace(/(\r\n|\r|\n){2,}/g, '$1\n'));
 
 export const makeLink = memoize((text = '') => text.replace(URL_REGEX, url => `<a target="_blank" href="${url}">${url}</a>`));
 
@@ -85,22 +111,23 @@ export const sanitizePostText = memoize(html => sanitizeHtml(html, {
   },
 }));
 
+export const copyToClipboard = (str) => {
+  const el = document.createElement('textarea');
+  el.value = str;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+};
+
 export const sanitizeCommentText = memoize(html => sanitizeHtml(html, {
   allowedTags: ['a'],
   allowedSchemes: ['http', 'https'],
   allowedAttributes: {
     a: ['href', 'target', 'class'],
   },
-  textFilter: text => escapeQuotes(removeMultipleNewLines(makeLink(text))),
+  textFilter: text => removeMultipleLineBreaks(makeLink(text)),
 }));
-/* eslint-disable */
 
-export const calculateClosestTo0 = arr => arr.reduce(
-  (acc, x) =>
-    (acc === 0 ? x :
-      x > 0 && x <= Math.abs(acc) ? x :
-        x < 0 && -x < Math.abs(acc) ? x : acc)
-  , 0,
-);
-/* eslint-enable */
-export const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value);
+export const sanitizePostTitle = memoize(text => sanitizeHtml(text));
+export const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);

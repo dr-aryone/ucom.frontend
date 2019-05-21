@@ -14,22 +14,34 @@
   "author": "",
   "license": "ISC",
   "uosGroupId": {
-    "staging": 89,
+    "staging": 41,
     "production": 4
   },
+  "airdropOfferId": {
+    "staging": 14317,
+    "production": 6137
+  },
+  "gitHubAuthLink": {
+    "staging": "https://github.com/login/oauth/authorize/?client_id=ec17c7e5b1f383034c25&state=5idkWlsZKzbpcD7u&redirect_uri=https://staging-backend.u.community/api/v1/github/auth_callback?redirect_uri=https://staging.u.community/posts/14317",
+    "production": "https://github.com/login/oauth/authorize/?client_id=8b4ef608525c8aff2d5e&state=5idkWlsZKzbpcD7u&redirect_uri=https://backend.u.community/api/v1/github/auth_callback?redirect_uri=https://u.community/posts/6137"
+  },
+  "grecaptchaSitekey": "6Leg_KEUAAAAANesBGRTETXBWJycatPc0EneSbTp",
   "backend": {
     "staging": {
       "httpEndpoint": "https://staging-backend.u.community",
-      "socketEndpoint": "https://websocket-staging.u.community:443"
+      "socketEndpoint": "https://websocket-staging.u.community:443",
+      "uploaderEndpoint": "https://staging-uploader.u.community"
     },
     "production": {
       "httpEndpoint": "https://backend.u.community",
-      "socketEndpoint": "https://websocket.u.community:443"
+      "socketEndpoint": "https://websocket.u.community:443",
+      "uploaderEndpoint": "https://uploader.u.community"
     }
   },
   "iframely": {
     "httpEndpoint": "https://iframely.u.community/iframely"
   },
+  "maintenanceMode": false,
   "socketEnabled": true,
   "devDependencies": {
     "autoprefixer": "^8.6.3",
@@ -46,7 +58,6 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "copy-webpack-plugin": "^4.6.0",
-    "crypto-js": "^3.1.9-1",
     "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
@@ -60,6 +71,7 @@
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "postcss-loader": "^2.1.5",
+    "react-countdown-now": "^2.1.0",
     "style-loader": "^0.21.0",
     "url-loader": "^1.1.1",
     "webpack": "^4.12.0",
@@ -70,19 +82,22 @@
     "@tippy.js/react": "^1.0.0",
     "autosize": "^4.0.2",
     "axios": "^0.18.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-register": "^6.26.0",
     "classnames": "^2.2.6",
     "crypto": "^1.0.1",
+    "crypto-js": "^3.1.9-1",
     "decko": "^1.2.0",
     "ejs": "^2.6.1",
     "eosjs": "^20.0.0-beta2",
     "eosjs-ecc": "^4.0.4",
     "express": "^4.16.4",
+    "he": "^1.2.0",
     "history": "^4.7.2",
     "imports-loader": "^0.8.0",
     "jquery-param": "^1.0.1",
     "keycode-js": "^1.0.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "lodash-humps": "^3.1.2",
     "medium-editor": "^5.23.3",
     "moment": "^2.22.2",
@@ -95,14 +110,15 @@
     "rc-pagination": "^1.17.7",
     "react": "^16.7.0-alpha.2",
     "react-copy-to-clipboard": "^5.0.1",
+    "react-device-detect": "^1.6.2",
     "react-dom": "^16.7.0-alpha.2",
     "react-dropzone": "^5.0.1",
-    "react-perfect-scrollbar": "^1.2.2",
-    "react-redux": "^5.0.7",
+    "react-redux": "^5.1.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scroll": "^1.7.10",
     "react-select": "^2.0.0",
+    "react-sortable-hoc": "^1.7.1",
     "react-tippy": "^1.2.3",
     "react-transition-group": "^2.4.0",
     "redux": "^4.0.0",
@@ -113,10 +129,12 @@
     "socket.io-client": "^2.1.1",
     "textarea-caret": "^3.1.0",
     "tributejs": "git+https://github.com/UOSnetwork/tribute.git",
-    "ucom-libs-graphql-schemas": "git+ssh://git@github.com/UOSnetwork/ucom.libs.graphql-schemas.git",
-    "ucom-libs-social-transactions": "^1.0.1",
-    "ucom-libs-wallet": "^1.1.1",
+    "ucom-libs-graphql-schemas": "^1.14.0",
+    "ucom-libs-social-transactions": "^1.1.5",
+    "ucom-libs-wallet": "^2.5.2",
+    "ucom.libs.common": "^1.8.2",
     "uuid": "^3.3.2",
-    "validatorjs": "^3.14.2"
+    "validatorjs": "^3.14.2",
+    "xss": "^1.0.6"
   }
 }

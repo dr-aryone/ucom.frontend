@@ -1,6 +1,16 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const path = require('path');
+const { exec } = require('child_process');
+
+const copySettings = [
+  { from: './src/favicon/*', flatten: true },
+  { from: './src/u.png', flatten: true },
+];
+
+if (process.env.NODE_ENV === 'staging') {
+  copySettings.push({ from: './src/robot.txt', flatten: true });
+}
 
 module.exports = {
   entry: [
@@ -9,9 +19,16 @@ module.exports = {
   ],
 
   plugins: [
-    new CopyWebpackPlugin([
-      { from: './src/favicon/*', flatten: true },
-    ]),
+    new CopyWebpackPlugin(copySettings),
+    {
+      apply: (compiler) => {
+        if (compiler.options.watch) {
+          compiler.hooks.afterEmit.tap('PM2ReloadPlugin', () => {
+            exec('pm2 reload all');
+          });
+        }
+      },
+    },
   ],
 
   module: {

@@ -9,10 +9,9 @@ import { getUserName } from '../utils/user';
 import urls from '../utils/urls';
 import IconTableTriangle from '../components/Icons/TableTriangle';
 import SearchInput from '../components/SearchInput';
-import { getFileUrl } from '../utils/upload';
 import loader from '../utils/loader';
 
-const { getPagingLink } = urls;
+const { getUsersPagingUrl } = urls;
 
 const textItemRender = (current, type, element) => {
   if (type === 'prev') {
@@ -37,12 +36,12 @@ const UsersPage = (props) => {
   };
 
   const onChangePage = (current) => {
-    props.history.push(getPagingLink({ ...usersParams, page: current }));
+    props.history.push(getUsersPagingUrl({ ...usersParams, page: current }));
     window.scrollTo(0, 'top');
   };
 
   const onChangeSearch = (userName) => {
-    props.history.push(getPagingLink({
+    props.history.push(getUsersPagingUrl({
       ...usersParams, userName, page: 1, perPage: 20,
     }));
   };
@@ -73,7 +72,7 @@ const UsersPage = (props) => {
     <LayoutBase>
       <div className="layout layout_entries">
         <div className="layout__title">
-          <h1 className="title">People</h1>
+          <h1 className="title title_bold">People</h1>
         </div>
         <div className="layout__search">
           <SearchInput setSearch={onChangeSearch} search={userName} />
@@ -107,7 +106,7 @@ const UsersPage = (props) => {
                             { 'list-table__cell_sortable': item.sortable },
                           )}
                         >
-                          <Link to={getPagingLink({ ...usersParams, sortBy: `${sortBy === `-${item.name}` ? '' : '-'}${item.name}` })}>
+                          <Link to={getUsersPagingUrl({ ...usersParams, sortBy: `${sortBy === `-${item.name}` ? '' : '-'}${item.name}` })}>
                             <div className="list-table__title">
                               {item.title}
 
@@ -136,7 +135,7 @@ const UsersPage = (props) => {
                         <td className="list-table__cell list-table__cell_name" data-title="Name">
                           <UserCard
                             profileLink={urls.getUserUrl(item.id)}
-                            avatarUrl={getFileUrl(item.avatarFilename)}
+                            avatarUrl={urls.getFileUrl(item.avatarFilename)}
                             userName={getUserName(item)}
                             accountName={item.accountName}
                             sign="@"
@@ -155,10 +154,11 @@ const UsersPage = (props) => {
                 {hasMore && (
                   <div className="table-content__showmore">
                     <div className="button-clean button-clean_link">
-                      <Link to={getPagingLink({ ...usersParams, perPage: +perPage + 20 })}>Show More</Link>
+                      <Link to={getUsersPagingUrl({ ...usersParams, perPage: +perPage + 20 })}>Show More</Link>
                     </div>
                   </div>
                 )}
+                {/* TODO Replace with components/paggination/ */}
                 <Pagination
                   className="table-content__pagination"
                   showTitle={false}

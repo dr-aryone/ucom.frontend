@@ -1,16 +1,21 @@
 import { GraphQLSchema } from 'ucom-libs-graphql-schemas';
 import humps from 'lodash-humps';
 import * as axios from 'axios';
+import snakes from '../utils/snakes';
 import { getBackendConfig } from '../utils/config';
 import { getToken } from '../utils/token';
 import { COMMENTS_PER_PAGE } from '../utils/comments';
-import { FEED_PER_PAGE } from '../utils/feed';
-import snakes from '../utils/snakes';
+import { FEED_PER_PAGE, OVERVIEW_SIDE_PER_PAGE } from '../utils/feed';
+import { NODES_PER_PAGE } from '../utils/governance';
+import { LIST_ORDER_BY, LIST_PER_PAGE } from '../utils/list';
 
-const request = async (data) => {
-  const options = {
-    baseURL: getBackendConfig().httpEndpoint,
+const { Dictionary } = require('ucom-libs-wallet');
+
+const request = async (data, extraOptions = {}) => {
+  let options = {
     headers: {},
+    withCredentials: true,
+    baseURL: getBackendConfig().httpEndpoint,
   };
 
   const token = getToken();
@@ -19,8 +24,20 @@ const request = async (data) => {
     options.headers.Authorization = `Bearer ${token}`;
   }
 
+  options = {
+    ...options,
+    ...extraOptions,
+    headers: {
+      ...options.headers,
+      ...extraOptions.headers,
+    },
+  };
+
   try {
     const resp = await axios.post('/graphql', data, options);
+    if (resp.data.errors) {
+      throw resp;
+    }
     return humps(resp.data);
   } catch (e) {
     throw e;
@@ -28,20 +45,147 @@ const request = async (data) => {
 };
 
 export default {
+  async getUserPageData({
+    userIdentity,
+    trustedByOrderBy = LIST_ORDER_BY,
+    trustedByPerPage = LIST_PER_PAGE,
+    trustedByPage = 1,
+    followsOrganizationsOrderBy = LIST_ORDER_BY,
+    followsOrganizationsPerPage = LIST_PER_PAGE,
+    followsOrganizationsPage = 1,
+  }) {
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getOneUserQueryPart({
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+      }),
+      GraphQLSchema.getOneUserTrustedByQueryPart({
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+        order_by: trustedByOrderBy,
+        per_page: trustedByPerPage,
+        page: trustedByPage,
+      }),
+      GraphQLSchema.getOneUserFollowsOrganizationsQueryPart({
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+        order_by: followsOrganizationsOrderBy,
+        per_page: followsOrganizationsPerPage,
+        page: followsOrganizationsPage,
+      }),
+    ]);
+
+    try {
+      const data = await request({ query });
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getUserFollowsOrganizations({
+    userIdentity,
+    orderBy = LIST_ORDER_BY,
+    perPage = LIST_PER_PAGE,
+    page = 1,
+  }) {
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getOneUserFollowsOrganizationsQueryPart({
+        page,
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+        order_by: orderBy,
+        per_page: perPage,
+      }),
+    ]);
+
+    try {
+      const data = await request({ query });
+      return data.data.oneUserFollowsOrganizations;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getUserTrustedBy({
+    userIdentity,
+    orderBy = LIST_ORDER_BY,
+    perPage = LIST_PER_PAGE,
+    page = 1,
+  }) {
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getOneUserTrustedByQueryPart({
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+        order_by: orderBy,
+        per_page: perPage,
+        page,
+      }),
+    ]);
+
+    try {
+      const data = await request({ query });
+
+      // TODO: Hot fix for backend bug
+      data.data.oneUserTrustedBy.data.forEach((item) => {
+        delete item.iFollow;
+        delete item.followedBy;
+      });
+
+      return data.data.oneUserTrustedBy;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async fetchUser({
+    userIdentity,
+  }) {
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getOneUserQueryPart({
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+      }),
+    ]);
+
+    try {
+      const data = await request({ query });
+      // TODO: Remove after backend fix 200 code when error;
+      if (data.errors) {
+        throw data.errors;
+      }
+      return data.data.oneUser;
+    } catch (e) {
+      throw e;
+    }
+  },
+
   async getUserWallFeed({
-    userId,
+    userIdentity,
     page = 1,
     perPage = FEED_PER_PAGE,
     commentsPage = 1,
     commentsPerPage = COMMENTS_PER_PAGE,
   }) {
-    const query = GraphQLSchema.getUserWallFeedQuery(
-      userId,
-      page,
-      perPage,
-      commentsPage,
-      commentsPerPage,
-    );
+    const query = GraphQLSchema.getQueryMadeFromParts([
+      GraphQLSchema.getUserWallFeedQueryPart({
+        filters: {
+          user_identity: `${userIdentity}`,
+        },
+        page,
+        per_page: perPage,
+        comments: {
+          page: commentsPage,
+          per_page: commentsPerPage,
+        },
+      }),
+    ]);
 
     try {
       const data = await request({ query });
@@ -182,28 +326,238 @@ export default {
     }
   },
 
-  async getPosts({
-    postFiltering,
-    postOrdering,
+
+  async getOverview({
     page = 1,
     perPage = FEED_PER_PAGE,
-    commentsPage = 1,
-    commentsPerPage = COMMENTS_PER_PAGE,
+    commentsPage,
+    commentsPerPage,
+    filter,
+    tab,
+    postTypeId,
   }) {
     const token = getToken();
-    const query = await GraphQLSchema.getPostsQuery(
-      snakes(postFiltering),
-      snakes(postOrdering),
+    const query = tab === 'Posts' ?
+      await GraphQLSchema[`getMany${filter}PostsQuery`](
+        postTypeId,
+        page,
+        perPage,
+        commentsPage,
+        commentsPerPage,
+        Boolean(token),
+      ) : await GraphQLSchema[`getMany${filter}${tab}Query`](
+        page,
+        perPage,
+      );
+
+    try {
+      const data = await request({ query });
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getOverviewSide({
+    page = 1,
+    perPage = OVERVIEW_SIDE_PER_PAGE,
+    filter,
+    tab,
+    side,
+    postTypeId,
+  }) {
+    const query = tab === 'Posts' ?
+      await GraphQLSchema[`getMany${side}For${filter}${tab}Query`](
+        postTypeId,
+        page,
+        perPage,
+      ) :
+      await GraphQLSchema[`getMany${side}For${filter}${tab}Query`](
+        page,
+        perPage,
+      );
+    try {
+      const data = await request({ query });
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getNodesSelected(
+    userId,
+    orderBy = 'bp_status',
+    page = 1,
+    perPage = NODES_PER_PAGE,
+  ) {
+    const commonParams = { orderBy, page, perPage };
+    const BLOCK_PRODUCERS = Dictionary.BlockchainNodes.typeBlockProducer();
+    const CALCULATOR_NODES = Dictionary.BlockchainNodes.typeCalculator();
+
+    const isVotedBlockProducers = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
+      ...commonParams,
+      filters: {
+        myselfVotesOnly: true,
+        userId,
+        blockchainNodesType: BLOCK_PRODUCERS,
+      },
+    }));
+
+    const isVotedCalculatorsNodes = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
+      ...commonParams,
+      filters: {
+        myselfVotesOnly: true,
+        userId,
+        blockchainNodesType: CALCULATOR_NODES,
+      },
+    }));
+
+    const partsWithAliases = {
+      isVotedBlockProducers, isVotedCalculatorsNodes,
+    };
+
+    const query = GraphQLSchema.getQueryMadeFromPartsWithAliases(partsWithAliases);
+
+    try {
+      const data = await request({ query });
+      return {
+        selectedNodes: {
+          [BLOCK_PRODUCERS]: data.data.isVotedBlockProducers,
+          [CALCULATOR_NODES]: data.data.isVotedCalculatorsNodes,
+        },
+      };
+    } catch (e) {
+      throw e;
+    }
+  },
+  async getAllNodes(
+    orderBy = 'bp_status',
+    page = 1,
+    perPage = NODES_PER_PAGE,
+  ) {
+    const commonParams = { orderBy, page, perPage };
+    const BLOCK_PRODUCERS = Dictionary.BlockchainNodes.typeBlockProducer();
+    const CALCULATOR_NODES = Dictionary.BlockchainNodes.typeCalculator();
+
+    const blockProducers = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
+      ...commonParams,
+      filters: {
+        myselfVotesOnly: false,
+        blockchainNodesType: BLOCK_PRODUCERS,
+      },
+    }));
+
+    const calculatorsNodes = GraphQLSchema.getManyBlockchainNodesQueryPart(snakes({
+      ...commonParams,
+      filters: {
+        myselfVotesOnly: false,
+        blockchainNodesType: CALCULATOR_NODES,
+      },
+    }));
+
+
+    const partsWithAliases = {
+      blockProducers, calculatorsNodes,
+    };
+
+    const query = GraphQLSchema.getQueryMadeFromPartsWithAliases(partsWithAliases);
+
+    try {
+      const data = await request({ query });
+      return {
+        nodes: {
+          [BLOCK_PRODUCERS]: data.data.blockProducers,
+          [CALCULATOR_NODES]: data.data.calculatorsNodes,
+        },
+      };
+    } catch (e) {
+      throw e;
+    }
+  },
+  async getOnePostOffer({
+    postId,
+    commentsQuery = {
+      page: 1,
+      per_page: COMMENTS_PER_PAGE,
+    },
+    usersTeamQuery = {
+      page: 1,
+      per_page: 20,
+      order_by: '-score',
+      filters: {
+        airdrops: {
+          id: 1,
+        },
+      },
+    },
+  }, options = {}) {
+    const query = GraphQLSchema.getOnePostOffer(
+      postId,
+      commentsQuery,
+      usersTeamQuery,
+    );
+
+    try {
+      const data = await request({ query }, options);
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getOnePostOfferWithUserAirdrop({
+    airdropFilter = { airdrop_id: 1 },
+    postId,
+    commentsQuery = {
+      page: 1,
+      per_page: COMMENTS_PER_PAGE,
+    },
+    usersTeamQuery = {
+      page: 1,
+      per_page: 20,
+      order_by: '-score',
+      filters: {
+        airdrops: {
+          id: 1,
+        },
+      },
+    },
+  }, options = {}) {
+    const query = GraphQLSchema.getOnePostOfferWithUserAirdrop(
+      airdropFilter,
+      postId,
+      commentsQuery,
+      usersTeamQuery,
+    );
+
+    try {
+      const data = await request({ query }, options);
+      return data.data;
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  async getManyUsers({
+    filter = {
+      airdrops: { id: 1 },
+    },
+    orderBy,
+    page,
+    perPage,
+    isMyself,
+  }) {
+    const query = GraphQLSchema.getManyUsers(
+      filter,
+      orderBy,
       page,
       perPage,
-      commentsPage,
-      commentsPerPage,
-      Boolean(token),
+      isMyself,
     );
 
     try {
       const data = await request({ query });
-      return data.data.posts;
+      return data.data.manyUsers;
     } catch (e) {
       throw e;
     }

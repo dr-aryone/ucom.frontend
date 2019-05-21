@@ -4,10 +4,11 @@ import { getToken, removeToken } from '../utils/token';
 import loader from '../utils/loader';
 // import { enableGtm } from '../utils/gtm';
 import { addServerErrorNotification } from './notifications';
-import { setUser } from './';
+import { setUser, setUserLoading } from './';
 import { siteNotificationsSetUnreadAmount } from './siteNotifications';
-import { getAccountState } from './wallet';
 import { addOrganizations } from './organizations';
+import graphql from '../api/graphql';
+import { walletGetAccount } from './walletSimple';
 
 export const usersAddIFollow = payload => ({ type: 'USERS_ADD_I_FOLLOW', payload });
 export const usersRemoveIFollow = payload => ({ type: 'USERS_REMOVE_I_FOLLOW', payload });
@@ -44,18 +45,19 @@ export const fetchMyself = () => async (dispatch) => {
   const token = getToken();
 
   if (!token) {
-    return;
+    return undefined;
   }
-
+  let data;
+  dispatch(setUserLoading(true));
   loader.start();
 
   try {
-    const data = await api.getMyself(token);
+    data = await api.getMyself(token);
 
     dispatch(setUser(data));
     dispatch(addUsers([data]));
     dispatch(siteNotificationsSetUnreadAmount(data.unreadMessagesCount));
-    dispatch(getAccountState());
+    dispatch(walletGetAccount(data.accountName));
 
     // TODO: Сделать disable
     // if (process.env.NODE_ENV === 'production' && data.isTrackingAllowed) {
@@ -66,14 +68,83 @@ export const fetchMyself = () => async (dispatch) => {
     removeToken();
   }
 
+  dispatch(setUserLoading(false));
   loader.done();
+
+  return data;
 };
 
-export const fetchUser = userId => dispatch =>
-  api.getUser(userId)
-    .then((data) => {
-      dispatch(addUsers([data]));
+export const fetchUser = userIdentity => async (dispatch) => {
+  try {
+    const data = await graphql.fetchUser({ userIdentity });
+    dispatch(addUsers([data]));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchUserPageData = ({
+  userIdentity,
+  trustedByOrderBy,
+  trustedByPerPage,
+  trustedByPage,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getUserPageData({
+      userIdentity,
+      trustedByOrderBy,
+      trustedByPerPage,
+      trustedByPage,
     });
+    const { oneUser, oneUserTrustedBy, oneUserFollowsOrganizations } = data;
+    dispatch(addUsers(oneUserTrustedBy.data.concat([oneUser])));
+    dispatch(addOrganizations(oneUserFollowsOrganizations.data));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchUserTrustedBy = ({
+  userIdentity,
+  orderBy,
+  perPage,
+  page,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getUserTrustedBy({
+      userIdentity,
+      orderBy,
+      perPage,
+      page,
+    });
+    dispatch(addUsers(data.data));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchUserFollowsOrganizations = ({
+  userIdentity,
+  orderBy,
+  perPage,
+  page,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getUserFollowsOrganizations({
+      userIdentity,
+      orderBy,
+      perPage,
+      page,
+    });
+    dispatch(addOrganizations(data.data));
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};
 
 export const updateUser = payload => async (dispatch) => {
   loader.start();
@@ -92,48 +163,119 @@ export const updateUser = payload => async (dispatch) => {
   loader.done();
 };
 
-export const followUser = data => async (dispatch) => {
-  loader.start();
-
+export const followUser = ({
+  user,
+  owner,
+  activeKey,
+}) => async (dispatch) => {
   try {
-    await api.follow(data.user.id, getToken(), data.owner.accountName, data.user.accountName);
-
+    await api.follow(user.id, getToken(), owner.accountName, user.accountName, activeKey);
     dispatch(usersAddIFollow({
-      ownerId: Number(data.owner.id),
-      userId: data.user.id,
+      ownerId: Number(owner.id),
+      userId: user.id,
     }));
-
     dispatch(usersAddFollowedBy({
-      ownerId: Number(data.user.id),
-      userId: data.owner.id,
+      ownerId: Number(user.id),
+      userId: owner.id,
     }));
   } catch (e) {
     console.error(e);
-    dispatch(addServerErrorNotification(e));
+    throw e;
   }
-
-  loader.done();
 };
 
-export const unfollowUser = data => async (dispatch) => {
-  loader.start();
-
+export const unfollowUser = ({
+  user,
+  owner,
+  activeKey,
+}) => async (dispatch) => {
   try {
-    await api.unfollow(data.user.id, getToken(), data.owner.accountName, data.user.accountName);
-
+    await api.unfollow(user.id, getToken(), owner.accountName, user.accountName, activeKey);
     dispatch(usersRemoveIFollow({
-      ownerId: Number(data.owner.id),
-      userId: data.user.id,
+      ownerId: Number(owner.id),
+      userId: user.id,
     }));
-
     dispatch(usersRemoveFollowedBy({
-      ownerId: Number(data.user.id),
-      userId: data.owner.id,
+      ownerId: Number(user.id),
+      userId: owner.id,
     }));
   } catch (e) {
     console.error(e);
-    dispatch(addServerErrorNotification(e));
+    throw e;
   }
+};
 
-  loader.done();
+export const getManyUsers = ({
+  airdropFilter,
+  orderBy,
+  page,
+  perPage,
+  isMyself,
+}) => async (dispatch) => {
+  try {
+    const data = await graphql.getManyUsers({
+      airdropFilter,
+      orderBy,
+      page,
+      perPage,
+      isMyself,
+    });
+    dispatch(addUsers([data]));
+    return data;
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+export const trustUser = ({
+  userId,
+  userAccountName,
+  ownerAccountName,
+  activeKey,
+}) => async (dispatch) => {
+  try {
+    await api.trustUser(
+      ownerAccountName,
+      userAccountName,
+      userId,
+      activeKey,
+    );
+    dispatch({
+      type: 'USERS_SET_TRUST',
+      payload: {
+        userId,
+        trust: true,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+};
+
+export const untrustUser = ({
+  userId,
+  userAccountName,
+  ownerAccountName,
+  activeKey,
+}) => async (dispatch) => {
+  try {
+    await api.untrustUser(
+      ownerAccountName,
+      userAccountName,
+      userId,
+      activeKey,
+    );
+    dispatch({
+      type: 'USERS_SET_TRUST',
+      payload: {
+        userId,
+        trust: false,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 };

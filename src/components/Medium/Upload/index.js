@@ -1,12 +1,12 @@
 import * as axios from 'axios';
 import MediumEditor from 'medium-editor';
 import api from '../../../api';
-import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR, getBase64FromFile } from '../../../utils/upload';
+import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR, compressUploadedImage } from '../../../utils/upload';
 import config from '../../../../package.json';
 import './styles.css';
 
 class UploadButtons {
-  constructor({ onImageSelect, onVideoEmbedSelect }) {
+  constructor({ onImageSelect, onVideoEmbedSelect, onSurveyEmbedSelect }) {
     this.currentEl = null;
     this.el = document.createElement('div');
     this.el.className = 'medium-upload';
@@ -29,6 +29,11 @@ class UploadButtons {
       this.hide();
     });
 
+    this.el.querySelector('.js-survey-embed').addEventListener('click', () => {
+      onSurveyEmbedSelect();
+      this.hide();
+    });
+
     document.body.appendChild(this.el);
   }
 
@@ -44,17 +49,33 @@ class UploadButtons {
 
       <div class="medium-upload__list">
         <div class="medium-upload__item">
-          <label class="medium-upload__button">
+          <label class="medium-upload__icon">
             <input type="file" class="js-file-input" />
-            <svg width="18" height="18" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z" />
+            <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <mask id="path-1-inside-1" fill="white">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M14.7694 1.26302C14.7694 0.565474 14.2039 0 13.5063 0H7.82726C7.12971 0 6.56424 0.565474 6.56424 1.26302C6.56424 1.96057 5.99876 2.52604 5.30122 2.52604H3C1.34315 2.52604 0 3.86919 0 5.52604V12.9997C0 14.6566 1.34315 15.9997 3 15.9997H18.3333C19.9902 15.9997 21.3333 14.6566 21.3333 12.9997V5.52604C21.3333 3.86919 19.9902 2.52604 18.3333 2.52604H16.0324C15.3348 2.52604 14.7694 1.96057 14.7694 1.26302Z"/>
+              </mask>
+              <path d="M7.82726 2H13.5063V-2H7.82726V2ZM3 4.52604H5.30122V0.526042H3V4.52604ZM2 12.9997V5.52604H-2V12.9997H2ZM18.3333 13.9997H3V17.9997H18.3333V13.9997ZM19.3333 5.52604V12.9997H23.3333V5.52604H19.3333ZM16.0324 4.52604H18.3333V0.526042H16.0324V4.52604ZM16.0324 0.526042C16.4394 0.526042 16.7694 0.855999 16.7694 1.26302H12.7694C12.7694 3.06514 14.2303 4.52604 16.0324 4.52604V0.526042ZM23.3333 5.52604C23.3333 2.76462 21.0948 0.526042 18.3333 0.526042V4.52604C18.8856 4.52604 19.3333 4.97376 19.3333 5.52604H23.3333ZM18.3333 17.9997C21.0948 17.9997 23.3333 15.7612 23.3333 12.9997H19.3333C19.3333 13.552 18.8856 13.9997 18.3333 13.9997V17.9997ZM-2 12.9997C-2 15.7612 0.238581 17.9997 3 17.9997V13.9997C2.44772 13.9997 2 13.552 2 12.9997H-2ZM3 0.526042C0.238577 0.526042 -2 2.76461 -2 5.52604H2C2 4.97376 2.44771 4.52604 3 4.52604V0.526042ZM4.56424 1.26302C4.56424 0.856 4.89419 0.526042 5.30122 0.526042V4.52604C7.10333 4.52604 8.56424 3.06514 8.56424 1.26302H4.56424ZM13.5063 2C13.0993 2 12.7694 1.67004 12.7694 1.26302H16.7694C16.7694 -0.539097 15.3085 -2 13.5063 -2V2ZM7.82726 -2C6.02514 -2 4.56424 -0.539095 4.56424 1.26302H8.56424C8.56424 1.67004 8.23428 2 7.82726 2V-2Z" fill="#C4C4C4" mask="url(#path-1-inside-1)"/>
+              <circle cx="10.6667" cy="9.05209" r="3" stroke="#C4C4C4" stroke-width="2"/>
             </svg>
           </label>
         </div>
         <div class="medium-upload__item">
-          <div class="medium-upload__button js-video-embed">
-            <svg width="21" height="21" viewBox="0 0 576 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z" />
+          <div class="medium-upload__icon js-video-embed">
+            <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1.33331" y="1" width="19.3333" height="14" rx="3" stroke="#C4C4C4" stroke-width="2"/>
+              <path d="M10.2778 6.74908L12.4444 8L10.2778 9.25093L10.2778 6.74908Z" stroke="#C4C4C4" stroke-width="3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="medium-upload__item medium-upload__item_survay">
+          <div class="medium-upload__icon js-survey-embed">
+          <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="9.92981" y="1.77778" width="1.68421" height="10.6667" rx="0.842105" fill="#C4C4C4"/>
+            <rect x="5.7193" width="1.68421" height="12.4444" rx="0.842105" fill="#C4C4C4"/>
+            <rect x="16.6667" y="14.2222" width="1.77778" height="16" rx="0.888889" transform="rotate(90 16.6667 14.2222)" fill="#C4C4C4"/>
+            <rect x="1.50876" y="5.33334" width="1.68421" height="7.11111" rx="0.842105" fill="#C4C4C4"/>
+            <rect x="14.1404" y="8" width="1.68421" height="4.44444" rx="0.842105" fill="#C4C4C4"/>
             </svg>
           </div>
         </div>
@@ -72,13 +93,21 @@ class UploadButtons {
 
   showButton() {
     this.el.classList.add('medium-upload_active');
+    if (this.currentEl) {
+      this.currentEl.classList.add('active-buttons');
+    }
   }
 
   hideButtons() {
     this.el.classList.remove('medium-upload_active');
+    if (this.currentEl) {
+      this.currentEl.classList.remove('active-buttons');
+    }
   }
 
   show(el) {
+    this.hideButtons();
+
     const rect = el.getBoundingClientRect();
     const top = rect.top + window.scrollY;
     const left = rect.left + window.scrollX;
@@ -101,7 +130,7 @@ class UploadButtons {
   }
 }
 
-class MediumUpload extends MediumEditor.Extension {
+export default class MediumUpload extends MediumEditor.Extension {
   name = 'MediumUpload';
   currentEl = null;
 
@@ -112,8 +141,9 @@ class MediumUpload extends MediumEditor.Extension {
     this.onUploadDone = params.onUploadDone;
     this.onError = params.onError;
     this.uploadButtons = new UploadButtons({
-      onImageSelect: this.uplaodImage,
+      onImageSelect: this.uplaodAndAppendImage,
       onVideoEmbedSelect: this.appendVideoEmbed,
+      onSurveyEmbedSelect: this.appendSurveyEmbed,
     });
   }
 
@@ -134,6 +164,10 @@ class MediumUpload extends MediumEditor.Extension {
   }
 
   onEdit = () => {
+    if (!window.getSelection().anchorNode) {
+      return;
+    }
+
     this.currentEl = this.base.getSelectedParentElement();
 
     if (this.hasShowUploadButtons()) {
@@ -164,53 +198,72 @@ class MediumUpload extends MediumEditor.Extension {
 
     newLine.innerHTML = '<br>';
     parentEl.replaceChild(el, this.currentEl);
-    parentEl.insertBefore(newLine, this.currentEl.nextSibling);
+    parentEl.insertBefore(newLine, el.nextSibling);
     this.setCursorToElemnt(newLine);
     this.currentEl = newLine;
     this.base.checkContentChanged(this.base.origElements);
+    this.base.trigger('stateChanged');
 
     setTimeout(() => {
       this.uploadButtons.show(this.currentEl);
     }, 0);
   }
 
-  uplaodImage = async (file) => {
-    if (!file || !file.type.indexOf('image/') === 0) {
+  fileIsImage = (file) => {
+    if (!file || file.type.indexOf('image/') !== 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  fileIsAllowedSize(file) {
+    if (file.size > UPLOAD_SIZE_LIMIT) {
+      return false;
+    }
+
+    return true;
+  }
+
+  uplaodAndAppendImage = async (file) => {
+    if (!this.fileIsImage(file)) {
       return;
     }
 
-    if (file.size > UPLOAD_SIZE_LIMIT && typeof this.onError === 'function') {
+    if (!this.fileIsAllowedSize(file) && this.onError) {
       this.onError(UPLOAD_SIZE_LIMIT_ERROR);
       return;
     }
 
     const p = document.createElement('p');
+    p.contentEditable = false;
     const img = document.createElement('img');
 
     p.appendChild(img);
-
+    let base64;
     try {
-      const base64 = await getBase64FromFile(file);
+      base64 = await compressUploadedImage(file);
       img.src = base64;
     } catch (e) {
-      console.error(e);
+      this.onError(e);
+      return;
     }
 
     this.insertEl(p);
 
-    if (typeof this.onUploadStart === 'function') {
+    if (this.onUploadStart) {
       this.onUploadStart();
     }
 
     try {
-      const data = await api.uploadPostImage(file);
+      const data = await api.uploadPostImage(base64);
       img.src = data.files[0].url;
       this.base.checkContentChanged(this.base.origElements);
     } catch (e) {
-      console.error(e);
+      this.onError(e);
     }
 
-    if (typeof this.onUploadDone === 'function') {
+    if (this.onUploadDone) {
       this.onUploadDone();
     }
   }
@@ -224,6 +277,7 @@ class MediumUpload extends MediumEditor.Extension {
       const data = await axios.get(config.iframely.httpEndpoint, { params: { url } });
       const embedUrl = data.data.links.player.find(i => i.rel.some(j => ['oembed', 'html5'].indexOf(j) > 0)).href;
       const p = document.createElement('p');
+      p.contentEditable = false;
       p.innerHTML = `
         <iframe
           class="iframe-video"
@@ -240,6 +294,12 @@ class MediumUpload extends MediumEditor.Extension {
       console.error(e);
     }
   }
-}
 
-export default MediumUpload;
+  appendSurveyEmbed = () => {
+    const surveyEl = document.createElement('div');
+    surveyEl.setAttribute('data-survey', '');
+    surveyEl.contentEditable = false;
+
+    this.insertEl(surveyEl);
+  }
+}

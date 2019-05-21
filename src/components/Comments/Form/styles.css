@@ -1,37 +1,53 @@
-:local(.form) {
+.form {
   display: flex;
   padding: 20px;
+  flex-direction: column;
+  overflow-x: hidden;
 }
 
-:local(.form[depth="1"]) {
+.form :global(.cover_small) {
+  margin-top: 8px;
+  margin-left: auto;
+}
+
+.formMain {
+  display: flex;
+}
+
+.form[depth="1"] {
   padding-left: 64px;
 }
 
-:local(.form[depth="2"]) {
+.form[depth="2"] {
   padding-left: 108px;
 }
 
-:local(.userPick) {
+.userPick {
   margin: 0 8px 0 0;
   padding: 6px 0 0;
 }
 
-:local(.content) {
+.content {
   flex: 1 1 auto;
 }
 
-:local(.field) {
+.field {
   display: flex;
   align-items: flex-end;
   border: 1px solid #B1B1B1;
   border-radius: 4px;
+  position: relative;
 }
 
-:local(.inputWrapper) {
+:global(body.dragenter) .field {
+  border: none;
+}
+
+.inputWrapper {
   flex: 1 1 auto;
 }
 
-:local(.input) {
+.input {
   display: block;
   width: 100%;
   line-height: 1;
@@ -45,33 +61,27 @@
   background: transparent;
 }
 
-:local(.input::placeholder) {
+.input::placeholder {
   opacity: 1;
   color: #C1C1C1;
 }
 
-:local(.actions) {
-  display: flex;
-  align-items: center;
-  height: 46px;
-  padding: 0 10px 0 0;
-}
-
-:local(.action) {
+.action {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 24px;
   height: 24px;
+  margin-right: 15px;
   cursor: pointer;
   fill: #c4c4c4;
 }
 
-:local(.action:hover) {
+.action:hover {
   fill: #767676;
 }
 
-:local(.images) {
+.images {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 8px;
@@ -80,19 +90,21 @@
   margin: 8px 0 0;
 }
 
-:local(.imageWrapper) {
+.imageWrapper {
   position: relative;
   z-index: 0;
+  margin-top: 20px;
+  margin-left: auto;
 }
 
-:local(.image) {
+.image {
   display: block;
-  height: 100%;
-  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
   object-fit: cover;
 }
 
-:local(.imageRemove) {
+.imageRemove {
   position: absolute;
   z-index: 1;
   top: 4px;
@@ -105,4 +117,54 @@
   border-radius: 1px;
   background: rgba(0,0,0,0.5);
   cursor: pointer;
+}
+
+.form.flat {
+  border-top: 1px solid #E7ECEC;
+}
+
+.form.flat .field {
+  border: none;
+}
+
+.form.flat .userPick {
+  padding: 0;
+}
+
+.form.flat .input {
+  padding: 4px 22px 4px 10px;
+}
+
+.form.flat .actions {
+  height: 36px;
+}
+
+.form.flat .action  {
+  margin-right: 0;
+}
+
+.containerActions {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  top: -9px;
+}
+
+.label {
+  fill: #c4c4c4;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 4px;
+}
+
+.labelFile {
+  display: none;
+}
+
+.label:hover {
+  fill: #767676;
 }

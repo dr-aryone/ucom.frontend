@@ -8,13 +8,13 @@ import UserOption from './UserOption';
 import Close from './Icons/Close';
 import api from '../api';
 import { getUserName } from '../utils/user';
-import { getFileUrl } from '../utils/upload';
+import urls from '../utils/urls';
 
 const SelectUserOption = props => (
   <components.Option {...props}>
     <UserOption
       name={getUserName(props.data)}
-      avatar={getFileUrl(humps(props.data).avatarFilename)}
+      avatar={urls.getFileUrl(humps(props.data).avatarFilename)}
       nickname={props.data.accountName}
     />
   </components.Option>
@@ -101,6 +101,8 @@ UserSearchInput.propTypes = {
 UserSearchInput.defaultProps = {
   isMulti: true,
   placeholder: 'Find people',
+  onChange: undefined,
+  value: undefined,
 };
 
 export default UserSearchInput;

@@ -1,3 +1,4 @@
+// TODO: Remove this and all dependencies
 import React, { PureComponent, Fragment } from 'react';
 import { withRouter } from 'react-router';
 import { NavLink } from 'react-router-dom';
@@ -11,11 +12,9 @@ import MenuWallet from './Wallet/MenuWallet';
 import UserCard from './UserCard';
 import Header from './Header/Header';
 import LogoutIcon from './Icons/Logout';
-import { getFileUrl } from '../utils/upload';
 import { selectUser } from '../store/selectors';
 import { getOrganizationUrl } from '../utils/organization';
 import { showMenuPopup, hideMenuPopup } from '../actions/menuPopup';
-import { removeBrainkey } from '../utils/brainkey';
 import { removeToken } from '../utils/token';
 import { removeUser } from '../actions';
 import urls from '../utils/urls';
@@ -51,7 +50,6 @@ class MenuPopup extends PureComponent {
 
   logout = () => {
     removeToken();
-    removeBrainkey();
     this.props.removeUser();
     window.location.reload();
     this.hidePopup();
@@ -159,7 +157,7 @@ class MenuPopup extends PureComponent {
                                     className="user-card_text_left"
                                     userName={item.title}
                                     accountName={item.nickname}
-                                    avatarUrl={getFileUrl(item.avatarFilename)}
+                                    avatarUrl={urls.getFileUrl(item.avatarFilename)}
                                     profileLink={getOrganizationUrl(item.id)}
                                     squareAvatar
                                     roundedAvatar

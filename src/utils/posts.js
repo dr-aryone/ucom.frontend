@@ -1,4 +1,5 @@
 import { truncate } from 'lodash';
+import { removeLineBreaksMultipleSpacesAndTrim } from '../utils/text';
 import urls from './urls';
 
 export const UPVOTE_STATUS = 'upvote';
@@ -19,6 +20,10 @@ export const POSTS_TITLE_MAX_LENGTH = 255;
 export const POSTS_LEADING_TEXT_MAX_LENGTH = 255;
 
 export const POSTS_DRAFT_LOCALSTORAGE_KEY = 'post_data_v_1';
+
+export const POSTS_DESCRIPTION_PREVIEW_LIMIT = 400;
+
+export const POST_EDIT_TIME_LIMIT = 60 * 1000 * 15;
 
 export const POSTS_CATREGORIES = [{
   id: POSTS_CATREGORIES_TRENDING_ID,
@@ -65,12 +70,12 @@ export const getPostTypeById = (postTypeId) => {
   }
 };
 
-export const postIsEditable = (createdAt) => {
+export const postIsEditable = (createdAt, leftMinutes) => {
   if (!createdAt) {
     return false;
   }
 
-  return (new Date()).getTime() - (new Date(createdAt)).getTime() < 600000;
+  return (new Date()).getTime() - (new Date(createdAt)).getTime() < leftMinutes;
 };
 
 export const getPostBody = (post) => {
@@ -118,8 +123,9 @@ export const parseMediumContent = (html) => {
   let entityImages = null;
 
   for (let i = 0; i < childNodes.length; i++) {
-    if (childNodes[i].textContent) {
-      title = truncate(childNodes[i].textContent, {
+    const textContent = removeLineBreaksMultipleSpacesAndTrim(childNodes[i].textContent);
+    if (textContent) {
+      title = truncate(textContent, {
         length: POSTS_TITLE_MAX_LENGTH,
         separator: ' ',
       });
@@ -129,8 +135,9 @@ export const parseMediumContent = (html) => {
   }
 
   for (let i = 0; i < childNodes.length; i++) {
-    if (childNodes[i].textContent) {
-      leadingText = truncate(childNodes[i].textContent, {
+    const textContent = removeLineBreaksMultipleSpacesAndTrim(childNodes[i].textContent);
+    if (textContent) {
+      leadingText = truncate(textContent, {
         length: POSTS_LEADING_TEXT_MAX_LENGTH,
         separator: ' ',
       });
@@ -153,6 +160,19 @@ export const parseMediumContent = (html) => {
   return ({
     title, leadingText, entityImages, description: html,
   });
+};
+
+export const mediumHasContent = (html = '') => {
+  if (typeof document === 'undefined') {
+    return false;
+  }
+
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  const hasTextContent = removeLineBreaksMultipleSpacesAndTrim(div.textContent).length > 0;
+  const hasImagesOrIframes = div.querySelectorAll('iframe, img').length > 0;
+
+  return hasTextContent || hasImagesOrIframes;
 };
 
 export const getContentMetaTags = (post) => {

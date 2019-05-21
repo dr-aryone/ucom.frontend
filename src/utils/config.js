@@ -19,3 +19,5 @@ export const getUosGroupId = () => {
 
   return id;
 };
+
+export const getGrecaptchaSitekey = () => config.grecaptchaSitekey;

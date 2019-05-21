@@ -7,6 +7,9 @@ import { selectUser } from '../../store/selectors/user';
 import { followOrganization, unfollowOrganization } from '../../actions/organizations';
 import { getUserById } from '../../store/users';
 import { authShowPopup } from '../../actions/auth';
+import { restoreActiveKey } from '../../utils/keys';
+import IconCheck from '../Icons/Check';
+import loader from '../../utils/loader';
 
 const OrganizationFollowButton = (props) => {
   if (!props.organizationId) {
@@ -22,21 +25,36 @@ const OrganizationFollowButton = (props) => {
 
   const userIsFollow = props.user.id ? (organization.followedBy || []).some(item => owner && +item.id === +owner.id) : false;
 
-  return (
+  const text = userIsFollow ? 'Joined' : 'Join';
+
+  const onClick = async () => {
+    const activeKey = restoreActiveKey();
+    if (!owner || !activeKey) {
+      props.authShowPopup();
+      return;
+    }
+
+    loader.start();
+    await (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner, activeKey });
+    loader.done();
+  };
+
+  return props.asLink ? (
+    <button
+      className="link red-hover"
+      onClick={onClick}
+    >
+      {text}
+      {userIsFollow && <IconCheck />}
+    </button>
+  ) : (
     <Button
       isStretched
       size="medium"
       theme="transparent"
       withCheckedIcon={userIsFollow}
-      text={userIsFollow ? 'Following' : 'Follow'}
-      onClick={() => {
-        if (!owner) {
-          props.authShowPopup();
-          return;
-        }
-
-        (userIsFollow ? props.unfollowOrganization : props.followOrganization)({ organization, owner });
-      }}
+      text={userIsFollow ? 'Joined' : 'Join'}
+      onClick={onClick}
     />
   );
 };
@@ -48,6 +66,14 @@ OrganizationFollowButton.propTypes = {
   organizationId: PropTypes.number.isRequired,
   users: PropTypes.objectOf(PropTypes.object).isRequired,
   organizations: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+  }).isRequired,
+  asLink: PropTypes.bool,
+};
+
+OrganizationFollowButton.defaultProps = {
+  asLink: false,
 };
 
 export default connect(

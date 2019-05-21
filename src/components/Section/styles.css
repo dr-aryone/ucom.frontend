@@ -1,0 +1,32 @@
+:local(.section) {
+  margin: 0 0 35px;
+  font-size: 16px;
+}
+
+:local(.section:last-child) {
+  margin-bottom: 0;
+}
+
+:local(.title) {
+  margin: 0 0 20px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+:local(.title.withIcon) {
+  display: flex;
+  justify-content: space-between;
+}
+
+:local(.title.forText) {
+  margin-bottom: 8px;
+}
+
+:local(.section p) {
+  margin: 0 0 12px;
+}
+
+:local(.section p:last-child) {
+  margin-bottom: 0;
+}

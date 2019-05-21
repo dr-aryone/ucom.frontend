@@ -15,10 +15,8 @@ const Notifications = props => (
         >
           <div className="notifications__item" key={item.id}>
             <Notification
+              {...item}
               id={item.id}
-              type={item.type}
-              title={item.title}
-              message={item.message}
             />
           </div>
         </CSSTransition>
@@ -29,8 +27,8 @@ const Notifications = props => (
 
 Notifications.propTypes = {
   notifications: PropTypes.shape({
-    list: PropTypes.arrayOf(PropTypes.object),
-  }),
+    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+  }).isRequired,
 };
 
 export default connect(state => ({

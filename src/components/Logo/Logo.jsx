@@ -1,19 +1,16 @@
 import React from 'react';
-import classNames from 'classnames';
 import IconLogo from '../Icons/Logo';
 import MiniIconLogo from '../Icons/MiniLogo';
+import styles from './styles.css';
 
-const Logo = props => (
-  <div
-    className={classNames(
-      'logo',
-      { [`logo_${props.mod}`]: Boolean(props.mod) },
-    )}
-  >
-    <div className="logo__svg">
-      {props.mod === 'small' ? <MiniIconLogo /> : <IconLogo />}
-    </div>
-    <span className="logo__version">Alpha</span>
+const Logo = () => (
+  <div className={styles.logo}>
+    <span className={`${styles.icon} ${styles.mini}`}>
+      <MiniIconLogo />
+    </span>
+    <span className={`${styles.icon} ${styles.default}`}>
+      <IconLogo />
+    </span>
   </div>
 );
 

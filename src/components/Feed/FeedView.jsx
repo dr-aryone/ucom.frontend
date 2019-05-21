@@ -5,7 +5,7 @@ import Post from './Post/Post';
 import LoadMore from './LoadMore';
 
 const Feed = props => (
-  <div className="feed">
+  <div className={`feed ${props.isMobile ? 'feed-mobile' : ''}`}>
     {props.onSubmitPostForm &&
       <FeedInput
         onSubmit={props.onSubmitPostForm}
@@ -48,6 +48,7 @@ Feed.propTypes = {
   onSubmitPostForm: PropTypes.func,
   onClickLoadMore: PropTypes.func.isRequired,
   filter: PropTypes.func,
+  isMobile: PropTypes.bool,
 };
 
 Feed.defaultProps = {
@@ -55,6 +56,7 @@ Feed.defaultProps = {
   onSubmitPostForm: null,
   feedInputInitialText: null,
   filter: null,
+  isMobile: false,
 };
 
 export default Feed;

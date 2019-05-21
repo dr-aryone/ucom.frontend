@@ -1,0 +1,98 @@
+.embedMenu {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  margin-right: auto;
+}
+
+.buttonIcon {
+  box-sizing: border-box;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  fill: #c4c4c4;
+  transition: transform 0.3s ease;
+}
+
+.buttonIcon svg {
+  align-self: center;
+  justify-self: center;
+}
+
+.buttonIcon:hover {
+  fill: #767676;
+}
+
+.trigger {
+  composes: buttonIcon;
+  border: 2px solid #E8ECEC;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  background: white;
+}
+
+.trigger svg {
+  width: 10px;
+  height: 10px;
+}
+
+.triggerActive {
+  transform: rotate(45deg);
+}
+
+.icon {
+  composes: buttonIcon;
+}
+
+.iconImage {
+  composes: buttonIcon;
+  transition: transform 0.3s ease;
+
+}
+
+.iconImage circle {
+  stroke: #c4c4c4;
+  transition: stroke 0.3s ease;
+}
+
+.iconImage:hover circle {
+  stroke: #767676;
+}
+
+.iconImage input {
+  display: none;
+}
+
+.mainItem {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 16px 0 0;
+  position: relative;
+  z-index: 9;
+}
+
+.item {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 16px 0 0;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;  
+  position: relative;
+  left: -40px;
+  opacity: 0;
+}
+
+.active {
+  transform: translateX(40px);
+  opacity: 1;
+}
+
+.item :global(.drop-zone_clip){
+  right: 0;
+}

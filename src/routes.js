@@ -3,7 +3,8 @@ import UserPage, { getUserPageData } from './pages/User';
 import EditPostPage from './pages/EditPost';
 import ProfilePage from './pages/Profile';
 import PostPage, { getPostPageData } from './pages/Post';
-import PublicationsPage, { getPublicationsPageData } from './pages/Publications';
+import OverviewPage, { getPageData } from './pages/Overview';
+import Offer, { getPostOfferData } from './pages/Offer';
 import UsersPage from './pages/Users';
 import AboutPage from './pages/About';
 import OrganizationsPage from './pages/Organizations';
@@ -14,19 +15,23 @@ import RegistrationPage from './components/Registration/Registration';
 import GovernancePage from './components/Governance/Governance';
 import Tag from './pages/Tag';
 import Faq from './pages/Faq';
+import Statistics from './pages/Statistics';
+import { getAirdropOfferId } from './utils/airdrop';
+
+const airdropOfferId = getAirdropOfferId();
 
 export default [{
   path: '/',
   component: HomePage,
   getData: getHomePageData,
 }, {
-  path: '/publications/:name',
-  component: PublicationsPage,
-  getData: getPublicationsPageData,
+  path: '/overview/:route/filter/:filter',
+  component: OverviewPage,
+  getData: getPageData,
 }, {
-  path: '/publications/:name/page/:page',
-  component: PublicationsPage,
-  getData: getPublicationsPageData,
+  path: '/overview/:route/filter/:filter/page/:page',
+  component: OverviewPage,
+  getData: getPageData,
 }, {
   path: '/user/:userId',
   component: UserPage,
@@ -41,6 +46,14 @@ export default [{
 }, {
   path: '/posts/:id/edit',
   component: EditPostPage,
+}, {
+  path: `/posts/${airdropOfferId}`,
+  component: Offer,
+  getData: getPostOfferData,
+}, {
+  path: '/github',
+  component: Offer,
+  getData: getPostOfferData,
 }, {
   path: '/posts/:postId',
   component: PostPage,
@@ -76,15 +89,21 @@ export default [{
   path: '/communities/:id/:postId',
   component: OrganizationPage,
 }, {
+  path: '/communities/:organizationId/discussions/new',
+  component: EditPostPage,
+}, {
   path: '/governance',
   component: GovernancePage,
 }, {
   path: '/tags/:title',
   component: Tag,
-},
-{
+}, {
   path: '/faq',
   component: Faq,
+},
+{
+  path: '/stats',
+  component: Statistics,
 },
 {
   path: '*',

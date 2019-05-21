@@ -1,4 +1,5 @@
 import { compact, uniq } from 'lodash';
+import { USER_ACCOUNT_LENGTH } from '../utils/user';
 
 const getInitialState = () => ({
   data: {},
@@ -20,7 +21,14 @@ const users = (state = getInitialState(), action) => {
         ...state,
         data: {
           ...state.data,
-          ...users.reduce((result, user) => ({ ...result, [user.id]: { ...state.data[user.id], ...user } }), {}),
+          ...users.reduce((result, user) => ({
+            ...result,
+            [user.id]: {
+              ...state.data[user.id],
+              ...result[user.id],
+              ...user,
+            },
+          }), {}),
         },
       };
     }
@@ -77,6 +85,7 @@ const users = (state = getInitialState(), action) => {
           [user.id]: {
             ...user,
             followedBy: uniq(compact([].concat(user.followedBy, action.payload.userId))),
+            myselfData: { ...user.myselfData, follow: true },
           },
         },
       };
@@ -85,7 +94,7 @@ const users = (state = getInitialState(), action) => {
     case 'USERS_REMOVE_FOLLOWED_BY': {
       const user = state.data[action.payload.ownerId];
 
-      if (!user || !user.followedBy) {
+      if (!user) {
         return state;
       }
 
@@ -95,11 +104,27 @@ const users = (state = getInitialState(), action) => {
           ...state.data,
           [user.id]: {
             ...user,
-            followedBy: user.followedBy.filter(id => id !== action.payload.userId),
+            followedBy: user.followedBy ? user.followedBy.filter(id => id !== action.payload.userId) : null,
+            myselfData: { ...user.myselfData, follow: false },
           },
         },
       };
     }
+
+    case 'USERS_SET_TRUST':
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [action.payload.userId]: {
+            ...state.data[action.payload.userId],
+            myselfData: {
+              ...(state.data[action.payload.userId] ? state.data[action.payload.userId].myselfData : null),
+              trust: action.payload.trust,
+            },
+          },
+        },
+      };
 
     default:
       return state;
@@ -107,14 +132,24 @@ const users = (state = getInitialState(), action) => {
 };
 
 export const getUserById = (users, userIdOrName) => {
-  if (Number.isNaN(+userIdOrName) && (String(userIdOrName).length >= 12)) {
-    return Object.values(users.data).find(e => e.accountName === userIdOrName);
+  let result;
+
+  if (Number.isNaN(+userIdOrName) || `${userIdOrName}`.length === USER_ACCOUNT_LENGTH) {
+    result = Object.values(users.data).find(e => e.accountName === userIdOrName);
   }
-  return users.data[userIdOrName];
+
+  return result || users.data[userIdOrName];
 };
 
-export const getUsersByIds = (users, ids = []) => ids
-  .map(id => getUserById(users, id))
-  .filter(user => Boolean(user));
+export const getUsersByIds = (users, ids = [], limit) => {
+  let result = ids.map(id => getUserById(users, id))
+    .filter(user => Boolean(user));
+
+  if (limit) {
+    result = result.slice(0, limit);
+  }
+
+  return result;
+};
 
 export default users;

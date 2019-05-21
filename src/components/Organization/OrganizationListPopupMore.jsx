@@ -1,14 +1,13 @@
 import { connect } from 'react-redux';
 import React, { useState, useEffect } from 'react';
-import { getFileUrl } from '../../utils/upload';
 import { getOrganizationUrl } from '../../utils/organization';
 import OrganizationCard from './OrganizationCard';
 import Popup from '../Popup';
 import ModalContent from '../ModalContent';
-import Rate from '../Rate';
 import api from '../../api';
 import loader from '../../utils/loader';
 import LoadMore from '../Feed/LoadMore';
+import urls from '../../utils/urls';
 
 const OrganizationListPopupMore = (props) => {
   if (!props.tagTitle) {
@@ -59,14 +58,12 @@ const OrganizationListPopupMore = (props) => {
               <div className="entry-list__item" key={item.id}>
                 <div className="entry-list__card">
                   <OrganizationCard
-                    avatarSrc={getFileUrl(item.avatarFilename)}
+                    avatarSrc={urls.getFileUrl(item.avatarFilename)}
                     title={item.title}
                     nickname={item.nickname}
                     url={getOrganizationUrl(item.id)}
+                    currentRate={+item.currentRate}
                   />
-                </div>
-                <div className="entry-list__rate">
-                  <Rate value={+item.currentRate} className="rate_small" />
                 </div>
               </div>
             ))}

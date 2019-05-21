@@ -1,0 +1,72 @@
+.dragContainer {
+  display: none;
+}
+
+.dropText {
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  width: 146px;
+  display: none;
+}
+
+:global(body.dragenter) .dragContainer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 99;
+  background: white;
+  border: 1px dashed #D8352F;
+  border-radius: 4px;
+  display: block;
+}
+
+:global(body.dragenter) .dragContainer.dropOnForm {
+  background: #D8352F;
+  border-radius: 4px;
+}
+
+:global(body.dragenter) .dragContainer .dropZonePost {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+:global(body.dragenter) .dragContainer .dropZonePost :global(.drop-zone__input) {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+:global(body.dragenter) .dragContainer .dropText {
+  display: block;
+  color: #D8352F;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+:global(body.dragenter) .dragContainer.dropOnForm .dropText {
+  color: white;
+}
+
+.dropZonePost {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: -14px;
+  left: -20px;
+  cursor: pointer;
+}
+.dropZonePost :global(.drop-zone__input):hover{
+  border: none;
+}
+

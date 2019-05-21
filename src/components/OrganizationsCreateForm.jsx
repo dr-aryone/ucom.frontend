@@ -21,7 +21,6 @@ import {
   removeOrganizationPartnershipNetwork,
   saveOrganization,
 } from '../actions/organization';
-import { getFileUrl } from '../utils/upload';
 import { selectUser } from '../store/selectors';
 import { getSourceNameById } from '../utils/organization';
 import api from '../api';
@@ -30,6 +29,7 @@ import {
   STEPS_ID_COMMUNITY,
   STEPS_ID_CONTACTS,
 } from '../store/organization';
+import urls from '../utils/urls';
 
 const OrganizationsCreatePage = (props) => {
   switch (props.organization.activeStepId) {
@@ -65,14 +65,14 @@ const OrganizationsCreatePage = (props) => {
                           {props.organization.data.avatarFilename && typeof props.organization.data.avatarFilename === 'object' ? (
                             <AvatarFromFile square rounded size="big" file={props.organization.data.avatarFilename} />
                           ) : (
-                            <Avatar square rounded size="big" src={getFileUrl(props.organization.data.avatarFilename)} />
+                            <Avatar square rounded size="big" src={urls.getFileUrl(props.organization.data.avatarFilename)} />
                           )}
                         </div>
                       </div>
                       <div className="field__input">
                         <div className="field__section">
                           <DropZone
-                            onDrop={files => props.setOrganizationData({ avatarFilename: files[0] })}
+                            onDrop={file => props.setOrganizationData({ avatarFilename: file })}
                             text="Add or drag img"
                           />
                         </div>
@@ -170,6 +170,7 @@ const OrganizationsCreatePage = (props) => {
                       <div className="field__label">Your idea</div>
                       <div className="field__input">
                         <Textarea
+                          isMentioned
                           placeholder="Type something..."
                           rows={4}
                           value={props.organization.data.about}

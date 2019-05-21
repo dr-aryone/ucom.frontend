@@ -1,10 +1,10 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { Fragment, useState } from 'react';
 import TextareaAutosize from '../TextareaAutosize';
 import Button from '../Button';
 import { setDataToStoreToLS } from '../../actions';
-import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR } from '../../utils/upload';
+import { UPLOAD_SIZE_LIMIT, UPLOAD_SIZE_LIMIT_ERROR, compressUploadedImage } from '../../utils/upload';
+import { changeCoverImageUrl } from '../../utils/entityImages';
 import { addErrorNotification } from '../../actions/notifications';
 import api from '../../api';
 import loader from '../../utils/loader';
@@ -14,7 +14,7 @@ import CreateBy from '../CreateBy';
 
 const PostSubmitForm = (props) => {
   const entityImages = props.post.data.entityImages || {};
-  const [loading, setLoading] = useState(false);
+  const [loadingCover, setLoadingCover] = useState(false);
 
   return (
     <div className="post-submit-form">
@@ -48,18 +48,18 @@ const PostSubmitForm = (props) => {
               }
 
               loader.start();
-              setLoading(true);
+              setLoadingCover(true);
 
               try {
-                const data = await api.uploadPostImage(file);
-                entityImages.articleTitle = [{ url: data.files[0].url }];
-                props.setDataToStoreToLS({ entityImages });
+                const data = await api.uploadPostImage(await compressUploadedImage(file));
+                const { url } = data.files[0];
+                props.setDataToStoreToLS({ entityImages: changeCoverImageUrl(entityImages, url) });
               } catch (e) {
                 console.error(e);
               }
 
               loader.done();
-              setLoading(false);
+              setLoadingCover(false);
             }}
           />
         </label>
@@ -72,7 +72,7 @@ const PostSubmitForm = (props) => {
           placeholder="Preview title"
           className="post-submit-form__data post-submit-form__data_title"
           value={props.post.data.title}
-          onChange={e => props.setDataToStoreToLS({ title: e.target.value })}
+          onChange={title => props.setDataToStoreToLS({ title })}
         />
       </div>
 
@@ -83,7 +83,7 @@ const PostSubmitForm = (props) => {
           placeholder="Preview description"
           className="post-submit-form__data post-submit-form__data_lead"
           value={props.post.data.leadingText}
-          onChange={e => props.setDataToStoreToLS({ leadingText: e.target.value })}
+          onChange={leadingText => props.setDataToStoreToLS({ leadingText })}
         />
       </div>
 
@@ -96,7 +96,7 @@ const PostSubmitForm = (props) => {
           theme="red"
           size="small"
           text="Publish"
-          isDisabled={!props.post.isValid || loading}
+          isDisabled={!props.post.isValid || loadingCover || props.loading}
           onClick={() => props.onSubmit && props.onSubmit()}
         />
       </div>
@@ -104,12 +104,9 @@ const PostSubmitForm = (props) => {
   );
 };
 
-export default connect(
-  state => ({
-    post: state.post,
-  }),
-  dispatch => bindActionCreators({
-    setDataToStoreToLS,
-    addErrorNotification,
-  }, dispatch),
-)(PostSubmitForm);
+export default connect(state => ({
+  post: state.post,
+}), {
+  setDataToStoreToLS,
+  addErrorNotification,
+})(PostSubmitForm);

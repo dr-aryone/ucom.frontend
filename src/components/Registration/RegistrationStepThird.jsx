@@ -1,5 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import classNames from 'classnames';
 import React, { PureComponent } from 'react';
 import Button from '../Button';
@@ -7,6 +8,10 @@ import Checkbox from '../Checkbox';
 import RegistrationBrainkeyVerification from './RegistrationBrainkeyVerification';
 import { THIRD_STEP_ID } from '../../store/registration';
 import { registrationRegister, registrationSetIsTrackingAllowed } from '../../actions/registration';
+import { getAirdropOfferId } from '../../utils/airdrop';
+import { getGrecaptchaSitekey } from '../../utils/config';
+
+const offerId = getAirdropOfferId();
 
 class RegistrationStepThird extends PureComponent {
   constructor(props) {
@@ -20,13 +25,39 @@ class RegistrationStepThird extends PureComponent {
       brainkeyVerificationIsComplete: false,
       brainkeyVerificationIsValid: false,
       termsAccepted: false,
+      recaptchaValid: false,
     };
+  }
+
+  componentDidMount() {
+    grecaptcha.ready(() => {
+      grecaptcha.render('recaptcha', {
+        sitekey: getGrecaptchaSitekey(),
+        callback: () => {
+          this.setState({
+            recaptchaValid: true,
+          });
+        },
+      });
+    });
   }
 
   componentWillReceiveProps(props) {
     if (props.registration.brainkey !== this.props.registration.brainkey) {
       this.setState(this.getInitialState());
     }
+  }
+
+  getPrevPageId() {
+    let prevPageId;
+    const prevPath = this.props.prevPath !== null ? this.props.prevPath.match(/\d+/) : null;
+    if (prevPath !== null && +prevPath[0] === offerId) {
+      prevPageId = offerId;
+    } else {
+      prevPageId = null;
+    }
+
+    return prevPageId;
   }
 
   render() {
@@ -51,6 +82,8 @@ class RegistrationStepThird extends PureComponent {
             onComplete={isComplete => this.setState({ brainkeyVerificationIsComplete: isComplete })}
           />
 
+          <div id="recaptcha" />
+
           <div className="registration-terms">
             <div className="registration-terms__item">
               <span className="toolbar">
@@ -60,7 +93,7 @@ class RegistrationStepThird extends PureComponent {
                     onChange={checked => this.setState({ termsAccepted: checked })}
                   />
                 </span>
-                <span className="toolbar__main">I accept the  General <a className="registration__link" href="#">Terms and Conditions.</a></span>
+                <span className="toolbar__main">I accept the  General <a target="_blank" rel="noopener noreferrer" className="registration__link" href="/posts/7881">Terms and Conditions.</a></span>
               </span>
             </div>
             <div className="registration-terms__item">
@@ -85,8 +118,8 @@ class RegistrationStepThird extends PureComponent {
                 theme="red"
                 type="submit"
                 text="Finish"
-                isDisabled={this.props.registration.loading || !this.state.brainkeyVerificationIsValid || !this.state.termsAccepted}
-                onClick={() => this.props.registrationRegister()}
+                isDisabled={this.props.registration.loading || !this.state.brainkeyVerificationIsValid || !this.state.termsAccepted || !this.state.recaptchaValid}
+                onClick={() => this.props.registrationRegister(this.getPrevPageId() || null)}
               />
             </div>
             {this.state.brainkeyVerificationIsComplete && !this.state.brainkeyVerificationIsValid &&
@@ -101,7 +134,7 @@ class RegistrationStepThird extends PureComponent {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   state => ({
     registration: state.registration,
   }),
@@ -109,4 +142,4 @@ export default connect(
     registrationRegister,
     registrationSetIsTrackingAllowed,
   }, dispatch),
-)(RegistrationStepThird);
+)(RegistrationStepThird));

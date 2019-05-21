@@ -2,7 +2,7 @@ import api from '../api';
 import snakes from '../utils/snakes';
 import { parseErrors } from '../utils/errors';
 import { saveToken } from '../utils/token';
-import { saveBrainkey } from '../utils/brainkey';
+import { saveActiveKey, getActivePrivateKey } from '../utils/keys';
 import loader from '../utils/loader';
 
 export const authReset = () => ({ type: 'AUTH_RESET' });
@@ -15,6 +15,10 @@ export const authShowPopup = () => (dispatch) => {
   dispatch(authSetVisibility(true));
 };
 
+export const authHidePopup = () => (dispatch) => {
+  dispatch(authSetVisibility(false));
+};
+
 export const authLogin = () => async (dispatch, getState) => {
   const state = getState();
 
@@ -25,7 +29,7 @@ export const authLogin = () => async (dispatch, getState) => {
     try {
       const data = await api.login(snakes(state.auth.form));
       saveToken(data.token);
-      saveBrainkey(state.auth.form.brainkey);
+      saveActiveKey(getActivePrivateKey(state.auth.form.brainkey));
       window.location.reload();
     } catch (e) {
       loader.done();

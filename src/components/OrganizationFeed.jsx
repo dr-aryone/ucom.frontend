@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import Post from './Post';
 import api from '../api';
-import { getFileUrl } from '../utils/upload';
 import { getPostUrl, getPostTypeById } from '../utils/posts';
 import { getUserName } from '../utils/user';
 import urls from '../utils/urls';
+import { getCoverImage } from '../utils/entityImages';
 
 class OrganizationFeed extends PureComponent {
   constructor(props) {
@@ -48,11 +48,11 @@ class OrganizationFeed extends PureComponent {
                 title={item.title}
                 url={getPostUrl(item.id)}
                 leadingText={item.leadingText}
-                coverUrl={getFileUrl(item.mainImageFilename)}
+                coverUrl={urls.getFileUrl(getCoverImage(item))}
                 userName={getUserName(item.user)}
                 accountName={item.user.accountName}
                 profileLink={urls.getUserUrl(item.user.id)}
-                avatarUrl={getFileUrl(item.user.avatarFilename)}
+                avatarUrl={urls.getFileUrl(item.user.avatarFilename)}
               />
             </div>
           ))}

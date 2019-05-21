@@ -1,6 +1,5 @@
 import { authShowPopup } from './auth';
 import { parseErrors } from '../utils/errors';
-import { fetchTransactionsList, walletTransactionsReset } from './wallet';
 import {
   NOTIFICATION_TYPE_ERROR,
   NOTIFICATION_TYPE_SUCCESS,
@@ -9,13 +8,19 @@ import {
 export const addNotification = payload => ({ type: 'ADD_NOTIFICATION', payload });
 export const closeNotification = payload => ({ type: 'CLOSE_NOTIFICATION', payload });
 
-export const addSuccessNotification = payload => (dispatch) => {
-  dispatch(walletTransactionsReset());
-  dispatch(fetchTransactionsList());
+export const addErrorNotification = message => (dispatch) => {
+  dispatch(addNotification({
+    message,
+    title: 'Error',
+    type: NOTIFICATION_TYPE_ERROR,
+  }));
+};
+
+export const addSuccessNotification = message => (dispatch) => {
   dispatch(addNotification({
     type: NOTIFICATION_TYPE_SUCCESS,
     title: 'Success',
-    message: payload.message,
+    message,
   }));
 };
 
@@ -33,8 +38,4 @@ export const addServerErrorNotification = error => (dispatch) => {
   } else {
     dispatch(addNotification({ type: NOTIFICATION_TYPE_ERROR, message: parseErrors(error).general }));
   }
-};
-
-export const addErrorNotification = message => (dispatch) => {
-  dispatch(addNotification({ type: NOTIFICATION_TYPE_ERROR, message }));
 };

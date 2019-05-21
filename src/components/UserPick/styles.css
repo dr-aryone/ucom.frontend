@@ -1,22 +1,41 @@
-:local(.userPick) {
+.userPick {
   position: relative;
   z-index: 0;
   display: inline-block;
-  vertical-align: top;
+  vertical-align: middle;
   width: 36px;
   height: 36px;
   border-radius: 50%;
+  overflow: hidden;
 }
 
-:local(.userPick img),
-:local(.userPick svg) {
+.userPick.stretch {
+  width: 100%;
+  height: 100%;
+}
+
+.userPick.organization {
+  border-radius: 3px;
+}
+
+.userPick.organization img,
+.userPick.organization svg {
+  border-radius: 3px;
+}
+
+.userPick.shadow {
+  box-shadow: 0px 1px 4px rgba(60, 68, 75, 0.13);
+}
+
+.userPick img,
+.userPick svg {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
 }
 
-:local(.userPick.owner:after) {
+.userPick.owner:after {
   content: '';
   position: absolute;
   z-index: 1;

@@ -3,22 +3,25 @@ import GovernanceTable from './GovernanceTable';
 import Button from '../Button';
 import Avatar from '../Avatar';
 import { IconOK, IconNo } from '../Icons/GovernanceIcons';
-import { getFileUrl } from '../../utils/upload';
 import Panel from '../Panel/Panel';
+import urls from '../../utils/urls';
+import mergeArraysByProperty from '../../utils/mergeArraysByProperty';
+import RequestActiveKey from '../Auth/Features/RequestActiveKey';
 
 const GovernanceConfirmation = (props) => {
   const [idList, setListId] = useState([]);
   const [panelActive, setPanelActive] = useState(false);
-
-  useEffect(() => {
-    setListId(props.selectedNodes.map(e => e.id));
-  }, []);
 
   const list = props.table.filter(i => idList.includes(i.id));
   const currentIdList = props.selectedNodes.map(e => e.id);
   const listToVote = list.filter(i => currentIdList.includes(i.id));
   const listToUnvote = list.filter(i => !currentIdList.includes(i.id));
   const listToText = listToVote.map(e => e.title);
+
+  useEffect(() => {
+    setListId(mergeArraysByProperty(props.oldSelectedNodes, props.selectedNodes, 'id').map(e => e.id));
+  }, []);
+
   return (
     <div className="governance governance-election governance-confirmation">
       <div className="content content_base content_base_low">
@@ -28,25 +31,27 @@ const GovernanceConfirmation = (props) => {
           </div>
           <div className="governance-vote-title">
             <div className="governance-confirmation-avatar">
-              <Avatar src={getFileUrl(props.user.avatarFilename)} size="xsmall" icon={<IconOK />} />
+              <Avatar src={urls.getFileUrl(props.user.avatarFilename)} size="xsmall" icon={<IconOK />} />
             </div>
             <div className="title title_xxsmall title_bold">Block Producers to Vote </div>
           </div>
           <div className="governance-all__table governance-all__table_margin">
             <GovernanceTable
               data={listToVote}
+              phoneMod
             />
           </div>
 
           <div className="governance-vote-title">
             <div className="governance-confirmation-avatar">
-              <Avatar src={getFileUrl(props.user.avatarFilename)} size="xsmall" icon={<IconNo />} />
+              <Avatar src={urls.getFileUrl(props.user.avatarFilename)} size="xsmall" icon={<IconNo />} />
             </div>
             <div className="title title_xxsmall title_bold">Block Producers to Unvote </div>
           </div>
           <div className="governance-all__table governance-all__table_margin_low">
             <GovernanceTable
               data={listToUnvote}
+              phoneMod
             />
           </div>
           <div className="governance-vote__panel">
@@ -70,14 +75,18 @@ const GovernanceConfirmation = (props) => {
             </Panel>
           </div>
           <div className="governance-button-tall governance-button_center">
-            <Button
-              isUpper
-              isStretched
-              text="Vote"
-              size="big"
-              theme="red"
-              onClick={props.setVotes}
-            />
+            <RequestActiveKey onSubmit={props.setVotes}>
+              {requestActiveKey => (
+                <Button
+                  isUpper
+                  isStretched
+                  text="Vote"
+                  size="big"
+                  theme="red"
+                  onClick={requestActiveKey}
+                />
+              )}
+            </RequestActiveKey>
           </div>
         </div>
       </div>

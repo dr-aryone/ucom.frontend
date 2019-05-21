@@ -50,4 +50,15 @@ const organizations = (state = getInitialState(), action) => {
 export const getOrganizationById = (organizations, organizationId) =>
   organizations.data[organizationId];
 
+export const getOrganizationByIds = (organizations, ids = [], limit) => {
+  let result = ids.map(id => getOrganizationById(organizations, id))
+    .filter(organization => Boolean(organization));
+
+  if (limit) {
+    result = result.slice(0, limit);
+  }
+
+  return result;
+};
+
 export default organizations;

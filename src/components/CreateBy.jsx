@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 import React from 'react';
 import Avatar from './Avatar';
 import OrganizationsDropdown from './OrganizationsDropdown';
-import { getFileUrl } from '../utils/upload';
 import { getUserName } from '../utils/user';
+import urls from '../utils/urls';
 import { selectUser } from '../store/selectors';
 import { setPostData } from '../actions';
 
@@ -13,7 +13,7 @@ const CreateBy = (props) => {
   }
 
   const organization = (props.user.organizations || [])
-    .find(i => i.id === props.post.data.organization_id);
+    .find(i => +i.id === +props.post.data.organization_id);
 
   return (
     <div className="inline inline_small">
@@ -21,7 +21,7 @@ const CreateBy = (props) => {
         <span className="title title_xxsmall title_medium">By</span>
       </div>
       <div className="inline__item">
-        <Avatar size="xsmall" src={getFileUrl(organization ? organization.avatarFilename : props.user.avatarFilename)} />
+        <Avatar size="xsmall" src={urls.getFileUrl(organization ? organization.avatarFilename : props.user.avatarFilename)} />
       </div>
       <div className="inline__item">
         <div className="title title_xxsmall title_medium">{organization ? organization.title : getUserName(props.user)}</div>

@@ -14,6 +14,11 @@
   }
 }
 
+:global(.medium-editor-element *) {
+  outline: none;
+  transition: padding 0.1s ease;
+}
+
 :global(.medium-editor-placeholder:after) {
   font-style: normal;
 }
@@ -30,4 +35,14 @@
     width: calc(100vw - 160px);
     height: calc((100vw - 160px) * 56.25 / 100);
   }
+}
+
+:global(.medium-editor-element.medium-editor-dragover) {
+  background: none;
+}
+
+:global(.medium-editor-element .medium-editor-dragover) {
+  background: none;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #d8352f;
 }

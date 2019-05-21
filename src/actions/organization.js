@@ -49,3 +49,21 @@ export const fetchOrganization = payload => (dispatch) => {
     .catch(() => loader.done())
     .then(() => loader.done());
 };
+
+export const setDiscussions = ({
+  organizationId,
+  discussions,
+}) => async () => {
+  loader.start();
+  try {
+    if (discussions.length) {
+      await api.setDiscussions(organizationId, snakes({ discussions }));
+    } else {
+      await api.deleteAllDiscussions(organizationId);
+    }
+  } catch (e) {
+    console.error(e);
+    // TODO: Show error notification
+  }
+  loader.done();
+};

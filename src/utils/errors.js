@@ -42,20 +42,16 @@ export const parseErrors = (error) => {
   return errors;
 };
 
-export const parseWalletErros = (error) => {
+// TODO: Make one functions for all server errors and remove parseErrors
+export const parseResponseError = (error) => {
   try {
     const { message } = error;
     const data = JSON.parse(message);
-
     return data.errors;
   } catch (e) {
-    console.error(e);
+    return [{
+      message: 'Could not complete request, please try again later',
+      field: 'general',
+    }];
   }
-
-  const defaultErrors = [{
-    message: 'Could not complete request, please try again later',
-    field: 'general',
-  }];
-
-  return defaultErrors;
 };

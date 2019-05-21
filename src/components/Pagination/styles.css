@@ -1,0 +1,39 @@
+:local(.pagination) {
+  display: flex;
+  margin: 46px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+:local(.pagination li) {
+  margin: 0 12px;
+  outline: none;
+}
+
+:local(.pagination) :global(li.rc-pagination-item-active) {
+  color: #D8352F;
+}
+
+:local(.pagination) :global(li.rc-pagination-disabled) {
+  color: #c4c4c4;
+}
+
+:local(.pagination) :global(li.rc-pagination-disabled a) {
+  cursor: default;
+}
+
+:local(.pagination) :global(li.rc-pagination-disabled a:hover) {
+  text-decoration: none;
+}
+
+:local(.pagination li:first-child) {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+:local(.pagination li:last-child) {
+  margin-left: auto;
+  margin-right: 0;
+}

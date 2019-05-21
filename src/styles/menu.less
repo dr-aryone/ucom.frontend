@@ -3,8 +3,42 @@
   align-items: center;
   margin: -5px -15px;
   font-size: 14px;
-  font-weight: bold;
   color: @black;
+  font-weight: bold;
+}
+
+.fixed-menu {
+  font-size: 14px;
+  color: @black;
+  display: flex;
+  align-items: center;
+
+  .menu_sigh-in {
+    margin-right: 30px;
+    margin-left: 30px;
+  }
+}
+
+.menu_sigh-in.menu__link {
+  transition: color 0.2s ease;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  color: #505050;
+
+  &:hover,
+  &_active {
+    color: @red;
+    text-decoration: none;
+  }
+}
+
+.menu_normal {
+  font-weight: normal;
+}
+
+.menu_fixed-width {
+  max-width: 145px;
 }
 
 .meny_bottom {
@@ -141,6 +175,10 @@
   }
 }
 
+.menu_border {
+  border-bottom: 1px solid #E8ECEC;
+}
+
 .menu_simple-tabs {
   margin: 0 -15px;
   font-size: 16px;
@@ -158,6 +196,13 @@
     margin: 0 12px;
   }
 
+  .menu__item_left {
+    margin-top: 20px;
+    @media (min-width: 1023px) {
+      margin-left: auto;
+    }
+  }
+
   .menu__link {
     padding: 24px 0;
     display: block;
@@ -168,6 +213,10 @@
     @media (max-width: 1023px) {
       padding: 12px 0;
       border: none;
+    }
+
+    @media (max-width: 500px) {
+      font-size: 20px;
     }
   }
 
@@ -180,6 +229,36 @@
     @media (max-width: 1023px) {
       color: @red;
     }
+  }
+}
+
+.menu_simple-tabs_header {
+  margin: 0 -15px;
+  font-size: 16px;
+  text-transform: capitalize;
+
+  .menu__item {
+    margin: 0 15px;
+  }
+
+  .menu__item_narrow {
+    margin: 0 12px;
+  }
+
+  .menu__link {
+    padding: 24px 0;
+    display: block;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: 0.3s ease border-bottom;
+  }
+
+  .menu__item_active .menu__link,
+  .menu__item:hover .menu__link,
+  .menu__link_active,
+  .menu__link:hover {
+    border-bottom-color: @red;
+    color: @red;
   }
 }
 
@@ -223,10 +302,7 @@
     text-align: left;
     font-size: 16px;
     display: inline-block;
-
-    @media (min-width: 767px) {
-      margin-bottom: 20px;
-    }
+    margin-bottom: 24px;
   }
 }
 
@@ -235,8 +311,11 @@
 
   .menu__link {
     transition: color 0.2s ease;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
+    letter-spacing: 0.1em;
+    color: #505050;
+
     &:hover,
     &_active, {
       color: @red;
@@ -272,8 +351,4 @@
   @media (min-width: 835px) {
     display: none;
   }
-}
-
-.menu__item_left {
-  margin-left: auto !important;
 }

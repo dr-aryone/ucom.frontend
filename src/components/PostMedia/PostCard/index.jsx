@@ -3,9 +3,10 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import React, { Fragment } from 'react';
 import Rate from '../../Rate';
-import styles from './PostCard.css';
+import styles from './styles.css';
 import Avatar from '../../Avatar';
 // import Eye from '../../Icons/Eye';
+import { sanitizeText } from '../../../utils/text';
 
 const PostCard = (props) => {
   const PostLink = props.url ? Link : 'span';
@@ -36,7 +37,7 @@ const PostCard = (props) => {
 
       {props.title && (
         <h1 className={styles.title}>
-          <PostLink to={props.url}>{props.title}</PostLink>
+          <PostLink to={props.url} dangerouslySetInnerHTML={{ __html: sanitizeText(props.title) }} />
         </h1>
       )}
 

@@ -2,6 +2,7 @@
   margin: 0 0 32px;
   padding: 40px 40px 64px;
   box-shadow: 0 0 20px rgba(184, 184, 184, 0.25);
+  background: #fff;
 
   @media (max-width: 767px) {
     padding: 20px 0 0;
@@ -86,7 +87,8 @@
 .post-body__comments {
   max-width: 600px;
   margin: 0 auto;
-  border: 1px solid #e1e1e1;
+  border: 1px solid #E7ECEC;
+  border-width: 0 1px 1px;
 }
 
 .post-body__share-popup {
@@ -115,5 +117,11 @@
     left: 65%;
     margin-left: -20px;
     transform: rotate(45deg);
+  }
+}
+
+@media (max-width: 1023px) {
+  .post-body__share-popup {
+    left: -20px;
   }
 }

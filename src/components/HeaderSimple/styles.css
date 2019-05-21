@@ -1,0 +1,110 @@
+.header {
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding: 0 30px;
+  transition: box-shadow 0.2s ease-in-out 0.1s, background 0.2s ease-in-out 0.1s
+}
+
+.header.isScroll {
+  background: #fff;
+  box-shadow: 0px 1px 4px rgba(60, 68, 75, 0.13);
+}
+
+.section {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  align-items: center;
+  grid-column-gap: 30px;
+}
+
+.section.flat {
+  grid-column-gap: 0;
+}
+
+.icon {
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: #505050;
+  cursor: pointer;
+  transition: fill 0.2s ease, background 0.2s ease;
+}
+
+.icon:hover {
+  fill: #000;
+}
+
+.icon.active {
+  fill: #000;
+}
+
+.icon.active.wallet {
+  background: #fff;
+}
+
+.icon .counter {
+  align-self: flex-start;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 50px;
+  width: 50px;
+  color: #505050;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.user:hover {
+  color: #000;
+}
+
+.user:hover img,
+:global(.active) > .user img {
+  transform: scale(1.5);
+}
+
+.user .rate {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  line-height: 50px;
+  vertical-align: middle;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.user img {
+  transform: none;
+  transition: transform 0.2s ease;
+}
+
+@media (max-width: 767px) {
+  .header {
+    padding: 0 20px;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .search {
+    display: none;
+  }
+}

@@ -10,20 +10,17 @@ import { closeNotification } from '../../actions/notifications';
 const Notification = (props) => {
   switch (props.type) {
     case NOTIFICATION_TYPE_ERROR:
-    case NOTIFICATION_TYPE_SUCCESS: {
+    case NOTIFICATION_TYPE_SUCCESS:
       return (
         <DefaultNotification
+          {...props}
           typeId={props.type}
-          title={props.title}
-          message={props.message}
           onClose={() => props.closeNotification(props.id)}
         />
       );
-    }
 
-    default: {
+    default:
       return null;
-    }
   }
 };
 

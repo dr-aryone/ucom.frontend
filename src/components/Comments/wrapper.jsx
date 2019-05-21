@@ -2,6 +2,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import Comments from './index';
 import { getCommentById, getCommentsByContainer } from '../../store/comments';
+import { getUserById } from '../../store/users';
 import urls from '../../utils/urls';
 import { getUserName } from '../../utils/user';
 import { getCommentsTree } from '../../utils/comments';
@@ -17,15 +18,13 @@ export default connect(
       comments = getCommentsTree(commentsData.commentIds
         .map(id => getCommentById(state.comments, id))
         .map(comment => ({
-          id: comment.id,
-          depth: comment.depth,
+          ...comment,
           text: comment.description,
           date: moment(comment.createdAt).fromNow(),
-          userId: comment.userId,
+          userAccountName: getUserById(state.users, comment.user).accountName,
           nextDepthTotalAmount: comment.metadata.nextDepthTotalAmount,
           parentId: comment.parentId || 0,
-          path: comment.path,
-          isNew: comment.isNew,
+          images: (comment && comment.entityImages) ? comment.entityImages.gallery : [],
         })));
 
       ({ metadata } = commentsData);
@@ -48,6 +47,7 @@ export default connect(
       postId,
       commentId,
       containerId,
+      entityImages,
     }) => {
       dispatch(createComment({
         containerId,
@@ -55,6 +55,7 @@ export default connect(
         commentId,
         data: {
           description: message,
+          entity_images: entityImages,
         },
       }));
     },

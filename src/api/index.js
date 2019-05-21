@@ -4,11 +4,16 @@ import param from 'jquery-param';
 import HttpActions from './HttpActions';
 import { getToken } from '../utils/token';
 import { getActivePrivateKey } from '../utils/keys';
-import { getBrainkey } from '../utils/brainkey';
 import { getBackendConfig } from '../utils/config';
 import snakes from '../utils/snakes';
+import { LIST_PER_PAGE } from '../utils/list';
 
-const { WalletApi } = require('ucom-libs-wallet');
+const { Dictionary } = require('ucom-libs-wallet');
+
+const BLOCK_PRODUCERS = Dictionary.BlockchainNodes.typeBlockProducer();
+const CALCULATOR_NODES = Dictionary.BlockchainNodes.typeCalculator();
+
+const { WalletApi, SocialApi } = require('ucom-libs-wallet');
 const AppTransaction = require('ucom-libs-social-transactions');
 
 const { TransactionFactory } = AppTransaction;
@@ -24,6 +29,7 @@ if (process.env.NODE_ENV === 'production') {
 class Api {
   constructor() {
     this.actions = new HttpActions(getBackendConfig().httpEndpoint);
+    this.uploaderActions = new HttpActions(getBackendConfig().uploaderEndpoint);
   }
 
   getPrivateHeaders() {
@@ -59,12 +65,16 @@ class Api {
 
   async getMyself() {
     const response = await this.actions.get('/api/v1/myself');
+    const data = humps(response.data);
 
-    return humps(response.data);
+    // API HOT FIX https://github.com/UOSnetwork/ucom.backend/issues/84
+    data.organizations.forEach(item => delete item.followedBy);
+
+    return data;
   }
 
   async patchMyself(data) {
-    const response = await this.actions.patch('/api/v1/myself', data);
+    const response = await this.actions.patch('/api/v1/myself', snakes(data));
 
     return humps(response.data);
   }
@@ -159,8 +169,8 @@ class Api {
 
   async getTagUsers({
     tagTitle,
-    perPage,
-    page,
+    perPage = LIST_PER_PAGE,
+    page = 1,
     lastId,
   }) {
     const response = await this.actions.get(`/api/v1/tags/${tagTitle}/users/?&v2=true&page=${page}&per_page=${perPage}&last_id=${lastId}`);
@@ -190,9 +200,7 @@ class Api {
     return humps(response.data);
   }
 
-  async follow(userId, token, senderAccountName, recipientAccountName) {
-    const brainkey = getBrainkey();
-    const senderActivePrivateKey = getActivePrivateKey(brainkey);
+  async follow(userId, token, senderAccountName, recipientAccountName, senderActivePrivateKey) {
     const signedTransaction = await TransactionFactory.getSignedUserFollowsUser(
       senderAccountName,
       senderActivePrivateKey,
@@ -207,9 +215,7 @@ class Api {
     return response;
   }
 
-  async unfollow(userId, token, senderAccountName, recipientAccountName) {
-    const brainkey = getBrainkey();
-    const senderActivePrivateKey = getActivePrivateKey(brainkey);
+  async unfollow(userId, token, senderAccountName, recipientAccountName, senderActivePrivateKey) {
     const signedTransaction = await TransactionFactory.getSignedUserUnfollowsUser(
       senderAccountName,
       senderActivePrivateKey,
@@ -224,9 +230,33 @@ class Api {
     return humps(response.data);
   }
 
-  async followOrganization(id, token, senderAccountName, recipientAccountName) {
-    const brainkey = getBrainkey();
-    const senderActivePrivateKey = getActivePrivateKey(brainkey);
+  async trustUser(ownerAccountName, userAccountName, userId, ownerPrivateKey) {
+    const signedTransaction = await SocialApi.getTrustUserSignedTransactionsAsJson(
+      ownerAccountName,
+      ownerPrivateKey,
+      userAccountName,
+    );
+    const response = await this.actions.post(`/api/v1/users/${userId}/trust`, {
+      signed_transaction: signedTransaction,
+    });
+
+    return humps(response.data);
+  }
+
+  async untrustUser(ownerAccountName, userAccountName, userId, ownerPrivateKey) {
+    const signedTransaction = await SocialApi.getUnTrustUserSignedTransactionsAsJson(
+      ownerAccountName,
+      ownerPrivateKey,
+      userAccountName,
+    );
+    const response = await this.actions.post(`/api/v1/users/${userId}/untrust`, {
+      signed_transaction: signedTransaction,
+    });
+
+    return humps(response.data);
+  }
+
+  async followOrganization(id, token, senderAccountName, recipientAccountName, senderActivePrivateKey) {
     const signedTransaction = await TransactionFactory.getSignedUserFollowsOrg(
       senderAccountName,
       senderActivePrivateKey,
@@ -240,9 +270,7 @@ class Api {
     return humps(response.data);
   }
 
-  async unfollowOrganization(id, token, senderAccountName, recipientAccountName) {
-    const brainkey = getBrainkey();
-    const senderActivePrivateKey = getActivePrivateKey(brainkey);
+  async unfollowOrganization(id, token, senderAccountName, recipientAccountName, senderActivePrivateKey) {
     const signedTransaction = await TransactionFactory.getSignedUserUnfollowsOrg(
       senderAccountName,
       senderActivePrivateKey,
@@ -292,6 +320,24 @@ class Api {
     const response = await this.actions.get(url);
 
     return response.data;
+  }
+
+  async setDiscussions(organizationId, data) {
+    const url = `/api/v1/organizations/${organizationId}/discussions`;
+    const response = await this.actions.post(url, snakes(data));
+    return humps(response.data);
+  }
+
+  async deleteAllDiscussions(organizationId) {
+    const url = `/api/v1/organizations/${organizationId}/discussions`;
+    const response = await this.actions.del(url);
+    return humps(response.data);
+  }
+
+  async validateDiscussionsPostId(organizationId, postId) {
+    const url = `/api/v1/organizations/${organizationId}/discussions/${postId}/validate`;
+    const response = await this.actions.get(url);
+    return humps(response.data);
   }
 
   async getOrganizationPosts(id) {
@@ -397,17 +443,19 @@ class Api {
     return humps(response);
   }
 
-  async sendTokens(accountNameFrom, accountNameTo, amount, memo) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async getAccountBalance(accountName, symbol) {
+    const response = await WalletApi.getAccountBalance(accountName, symbol);
+
+    return humps(response);
+  }
+
+  async sendTokens(accountNameFrom, accountNameTo, amount, memo, privateKey) {
     const response = await WalletApi.sendTokens(accountNameFrom, privateKey, accountNameTo, amount, memo);
 
     return humps(response);
   }
 
-  async stakeOrUnstakeTokens(accountName, netAmount, cpuAmount) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async stakeOrUnstakeTokens(accountName, netAmount, cpuAmount, privateKey) {
     const response = await WalletApi.stakeOrUnstakeTokens(
       accountName,
       privateKey,
@@ -424,9 +472,7 @@ class Api {
     return humps(response);
   }
 
-  async claimEmission(accountName) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async claimEmission(accountName, privateKey) {
     const response = await WalletApi.claimEmission(accountName, privateKey);
 
     return humps(response);
@@ -438,17 +484,13 @@ class Api {
     return humps(response);
   }
 
-  async buyRam(accountName, bytesAmount) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async buyRam(accountName, bytesAmount, privateKey) {
     const response = await WalletApi.buyRam(accountName, privateKey, bytesAmount);
 
     return humps(response);
   }
 
-  async sellRam(accountName, bytesAmount) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
+  async sellRam(accountName, bytesAmount, privateKey) {
     const response = await WalletApi.sellRam(accountName, privateKey, bytesAmount);
 
     return humps(response);
@@ -460,11 +502,13 @@ class Api {
     return humps(response.data);
   }
 
-  async voteForBlockProducers(accountName, producers) {
-    const brainkey = getBrainkey();
-    const privateKey = getActivePrivateKey(brainkey);
-    const response = await WalletApi.voteForBlockProducers(accountName, privateKey, producers);
+  async voteForNodes(accountName, producers, privateKey, nodeType) {
+    const voteFunctions = {
+      [BLOCK_PRODUCERS]: WalletApi.voteForBlockProducers,
+      [CALCULATOR_NODES]: WalletApi.voteForCalculatorNodes,
+    };
 
+    const response = await voteFunctions[nodeType](accountName, privateKey, producers);
     return humps(response);
   }
 
@@ -475,7 +519,19 @@ class Api {
   }
 
   async uploadPostImage(file) {
-    const response = await this.actions.post('/api/v1/posts/image', { image: file });
+    const response = await this.uploaderActions.post('/api/v1/images/one-image', { one_image: file });
+
+    return humps(response.data);
+  }
+
+  async getStats() {
+    const response = await this.actions.get('/api/v1/stats/total');
+
+    return humps(response.data);
+  }
+
+  async syncAccountGithub(options) {
+    const response = await this.actions.post('/api/v1/users-external/users/pair', {}, options);
 
     return humps(response.data);
   }

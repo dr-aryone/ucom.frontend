@@ -54,6 +54,7 @@
     padding: 32px;
     border: 1px solid #E8ECEC;
     border-width: 1px 0 0;
+    background: #fff;
 
     &:first-child {
       border-radius: 16px 0 0;
@@ -72,9 +73,10 @@
         position: absolute;
         left: -1px;
         top: 100%;
-        width: 1px;
+        width: 16px;
         height: 16px;
-        background: #E8ECEC;
+        background: #fff;
+        border-left: 1px solid #E8ECEC;
       }
     }
 
@@ -82,6 +84,8 @@
       &:after {
         left: auto;
         right: -1px;
+        border-left: none;
+        border-right: 1px solid #E8ECEC;
       }
     }
   }
@@ -97,6 +101,10 @@
   &:last-child {
     padding-right: 100px;
   }
+
+  &[data-title="Rate"] {
+    white-space: nowrap;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -111,18 +119,18 @@
       min-width: 140px;
       max-width: 140px;
       width: 100%;
-    
+
       &:first-child {
         padding-left: 100px;
       }
-    
+
       &:last-child {
         min-width: 240px;
         max-width: 240px;
         width: 100%;
         padding-right: 100px;
       }
-    } 
+    }
   }
 
   .list-table_users {

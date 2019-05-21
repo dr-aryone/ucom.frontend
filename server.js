@@ -1,9 +1,11 @@
+// TODO: Refactoring
 require('babel-register')({
   presets: ['env', 'react', 'stage-2', 'es2015', 'stage-0'],
 });
 
 const STATIC_VERSION = (new Date()).getTime();
 
+const xss = require('xss');
 const path = require('path');
 const ejs = require('ejs');
 const express = require('express');
@@ -26,16 +28,31 @@ routes.forEach((route) => {
         const data = await route.getData(store, req.params);
 
         if (data && data.contentMetaTags) {
-          ({ contentMetaTags } = data);
+          contentMetaTags = JSON.parse(xss(JSON.stringify(data.contentMetaTags)));
+          if (contentMetaTags.path) {
+            contentMetaTags.url = `${req.protocol}://${req.hostname}${contentMetaTags.path}`;
+          }
         }
       } catch (e) {
         console.error(e);
       }
     }
 
+    if (!contentMetaTags) {
+      contentMetaTags = {
+        type: 'website',
+        title: 'U°Community',
+        description: 'Social platform with a transparent dynamic reputation system',
+        url: `${req.protocol}://${req.hostname}${req.originalUrl}`,
+        image: `${req.protocol}://${req.hostname}/u.png`,
+        imageWidth: '512',
+        imageHeight: '512',
+      };
+    }
+
     const templateData = {
       contentMetaTags,
-      state: store.getState(),
+      state: xss(JSON.stringify(store.getState())),
       content: renderStatic(store, req.url),
       staticVersion: STATIC_VERSION,
     };

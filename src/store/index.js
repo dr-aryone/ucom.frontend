@@ -12,16 +12,20 @@ import comments from './comments';
 import organizations from './organizations';
 import menuPopup from './menuPopup';
 import userForm from './userForm';
-import wallet from './wallet/index';
 import governance from './governance/index';
 import registration from './registration';
 import mainPostGroup from './mainPostGroup';
 import feed from './feed';
 import tags from './tags';
-import { reducer as user } from './user';
+import communityFeed from './communityFeed';
+import tagsFeed from './tagsFeed';
+import user from './user';
+import settings from './settings';
+import walletSimple from './walletSimple';
 
 export const createStore = () => {
   const reducers = redux.combineReducers({
+    settings,
     user,
     post,
     auth,
@@ -33,19 +37,21 @@ export const createStore = () => {
     comments,
     organizations,
     menuPopup,
-    wallet,
     userForm,
     governance,
     registration,
     mainPostGroup,
     feed,
     tags,
+    communityFeed,
+    tagsFeed,
+    walletSimple,
   });
   const middlewares = [thunk];
   let preloadedState;
 
-  if (typeof window !== 'undefined') {
-    preloadedState = window.APP_STATE;
+  if (typeof window !== 'undefined' && window.APP_STATE !== undefined) {
+    preloadedState = JSON.parse(window.APP_STATE);
     delete window.APP_STATE;
   }
 
