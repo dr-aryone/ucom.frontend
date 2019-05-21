@@ -51,7 +51,7 @@ const Form = (props) => {
 
   const onMultipleImages = async (files) => {
     const savedEntityImages = entityImages;
-    setEntityImages(addGalleryImages(entityImages, Array(files.length + 1).fill({ url: 'loading' })));
+    setEntityImages(addGalleryImages(entityImages, Array(files.length).fill({ url: '' })));
     const data = await Promise.all(files.map(url => api.uploadPostImage(url)));
     const urls = data.map(item => item.files[0]);
     setEntityImages(addGalleryImages(savedEntityImages, urls));
@@ -157,7 +157,7 @@ const Form = (props) => {
       </div>
 
       <PreviewImagesGrid {...{
-          isExistGalleryImages, setEntityImages, entityImages, galleryImages,
+          isExistGalleryImages, setEntityImages, entityImages,
         }}
       />
     </div>

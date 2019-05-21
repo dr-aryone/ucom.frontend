@@ -7,7 +7,6 @@ const Image = props => (
   <div
     className={classNames({
       [styles.imageWrapper]: true,
-      [styles.isMultiple]: props.isMultiple,
     })}
   >
     <span
@@ -28,13 +27,11 @@ Image.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string,
   onClickRemove: PropTypes.func,
-  isMultiple: PropTypes.bool,
 };
 
 Image.defaultProps = {
   alt: null,
   onClickRemove: null,
-  isMultiple: false,
 };
 
 export default Image;

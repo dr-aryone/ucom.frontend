@@ -114,7 +114,7 @@ const FeedForm = (props) => {
         </div>
       </div>
       <PreviewImagesGrid {...{
-          isExistGalleryImages, setEntityImages, entityImages, galleryImages,
+          isExistGalleryImages, setEntityImages, entityImages,
         }}
       />
 

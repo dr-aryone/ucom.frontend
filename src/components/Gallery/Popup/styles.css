@@ -317,3 +317,7 @@
   border-radius: 4px;
   object-fit: cover;
 }
+
+.emptyWrapper:after {
+  background: none;
+}

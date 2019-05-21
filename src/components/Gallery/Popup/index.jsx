@@ -36,7 +36,15 @@ const GalleryPopup = (props) => {
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   });
+  const dummyLength = ((2 * activeIndex) - props.images.length) + 1;
+  let leftImages;
+  let rightImages;
 
+  if (dummyLength < 0) {
+    leftImages = [...Array(-dummyLength)];
+  } else if (dummyLength > 0) {
+    rightImages = [...Array(dummyLength)];
+  }
   return (
     <Popup
       mod="dark"
@@ -97,11 +105,21 @@ const GalleryPopup = (props) => {
             <UserCard userId={props.userId} />
           </div>
           <div className={styles.thumbs}>
-            {// empty blocks
-           }
+            {leftImages && leftImages.map((image, index) => (
+              <div
+                key={index}
+                role="presentation"
+                className={`${styles.emptyWrapper} ${styles.thumbWrapper}`}
+                level={((activeIndex - props.images.length) + index + 1)}
+              >
+                <div
+                  className={styles.thumb}
+                />
+              </div>
+            ))}
             {props.images.map((image, index) => (
               <div
-                key={image.url}
+                key={index}
                 role="presentation"
                 className={styles.thumbWrapper}
                 level={index - activeIndex}
@@ -114,10 +132,26 @@ const GalleryPopup = (props) => {
                 />
               </div>
             ))}
+            {rightImages && rightImages.map((image, index) => (
+              <div
+                key={index}
+                role="presentation"
+                className={`${styles.emptyWrapper} ${styles.thumbWrapper}`}
+                level={((props.images.length - activeIndex) + index)}
+              >
+                <div
+                  className={styles.thumb}
+                />
+              </div>
+            ))}
           </div>
+
           <div className={styles.counter}>
-            {activeIndex + 1} / {props.images.length}
+            {props.images.length > 1 &&
+              <span> {activeIndex + 1} / {props.images.length}</span>
+            }
           </div>
+
         </div>
       </div>
     </Popup>
@@ -132,6 +166,8 @@ GalleryPopup.propTypes = {
   userId: PropTypes.number,
   date: PropTypes.string,
   onClickClose: PropTypes.func.isRequired,
+  activeIndex: PropTypes.number.isRequired,
+  setActiveIndex: PropTypes.func.isRequired,
 };
 
 GalleryPopup.defaultProps = {

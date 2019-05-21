@@ -175,3 +175,24 @@
 .label:hover {
   fill: #767676;
 }
+
+@keyframes loader {
+  0%{
+    background-position:50% 0%;
+  }
+  33%{
+    background-position:50% 100%;
+  }
+  100%{
+    background-position:50% 0%;
+  }
+}
+
+.preloader {
+  animation-iteration-count: infinite;
+  animation-duration: 1.5s;
+  animation-name: loader;
+  animation-timing-function: ease;
+  background: linear-gradient(180deg, #f3f3f3, rgba(243, 243, 243, 0), #f3f3f3);
+  background-size: 200% 200%;
+}
