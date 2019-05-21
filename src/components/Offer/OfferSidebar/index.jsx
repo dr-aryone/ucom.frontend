@@ -14,8 +14,11 @@ import IconShareCircle from '../../Icons/ShareCircle';
 import ShareBlock from '../../ShareBlock';
 import styles from './styles.css';
 import { authShowPopup } from '../../../actions/auth';
-import IconTelegram from '../../Icons/Socials/TelegramBlack';
+import Telegram from '../../Icons/Socials/TelegramBlack';
 import formatNumber from '../../../utils/formatNumber';
+import IconFacebook from '../../Icons/Socials/Share/Facebook';
+import IconTwitter from '../../Icons/Socials/Share/Twitter';
+import IconTelegram from '../../Icons/Socials/Share/Telegram';
 
 const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
@@ -82,7 +85,7 @@ const OfferSidebar = (props) => {
             </Fragment>
           </div>
           <div className={styles.statusErrorText}>
-            Something went wrong, please contact us in <a href="https://t.me/uos_network_en" target="_blank" rel="noopener noreferrer"><IconTelegram />Chat</a>
+            Something went wrong, please contact us in <a href="https://t.me/uos_network_en" target="_blank" rel="noopener noreferrer"><Telegram />Chat</a>
           </div>
         </div>
       }
@@ -115,6 +118,26 @@ const OfferSidebar = (props) => {
             <div className={styles.optionText}>to secure your Importance in the network</div>
           </div>
         </div>
+
+        <div className={styles.option}>
+          <div className={styles.optionStatus}>{conditions && conditions.conditions.authMyself === true ? <Done /> : <Two />}</div>
+          <div className={styles.optionBlock}>
+            <div
+              role="presentation"
+              onClick={() => (Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 ? props.authShowPopup() : null)}
+              className={styles.optionTitle}
+            >
+              Share to
+            </div>
+            <div className={styles.optionText}>Let others check their score (and it will help us a lot)</div>
+            <div className={styles.socialIcons}>
+              <a href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}github}`} target="_blank" rel="noopener noreferrer" className={styles.icon}><IconFacebook /></a>
+              <a href={`https://twitter.com/intent/tweet?url=${window.location.origin + (this.props.linkPost || this.props.link)}`} target="_blank" rel="noopener noreferrer" className={styles.icon}><IconTwitter /></a>
+              <a href={`https://telegram.me/share/url?url=${window.location.origin + (this.props.linkPost || this.props.link)}`} target="_blank" rel="noopener noreferrer" className={styles.icon}><IconTelegram /></a>
+            </div>
+          </div>
+        </div>
+
         <div className={styles.option}>
           <div className={styles.optionStatus}>{conditions && conditions.conditions.followingDevExchange === true ? <Done /> : <Three />}</div>
           <div className={styles.optionBlock}>
