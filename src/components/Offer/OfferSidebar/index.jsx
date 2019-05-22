@@ -24,18 +24,20 @@ const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 
 const OfferSidebar = (props) => {
   const [sharePopupVisibility, setSharePopupVisibility] = useState(false);
-  const [shareStatus, setShareStatus] = useState(localStorage.setItem('ShareAirdrop', false));
+  const [shareStatus, setShareStatus] = useState(false);
 
   const toggleShare = () => {
     setSharePopupVisibility(!sharePopupVisibility);
   };
 
-  const saveShare = (data) => {
-    localStorage.setItem('ShareAirdrop', data);
+  const saveShare = () => {
+    localStorage.setItem('ShareAirdrop', true);
+    setShareStatus(true);
   };
 
   useEffect(() => {
-    // localStorage.getItem('ShareAirdrop') === true ? setShareStatus(true) : false;
+    const status = localStorage.getItem('ShareAirdrop');
+    setShareStatus(status);
   }, [shareStatus]);
 
   const { conditions } = props;
@@ -129,7 +131,7 @@ const OfferSidebar = (props) => {
         </div>
 
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{shareStatus === true ? <Done /> : <Two />}</div>
+          <div className={styles.optionStatus}>{shareStatus === 'true' ? <Done /> : <Two />}</div>
           <div className={styles.optionBlock}>
             <div
               role="presentation"
@@ -146,7 +148,7 @@ const OfferSidebar = (props) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.icon}
-                    onClick={() => saveShare(true)}
+                    onClick={() => setTimeout(saveShare, 5000)}
                   >
                     <IconFacebook />
                   </a>
@@ -155,7 +157,7 @@ const OfferSidebar = (props) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.icon}
-                    onClick={() => saveShare(true)}
+                    onClick={() => setTimeout(saveShare, 5000)}
                   >
                     <IconTwitter />
                   </a>
@@ -164,7 +166,7 @@ const OfferSidebar = (props) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.icon}
-                    onClick={() => saveShare(true)}
+                    onClick={() => setTimeout(saveShare, 5000)}
                   >
                     <IconTelegram />
                   </a>
