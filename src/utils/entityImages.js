@@ -56,7 +56,10 @@ export const addGalleryImagesWithCatch = onError => (entry, gallery) => {
     return addGalleryImages(entry, gallery);
   } catch (e) {
     onError(e.message);
-    return entry;
+    return {
+      ...entry,
+      gallery: gallery.slice(0, 10),
+    };
   }
 };
 

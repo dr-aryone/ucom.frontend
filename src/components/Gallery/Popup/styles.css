@@ -57,6 +57,7 @@
 .arrowBlock {
   opacity: 0;
   transition: opacity 0.2s ease;
+  backface-visibility: hidden;
 }
 
 .arrow.active:hover .arrowBlock {
@@ -80,6 +81,7 @@
 
 
 .image {
+  composes: noselect from global;
   position: absolute;
   top: 0;
   left: 0;
@@ -89,6 +91,10 @@
   display: block;
   max-width: 100%;
   max-height: 100%;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .toolbar {
@@ -136,6 +142,7 @@
 }
 
 .thumbWrapper {
+  composes: noselect from global;
   position: relative;
   z-index: 0;
   width: 64px;
@@ -316,6 +323,10 @@
   height: 100%;
   border-radius: 4px;
   object-fit: cover;
+}
+
+.emptyWrapper {
+  cursor: default;
 }
 
 .emptyWrapper:after {

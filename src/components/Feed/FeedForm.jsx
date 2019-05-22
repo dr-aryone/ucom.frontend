@@ -36,9 +36,11 @@ const FeedForm = (props) => {
   }, []);
 
   const onMultipleImages = async (files) => {
+    const savedEntityImages = entityImages;
+    setEntityImages(addGalleryImages(entityImages, Array(files.length).fill({ url: '' })));
     const data = await Promise.all(files.map(url => api.uploadPostImage(url)));
     const urls = data.map(item => item.files[0]);
-    setEntityImages(addGalleryImages(entityImages, urls));
+    setEntityImages(addGalleryImages(savedEntityImages, urls));
   };
 
   const sumbitForm = () => {

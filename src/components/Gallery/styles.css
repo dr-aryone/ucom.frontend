@@ -7,6 +7,19 @@
   margin: 5px 0 0;
 }
 
+.otherImages .imageWrapper {
+  padding-top: 60%;
+}
+
+.otherImages .image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
 .imageWrapper {
   position: relative;
   z-index: 0;

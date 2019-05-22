@@ -77,7 +77,12 @@ const GalleryPopup = (props) => {
           </div>
           <div className={styles.viewport}>
             <img
-              className={styles.image}
+              className={classNames({
+                [styles.image]: true,
+                [styles.pointer]: canMoveRight,
+              })}
+              role="presentation"
+              onClick={moveRight}
               src={props.images[activeIndex].url}
               alt={props.images[activeIndex].alt}
             />
