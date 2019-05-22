@@ -6,32 +6,53 @@ import { removeGalleryImage } from '../../utils/entityImages';
 import styles from './styles.css';
 
 const PreviewImagesGrid = ({
-  isExistGalleryImages, setEntityImages, entityImages,
+  images,
+  onClickRemove,
+}) => {
+  if (!images.length) {
+    return null;
+  }
+
+  return (
+    <div className={styles.list}>
+      {images.map((image, index) => (
+        image.url ?
+          <Image
+            key={index}
+            src={image.url}
+            onClickRemove={() => onClickRemove(index)}
+          /> :
+          <PreloaderImage
+            key={index}
+          />
+        ))}
+    </div>
+  );
+};
+
+const PreviewImagesGridForGallery = ({
+  setEntityImages, entityImages,
 }) => (
-  <div className={styles.list}>
-    {isExistGalleryImages &&
-      entityImages.gallery.map((image, index) => (
-       image.url ?
-         <Image
-           key={index}
-           src={image.url}
-           isMultiple={entityImages.gallery.length > 1}
-           onClickRemove={() => {
-              setEntityImages(removeGalleryImage(entityImages, index));
-            }}
-         /> :
-         <PreloaderImage
-           key={index}
-         />
-      ))
-    }
-  </div>
+  <PreviewImagesGrid
+    images={entityImages.gallery}
+    onClickRemove={index => setEntityImages(removeGalleryImage(entityImages, index))}
+  />
 );
 
 PreviewImagesGrid.propTypes = {
-  isExistGalleryImages: PropTypes.bool.isRequired,
+  onClickRemove: PropTypes.func.isRequired,
+  images: PropTypes.arrayOf(PropTypes.any),
+};
+
+
+PreviewImagesGrid.defaultProps = {
+  images: [],
+};
+
+
+PreviewImagesGridForGallery.propTypes = {
   setEntityImages: PropTypes.func.isRequired,
   entityImages: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-export default PreviewImagesGrid;
+export default PreviewImagesGridForGallery;
