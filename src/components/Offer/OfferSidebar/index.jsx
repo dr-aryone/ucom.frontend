@@ -131,7 +131,7 @@ const OfferSidebar = (props) => {
         </div>
 
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{shareStatus === 'true' ? <Done /> : <Two />}</div>
+          <div className={styles.optionStatus}>{shareStatus === 'true' || (conditions && conditions.airdropStatus === AirdropStatuses.RECEIVED) ? <Done /> : <Two />}</div>
           <div className={styles.optionBlock}>
             <div
               role="presentation"

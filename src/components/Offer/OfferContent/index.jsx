@@ -37,7 +37,7 @@ const OfferContent = props => (
       {props.tokens &&
         <Fragment>
           <div className={styles.progress}>
-            <div className={styles.tokenLeft}>UOS Left {formatNumber(props.tokens[0].amountLeft)}</div>
+            <div className={styles.tokenLeft}>UOS Left {formatNumber(Math.round(props.tokens[0].amountLeft))}</div>
             <div className={styles.tokenTotal}>from {formatNumber(props.tokens[0].amountClaim)}</div>
           </div>
           <ProgressBar
@@ -46,7 +46,7 @@ const OfferContent = props => (
           />
 
           <div className={styles.progress}>
-            <div className={styles.tokenLeft}>UOS.Futures Left {formatNumber(props.tokens[1].amountLeft)}</div>
+            <div className={styles.tokenLeft}>UOS.Futures Left {formatNumber(Math.round(props.tokens[1].amountLeft))}</div>
             <div className={styles.tokenTotal}>from {formatNumber(props.tokens[1].amountClaim)}</div>
           </div>
           <ProgressBar
