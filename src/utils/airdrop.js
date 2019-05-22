@@ -1,7 +1,7 @@
 import config from '../../package.json';
 
 export const airdropId_1 = { id: 1 };
-export const airdropId_2 = { id: 2 };
+export const airdropId_2 = { id: 4 };
 
 export const getAirdropOfferId_1 = () => {
   let id = config.airdropOfferId_1.staging;
