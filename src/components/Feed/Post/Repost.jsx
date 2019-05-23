@@ -74,6 +74,7 @@ const Repost = (props) => {
           />
         ) : (
           <PostFeedContent
+            postTypeId={post.postTypeId}
             postId={post.post.id}
             userId={post.post.user.id}
           />

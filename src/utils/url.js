@@ -47,3 +47,16 @@ export const filterURL = (url) => {
 
   return '';
 };
+
+export const isHttpsUrl = url => url.indexOf('https://') === 0;
+
+export const getUrlsFromStr = (str = '') => {
+  let result = [];
+  const matches = str.match(/\bhttps?:\/\/\S+/gi);
+
+  if (matches) {
+    result = matches.filter(url => validUrl(url));
+  }
+
+  return result;
+};

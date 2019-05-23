@@ -39,7 +39,7 @@
   background: #fff;
 }
 
-.feed-form__edit { 
+.feed-form__edit {
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -86,6 +86,10 @@
   display: flex;
 }
 
+.feed-form__embed {
+  margin: 0 0 20px;
+}
+
 .feed-form-message {
   padding: 12px;
   flex: 1 1 auto;
@@ -110,6 +114,10 @@
   line-height: 24px;
   resize: none;
   outline: none;
+
+  &::placeholder {
+    color: rgba(0,0,0,0.3);
+  }
 }
 
 .feed-form__actions {

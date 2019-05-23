@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isString, isObject, isNumber, pick, omitBy, isUndefined, size, find } from 'lodash';
 
 export const getEntryImageAttr = (entry, type, attr, index) => {
   try {
@@ -11,7 +11,7 @@ export const getEntryImageAttr = (entry, type, attr, index) => {
 export const removeCoverImage = entry => ({ ...entry, articleTitle: [] });
 
 export const changeCoverImageUrl = (entry, url) => {
-  if (_.isString(entry)) {
+  if (isString(entry)) {
     entry = JSON.parse(entry);
   }
 
@@ -27,3 +27,76 @@ export const getCoverImage = entry =>
 export const getGalleryImage = entry =>
   getEntryImageAttr(entry, 'gallery', 'url', 0);
 
+export const addEmbed = (entityImages = {}, data) => {
+  if (!entityImages) {
+    throw new Error('EntityImages is required argument');
+  }
+
+  if (!isObject(entityImages)) {
+    throw new Error('EntityImages must be object');
+  }
+
+  if (!data) {
+    throw new Error('Data is required argument');
+  }
+
+  let dataToSave = pick(data, [
+    'url',
+    'title',
+    'description',
+    'imageUrl',
+    'videoUrl',
+    'videoAspectRatio',
+  ]);
+
+  dataToSave = omitBy(dataToSave, isUndefined);
+
+  if (!size(dataToSave)) {
+    throw new Error('EmbedData is empty');
+  }
+
+  if (!Array.isArray(entityImages.embeds)) {
+    entityImages.embeds = [];
+  }
+
+  if (!find(entityImages.embeds, { url: dataToSave.url })) {
+    entityImages.embeds.push(dataToSave);
+  }
+
+  return entityImages;
+};
+
+export const removeEmbed = (entityImages, embedIndex) => {
+  if (!entityImages) {
+    throw new Error('EntityImages is required argument');
+  }
+
+  if (!isNumber(embedIndex)) {
+    throw new Error('EmbedIndex is required argument');
+  }
+
+  if (!Array.isArray(entityImages.embeds)) {
+    entityImages.embeds = [];
+  }
+
+  entityImages.embeds.splice(embedIndex, 1);
+
+  return entityImages;
+};
+
+export const getEmbedByUrl = (entityImages, url) => {
+  let result;
+
+  if (!entityImages) {
+    throw new Error('EntityImages is required argument');
+  }
+
+  if (Array.isArray(entityImages.embeds)) {
+    result = find(entityImages.embeds, { url });
+  }
+
+  return result;
+};
+
+export const hasEmbeds = (entityImages = {}) =>
+  Boolean(entityImages.embeds && entityImages.embeds.length);

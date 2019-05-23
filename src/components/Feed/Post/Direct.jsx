@@ -27,7 +27,7 @@ const Direct = (props) => {
 
   return (
     <Fragment>
-      {formIsVisible ?
+      {formIsVisible ? (
         <Fragment>
           <div className={styles.container}>
             <div className={styles.overlay} role="presentation" onClick={() => setFormIsVisible(false)} />
@@ -61,7 +61,7 @@ const Direct = (props) => {
             />
           </div>
         </Fragment>
-        :
+      ) : (
         <div className={styles.post} id={`post-${post.id}`}>
           <PostFeedHeader
             userId={props.user.id}
@@ -87,7 +87,7 @@ const Direct = (props) => {
             toggleShare={props.toggleShare}
           />
         </div>
-      }
+      )}
     </Fragment>
 
   );

@@ -18,7 +18,7 @@
   outline: none;
   cursor: pointer;
   fill: #c4c4c4;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, fill 0.2s ease, stroke 0.2s ease;
 }
 
 .buttonIcon svg {
@@ -34,7 +34,6 @@
   composes: buttonIcon;
   border: 2px solid #E8ECEC;
   border-radius: 50%;
-  transition: transform 0.3s ease;
   background: white;
 }
 
@@ -47,14 +46,8 @@
   transform: rotate(45deg);
 }
 
-.icon {
-  composes: buttonIcon;
-}
-
 .iconImage {
   composes: buttonIcon;
-  transition: transform 0.3s ease;
-
 }
 
 .iconImage circle {
@@ -70,6 +63,16 @@
   display: none;
 }
 
+.iconEmbed {
+  fill: transparent;
+  stroke: #c4c4c4;
+}
+
+.iconEmbed:hover {
+  fill: transparent;
+  stroke: #767676;
+}
+
 .mainItem {
   display: inline-block;
   vertical-align: middle;
@@ -82,7 +85,7 @@
   display: inline-block;
   vertical-align: middle;
   margin: 0 16px 0 0;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;  
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   position: relative;
   left: -40px;
   opacity: 0;
