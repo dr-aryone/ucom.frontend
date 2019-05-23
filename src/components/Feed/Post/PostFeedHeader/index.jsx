@@ -66,7 +66,8 @@ const PostFeedHeader = (props) => {
     <Fragment>
       <div className={styles.header}>
         <div className={styles.info}>
-          <Link to={urls.getFeedPostUrl(post)} className={styles.date}>{props.createdAt}</Link>
+          <Link to={urls.getFeedPostUrl(post)} className={props.formIsVisible ? '' : styles.date}>{props.createdAt}</Link>
+          {props.formIsVisible && <span> | <span className={styles.edit}>Edit post</span></span>}
           {entityForUser !== '' && entityForUser !== undefined && post.entityNameFor.trim() === 'users' &&
             <Link to={urls.getUserUrl(post.entityForCard.id)}>@{entityForUser}</Link>
           }
