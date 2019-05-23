@@ -1,3 +1,5 @@
+// TODO: Make popup like facebook with portals
+
 import { KEY_ESCAPE } from 'keycode-js';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
