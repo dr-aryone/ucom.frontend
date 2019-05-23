@@ -2,7 +2,7 @@ import HomePage, { getHomePageData } from './pages/Home';
 import UserPage, { getUserPageData } from './pages/User';
 import EditPostPage from './pages/EditPost';
 import ProfilePage from './pages/Profile';
-import PostPage, { getPostPageData } from './pages/Post';
+import PostPage, { PostEosPage, getPostPageData, getPostEosPageData } from './pages/Post';
 import OverviewPage, { getPageData } from './pages/Overview';
 import Offer, { getPostOfferData } from './pages/Offer';
 import UsersPage from './pages/Users';
@@ -54,6 +54,10 @@ export default [{
   path: '/github',
   component: Offer,
   getData: getPostOfferData,
+}, {
+  path: '/eos',
+  component: PostEosPage,
+  getData: getPostEosPageData,
 }, {
   path: '/posts/:postId',
   component: PostPage,
