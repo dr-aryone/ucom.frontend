@@ -25,6 +25,7 @@ const { AirdropStatuses } = require('ucom.libs.common').Airdrop.Dictionary;
 const OfferSidebar = (props) => {
   const [sharePopupVisibility, setSharePopupVisibility] = useState(false);
   const [shareStatus, setShareStatus] = useState(false);
+  const [originLink, setOriginLink] = useState(false);
 
   const toggleShare = () => {
     setSharePopupVisibility(!sharePopupVisibility);
@@ -39,6 +40,10 @@ const OfferSidebar = (props) => {
     const status = localStorage.getItem('ShareAirdrop');
     setShareStatus(status);
   }, [shareStatus]);
+
+  useEffect(() => {
+    setOriginLink(typeof window !== 'undefined' ? window.location.origin : null);
+  }, []);
 
   const { conditions } = props;
 
@@ -108,7 +113,7 @@ const OfferSidebar = (props) => {
           </div>
           <div className={styles.optionBlock}>
             <a
-              href={Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 ? props.gitHubAuthLink : null}
+              href={Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 && Date.parse(new Date()) < Date.parse(new Date(props.finishedAt)) ? props.gitHubAuthLink : null}
               className={styles.optionTitle}
             >
               Authorize GitHub
@@ -121,7 +126,7 @@ const OfferSidebar = (props) => {
           <div className={styles.optionBlock}>
             <div
               role="presentation"
-              onClick={() => (Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 ? props.authShowPopup() : null)}
+              onClick={() => (Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 && Date.parse(new Date()) < Date.parse(new Date(props.finishedAt)) ? props.authShowPopup() : null)}
               className={styles.optionTitle}
             >
               Register U°OS account
@@ -141,37 +146,35 @@ const OfferSidebar = (props) => {
             </div>
             <div className={styles.optionText}>Let others check their score (and it will help us a lot)</div>
             <div className={styles.socialIcons}>
-              {typeof window !== 'undefined' &&
-                <Fragment>
-                  <a
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.origin}/github`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.icon}
-                    onClick={() => setTimeout(saveShare, 5000)}
-                  >
-                    <IconFacebook />
-                  </a>
-                  <a
-                    href={`https://twitter.com/intent/tweet?url=${window.location.origin}/github`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.icon}
-                    onClick={() => setTimeout(saveShare, 5000)}
-                  >
-                    <IconTwitter />
-                  </a>
-                  <a
-                    href={`https://telegram.me/share/url?url=${window.location.origin}/github`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.icon}
-                    onClick={() => setTimeout(saveShare, 5000)}
-                  >
-                    <IconTelegram />
-                  </a>
-                </Fragment>
-              }
+              <Fragment>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${originLink}/github`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.icon}
+                  onClick={() => setTimeout(saveShare, 5000)}
+                >
+                  <IconFacebook />
+                </a>
+                <a
+                  href={`https://twitter.com/intent/tweet?url=${originLink}/github`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.icon}
+                  onClick={() => setTimeout(saveShare, 5000)}
+                >
+                  <IconTwitter />
+                </a>
+                <a
+                  href={`https://telegram.me/share/url?url=${originLink}/github`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.icon}
+                  onClick={() => setTimeout(saveShare, 5000)}
+                >
+                  <IconTelegram />
+                </a>
+              </Fragment>
             </div>
           </div>
         </div>
@@ -179,7 +182,7 @@ const OfferSidebar = (props) => {
         <div className={styles.option}>
           <div className={styles.optionStatus}>{conditions && conditions.conditions.followingDevExchange === true ? <Done /> : <Three />}</div>
           <div className={styles.optionBlock}>
-            <a href={Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 ? `/communities/${props.organizationId}` : null} target="_blank" rel="noopener noreferrer" className={styles.optionTitle}>Join DevExchange</a>
+            <a href={Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 && Date.parse(new Date()) < Date.parse(new Date(props.finishedAt)) ? `/communities/${props.organizationId}` : null} target="_blank" rel="noopener noreferrer" className={styles.optionTitle}>Join DevExchange</a>
             <div className={styles.optionText}>to see your Importance in action and talk to community members</div>
           </div>
         </div>
@@ -228,6 +231,7 @@ OfferSidebar.propTypes = {
   postId: PropTypes.number.isRequired,
   createdAt: PropTypes.string,
   startedAt: PropTypes.string,
+  finishedAt: PropTypes.string,
   link: PropTypes.string.isRequired,
   repostAvailable: PropTypes.bool,
   postTypeId: PropTypes.number,
@@ -245,6 +249,7 @@ OfferSidebar.defaultProps = {
   gitHubAuthLink: '',
   startedAt: '',
   createdAt: '',
+  finishedAt: '',
   organizationId: 101,
 };
 
