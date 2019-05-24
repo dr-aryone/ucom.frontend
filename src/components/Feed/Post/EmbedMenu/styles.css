@@ -17,16 +17,18 @@
   border: none;
   outline: none;
   cursor: pointer;
-  fill: #c4c4c4;
   transition: transform 0.3s ease;
 }
 
 .buttonIcon svg {
   align-self: center;
   justify-self: center;
+  fill: #c4c4c4;
+  transition: fill 0.3s ease;
+
 }
 
-.buttonIcon:hover {
+.buttonIcon:hover svg{
   fill: #767676;
 }
 
@@ -82,7 +84,7 @@
   display: inline-block;
   vertical-align: middle;
   margin: 0 16px 0 0;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;  
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease;  
   position: relative;
   left: -40px;
   opacity: 0;
