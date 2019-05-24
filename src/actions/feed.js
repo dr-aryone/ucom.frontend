@@ -1,3 +1,4 @@
+import { batchActions } from 'redux-batched-actions';
 import * as overviewUtils from '../utils/overview';
 import { addUsers } from './users';
 import { addOrganizations } from './organizations';
@@ -43,9 +44,11 @@ export const parseFeedData = ({
     }
   });
 
-  dispatch(addPosts(posts));
-  dispatch(feedAppendPostIds(posts.map(i => i.id)));
-  dispatch(feedSetMetadata(metadata));
+  dispatch(batchActions([
+    addPosts(posts),
+    feedAppendPostIds(posts.map(i => i.id)),
+    feedSetMetadata(metadata),
+  ]));
 };
 
 export const feedGetUserPosts = ({
@@ -84,9 +87,7 @@ export const feedGetUserPosts = ({
     console.error(e);
   }
 
-  setTimeout(() => {
-    dispatch(feedSetLoading(false));
-  }, 2000);
+  dispatch(feedSetLoading(false));
 };
 
 export const feedCreatePost = (feedTypeId, params) => (dispatch) => {
@@ -101,9 +102,11 @@ export const feedCreatePost = (feedTypeId, params) => (dispatch) => {
 
   return createCommentPostFunctions[feedTypeId](params)
     .then((data) => {
-      dispatch(addPosts([data]));
-      dispatch(feedPrependPostIds([data.id]));
-      dispatch(feedSetLoading(false));
+      dispatch(batchActions([
+        addPosts([data]),
+        feedPrependPostIds([data.id]),
+        feedSetLoading(false),
+      ]));
     })
     .catch(() => {
       dispatch(feedSetLoading(false));
@@ -136,18 +139,17 @@ export const feedGetPosts = ({
 
   try {
     const data = await graphql.getOverview(params);
-    dispatch(parseFeedData({
-      posts: data.manyPosts.data,
-      metadata: data.manyPosts.metadata,
-    }));
-
-    dispatch(feedSetSideUsers(data.manyUsers.data));
-    dispatch(addUsers(data.manyUsers.data));
-
-    dispatch(feedSetSideOrganizations(data.manyOrganizations.data));
-    dispatch(addOrganizations(data.manyOrganizations.data));
-
-    dispatch(feedSetSideTags(data.manyTags.data));
+    dispatch(batchActions([
+      parseFeedData({
+        posts: data.manyPosts.data,
+        metadata: data.manyPosts.metadata,
+      }),
+      feedSetSideUsers(data.manyUsers.data),
+      addUsers(data.manyUsers.data),
+      feedSetSideOrganizations(data.manyOrganizations.data),
+      addOrganizations(data.manyOrganizations.data),
+      feedSetSideTags(data.manyTags.data),
+    ]));
   } catch (e) {
     console.error(e);
   }
@@ -182,4 +184,3 @@ export const feedGetSide = ({
 
   dispatch(feedSetLoading(false));
 };
-

@@ -1,3 +1,4 @@
+import { batchDispatchMiddleware } from 'redux-batched-actions';
 import thunk from 'redux-thunk';
 import * as redux from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -47,7 +48,7 @@ export const createStore = () => {
     tagsFeed,
     walletSimple,
   });
-  const middlewares = [thunk];
+  const middlewares = [thunk, batchDispatchMiddleware];
   let preloadedState;
 
   if (typeof window !== 'undefined' && window.APP_STATE !== undefined) {
