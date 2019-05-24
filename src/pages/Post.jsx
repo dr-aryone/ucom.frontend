@@ -22,9 +22,10 @@ import ShareButton from '../components/ShareButton';
 import ShareBlock from '../components/ShareBlock';
 import NotFoundPage from '../pages/NotFoundPage';
 import { addErrorNotification } from '../actions/notifications';
+import { getEosPostId } from '../utils/config';
 
 const PostPage = (props) => {
-  const { postId } = props.match.params;
+  const { postId } = props;
   const [sharePopup, toggleSharePopup] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -136,11 +137,7 @@ const PostPage = (props) => {
 };
 
 PostPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      postId: PropTypes.string,
-    }),
-  }).isRequired,
+  postId: PropTypes.number.isRequired,
   user: PropTypes.shape({
     id: PropTypes.number,
   }),
@@ -162,9 +159,10 @@ export default connect(
     const postAuthor = post ? getUserById(state.users, post.user.id) : null;
 
     return ({
-      user: state.user.data,
       post,
       postAuthor,
+      postId: props.match.params.postId,
+      user: state.user.data,
     });
   },
   {
@@ -184,3 +182,25 @@ export const getPostPageData = async (store, { postId }) => {
     throw e;
   }
 };
+
+export const PostEosPage = connect(
+  (state) => {
+    const post = getPostById(state.posts, getEosPostId());
+    const postAuthor = post ? getUserById(state.users, post.user.id) : null;
+
+    return ({
+      post,
+      postAuthor,
+      user: state.user.data,
+      postId: getEosPostId(),
+    });
+  },
+  {
+    postsFetch,
+    commentsResetContainerDataByEntryId,
+    addErrorNotification,
+  },
+)(PostPage);
+
+export const getPostEosPageData = async store =>
+  getPostPageData(store, { postId: getEosPostId() });

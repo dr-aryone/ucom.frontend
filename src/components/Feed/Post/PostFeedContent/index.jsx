@@ -1,8 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import FeedForm from '../../FeedForm';
+import Gallery from '../../../Gallery';
 import { updatePost } from '../../../../actions/posts';
 import { getPostById } from '../../../../store/posts';
 import DescDirectPost from './DescDirectPost';
@@ -39,13 +41,23 @@ const PostFeedContent = (props) => {
         </div>
       ) : (
         <Fragment>
-          {(props.postTypeId === POST_TYPE_DIRECT_ID || post.postTypeId === POST_TYPE_DIRECT_ID) ? (
+          {(props.postTypeId === POST_TYPE_DIRECT_ID || post.postTypeId === POST_TYPE_DIRECT_ID) && !props.formIsVisible ? (
             <Fragment>
-              {getCoverImage(post) && !props.formIsVisible && (
+              {getCoverImage(post) ? (
                 <div className={styles.cover}>
                   <img src={urls.getFileUrl(getCoverImage(post))} alt="cover" />
                 </div>
-              )}
+                ) : post.entityImages.gallery && post.entityImages.gallery.length > 0 &&
+                <div className={styles.gallery}>
+                  <Gallery
+                    images={post.entityImages.gallery}
+                    userId={props.userId}
+                    date={moment(post.createdAt).fromNow()}
+                  />
+                </div>
+              }
+
+
               {post.description &&
                 <div className={styles.content}>
                   <DescDirectPost

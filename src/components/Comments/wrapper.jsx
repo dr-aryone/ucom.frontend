@@ -7,6 +7,7 @@ import urls from '../../utils/urls';
 import { getUserName } from '../../utils/user';
 import { getCommentsTree } from '../../utils/comments';
 import { createComment, getPostComments, getCommentsOnComment } from '../../actions/comments';
+import { addErrorNotification } from '../../actions/notifications';
 
 export default connect(
   (state, props) => {
@@ -90,6 +91,9 @@ export default connect(
         page,
         perPage,
       }));
+    },
+    addErrorNotification: (e) => {
+      dispatch(addErrorNotification(e));
     },
   }),
 )(Comments);
