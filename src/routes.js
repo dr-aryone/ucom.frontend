@@ -58,8 +58,8 @@ export default [{
   getData: getPostOfferData_2,
 }, {
   path: '/github',
-  component: Offer,
-  getData: getPostOfferData,
+  component: Offer2,
+  getData: getPostOfferData_2,
 }, {
   path: '/posts/:postId',
   component: PostPage,

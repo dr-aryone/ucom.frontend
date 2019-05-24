@@ -32,11 +32,16 @@ const Offer = (props) => {
   const postId = getAirdropOfferId_2();
   const gitHubAuthLink = getGitHubAuthLink();
   const [token, setToken] = useState(null);
-  const [cookie, setCookie] = useState(null);
+  const [cookie, setCookie] = useState();
   const [users, setUsers] = useState([]);
   const [conditions, setConditions] = useState(null);
   const [metadata, setMetadata] = useState({ page: 1, perPage: 20 });
   const post = getPostById(props.posts, postId);
+
+  useEffect(() => {
+    setToken(getToken());
+    setCookie(getCookie(CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB));
+  }, []);
 
   const pairAccounts = async () => {
     if (cookie && token && conditions && (conditions.conditions.authGithub === false || conditions.conditions.authMyself === false)) {
@@ -84,47 +89,29 @@ const Offer = (props) => {
     if (cookie) {
       options.headers[CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB] = cookie;
     }
-    if (Object.keys(props.user).length) {
-      props.getOnePostOfferWithUserAirdrop({
-        postId,
-        airdropFilter: { airdrop_id: airdropId_2.id },
-        usersTeamQuery: {
-          page: 1,
-          per_page: 20,
-          order_by: '-score',
-          filters: {
-            airdrops: {
-              id: airdropId_2.id,
-            },
+
+    props.getOnePostOfferWithUserAirdrop({
+      postId,
+      airdropFilter: { airdrop_id: airdropId_2.id },
+      usersTeamQuery: {
+        page: 1,
+        per_page: 20,
+        order_by: '-score',
+        filters: {
+          airdrops: {
+            id: airdropId_2.id,
           },
         },
-      }, options).then((data) => {
-        props.getOrganization(data.onePostOffer.organization.id);
-        setConditions(data.oneUserAirdrop);
-      });
-    } else {
-      props.getOnePostOffer({
-        postId,
-        airdropFilter: { airdrop_id: airdropId_2.id },
-        usersTeamQuery: {
-          page: 1,
-          per_page: 20,
-          order_by: '-score',
-          filters: {
-            airdrops: {
-              id: airdropId_2.id,
-            },
-          },
-        },
-      }, options).then((data) => {
-        props.getOrganization(data.onePostOffer.organization.id);
-      });
-    }
+      },
+    }, options).then((data) => {
+      props.getOrganization(data.onePostOffer.organization.id);
+      setConditions(data.oneUserAirdrop);
+    });
 
     getParticipants();
 
     loader.done();
-  }, [postId, props.user]);
+  }, [postId, props.user, cookie]);
 
   if (!post) {
     return null;
@@ -133,11 +120,6 @@ const Offer = (props) => {
   useEffect(() => {
     pairAccounts();
   }, [cookie, token, conditions]);
-
-  useEffect(() => {
-    setToken(getToken());
-    setCookie(getCookie(CommonHeaders.TOKEN_USERS_EXTERNAL_GITHUB));
-  }, []);
 
   return (
     <LayoutBase gray>
@@ -181,7 +163,7 @@ const Offer = (props) => {
               score={conditions && conditions.score}
               tokens={post.offerData && post.offerData.tokens}
               commentsCount={post.commentsCount}
-              status={conditions && conditions.airdropStatus}
+              conditions={conditions}
             />
           </div>
           <div className={styles.sidebar}>
@@ -211,7 +193,6 @@ Offer.propTypes = {
   posts: PropTypes.objectOf(PropTypes.any).isRequired,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
   commentsResetContainerDataByEntryId: PropTypes.func.isRequired,
-  getOnePostOffer: PropTypes.func.isRequired,
   getOnePostOfferWithUserAirdrop: PropTypes.func.isRequired,
   getManyUsers: PropTypes.func.isRequired,
   getOrganization: PropTypes.func.isRequired,

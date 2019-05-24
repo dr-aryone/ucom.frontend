@@ -34,6 +34,7 @@ const OfferCard = (props) => {
     props.authShowPopup();
   };
 
+  // TODO: sticky button on mobile
   // const checkSizeWindow = () => {
   //   if (window.scrollY > 485 && window.innerWidth < 414) {
   //     setBtnFixed(true);
