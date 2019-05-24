@@ -521,16 +521,14 @@ export default {
   },
 
   async getManyUsers({
-    filter = {
-      airdrops: { id: 1 },
-    },
+    airdropFilter,
     orderBy,
     page,
     perPage,
     isMyself,
   }) {
     const query = GraphQLSchema.getManyUsers(
-      filter,
+      airdropFilter,
       orderBy,
       page,
       perPage,

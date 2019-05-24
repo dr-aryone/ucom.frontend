@@ -6,6 +6,7 @@ import PostRating from '../../Rating/PostRating';
 import One from '../../Icons/Airdrop/One';
 import Two from '../../Icons/Airdrop/Two';
 import Three from '../../Icons/Airdrop/Three';
+import Four from '../../Icons/Airdrop/Four';
 import Done from '../../Icons/Airdrop/Done';
 import DoneSmall from '../../Icons/Airdrop/DoneSmall';
 import Dots from '../../Icons/Airdrop/Dots';
@@ -81,11 +82,11 @@ const OfferSidebar = (props) => {
             </div>
             <div className={styles.tokens}>
               <div className={styles.tokensColumn}>
-                <div className={styles.tokenNumber}>{formatNumber(conditions.tokens[0].amountClaim)}</div>
+                <div className={styles.tokenNumber}>{formatNumber(conditions.tokens[0].amountClaim.toFixed(2))}</div>
                 <span className={styles.tokenCurr}>UOS</span>
               </div>
               <div className={styles.tokensColumn}>
-                <div className={styles.tokenNumber}>{formatNumber(conditions.tokens[1].amountClaim)}</div>
+                <div className={styles.tokenNumber}>{formatNumber(conditions.tokens[1].amountClaim.toFixed(2))}</div>
                 <span className={styles.tokenCurr}>UOS.Futures</span>
               </div>
             </div>
@@ -136,7 +137,7 @@ const OfferSidebar = (props) => {
         </div>
 
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{shareStatus === 'true' || (conditions && conditions.airdropStatus === AirdropStatuses.RECEIVED) ? <Done /> : <Two />}</div>
+          <div className={styles.optionStatus}>{shareStatus === 'true' || (conditions && conditions.airdropStatus === AirdropStatuses.RECEIVED) ? <Done /> : <Three />}</div>
           <div className={styles.optionBlock}>
             <div
               role="presentation"
@@ -180,7 +181,7 @@ const OfferSidebar = (props) => {
         </div>
 
         <div className={styles.option}>
-          <div className={styles.optionStatus}>{conditions && conditions.conditions.followingDevExchange === true ? <Done /> : <Three />}</div>
+          <div className={styles.optionStatus}>{conditions && conditions.conditions.followingDevExchange === true ? <Done /> : <Four />}</div>
           <div className={styles.optionBlock}>
             <a href={Date.parse(new Date(props.startedAt)) - Date.parse(new Date()) < 0 && Date.parse(new Date()) < Date.parse(new Date(props.finishedAt)) ? `/communities/${props.organizationId}` : null} target="_blank" rel="noopener noreferrer" className={styles.optionTitle}>Join DevExchange</a>
             <div className={styles.optionText}>to see your Importance in action and talk to community members</div>
