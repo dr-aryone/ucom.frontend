@@ -139,17 +139,16 @@ export const feedGetPosts = ({
 
   try {
     const data = await graphql.getOverview(params);
-    dispatch(batchActions([
-      parseFeedData({
-        posts: data.manyPosts.data,
-        metadata: data.manyPosts.metadata,
-      }),
-      feedSetSideUsers(data.manyUsers.data),
-      addUsers(data.manyUsers.data),
-      feedSetSideOrganizations(data.manyOrganizations.data),
-      addOrganizations(data.manyOrganizations.data),
-      feedSetSideTags(data.manyTags.data),
-    ]));
+
+    dispatch(parseFeedData({
+      posts: data.manyPosts.data,
+      metadata: data.manyPosts.metadata,
+    }));
+    dispatch(feedSetSideUsers(data.manyUsers.data));
+    dispatch(addUsers(data.manyUsers.data));
+    dispatch(feedSetSideOrganizations(data.manyOrganizations.data));
+    dispatch(addOrganizations(data.manyOrganizations.data));
+    dispatch(feedSetSideTags(data.manyTags.data));
   } catch (e) {
     console.error(e);
   }
