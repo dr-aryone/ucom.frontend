@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import React, { useState, Fragment } from 'react';
@@ -31,7 +32,13 @@ const Direct = (props) => {
         <Fragment>
           <div className={styles.container}>
             <div className={styles.overlay} role="presentation" onClick={() => setFormIsVisible(false)} />
-            <div className={styles.post} id={`post-${post.id}`}>
+            <div
+              className={classNames({
+                [styles.post]: true,
+                [styles.postEdit]: formIsVisible,
+              })}
+              id={`post-${post.id}`}
+            >
               <PostFeedHeader
                 userId={props.user.id}
                 createdAt={moment(post.createdAt).fromNow()}
