@@ -44,11 +44,9 @@ export const parseFeedData = ({
     }
   });
 
-  dispatch(batchActions([
-    addPosts(posts),
-    feedAppendPostIds(posts.map(i => i.id)),
-    feedSetMetadata(metadata),
-  ]));
+  dispatch(addPosts(posts));
+  dispatch(feedAppendPostIds(posts.map(i => i.id)));
+  dispatch(feedSetMetadata(metadata));
 };
 
 export const feedGetUserPosts = ({
