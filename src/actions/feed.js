@@ -1,4 +1,3 @@
-import { batchActions } from 'redux-batched-actions';
 import * as overviewUtils from '../utils/overview';
 import { addUsers } from './users';
 import { addOrganizations } from './organizations';
@@ -100,11 +99,9 @@ export const feedCreatePost = (feedTypeId, params) => (dispatch) => {
 
   return createCommentPostFunctions[feedTypeId](params)
     .then((data) => {
-      dispatch(batchActions([
-        addPosts([data]),
-        feedPrependPostIds([data.id]),
-        feedSetLoading(false),
-      ]));
+      dispatch(addPosts([data]));
+      dispatch(feedPrependPostIds([data.id]));
+      dispatch(feedSetLoading(false));
     })
     .catch(() => {
       dispatch(feedSetLoading(false));
