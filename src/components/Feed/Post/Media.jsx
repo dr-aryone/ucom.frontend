@@ -9,7 +9,9 @@ import PostCard from '../../PostMedia/PostCard';
 import urls from '../../../utils/urls';
 import styles from './Post.css';
 
-const Media = ({ post, user, owner, ...props }) => {
+const Media = ({
+  post, user, owner, ...props
+}) => {
   if (!post || !user) {
     return null;
   }
