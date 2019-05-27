@@ -58,8 +58,8 @@ export default [{
   getData: getPostOfferData_2,
 }, {
   path: '/github',
-  component: Offer2,
-  getData: getPostOfferData_2,
+  component: Offer,
+  getData: getPostOfferData,
 }, {
   path: '/eos',
   component: PostEosPage,
