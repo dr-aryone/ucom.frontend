@@ -1,4 +1,3 @@
-import { batchActions } from 'redux-batched-actions';
 import humps from 'lodash-humps';
 import api from '../api';
 import graphql from '../api/graphql';
@@ -36,11 +35,9 @@ export const addPosts = (postsData = []) => (dispatch) => {
   };
 
   postsData.forEach(parsePost);
-  dispatch(batchActions([
-    addUsers(users),
-    addOrganizations(organizations),
-    dispatch({ type: 'ADD_POSTS', payload: posts }),
-  ]));
+  dispatch(addUsers(users));
+  dispatch(addOrganizations(organizations));
+  dispatch({ type: 'ADD_POSTS', payload: posts });
 };
 
 export const fetchPost = postId => async (dispatch) => {

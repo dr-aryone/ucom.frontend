@@ -1,4 +1,3 @@
-import { batchActions } from 'redux-batched-actions';
 import api from '../api';
 import snakes from '../utils/snakes';
 import { getToken, removeToken } from '../utils/token';
@@ -38,10 +37,8 @@ export const addUsers = (data = []) => (dispatch) => {
     users.push(user);
   });
 
-  dispatch(batchActions([
-    addOrganizations(organizations),
-    { type: 'USERS_ADD', payload: users },
-  ]));
+  dispatch(addOrganizations(organizations));
+  dispatch({ type: 'USERS_ADD', payload: users });
 };
 
 export const fetchMyself = () => async (dispatch) => {
@@ -57,12 +54,10 @@ export const fetchMyself = () => async (dispatch) => {
   try {
     data = await api.getMyself(token);
 
-    dispatch(batchActions([
-      setUser(data),
-      addUsers([data]),
-      siteNotificationsSetUnreadAmount(data.unreadMessagesCount),
-      walletGetAccount(data.accountName),
-    ]));
+    dispatch(setUser(data));
+    dispatch(addUsers([data]));
+    dispatch(siteNotificationsSetUnreadAmount(data.unreadMessagesCount));
+    dispatch(walletGetAccount(data.accountName));
 
     // TODO: Сделать disable
     // if (process.env.NODE_ENV === 'production' && data.isTrackingAllowed) {
@@ -104,10 +99,8 @@ export const fetchUserPageData = ({
     });
     const { oneUser, oneUserTrustedBy, oneUserFollowsOrganizations } = data;
 
-    dispatch(batchActions([
-      addUsers(oneUserTrustedBy.data.concat([oneUser])),
-      addOrganizations(oneUserFollowsOrganizations.data),
-    ]));
+    dispatch(addUsers(oneUserTrustedBy.data.concat([oneUser])));
+    dispatch(addOrganizations(oneUserFollowsOrganizations.data));
     return data;
   } catch (e) {
     throw e;

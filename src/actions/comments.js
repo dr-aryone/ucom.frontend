@@ -1,4 +1,3 @@
-import { batchActions } from 'redux-batched-actions';
 import api from '../api';
 import graphql from '../api/graphql';
 import loader from '../utils/loader';
@@ -17,13 +16,11 @@ export const addComments = comments => (dispatch) => {
     }
   });
 
-  dispatch(batchActions([
-    addUsers(users),
-    dispatch({
-      type: 'ADD_COMMENTS',
-      payload: comments,
-    }),
-  ]));
+  dispatch(addUsers(users));
+  dispatch({
+    type: 'ADD_COMMENTS',
+    payload: comments,
+  });
 };
 
 export const commentVote = ({
@@ -76,19 +73,17 @@ export const commentsAddContainerData = ({
   comments,
   metadata,
 }) => (dispatch) => {
-  dispatch(batchActions([
-    addComments(comments),
-    dispatch({
-      type: 'COMMENTS_ADD_CONTAINER_DATA',
-      payload: {
-        containerId,
-        entryId,
-        parentId,
-        metadata,
-        commentIds: comments.map(i => i.id),
-      },
-    }),
-  ]));
+  dispatch(addComments(comments));
+  dispatch({
+    type: 'COMMENTS_ADD_CONTAINER_DATA',
+    payload: {
+      containerId,
+      entryId,
+      parentId,
+      metadata,
+      commentIds: comments.map(i => i.id),
+    },
+  });
 };
 
 export const getPostComments = ({
